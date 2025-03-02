@@ -1,0 +1,85 @@
+.background {
+    -fx-background-image: url("../images/safari2.png");
+    -fx-background-size: cover;
+}
+
+@font-face {
+    font-family: "Patua One";
+    src: url("/fonts/PatuaOne-Regular.ttf") format("truetype");
+}
+
+.button {
+    -fx-font-size: 40px;
+    -fx-font-family: "Patua One", sans-serif;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-cursor: hand;
+    -fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39);
+    -fx-border-color: #83301B;
+    -fx-border-width: 3px;
+}
+
+.button:hover {
+    -fx-background-color: #8B3D2D;
+}
+
+.label {
+    -fx-cursor: hand;
+}
+
+#diffLabel {
+    -fx-font-size: 96px;
+    -fx-cursor: default;
+    -fx-font-family: "Patua One", sans-serif;
+}
+
+.list-view {
+    -fx-background-color: transparent;
+    -fx-font-size: 24px;
+    -fx-font-family: "Patua One";
+    -fx-background-color: rgba(247, 191, 101, 0.7);
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+    -fx-border-color: #EC9042;
+    -fx-border-width: 3px;
+    -fx-border-radius: 8px;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3E2415;
+}
+
+.list-cell:hover {
+    -fx-text-fill: white;
+}
+
+.list-cell:filled:odd {
+    -fx-background-color: transparent;
+}
+
+.list-cell:filled:even {
+    -fx-background-color: rgba(255, 227, 137, 0.6);
+}
+
+.scroll-bar {
+    -fx-background-color: transparent;
+    -fx-pref-width: 15px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #f09147;
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0, 0;
+    -fx-text-fill: transparent;
+}
+

@@ -1,0 +1,40 @@
+.background {
+    -fx-background-image: url("../images/safari.jpg");
+    -fx-background-size: cover;
+}
+
+@font-face {
+    font-family: "Patua One";
+    src: url("/fonts/PatuaOne-Regular.ttf") format("truetype");
+}
+
+.button {
+    -fx-font-size: 40px;
+    -fx-font-family: "Patua One", sans-serif;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-cursor: hand;
+    -fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39);
+    -fx-border-color: #83301B;
+    -fx-border-width: 3px;
+}
+
+.button:hover {
+    -fx-background-color: #8B3D2D;
+}
+
+#startBtn, #backBtn {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.text {
+    -fx-cursor: hand;
+}
+
+#diffLabel {
+    -fx-font-size: 96px;
+    -fx-font-family: "Patua One", sans-serif;
+    -fx-cursor: default;
+}
