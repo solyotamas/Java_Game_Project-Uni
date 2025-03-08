@@ -55,7 +55,21 @@ public class SceneController {
         stage.show();
     }
 
-    public void exit(ActionEvent event) throws IOException {
+    public void switchToGame(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/game_screen.fxml"));
+        Parent root = loader.load();
+
+        GameScreenController gameScreenController = loader.getController();
+        gameScreenController.loadLevel();
+
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setMaximized(true);
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void exit() {
         Platform.exit();
         System.exit(0);
     }

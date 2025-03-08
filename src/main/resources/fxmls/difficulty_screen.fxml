@@ -10,7 +10,7 @@
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/main_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.SceneController">
     <children>
         <!-- Easy Button -->
-        <Button layoutX="800.0" layoutY="472.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="320.0" text="" textFill="WHITE">
+        <Button layoutX="800.0" layoutY="472.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="320.0">
             <graphic>
                 <Text fill="WHITE" text="Easy">
                     <effect>
@@ -25,7 +25,7 @@
         </Button>
 
         <!-- Medium Button -->
-        <Button layoutX="800.0" layoutY="589.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="320.0" text="" textFill="WHITE">
+        <Button layoutX="800.0" layoutY="589.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="320.0">
             <graphic>
                 <Text fill="WHITE" text="Medium">
                     <effect>
@@ -40,7 +40,7 @@
         </Button>
 
         <!-- Hard Button -->
-        <Button layoutX="800.0" layoutY="706.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="320.0" text="" textFill="WHITE">
+        <Button layoutX="800.0" layoutY="706.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="320.0">
             <graphic>
                 <Text fill="WHITE" text="Hard">
                     <effect>
@@ -77,7 +77,7 @@
         </Button>
 
         <!-- Start Button -->
-        <Button fx:id="startBtn" layoutX="1164.0" layoutY="843.0" mnemonicParsing="false" prefHeight="71.0" prefWidth="198.0" text="Start" textFill="WHITE">
+        <Button fx:id="startBtn" layoutX="1164.0" layoutY="843.0" mnemonicParsing="false" onAction="#switchToGame" prefHeight="71.0" prefWidth="198.0" text="Start" textFill="WHITE">
             <effect>
                 <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                     <color>
