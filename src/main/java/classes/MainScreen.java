@@ -11,7 +11,9 @@ public class MainScreen extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource(("/fxmls/main_screen.fxml")));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/main_screen.fxml"));
+            Parent root = loader.load();
+            SceneController controller = loader.getController();
             Scene scene = new Scene(root);
             stage.setTitle("Szafari");
             stage.setScene(scene);

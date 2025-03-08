@@ -39,10 +39,10 @@
     -fx-font-size: 24px;
     -fx-font-family: "Patua One";
     -fx-background-color: #FFEB9D;
-    -fx-background-radius: 8px;
+    -fx-background-radius: 10px;
     -fx-cursor: hand;
     -fx-border-color: #7F4F27;
-    -fx-border-width: 3px;
+    -fx-border-width: 4px;
     -fx-border-radius: 8px;
 }
 
