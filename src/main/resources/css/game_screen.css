@@ -1,0 +1,6 @@
+.fancyBtn {
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-border-width: 2px;
+    -fx-border-color: #83301B;
+}
