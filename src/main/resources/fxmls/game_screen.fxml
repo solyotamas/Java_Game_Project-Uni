@@ -18,7 +18,7 @@
 
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/game_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.GameScreenController">
    <children>
-      <Pane fx:id="gamePane" layoutY="58.0" prefHeight="965.0" prefWidth="1920.0" />
+      <Pane fx:id="gamePane" layoutY="76.0" prefHeight="931.0" prefWidth="1920.0" />
       <HBox alignment="CENTER" prefHeight="58.0" prefWidth="1920.0" spacing="50.0" style="-fx-background-color: #EC9043;">
          <padding>
             <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
@@ -120,7 +120,7 @@
                   <Insets />
                </opaqueInsets>
                <children>
-                  <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;" styleClass="fancyBtn" textFill="#3e2415">
+                  <Button mnemonicParsing="false" onAction="#switchToSave" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;" styleClass="fancyBtn" textFill="#3e2415">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -142,7 +142,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;" styleClass="fancyBtn" textFill="#3e2415">
+                  <Button mnemonicParsing="false" onAction="#switchToMain" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;" styleClass="fancyBtn" textFill="#3e2415">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>

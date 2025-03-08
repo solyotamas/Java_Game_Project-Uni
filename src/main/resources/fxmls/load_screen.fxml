@@ -21,9 +21,9 @@
             </effect>
         </Label>
 
-        <Button layoutX="1162.0" layoutY="867.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
+        <Button layoutX="1152.0" layoutY="867.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="230.0" text="" textFill="WHITE">
             <graphic>
-                <Text fill="WHITE" text="Start">
+                <Text fill="WHITE" text="Load game">
                     <effect>
                         <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
                             <color>
@@ -35,7 +35,7 @@
             </graphic>
         </Button>
 
-        <Button layoutX="562.0" layoutY="867.0" mnemonicParsing="false" onAction="#switchToMain" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
+        <Button layoutX="562.0" layoutY="867.0" mnemonicParsing="false" onAction="#goBack" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
             <graphic>
                 <Text fill="WHITE" text="Back">
                     <effect>

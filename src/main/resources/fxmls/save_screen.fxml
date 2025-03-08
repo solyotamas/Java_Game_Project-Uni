@@ -36,7 +36,7 @@
             </graphic>
         </Button>
 
-        <Button layoutX="562.0" layoutY="867.0" mnemonicParsing="false" onAction="#switchToMain" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
+        <Button layoutX="562.0" layoutY="867.0" mnemonicParsing="false" onAction="#goBack" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
             <graphic>
                 <Text fill="WHITE" text="Back">
                     <effect>
