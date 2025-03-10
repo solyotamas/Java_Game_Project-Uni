@@ -22,6 +22,9 @@ public class ScreenController {
     private Scene scene;
     private static final Stack<Scene> sceneHistory = new Stack<>();
 
+
+
+
     @FXML
     private ListView<String> saveListView;
 
@@ -35,7 +38,8 @@ public class ScreenController {
     }
 
     private void switchScene(ActionEvent event, String fxmlPath) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        Parent root = loader.load();
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -54,31 +58,23 @@ public class ScreenController {
         switchScene(event, "/fxmls/load_screen.fxml");
     }
 
-    public void switchToSave(ActionEvent event) throws IOException {
-        switchScene(event, "/fxmls/save_screen.fxml");
-    }
 
-    public void switchToMain(ActionEvent event) throws IOException {
-        switchScene(event, "/fxmls/main_screen.fxml");
-    }
+
 
     public void switchToGame(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/game_screen.fxml"));
         Parent root = loader.load();
 
-/*        GameScreenController gameScreenController = loader.getController();
-        gameScreenController.loadLevel();*/
+        //innen mar GameController
+        //nem kell mert initialize egybol lefut
+        // GameController gameController = loader.getController();
+        //gameController.initGame();
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         sceneHistory.push(stage.getScene());
 
         scene = new Scene(root);
         stage.setScene(scene);
-
-        ScreenController controller = loader.getController();
-        GameBoard gameBoard = new GameBoard(controller.gamePane);
-        gameBoard.loadLevel();
-
         stage.show();
     }
 

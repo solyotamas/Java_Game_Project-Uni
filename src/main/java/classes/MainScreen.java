@@ -8,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -28,6 +29,8 @@ public class MainScreen extends Application {
             stage.setWidth(screenBounds.getWidth());
             stage.setHeight(screenBounds.getHeight());
 
+
+            stage.initStyle(StageStyle.UNDECORATED);
             stage.setMaximized(true);
             stage.setScene(scene);
             stage.show();
