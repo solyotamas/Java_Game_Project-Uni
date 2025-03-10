@@ -75,6 +75,7 @@ public class SceneController {
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene previousScene = sceneHistory.pop();
             stage.setScene(previousScene);
+            stage.setMaximized(true);
             stage.show();
         }
     }
