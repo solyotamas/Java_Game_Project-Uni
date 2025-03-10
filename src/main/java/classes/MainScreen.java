@@ -1,5 +1,6 @@
 package classes;
 
+import classes.controllers.ScreenController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -16,7 +17,7 @@ public class MainScreen extends Application {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/main_screen.fxml"));
             Parent root = loader.load();
-            SceneController controller = loader.getController();
+            ScreenController controller = loader.getController();
             Scene scene = new Scene(root);
 
             stage.setTitle("Szafari");

@@ -1,5 +1,6 @@
-package classes;
+package classes.controllers;
 
+import classes.game.GameBoard;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,19 +10,23 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 
 import java.io.IOException;
 import java.util.Stack;
 
-public class SceneController {
+public class ScreenController {
     private Stage stage;
     private Scene scene;
     private static final Stack<Scene> sceneHistory = new Stack<>();
 
     @FXML
     private ListView<String> saveListView;
+
+    @FXML
+    private Pane gamePane;
 
     public void addItemsToList() {
         ObservableList<String> items = FXCollections.observableArrayList("Save Slot 1", "Save Slot 2", "Save Slot 3",
@@ -38,7 +43,6 @@ public class SceneController {
         sceneHistory.push(stage.getScene());
 
         stage.setScene(scene);
-        stage.setMaximized(true);
         stage.show();
     }
 
@@ -54,19 +58,22 @@ public class SceneController {
         switchScene(event, "/fxmls/load_screen.fxml");
     }
 
-    public void switchToGame(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/game_screen.fxml"));
-        Parent root = loader.load();
+    public void switchToSave(ActionEvent event) throws IOException {
+        switchScene(event, "/fxmls/save_screen.fxml");
+    }
 
-        GameScreenController gameScreenController = loader.getController();
-        gameScreenController.loadLevel();
+    public void switchToGame(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/game_screen.fxml"));
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         sceneHistory.push(stage.getScene());
 
         scene = new Scene(root);
         stage.setScene(scene);
-        stage.setMaximized(true);
+
+        GameBoard gameBoard = new GameBoard(gamePane);
+        gameBoard.loadLevel();
+
         stage.show();
     }
 
@@ -75,7 +82,6 @@ public class SceneController {
             stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene previousScene = sceneHistory.pop();
             stage.setScene(previousScene);
-            stage.setMaximized(true);
             stage.show();
         }
     }

@@ -1,10 +1,10 @@
-package classes;
+package classes.terrains;
 
 import java.util.Random;
 
-public class Ground extends Tile {
-    public Ground(int x, int y, int width, int height) {
-        super(x, y, width, height, getRandomGrassImage());
+public class Ground extends Terrain {
+    public Ground(int x, int y, int size) {
+        super(x, y, size, getRandomGrassImage(), 1);
     }
 
     private static String getRandomGrassImage() {

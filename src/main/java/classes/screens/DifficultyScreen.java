@@ -1,4 +1,4 @@
-package classes;
+package classes.screens;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

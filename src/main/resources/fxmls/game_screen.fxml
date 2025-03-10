@@ -16,9 +16,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/game_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.GameScreenController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/game_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.ScreenController">
    <children>
-      <Pane fx:id="gamePane" layoutY="76.0" prefHeight="931.0" prefWidth="1920.0" />
       <HBox alignment="CENTER" prefHeight="58.0" prefWidth="1920.0" spacing="50.0" style="-fx-background-color: #EC9043;">
          <padding>
             <Insets bottom="10.0" left="50.0" right="50.0" top="10.0" />
@@ -299,5 +298,6 @@
             </StackPane>
          </children>
       </HBox>
+      <Pane fx:id="gamePane" layoutY="76.0" prefHeight="930.0" prefWidth="1920.0" />
    </children>
 </AnchorPane>
