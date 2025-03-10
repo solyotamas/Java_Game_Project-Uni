@@ -50,10 +50,6 @@ public class ScreenController {
         switchScene(event, "/fxmls/difficulty_screen.fxml");
     }
 
-    public void switchToMain(ActionEvent event) throws IOException {
-        switchScene(event, "/fxmls/main_screen.fxml");
-    }
-
     public void switchToLoad(ActionEvent event) throws IOException {
         switchScene(event, "/fxmls/load_screen.fxml");
     }
@@ -62,8 +58,16 @@ public class ScreenController {
         switchScene(event, "/fxmls/save_screen.fxml");
     }
 
+    public void switchToMain(ActionEvent event) throws IOException {
+        switchScene(event, "/fxmls/main_screen.fxml");
+    }
+
     public void switchToGame(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxmls/game_screen.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/game_screen.fxml"));
+        Parent root = loader.load();
+
+/*        GameScreenController gameScreenController = loader.getController();
+        gameScreenController.loadLevel();*/
 
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         sceneHistory.push(stage.getScene());
@@ -71,11 +75,13 @@ public class ScreenController {
         scene = new Scene(root);
         stage.setScene(scene);
 
-        GameBoard gameBoard = new GameBoard(gamePane);
+        ScreenController controller = loader.getController();
+        GameBoard gameBoard = new GameBoard(controller.gamePane);
         gameBoard.loadLevel();
 
         stage.show();
     }
+
 
     public void goBack(ActionEvent event) {
         if (!sceneHistory.isEmpty()) {

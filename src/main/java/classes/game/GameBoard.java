@@ -14,12 +14,12 @@ public class GameBoard {
 
     public GameBoard(Pane gamePane) {
         this.gamePane = gamePane;
+        TILE_COUNT_X = (int) (gamePane.getWidth() / TILE_SIZE);
+        TILE_COUNT_Y = (int) (gamePane.getHeight() / TILE_SIZE) - 2;
     }
 
     public void loadLevel() {
         Random rand = new Random();
-        TILE_COUNT_X = (int) (gamePane.getWidth() / TILE_SIZE);
-        TILE_COUNT_Y = (int) (gamePane.getHeight() / TILE_SIZE);
 
         for (int y = 0; y < TILE_COUNT_Y; y++) {
             for (int x = 0; x < TILE_COUNT_X; x++) {
