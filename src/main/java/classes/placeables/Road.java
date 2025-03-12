@@ -1,0 +1,15 @@
+package classes.placeables;
+
+import java.util.Random;
+
+public class Road extends Placeable {
+    public Road(int x, int y, int size) {
+        super(x, y, size, getRandomRoadImage());
+    }
+
+    private static String getRandomRoadImage() {
+        Random rand = new Random();
+        int ran = rand.nextInt(3) + 1;
+        return "/images/road" + ran + ".png";
+    }
+}
