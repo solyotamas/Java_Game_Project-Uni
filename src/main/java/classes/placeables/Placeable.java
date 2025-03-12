@@ -5,7 +5,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 public abstract class Placeable {
-    protected int x, y, size;
+    protected double x, y, size;
     protected ImageView imageView;
 
     public Placeable(int x, int y, int size, String imgURL) {
@@ -23,5 +23,13 @@ public abstract class Placeable {
 
     public void draw(Pane gamePane) {
         gamePane.getChildren().add(imageView);
+    }
+
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
     }
 }
