@@ -21,12 +21,11 @@ public class MainScreen extends Application {
             Scene scene = new Scene(root);
 
             stage.setTitle("Szafari");
-
-
             stage.initStyle(StageStyle.UNDECORATED);
             stage.setMaximized(true);
             stage.setScene(scene);
             stage.show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

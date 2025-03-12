@@ -1,6 +1,67 @@
 .fancyBtn {
-    -fx-border-radius: 10px;
     -fx-background-radius: 10px;
-    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-cursor: hand;
+    -fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39);
     -fx-border-color: #83301B;
+    -fx-border-width: 3px;
+}
+
+.fancyBtn:hover {
+    -fx-background-color: #8B3D2D;
+}
+
+#shopPane {
+    -fx-background-image: url("../images/simplebg.png");
+    -fx-border-color: #7F4F27;
+    -fx-border-width: 4px;
+}
+
+.list-view {
+    -fx-background-color: transparent;
+    -fx-font-size: 24px;
+    -fx-background-color: #FFEB9D;
+    -fx-background-radius: 10px;
+    -fx-cursor: hand;
+    -fx-border-color: #7F4F27;
+    -fx-border-width: 4px;
+    -fx-border-radius: 8px;
+}
+
+.list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #3E2415;
+}
+
+.list-cell:hover {
+    -fx-text-fill: #E96E2B;
+}
+
+.list-cell:filled:odd {
+    -fx-background-color: transparent;
+}
+
+.list-cell:filled:even {
+    -fx-background-color: #FFD884;
+}
+
+.scroll-bar {
+    -fx-background-color: transparent;
+    -fx-pref-width: 15px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #7F4F27;
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0, 0;
+    -fx-text-fill: transparent;
 }

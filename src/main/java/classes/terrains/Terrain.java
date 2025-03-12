@@ -10,7 +10,6 @@ public class Terrain extends Pane{
     protected int row;
     protected int col;
 
-
     protected ImageView background;
     protected int crossingDifficulty;
 
@@ -32,6 +31,4 @@ public class Terrain extends Pane{
         //adding to pane directly
         getChildren().add(background);
     }
-
-
 }
