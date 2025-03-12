@@ -5,6 +5,7 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/main_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.ScreenController">
@@ -20,6 +21,9 @@
                             </color>
                         </DropShadow>
                     </effect>
+               <font>
+                  <Font name="Franklin Gothic Demi" size="42.0" />
+               </font>
                 </Text>
             </graphic>
         </Button>
@@ -35,6 +39,9 @@
                             </color>
                         </DropShadow>
                     </effect>
+               <font>
+                  <Font name="Franklin Gothic Demi" size="42.0" />
+               </font>
                 </Text>
             </graphic>
         </Button>
@@ -50,12 +57,15 @@
                             </color>
                         </DropShadow>
                     </effect>
+               <font>
+                  <Font name="Franklin Gothic Demi" size="42.0" />
+               </font>
                 </Text>
             </graphic>
         </Button>
 
         <!-- Difficulty Label -->
-        <Label fx:id="diffLabel" layoutX="756.0" layoutY="280.0" text="Difficulty" textFill="WHITE">
+        <Label fx:id="diffLabel" layoutX="771.0" layoutY="279.0" text="Difficulty" textFill="WHITE">
             <effect>
                 <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                     <color>
@@ -63,10 +73,13 @@
                     </color>
                 </DropShadow>
             </effect>
+         <font>
+            <Font name="Franklin Gothic Demi" size="96.0" />
+         </font>
         </Label>
 
         <!-- Back Button -->
-        <Button fx:id="backBtn" layoutX="564.0" layoutY="843.0" mnemonicParsing="false" onAction="#goBack" prefHeight="71.0" prefWidth="198.0" text="Back" textFill="WHITE">
+        <Button fx:id="backBtn" layoutX="561.0" layoutY="843.0" mnemonicParsing="false" onAction="#switchToMain" prefHeight="71.0" prefWidth="198.0" text="Back" textFill="WHITE">
             <effect>
                 <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                     <color>
@@ -74,10 +87,13 @@
                     </color>
                 </DropShadow>
             </effect>
+         <font>
+            <Font name="Franklin Gothic Demi" size="42.0" />
+         </font>
         </Button>
 
         <!-- Start Button -->
-        <Button fx:id="startBtn" layoutX="1164.0" layoutY="843.0" mnemonicParsing="false" onAction="#switchToGame" prefHeight="71.0" prefWidth="198.0" text="Start" textFill="WHITE">
+        <Button fx:id="startBtn" layoutX="1161.0" layoutY="843.0" mnemonicParsing="false" onAction="#switchToGame" prefHeight="71.0" prefWidth="198.0" text="Start" textFill="WHITE">
             <effect>
                 <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                     <color>
@@ -85,6 +101,9 @@
                     </color>
                 </DropShadow>
             </effect>
+         <font>
+            <Font name="Franklin Gothic Demi" size="42.0" />
+         </font>
         </Button>
     </children>
 </AnchorPane>

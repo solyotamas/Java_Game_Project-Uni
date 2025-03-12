@@ -18,7 +18,6 @@ import java.util.Stack;
 public class GameController {
     private Stage stage;
     private Scene scene;
-    private static final Stack<Scene> sceneHistory = new Stack<>();
 
     @FXML
     private Pane gamePane;
@@ -48,12 +47,8 @@ public class GameController {
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
 
-        sceneHistory.push(stage.getScene());
-
         stage.setScene(scene);
         stage.show();
     }
-
-
 
 }

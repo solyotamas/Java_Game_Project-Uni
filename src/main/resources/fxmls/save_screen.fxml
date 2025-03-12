@@ -12,7 +12,7 @@
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/load_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.ScreenController">
     <children>
         <!-- Load Game Label -->
-        <Label fx:id="diffLabel" layoutX="729.0" layoutY="111.0" text="Save Game" textFill="WHITE">
+        <Label fx:id="diffLabel" layoutX="725.0" layoutY="115.0" text="Save Game" textFill="WHITE">
             <effect>
                 <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                     <color>
@@ -20,11 +20,14 @@
                     </color>
                 </DropShadow>
             </effect>
+         <font>
+            <Font name="Franklin Gothic Demi" size="96.0" />
+         </font>
         </Label>
 
-        <Button layoutX="1152.0" layoutY="867.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="226.0" text="" textFill="WHITE">
+        <Button layoutX="1157.0" layoutY="869.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
             <graphic>
-                <Text fill="WHITE" text="Save game">
+                <Text fill="WHITE" text="Save">
                     <effect>
                         <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
                             <color>
@@ -32,11 +35,14 @@
                             </color>
                         </DropShadow>
                     </effect>
+               <font>
+                  <Font name="Franklin Gothic Demi" size="42.0" />
+               </font>
                 </Text>
             </graphic>
         </Button>
 
-        <Button layoutX="562.0" layoutY="867.0" mnemonicParsing="false" onAction="#goBack" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
+        <Button layoutX="567.0" layoutY="869.0" mnemonicParsing="false" onAction="#switchToGame" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
             <graphic>
                 <Text fill="WHITE" text="Back">
                     <effect>
@@ -46,6 +52,9 @@
                             </color>
                         </DropShadow>
                     </effect>
+               <font>
+                  <Font name="Franklin Gothic Demi" size="42.0" />
+               </font>
                 </Text>
             </graphic>
         </Button>

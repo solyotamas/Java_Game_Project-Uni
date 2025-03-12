@@ -16,8 +16,6 @@ public class GameBoard{
     //conf
     private final Random rand = new Random();
 
-
-
     public GameBoard(Pane gamePane) {
         this.gamePane = gamePane;
 
@@ -47,7 +45,6 @@ public class GameBoard{
         terrainGrid[x][y] = terrain;
     }
 
-
     // #TODO to implement it still because it doesnt work yet
     private void addHillCluster(int startX, int startY) {
         Random rand = new Random();
@@ -62,7 +59,4 @@ public class GameBoard{
             }
         }
     }
-
-
-
 }

@@ -19,10 +19,6 @@ import java.util.Stack;
 public class ScreenController {
     private Stage stage;
     private Scene scene;
-    private static final Stack<Scene> sceneHistory = new Stack<>();
-
-
-
 
     @FXML
     private ListView<String> saveListView;
@@ -41,8 +37,6 @@ public class ScreenController {
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         scene = new Scene(root);
 
-        sceneHistory.push(stage.getScene());
-
         stage.setScene(scene);
         stage.show();
     }
@@ -55,34 +49,19 @@ public class ScreenController {
         switchScene(event, "/fxmls/load_screen.fxml");
     }
 
-
-
+    public void switchToMain(ActionEvent event) throws IOException {
+        switchScene(event, "/fxmls/main_screen.fxml");
+    }
 
     public void switchToGame(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/game_screen.fxml"));
         Parent root = loader.load();
 
-        //innen mar GameController
-        //nem kell mert initialize egybol lefut
-        // GameController gameController = loader.getController();
-        //gameController.initGame();
-
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        sceneHistory.push(stage.getScene());
 
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-    }
-
-
-    public void goBack(ActionEvent event) {
-        if (!sceneHistory.isEmpty()) {
-            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            Scene previousScene = sceneHistory.pop();
-            stage.setScene(previousScene);
-            stage.show();
-        }
     }
 
     public void exit() {

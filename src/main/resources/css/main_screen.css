@@ -3,14 +3,7 @@
     -fx-background-size: cover;
 }
 
-@font-face {
-    font-family: "Patua One";
-    src: url("/fonts/PatuaOne-Regular.ttf") format("truetype");
-}
-
 .button {
-    -fx-font-size: 40px;
-    -fx-font-family: "Patua One", sans-serif;
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-padding: 10px;
@@ -34,7 +27,5 @@
 }
 
 #diffLabel {
-    -fx-font-size: 96px;
-    -fx-font-family: "Patua One", sans-serif;
     -fx-cursor: default;
 }
