@@ -10,6 +10,7 @@ public class GameBoard{
     //stats
     private static final int ROWS = 31;
     private static final int COLUMNS = 64;
+    private static final int TILE_SIZE = 30; // assumed tile size
     //representation
     private final Pane gamePane;
     private final Terrain[][] terrainGrid = new Terrain[COLUMNS][ROWS];
@@ -18,7 +19,6 @@ public class GameBoard{
 
     public GameBoard(Pane gamePane) {
         this.gamePane = gamePane;
-
     }
 
     public void setupBoard() {
