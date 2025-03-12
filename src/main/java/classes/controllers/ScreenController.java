@@ -1,6 +1,5 @@
 package classes.controllers;
 
-import classes.game.GameBoard;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,8 +27,6 @@ public class ScreenController {
     @FXML
     private ListView<String> saveListView;
 
-    @FXML
-    private Pane gamePane;
 
     public void addItemsToList() {
         ObservableList<String> items = FXCollections.observableArrayList("Save Slot 1", "Save Slot 2", "Save Slot 3",

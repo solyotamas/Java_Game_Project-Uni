@@ -15,7 +15,7 @@ public class GameBoard{
     private final Terrain[][] terrainGrid = new Terrain[COLUMNS][ROWS];
     //conf
     private final Random rand = new Random();
-    private final boolean[][] isTileOccupied = new boolean[COLUMNS][ROWS];
+
 
 
     public GameBoard(Pane gamePane) {
@@ -27,10 +27,7 @@ public class GameBoard{
 
         for (int x = 0; x < COLUMNS; x++) {
             for (int y = 0; y < ROWS; y++) {
-                if(!isTileOccupied[x][y]){
-                    makeTerrain(x, y);
-                }
-
+                makeTerrain(x, y);
             }
         }
     }
@@ -53,27 +50,17 @@ public class GameBoard{
 
     // #TODO to implement it still because it doesnt work yet
     private void addHillCluster(int startX, int startY) {
+        Random rand = new Random();
         int clusterSize = rand.nextInt(3) + 1;
         int placed = 0;
 
-        for (int dy = -1; dy <= 1; dy++) {
-            for (int dx = -1; dx <= 1; dx++) {
-                int x = startX + dx;
-                int y = startY + dy;
-
-                if (x >= 0 && x < COLUMNS && y >= 0 && y < ROWS && !isTileOccupied[x][y]) {
-                    Terrain hill = new Hill(x, y);
-                    gamePane.getChildren().add(hill);
-                    terrainGrid[x][y] = hill;
-                    isTileOccupied[x][y] = true;
-                    placed++;
-                    System.out.println("Placing hill at: " + x + ", " + y);
-                    System.out.println("Cluster size: " + clusterSize + ", Placed so far: " + placed);
-                    if (placed >= clusterSize) return;
-                }
+        for (int y = Math.max(0, startY - 1); y <= Math.min(ROWS - 1, startY + 1) && placed < clusterSize; y++) {
+            for (int x = Math.max(0, startX - 1); x <= Math.min(COLUMNS - 1, startX + 1) && placed < clusterSize; x++) {
+                Terrain hillTerrain = new Hill(x, y);
+                gamePane.getChildren().add(hillTerrain);
+                placed++;
             }
         }
-
     }
 
 
