@@ -2,10 +2,11 @@ package classes.controllers;
 
 import classes.game.GameBoard;
 import classes.placeables.animals.*;
-import classes.terrains.Ground;
-import classes.terrains.Hill;
+import classes.terrains.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +19,6 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 public class GameController {
     private Stage stage;
@@ -75,7 +75,7 @@ public class GameController {
         gir1.draw(gamePane);
 
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(0.1), e -> {
+                new KeyFrame(Duration.seconds(0.05), e -> {
                     eli1.move(6, 0);
                     tres1.move(-6, 0);
                     gaz1.move(0, 6);
