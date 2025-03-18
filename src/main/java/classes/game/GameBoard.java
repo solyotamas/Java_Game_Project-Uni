@@ -12,6 +12,8 @@ public class GameBoard{
     //stats
     private static final int ROWS = 31;
     private static final int COLUMNS = 64;
+
+
     //representation
     private final Pane gamePane;
     private final Terrain[][] terrainGrid = new Terrain[COLUMNS][ROWS];
@@ -58,21 +60,18 @@ public class GameBoard{
         marketButton.toFront();
 
     }
-
     private void makeFenceTerrain(int x, int y){
         Terrain fence = new Fence(x,y);
 
         gamePane.getChildren().add(fence);
         terrainGrid[x][y] = fence;
     }
-
     private void makeFloorTerrain(int x, int y){
         Terrain floor = new Floor(x,y);
 
         gamePane.getChildren().add(floor);
         terrainGrid[x][y] = floor;
     }
-
     private void makeRandomMapTerrain(int x, int y) {
         int terrainType = rand.nextInt(100);
 
@@ -117,40 +116,48 @@ public class GameBoard{
         }
         return true;
     }
+    public boolean canPlaceBush(int x, int y){
+        Terrain terrain = getTerrainAt(x, y);
+        if (terrain == null || terrain.hasPlant()) {
+            return false;
+        }
+        return true;
+    }
 
 
+    public void placeMultiTilePlant(Plant plant, int x, int y, int widthInTiles, int heightInTiles) {
 
-    public void placeMultiTilePlant(Plant plant, int startX, int startY, int widthInTiles, int heightInTiles) {
-        double anchorX = startX * 30;
-        double anchorY = startY * 30;
-        plant.setLayoutX(anchorX);
-        plant.setLayoutY(anchorY);
+        //Placing the plane in the global gamePane but still covering entirely the 2 panes underneath
+        plant.setLayoutX(x * 30);
+        plant.setLayoutY(y * 30);
         gamePane.getChildren().add(plant);
 
-        // Mark all occupied tiles
-        for (int x = startX; x < startX + widthInTiles; x++) {
-            for (int y = startY; y < startY + heightInTiles; y++) {
-                Terrain terrain = getTerrainAt(x, y);
+        //marking the 2 panes underneath it as occupied by the plant
+        for (int i = x; i < x + widthInTiles; i++) {
+            for (int j = y; j < y + heightInTiles; j++) {
+                Terrain terrain = getTerrainAt(i, j);
                 if (terrain != null) {
                     terrain.placePlant(plant);
                 }
             }
         }
     }
+    public void placeSingleTilePlant(Plant plant, int x, int y){
+        plant.setLayoutX(x * 30);
+        plant.setLayoutY(y * 30);
+        gamePane.getChildren().add(plant);
 
-
-    // #TODO to implement it still because it doesnt work yet
-    private void addHillCluster(int startX, int startY) {
-        Random rand = new Random();
-        int clusterSize = rand.nextInt(3) + 1;
-        int placed = 0;
-
-        for (int y = Math.max(0, startY - 1); y <= Math.min(ROWS - 1, startY + 1) && placed < clusterSize; y++) {
-            for (int x = Math.max(0, startX - 1); x <= Math.min(COLUMNS - 1, startX + 1) && placed < clusterSize; x++) {
-                Terrain hillTerrain = new Hill(x, y);
-                gamePane.getChildren().add(hillTerrain);
-                placed++;
-            }
-        }
+        Terrain terrain = getTerrainAt(x,y);
+        terrain.placePlant(plant);
     }
+
+
+    public int getColumns(){
+        return COLUMNS;
+    }
+    public int getRows(){
+        return ROWS;
+    }
+
+
 }

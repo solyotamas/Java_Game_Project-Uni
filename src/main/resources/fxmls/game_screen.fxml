@@ -298,7 +298,7 @@
             </StackPane>
          </children>
       </HBox>
-      <Pane fx:id="gamePane" layoutY="75.0" prefHeight="930.0" prefWidth="1920.0">
+      <Pane fx:id="gamePane" layoutY="75.0" maxHeight="930.0" maxWidth="1920.0" minHeight="930.0" minWidth="1920.0" prefHeight="930.0" prefWidth="1920.0">
          <children>
             <Pane fx:id="shopPane" layoutX="293.0" layoutY="50.0" prefHeight="830.0" prefWidth="1335.0" stylesheets="@../css/game_screen.css" visible="true">
                <children>

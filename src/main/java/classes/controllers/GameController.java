@@ -19,9 +19,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.scene.image.ImageView;
 
+
 public class GameController {
     private GameBoard gameBoard;
-
 
 
     @FXML
@@ -31,25 +31,31 @@ public class GameController {
     @FXML
     private Pane shopPane;
 
-    @FXML
-    //private Button buyBushButton;
-    private ImageView ghostImage;
 
+    //Market appear, disappear
     @FXML
     public void happens() {
         shopPane.setVisible(true);
-        //shopPane.setManaged(false);
         shopPane.toFront();
     }
+    @FXML
+    public void closeShopPane(){
+        shopPane.setVisible(false);
+    }
 
+
+
+    //Market button actions
+    //todo
+    // need to simplify
     @FXML
     public void buyBush() {
         shopPane.setVisible(false);
 
         Image plantImage = new Image(getClass().getResource("/images/bush1.png").toExternalForm());
         ImageView ghostImage = new ImageView(plantImage);
-        ghostImage.setOpacity(0.3);
-        ghostImage.setMouseTransparent(true); // Doesn’t block mouse input
+        ghostImage.setOpacity(0.5);
+        ghostImage.setMouseTransparent(true);
         ghostImage.setFitWidth(30);
         ghostImage.setFitHeight(30);
 
@@ -59,29 +65,27 @@ public class GameController {
             int gridSize = 30;
             double snappedX = Math.floor(e.getX() / gridSize) * gridSize;
             double snappedY = Math.floor(e.getY() / gridSize) * gridSize;
+
+            int maxX = (gameBoard.getColumns() - 1) * gridSize;
+            int maxY = (gameBoard.getRows() - 1) * gridSize;
+            snappedX = Math.max(0, Math.min(snappedX, maxX));
+            snappedY = Math.max(0, Math.min(snappedY, maxY));
+
             ghostImage.setLayoutX(snappedX);
             ghostImage.setLayoutY(snappedY);
         });
 
         gamePane.setOnMouseClicked(e -> {
-            int gridSize = 30;
-            int snappedX = (int)Math.floor(e.getX() / gridSize) * gridSize;
-            int snappedY = (int)Math.floor(e.getY() / gridSize) * gridSize;
 
+            int tileX = ((int) e.getX()) / 30;
+            int tileY = ((int) e.getY()) / 30;
 
-            int tileX = snappedX / 30;
-            int tileY = snappedY / 30;
-            Terrain terrain = gameBoard.getTerrainAt(tileX, tileY);
-            if (terrain == null) {
-                System.out.println("No terrain found at these coordinates!");
-            } else if (terrain.hasPlant()) {
-                System.out.println("Terrain already has a plant placed.");
+            if (gameBoard.canPlaceBush(tileX, tileY)) {
+                Bush bush = new Bush(tileX, tileY);
+                gameBoard.placeSingleTilePlant(bush, tileX, tileY);
             } else {
-                Bush bush = new Bush((int) e.getX(), (int)e.getY());
-                terrain.placePlant(bush);
-                terrain.getChildren().add(bush);
+                System.out.println("Cannot place tree here.");
             }
-
 
 
             // Clean up ghost image and listeners
@@ -90,15 +94,13 @@ public class GameController {
             gamePane.setOnMouseClicked(null);
         });
     }
-
-
     @FXML
     public void buyTree() {
         shopPane.setVisible(false);
 
         Image treeImage = new Image(getClass().getResource("/images/tree2.png").toExternalForm());
         ImageView ghostImage = new ImageView(treeImage);
-        ghostImage.setOpacity(0.3);
+        ghostImage.setOpacity(0.5);
         ghostImage.setMouseTransparent(true);
         ghostImage.setFitWidth(30);
         ghostImage.setFitHeight(60);
@@ -109,6 +111,12 @@ public class GameController {
             int gridSize = 30;
             double snappedX = Math.floor(e.getX() / gridSize) * gridSize;
             double snappedY = Math.floor(e.getY() / gridSize) * gridSize;
+
+            int maxX = (gameBoard.getColumns() - 1) * gridSize;
+            int maxY = (gameBoard.getRows() - 2) * gridSize;
+            snappedX = Math.max(0, Math.min(snappedX, maxX));
+            snappedY = Math.max(0, Math.min(snappedY, maxY));
+
             ghostImage.setLayoutX(snappedX);
             ghostImage.setLayoutY(snappedY);
         });
@@ -129,14 +137,13 @@ public class GameController {
             gamePane.setOnMouseClicked(null);
         });
     }
-
     @FXML
     public void buyLake() {
         shopPane.setVisible(false);
 
         Image lakeImage = new Image(getClass().getResource("/images/lake.png").toExternalForm());
         ImageView ghostImage = new ImageView(lakeImage);
-        ghostImage.setOpacity(0.3);
+        ghostImage.setOpacity(0.5);
         ghostImage.setMouseTransparent(true);
         ghostImage.setFitWidth(60);
         ghostImage.setFitHeight(30);
@@ -147,6 +154,12 @@ public class GameController {
             int gridSize = 30;
             double snappedX = Math.floor(e.getX() / gridSize) * gridSize;
             double snappedY = Math.floor(e.getY() / gridSize) * gridSize;
+
+            int maxX = (gameBoard.getColumns() - 2) * gridSize;
+            int maxY = (gameBoard.getRows() - 1) * gridSize;
+            snappedX = Math.max(0, Math.min(snappedX, maxX));
+            snappedY = Math.max(0, Math.min(snappedY, maxY));
+
             ghostImage.setLayoutX(snappedX);
             ghostImage.setLayoutY(snappedY);
         });
@@ -170,14 +183,6 @@ public class GameController {
 
 
 
-
-
-    @FXML
-    public void closeShopPane(){
-        shopPane.setVisible(false);
-        //shopPane.toBack();
-    }
-
     public void preloadImages(){
         Ground.preloadGroundImages();
         Hill.preloadHillImage();
@@ -185,17 +190,20 @@ public class GameController {
         Fence.preloadFenceImages();
     }
 
+
+    //starting game
+    //TODO
+    // - make a game loop, maybe game factory to separate placing the plants, track placed plants somewhere
+    // and just manage the UI here
+    // -
     @FXML
     public void initialize() {
         //preloading images for faster start
             preloadImages();
         //-------------------------------
 
-
         this.gameBoard = new GameBoard(gamePane, shopPane, marketButton);
         gameBoard.setupBoard();
-
-
 
     }
 
@@ -206,11 +214,9 @@ public class GameController {
     public void switchToSave(ActionEvent event) throws IOException {
         switchScene(event, "/fxmls/save_screen.fxml");
     }
-
     public void switchToMain(ActionEvent event) throws IOException {
         switchScene(event, "/fxmls/main_screen.fxml");
     }
-
     private void switchScene(ActionEvent event, String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
