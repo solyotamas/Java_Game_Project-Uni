@@ -1,9 +1,10 @@
 package classes.game;
 
-import classes.terrains.Ground;
-import classes.terrains.Hill;
-import classes.terrains.Terrain;
+import classes.terrains.*;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
+
+
 import java.util.Random;
 
 public class GameBoard{
@@ -13,24 +14,54 @@ public class GameBoard{
     //representation
     private final Pane gamePane;
     private final Terrain[][] terrainGrid = new Terrain[COLUMNS][ROWS];
+
+    //market
+    private Button marketUI;
+
     //conf
     private final Random rand = new Random();
 
-    public GameBoard(Pane gamePane) {
-        this.gamePane = gamePane;
 
+    public GameBoard(Pane gamePane, Button valami) {
+        this.gamePane = gamePane;
+        this.marketUI = valami;
     }
 
     public void setupBoard() {
 
         for (int x = 0; x < COLUMNS; x++) {
             for (int y = 0; y < ROWS; y++) {
-                makeTerrain(x, y);
+                switch (x){
+                    case 0,1,2,3, COLUMNS-1, COLUMNS-2, COLUMNS-3, COLUMNS-4:
+                        makeFloorTerrain(x,y);
+                        break;
+                    case 4, COLUMNS-5:
+                        makeFenceTerrain(x,y);
+                        break;
+                    default:
+                        makeRandomMapTerrain(x,y);
+                }
             }
+
         }
+        Market market = new Market(marketUI);
     }
 
-    private void makeTerrain(int x, int y) {
+    private void makeFenceTerrain(int x, int y){
+        Terrain fence = new Fence(x,y);
+
+        gamePane.getChildren().add(fence);
+        terrainGrid[x][y] = fence;
+    }
+
+    private void makeFloorTerrain(int x, int y){
+        Terrain floor = new Floor(x,y);
+
+        gamePane.getChildren().add(floor);
+        terrainGrid[x][y] = floor;
+    }
+
+    private void makeRandomMapTerrain(int x, int y) {
         int terrainType = rand.nextInt(100);
 
         Terrain terrain;
@@ -38,7 +69,6 @@ public class GameBoard{
             terrain = new Hill(x, y);
         else
             terrain = new Ground(x, y);
-
 
         //Placing inside gamePane and keeping track inside the matrix
         gamePane.getChildren().add(terrain);

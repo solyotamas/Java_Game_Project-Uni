@@ -4,3 +4,10 @@
     -fx-border-width: 2px;
     -fx-border-color: #83301B;
 }
+
+#market{
+    -fx-background-image:  url("../images/market.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-size: 100%
+}

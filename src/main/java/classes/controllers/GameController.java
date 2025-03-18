@@ -1,6 +1,8 @@
 package classes.controllers;
 
 import classes.game.GameBoard;
+import classes.terrains.Fence;
+import classes.terrains.Floor;
 import classes.terrains.Ground;
 import classes.terrains.Hill;
 import javafx.event.ActionEvent;
@@ -9,6 +11,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -23,13 +26,25 @@ public class GameController {
     private Pane gamePane;
 
     @FXML
+    private Button valami;
+
+    @FXML
+    public void happens() {
+        System.out.println("Market button clicked!");
+    }
+
+    @FXML
     public void initialize() {
         //preloading images for faster start
         Ground.preloadGroundImages();
         Hill.preloadHillImage();
+        Floor.preloadFloorImages();
+        Fence.preloadFenceImages();
+        //-------------------------------
 
-        GameBoard gameBoard = new GameBoard(gamePane);
+        GameBoard gameBoard = new GameBoard(gamePane, valami);
         gameBoard.setupBoard();
+        valami.toFront();
     }
 
     public void switchToSave(ActionEvent event) throws IOException {

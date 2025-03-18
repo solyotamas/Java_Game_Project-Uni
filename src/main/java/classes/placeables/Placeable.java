@@ -4,24 +4,25 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public abstract class Placeable {
+public abstract class Placeable extends Pane{
     protected int x, y, size;
-    protected ImageView imageView;
+    protected ImageView picture;
 
     public Placeable(int x, int y, int size, String imgURL) {
         this.x = x;
         this.y = y;
         this.size = size;
 
-        Image image = new Image(getClass().getResource(imgURL).toExternalForm());
-        this.imageView = new ImageView(image);
-        this.imageView.setX(x);
-        this.imageView.setY(y);
-        this.imageView.setFitWidth(size);
-        this.imageView.setFitHeight(size);
+        Image img = new Image(getClass().getResource(imgURL).toExternalForm());
+        this.picture = new ImageView(img);
+        this.picture.setFitWidth(size);
+        this.picture.setFitHeight(size);
+
+        //placing the pane itself
+        setLayoutX(x);
+        setLayoutY(y);
+
+
     }
 
-    public void draw(Pane gamePane) {
-        gamePane.getChildren().add(imageView);
-    }
 }
