@@ -36,22 +36,16 @@ public class Terrain extends Pane{
         getChildren().add(background);
     }
 
-    public boolean placePlant(Plant newPlant) {
-        if (plant == null) {
-            this.plant = newPlant;
-            this.getChildren().add(newPlant);
-            return true;
-        } else {
-            System.out.println("A plant is already placed here!");
-            return false;
-        }
-    }
 
-    public Plant getPlant() {
-        return plant;
+    public void placePlant(Plant plant) {
+        this.plant = plant;
     }
 
     public boolean hasPlant() {
         return plant != null;
     }
+
+
+
+
 }

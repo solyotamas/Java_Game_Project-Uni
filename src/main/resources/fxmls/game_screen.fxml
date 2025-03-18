@@ -337,7 +337,27 @@
                               <Image url="@../images/bush1.png" />
                            </image>
                         </ImageView>
-                        <Button fx:id="buyBushButton" layoutX="465.0" layoutY="105.0" mnemonicParsing="false" onAction="#buyBush" prefHeight="48.0" prefWidth="174.0" text="Buy Bush">
+                        <Button layoutX="465.0" layoutY="105.0" mnemonicParsing="false" onAction="#buyBush" prefHeight="48.0" prefWidth="174.0" text="Buy Bush">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <ImageView fitHeight="71.0" fitWidth="87.0" layoutX="307.0" layoutY="204.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/lake.png" />
+                           </image>
+                        </ImageView>
+                        <Button layoutX="466.0" layoutY="206.0" mnemonicParsing="false" onAction="#buyLake" prefHeight="48.0" prefWidth="174.0" text="Buy Lake">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Button>
+                        <ImageView fitHeight="71.0" fitWidth="87.0" layoutX="317.0" layoutY="311.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/tree2.png" />
+                           </image>
+                        </ImageView>
+                        <Button layoutX="461.0" layoutY="323.0" mnemonicParsing="false" onAction="#buyTree" prefHeight="48.0" prefWidth="174.0" text="Buy Tree">
                            <font>
                               <Font size="20.0" />
                            </font>

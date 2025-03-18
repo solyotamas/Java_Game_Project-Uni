@@ -2,6 +2,8 @@ package classes.controllers;
 
 import classes.game.GameBoard;
 import classes.placeables.Bush;
+import classes.placeables.Lake;
+import classes.placeables.Tree;
 import classes.terrains.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,7 +32,7 @@ public class GameController {
     private Pane shopPane;
 
     @FXML
-    private Button buyBushButton;
+    //private Button buyBushButton;
     private ImageView ghostImage;
 
     @FXML
@@ -42,6 +44,8 @@ public class GameController {
 
     @FXML
     public void buyBush() {
+        shopPane.setVisible(false);
+
         Image plantImage = new Image(getClass().getResource("/images/bush1.png").toExternalForm());
         ImageView ghostImage = new ImageView(plantImage);
         ghostImage.setOpacity(0.3);
@@ -65,8 +69,6 @@ public class GameController {
             int snappedY = (int)Math.floor(e.getY() / gridSize) * gridSize;
 
 
-
-
             int tileX = snappedX / 30;
             int tileY = snappedY / 30;
             Terrain terrain = gameBoard.getTerrainAt(tileX, tileY);
@@ -75,12 +77,11 @@ public class GameController {
             } else if (terrain.hasPlant()) {
                 System.out.println("Terrain already has a plant placed.");
             } else {
-                Bush bush = new Bush(tileX, tileY, 30);
+                Bush bush = new Bush((int) e.getX(), (int)e.getY());
                 terrain.placePlant(bush);
+                terrain.getChildren().add(bush);
             }
-            System.out.println("Bush placed");
-            //bush.toFront();
-            //terrain.setOpacity(0.4);
+
 
 
             // Clean up ghost image and listeners
@@ -89,6 +90,87 @@ public class GameController {
             gamePane.setOnMouseClicked(null);
         });
     }
+
+
+    @FXML
+    public void buyTree() {
+        shopPane.setVisible(false);
+
+        Image treeImage = new Image(getClass().getResource("/images/tree2.png").toExternalForm());
+        ImageView ghostImage = new ImageView(treeImage);
+        ghostImage.setOpacity(0.3);
+        ghostImage.setMouseTransparent(true);
+        ghostImage.setFitWidth(30);
+        ghostImage.setFitHeight(60);
+
+        gamePane.getChildren().add(ghostImage);
+
+        gamePane.setOnMouseMoved(e -> {
+            int gridSize = 30;
+            double snappedX = Math.floor(e.getX() / gridSize) * gridSize;
+            double snappedY = Math.floor(e.getY() / gridSize) * gridSize;
+            ghostImage.setLayoutX(snappedX);
+            ghostImage.setLayoutY(snappedY);
+        });
+
+        gamePane.setOnMouseClicked(e -> {
+            int tileX = ((int) e.getX()) / 30;
+            int tileY = ((int) e.getY()) / 30;
+
+            if (gameBoard.canPlaceTree(tileX, tileY)) {
+                Tree tree = new Tree(tileX, tileY);
+                gameBoard.placeMultiTilePlant(tree, tileX, tileY, 1, 2);
+            } else {
+                System.out.println("Cannot place tree here.");
+            }
+
+            gamePane.getChildren().remove(ghostImage);
+            gamePane.setOnMouseMoved(null);
+            gamePane.setOnMouseClicked(null);
+        });
+    }
+
+    @FXML
+    public void buyLake() {
+        shopPane.setVisible(false);
+
+        Image lakeImage = new Image(getClass().getResource("/images/lake.png").toExternalForm());
+        ImageView ghostImage = new ImageView(lakeImage);
+        ghostImage.setOpacity(0.3);
+        ghostImage.setMouseTransparent(true);
+        ghostImage.setFitWidth(60);
+        ghostImage.setFitHeight(30);
+
+        gamePane.getChildren().add(ghostImage);
+
+        gamePane.setOnMouseMoved(e -> {
+            int gridSize = 30;
+            double snappedX = Math.floor(e.getX() / gridSize) * gridSize;
+            double snappedY = Math.floor(e.getY() / gridSize) * gridSize;
+            ghostImage.setLayoutX(snappedX);
+            ghostImage.setLayoutY(snappedY);
+        });
+
+        gamePane.setOnMouseClicked(e -> {
+            int tileX = ((int) e.getX()) / 30;
+            int tileY = ((int) e.getY()) / 30;
+
+            if (gameBoard.canPlaceLake(tileX, tileY)) {
+                Lake lake = new Lake(tileX, tileY);
+                gameBoard.placeMultiTilePlant(lake, tileX, tileY, 2, 1);
+            } else {
+                System.out.println("Cannot place lake here.");
+            }
+
+            gamePane.getChildren().remove(ghostImage);
+            gamePane.setOnMouseMoved(null);
+            gamePane.setOnMouseClicked(null);
+        });
+    }
+
+
+
+
 
     @FXML
     public void closeShopPane(){

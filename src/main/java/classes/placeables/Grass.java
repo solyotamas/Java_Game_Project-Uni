@@ -1,7 +1,11 @@
 package classes.placeables;
 
 public class Grass extends Plant {
-    public Grass(int x, int y, int size) {
-        super(x, y, size, "/images/grass.png");
+    private static final int WIDTH_IN_TILES = 1;
+    private static final int HEIGHT_IN_TILES = 1;
+
+
+    public Grass(int x, int y) {
+        super(x, y, HEIGHT_IN_TILES, WIDTH_IN_TILES, "/images/grass.png");
     }
 }

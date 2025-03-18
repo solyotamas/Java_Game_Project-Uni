@@ -4,6 +4,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+import java.awt.im.spi.InputMethod;
+
 public abstract class Placeable extends Pane{
     protected int x, y, size;
     protected ImageView picture;
@@ -28,5 +30,7 @@ public abstract class Placeable extends Pane{
 
 
     }
+
+
 
 }
