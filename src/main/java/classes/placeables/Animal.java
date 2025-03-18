@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public abstract class Animal extends Placeable {
     private int age;
     //private int speed;
-    Placeable target;
+    private Placeable target;
     private int appetite;
     private boolean hungry;
     private boolean thirsty;
@@ -17,4 +17,14 @@ public abstract class Animal extends Placeable {
         this.appetite = 1;
         this.consumes = consumes;
     }
+
+    public void move(double dx, double dy) {
+        this.x += dx;
+        this.y += dy;
+        this.imageView.setX(this.x);
+        this.imageView.setY(this.y);
+    }
+
+
+
 }

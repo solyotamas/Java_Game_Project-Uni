@@ -23,7 +23,6 @@ public class ScreenController {
     @FXML
     private ListView<String> saveListView;
 
-
     public void addItemsToList() {
         ObservableList<String> items = FXCollections.observableArrayList("Save Slot 1", "Save Slot 2", "Save Slot 3",
                 "Save Slot 4", "Save Slot 5");

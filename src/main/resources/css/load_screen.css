@@ -73,3 +73,18 @@
     -fx-text-fill: transparent;
 }
 
+#saveTaken {
+    -fx-background-color: transparent;
+    -fx-background-color: #FFEB9D;
+    -fx-background-radius: 10px;
+    -fx-border-color: #7F4F27;
+    -fx-border-width: 4px;
+    -fx-border-radius: 8px;
+}
+
+#yesBtn {
+    -fx-background-color: linear-gradient(to bottom, #C0BA0E, #A29E09);
+    -fx-border-color: #887101;
+}
+
+

@@ -5,6 +5,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
@@ -67,5 +68,46 @@
             <Font name="Calibri" size="24.0" />
          </font>
       </Label>
+      <Pane id="saveTaken" fx:id="saveTaken" layoutX="683.0" layoutY="388.0" prefHeight="261.0" prefWidth="533.0" visible="false">
+         <children>
+            <Label layoutX="59.0" layoutY="24.0" prefHeight="112.0" prefWidth="416.0" style="-fx-wrap-text: true;" text="This save name is taken. Do you want to overwrite the existing one?" textAlignment="CENTER" textFill="#683d26" wrapText="true">
+               <font>
+                  <Font name="Calibri Bold" size="28.0" />
+               </font>
+            </Label>
+            <Button layoutX="86.0" layoutY="152.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="150.0" text="" textFill="WHITE">
+               <graphic>
+                  <Text fill="WHITE" text="No">
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
+                           <color>
+                              <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                     <font>
+                        <Font name="Franklin Gothic Demi" size="42.0" />
+                     </font>
+                  </Text>
+               </graphic>
+            </Button>
+            <Button id="yesBtn" layoutX="298.0" layoutY="152.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="150.0" text="" textFill="WHITE">
+               <graphic>
+                  <Text fill="WHITE" text="Yes">
+                     <font>
+                        <Font name="Franklin Gothic Demi" size="42.0" />
+                     </font>
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="18.0" radius="8.0" spread="1.0" width="16.0">
+                           <color>
+                              <Color red="0.5333333611488342" green="0.4431372582912445" blue="0.003921568859368563" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                  </Text>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
     </children>
 </AnchorPane>
