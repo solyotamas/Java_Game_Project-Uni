@@ -9,7 +9,7 @@ public class Bush extends Plant {
 
     private static String getRandomBushImage() {
         Random rand = new Random();
-        int ran = rand.nextInt(2) + 1;
+        int ran = rand.nextInt(1) + 1;
         return "/images/bush" + ran + ".png";
     }
 }

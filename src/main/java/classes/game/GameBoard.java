@@ -16,19 +16,23 @@ public class GameBoard{
     private final Terrain[][] terrainGrid = new Terrain[COLUMNS][ROWS];
 
     //market
-    private Button marketUI;
+    private Button marketButton;
+    private Pane shopPane;
+
 
     //conf
     private final Random rand = new Random();
 
 
-    public GameBoard(Pane gamePane, Button valami) {
+    public GameBoard(Pane gamePane, Pane shopPane, Button marketButton) {
         this.gamePane = gamePane;
-        this.marketUI = valami;
+        this.shopPane = shopPane;
+        this.marketButton = marketButton;
     }
 
     public void setupBoard() {
 
+        //Map config at start
         for (int x = 0; x < COLUMNS; x++) {
             for (int y = 0; y < ROWS; y++) {
                 switch (x){
@@ -42,9 +46,16 @@ public class GameBoard{
                         makeRandomMapTerrain(x,y);
                 }
             }
-
         }
-        Market market = new Market(marketUI);
+
+        //Shop config at start
+        shopPane.setVisible(false);
+        //shopPane.setManaged(false);
+        //shopPane.toFront();
+
+        //Market config at start
+        marketButton.toFront();
+
     }
 
     private void makeFenceTerrain(int x, int y){
@@ -66,7 +77,7 @@ public class GameBoard{
 
         Terrain terrain;
         if (terrainType < 2) // 2% chance for a hill
-            terrain = new Hill(x, y);
+            terrain = new Ground(x, y);
         else
             terrain = new Ground(x, y);
 
@@ -74,6 +85,17 @@ public class GameBoard{
         gamePane.getChildren().add(terrain);
         terrainGrid[x][y] = terrain;
     }
+
+
+    public Terrain getTerrainAt(int x, int y) {
+        if (x >= 0 && y >= 0 && x < COLUMNS && y < ROWS) {
+            return terrainGrid[x][y];
+        }else
+            return null;
+
+    }
+
+
 
     // #TODO to implement it still because it doesnt work yet
     private void addHillCluster(int startX, int startY) {

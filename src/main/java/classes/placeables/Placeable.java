@@ -15,12 +15,16 @@ public abstract class Placeable extends Pane{
 
         Image img = new Image(getClass().getResource(imgURL).toExternalForm());
         this.picture = new ImageView(img);
+
+        //this.picture.setLayoutX(0);
+        //this.picture.setLayoutX(0);
         this.picture.setFitWidth(size);
         this.picture.setFitHeight(size);
 
+        this.getChildren().add(picture);
         //placing the pane itself
-        setLayoutX(x);
-        setLayoutY(y);
+        //setLayoutX(x);
+        //setLayoutY(y);
 
 
     }

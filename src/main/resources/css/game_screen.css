@@ -12,6 +12,14 @@
     -fx-background-color: #8B3D2D;
 }
 
+
+#market{
+    -fx-background-image:  url("../images/market.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-size: 100%
+}
+
 #shopPane {
     -fx-background-image: url("../images/simplebg.png");
     -fx-border-color: #7F4F27;

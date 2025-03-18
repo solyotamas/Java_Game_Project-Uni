@@ -1,5 +1,6 @@
 package classes.terrains;
 
+import classes.placeables.Plant;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -13,11 +14,14 @@ public class Terrain extends Pane{
     protected ImageView background;
     protected int crossingDifficulty;
 
+    private Plant plant;
+
     public Terrain(int row, int col, Image img, int crossingDifficulty) {
         //tulajdonsagok
         this.row = row;
         this.col = col;
         this.crossingDifficulty = crossingDifficulty;
+        this.setPrefSize(SIZE, SIZE);
 
         //Hatter
         this.background = new ImageView(img);
@@ -30,5 +34,24 @@ public class Terrain extends Pane{
 
         //adding to pane directly
         getChildren().add(background);
+    }
+
+    public boolean placePlant(Plant newPlant) {
+        if (plant == null) {
+            this.plant = newPlant;
+            this.getChildren().add(newPlant);
+            return true;
+        } else {
+            System.out.println("A plant is already placed here!");
+            return false;
+        }
+    }
+
+    public Plant getPlant() {
+        return plant;
+    }
+
+    public boolean hasPlant() {
+        return plant != null;
     }
 }

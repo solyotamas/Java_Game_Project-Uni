@@ -18,12 +18,13 @@ public abstract class Animal extends Placeable {
         this.consumes = consumes;
     }
 
+    /*
     public void move(double dx, double dy) {
         this.x += dx;
         this.y += dy;
         this.imageView.setX(this.x);
         this.imageView.setY(this.y);
-    }
+    }*/
 
 
 
