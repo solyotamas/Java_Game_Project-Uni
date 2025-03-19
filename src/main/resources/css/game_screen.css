@@ -8,10 +8,6 @@
     -fx-border-width: 3px;
 }
 
-.fancyBtn:hover {
-    -fx-background-color: #8B3D2D;
-}
-
 #market {
     -fx-background-image:  url("../images/market.png");
     -fx-background-color: transparent;
@@ -27,6 +23,11 @@
     -fx-background-size: cover;
     -fx-background-position: center;
     -fx-cursor: hand;
+}
+
+.buyItem:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
 }
 
 #shopPane {

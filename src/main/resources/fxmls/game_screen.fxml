@@ -307,9 +307,9 @@
       </HBox>
       <Pane fx:id="gamePane" layoutY="75.0" maxHeight="930.0" maxWidth="1920.0" minHeight="930.0" minWidth="1920.0" prefHeight="930.0" prefWidth="1920.0">
          <children>
-            <Pane fx:id="shopPane" layoutX="341.0" layoutY="92.0" prefHeight="746.0" prefWidth="1239.0" stylesheets="@../css/game_screen.css" visible="true">
+            <Pane fx:id="shopPane" layoutX="382.0" layoutY="92.0" prefHeight="746.0" prefWidth="1156.0" stylesheets="@../css/game_screen.css" visible="true">
                <children>
-                  <Label fx:id="diffLabel" layoutX="527.0" layoutY="24.0" text="Market" textFill="WHITE">
+                  <Label fx:id="diffLabel" layoutX="486.0" layoutY="24.0" text="Market" textFill="WHITE">
                      <effect>
                         <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                            <color>
@@ -321,7 +321,7 @@
                         <Font name="Franklin Gothic Demi" size="58.0" />
                      </font>
                   </Label>
-                  <Button layoutX="544.0" layoutY="665.0" mnemonicParsing="false" onMouseClicked="#closeShopPane" prefHeight="58.0" prefWidth="152.0" styleClass="fancyBtn" text="" textFill="WHITE">
+                  <Button layoutX="502.0" layoutY="658.0" mnemonicParsing="false" onMouseClicked="#closeShopPane" prefHeight="58.0" prefWidth="152.0" styleClass="fancyBtn" text="" textFill="WHITE">
                      <graphic>
                         <Text fill="WHITE" text="Back">
                            <effect>
@@ -337,7 +337,7 @@
                         </Text>
                      </graphic>
                   </Button>
-                  <GridPane hgap="10.0" layoutX="172.0" layoutY="120.0" prefHeight="507.0" prefWidth="923.0" style="-fx-background-color: FFD884; -fx-background-radius: 20px;" vgap="10.0">
+                  <GridPane hgap="10.0" layoutX="117.0" layoutY="120.0" prefHeight="507.0" prefWidth="923.0" style="-fx-background-color: FFD884; -fx-background-radius: 20px;" vgap="10.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -371,7 +371,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" onAction="#buyBush" prefHeight="28.0" prefWidth="44.0" style="-fx-background-color: A8BA44; -fx-background-radius: 10px;" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyBush" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -409,7 +409,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" onAction="#buyLake" prefHeight="28.0" prefWidth="44.0" style="-fx-background-color: A8BA44; -fx-background-radius: 10px;" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyLake" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -447,7 +447,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" onAction="#buyTree" prefHeight="28.0" prefWidth="44.0" style="-fx-background-color: A8BA44; -fx-background-radius: 10px;" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyTree" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
