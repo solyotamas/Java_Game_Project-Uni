@@ -12,64 +12,37 @@
     -fx-background-color: #8B3D2D;
 }
 
-
-#market{
+#market {
     -fx-background-image:  url("../images/market.png");
     -fx-background-color: transparent;
     -fx-background-position: center;
-    -fx-background-size: 100%
+    -fx-background-size: 100%;
+    -fx-cursor: hand;
+}
+
+.buyItem {
+    -fx-background-image: url("../images/buyItem.png");
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-cursor: hand;
 }
 
 #shopPane {
-    -fx-background-image: url("../images/simplebg.png");
     -fx-border-color: #7F4F27;
     -fx-border-width: 4px;
+    -fx-background-color: radial-gradient(center 50% 50%, radius 80%, #F7BB5E, #EC9042);
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
 }
 
-.list-view {
+#itemsPane {
     -fx-background-color: transparent;
     -fx-font-size: 24px;
-    -fx-background-color: #FFEB9D;
-    -fx-background-radius: 10px;
-    -fx-cursor: hand;
+    -fx-background-color: #FFD884;
+    -fx-background-radius: 20px;
     -fx-border-color: #7F4F27;
     -fx-border-width: 4px;
-    -fx-border-radius: 8px;
-}
-
-.list-cell {
-    -fx-background-color: transparent;
-    -fx-text-fill: #3E2415;
-}
-
-.list-cell:hover {
-    -fx-text-fill: #E96E2B;
-}
-
-.list-cell:filled:odd {
-    -fx-background-color: transparent;
-}
-
-.list-cell:filled:even {
-    -fx-background-color: #FFD884;
-}
-
-.scroll-bar {
-    -fx-background-color: transparent;
-    -fx-pref-width: 15px;
-}
-
-.scroll-bar .thumb {
-    -fx-background-color: #7F4F27;
-}
-
-.scroll-bar .track {
-    -fx-background-color: transparent;
-}
-
-.scroll-bar .increment-button,
-.scroll-bar .decrement-button {
-    -fx-background-color: transparent;
-    -fx-background-insets: 0, 0;
-    -fx-text-fill: transparent;
+    -fx-border-radius: 20px;
 }

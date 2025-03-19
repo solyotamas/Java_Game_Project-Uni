@@ -54,7 +54,7 @@ public class GameBoard{
 
         Random rand = new Random();
         for (int i = 0; i < 3; i++) {
-            generateRiver(rand.nextInt(COLUMNS - 10) + 6, 0);
+            generateRiver(rand.nextInt(49) + 8, 0);
         }
 
         //Shop config at start
