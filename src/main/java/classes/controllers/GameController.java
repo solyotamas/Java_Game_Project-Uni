@@ -102,7 +102,7 @@ public class GameController {
         ImageView ghostImage = new ImageView(treeImage);
         ghostImage.setOpacity(0.5);
         ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(30);
+        ghostImage.setFitWidth(60);
         ghostImage.setFitHeight(60);
 
         gamePane.getChildren().add(ghostImage);
@@ -127,7 +127,7 @@ public class GameController {
 
             if (gameBoard.canPlaceTree(tileX, tileY)) {
                 Tree tree = new Tree(tileX, tileY);
-                gameBoard.placeMultiTilePlant(tree, tileX, tileY, 1, 2);
+                gameBoard.placeMultiTilePlant(tree, tileX, tileY, 2, 2);
             } else {
                 System.out.println("Cannot place tree here.");
             }
@@ -145,8 +145,8 @@ public class GameController {
         ImageView ghostImage = new ImageView(lakeImage);
         ghostImage.setOpacity(0.5);
         ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(60);
-        ghostImage.setFitHeight(30);
+        ghostImage.setFitWidth(120);
+        ghostImage.setFitHeight(60);
 
         gamePane.getChildren().add(ghostImage);
 
@@ -170,7 +170,7 @@ public class GameController {
 
             if (gameBoard.canPlaceLake(tileX, tileY)) {
                 Lake lake = new Lake(tileX, tileY);
-                gameBoard.placeMultiTilePlant(lake, tileX, tileY, 2, 1);
+                gameBoard.placeMultiTilePlant(lake, tileX, tileY, 4, 2);
             } else {
                 System.out.println("Cannot place lake here.");
             }
@@ -185,9 +185,10 @@ public class GameController {
 
     public void preloadImages(){
         Ground.preloadGroundImages();
-        Hill.preloadHillImage();
+        Hill.preloadHillImages();
         Floor.preloadFloorImages();
         Fence.preloadFenceImages();
+        River.preloadRiverImage();
     }
 
 
