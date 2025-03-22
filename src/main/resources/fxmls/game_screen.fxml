@@ -664,10 +664,13 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="59.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="55.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/elephant.png" />
                                  </image>
+                                 <VBox.margin>
+                                    <Insets top="6.0" />
+                                 </VBox.margin>
                               </ImageView>
                               <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Elephant 500$" textFill="#3e2415">
                                  <VBox.margin>
@@ -707,15 +710,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="64.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="43.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/gazelle.png" />
+                                    <Image url="@../images/rhino.png" />
                                  </image>
                                  <VBox.margin>
-                                    <Insets top="5.0" />
+                                    <Insets top="16.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Gazelle 250$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Rhino 400$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -753,15 +756,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="56.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="41.0" fitWidth="68.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/giraffe.png" />
+                                    <Image url="@../images/hippo.png" />
                                  </image>
                                  <VBox.margin>
-                                    <Insets top="5.0" />
+                                    <Insets top="20.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" graphicTextGap="0.0" prefHeight="23.0" prefWidth="113.0" text="Giraffe 450$" textFill="#3e2415">
+                              <Label alignment="CENTER" graphicTextGap="0.0" prefHeight="23.0" prefWidth="113.0" text="Hippo 400$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -799,15 +802,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="50.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="54.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/kecske.png" />
+                                    <Image url="@../images/zebra.png" />
                                  </image>
                                  <VBox.margin>
-                                    <Insets top="12.0" />
+                                    <Insets top="7.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Goat 200$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Zebra 300$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -845,12 +848,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="59.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="55.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/ostrich.png" />
+                                    <Image url="@../images/kangaroo.png" />
                                  </image>
+                                 <VBox.margin>
+                                    <Insets top="8.0" />
+                                 </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Ostrich 300$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Kangaroo 300$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -893,7 +899,7 @@
                                     <Image url="@../images/turtle.png" />
                                  </image>
                                  <VBox.margin>
-                                    <Insets top="16.0" />
+                                    <Insets bottom="11.0" top="25.0" />
                                  </VBox.margin>
                               </ImageView>
                               <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Turtle 100$" textFill="#3e2415">
@@ -934,15 +940,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="6" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="59.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="54.0" fitWidth="81.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/caprinae.png" />
+                                    <Image url="@../images/buffalo.png" />
                                  </image>
                                  <VBox.margin>
-                                    <Insets top="5.0" />
+                                    <Insets top="10.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Caprinae 250$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Buffalo 350$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -980,12 +986,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="1" GridPane.rowIndex="2">
                            <children>
-                              <ImageView fitHeight="64.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="52.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/lion.png" />
                                  </image>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Lion 400$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Lion 450$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1023,12 +1032,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <children>
-                              <ImageView fitHeight="62.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="50.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/lynx.png" />
+                                    <Image url="@../images/tiger.png" />
                                  </image>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Lynx 200$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Tiger 450$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1066,12 +1078,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.rowIndex="2">
                            <children>
-                              <ImageView fitHeight="58.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="49.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/bison.png" />
+                                    <Image url="@../images/panther.png" />
                                  </image>
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Bison 300$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Panther 400$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1082,7 +1097,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore" textFill="#ff3a00">
                                  <font>
                                     <Font name="Calibri Bold" size="16.0" />
                                  </font>
@@ -1135,6 +1150,52 @@
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
+                              </Button>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <effect>
+                              <DropShadow height="15.0" radius="7.0" width="15.0">
+                                 <color>
+                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                           <children>
+                              <ImageView fitHeight="26.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/vulture.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="23.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Vulture 250$" textFill="#3e2415">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Calibri Bold" size="16.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore" textFill="#ff3a00">
+                                 <font>
+                                    <Font name="Calibri Bold" size="16.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
                               </Button>
                            </children>
                            <opaqueInsets>
