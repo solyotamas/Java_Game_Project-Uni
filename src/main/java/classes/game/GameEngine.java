@@ -41,10 +41,12 @@ public class GameEngine {
     private int touristCount = 0;
     private int jeepCount = 0;
 
+    //protected int speedMultiplier  = 1;
 
     public void gameLoop() {
+
         Timeline timeline = new Timeline(
-            new KeyFrame(Duration.millis(100), e -> {
+            new KeyFrame(Duration.millis(50), e -> {
                 // 1️⃣ Move animals
                 updateAnimalPositions();
 
@@ -52,7 +54,7 @@ public class GameEngine {
                 //updateHerds();
 
                 // 3️⃣ Possibly spawn tourists/poachers
-                maybeSpawnTourist();
+                //maybeSpawnTourist();
                 //maybeSpawnPoacher();
 
                 // 4️⃣ Update money, time, conditions
@@ -74,20 +76,25 @@ public class GameEngine {
     }
 
     private void updateGameConditions() {
-        spentTime += 0.1;
+        spentTime += 0.05;
         gameController.updateDisplay(
                 spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount
         );
     }
 
-    private void maybeSpawnTourist() {
 
+
+
+
+    public void buyHerbivore(Herbivore herbivore){
+        this.herbivores.add(herbivore);
     }
 
     private void updateAnimalPositions() {
-        for (Herbivore h : herbivores) {
-            //h.moveRandomly();
+        for (Herbivore herbivore : herbivores) {
+            herbivore.moveTowardsTarget();
         }
+
         for (Carnivore c : carnivores) {
             //c.moveHunting(herbivores);
         }
@@ -117,11 +124,12 @@ public class GameEngine {
 
 
 
-    public GameEngine(GameController gameController, Difficulty difficulty, ArrayList<Plant> plants) {
+
+    public GameEngine(GameController gameController, Difficulty difficulty) {
         this.gameController = gameController;
 
         this.difficulty = difficulty;
-        this.plants = plants;
+
 
         money = 0;
         ticketPrice = 0;
@@ -182,6 +190,7 @@ public class GameEngine {
 
     }
 
+    /*
     public void sells(Animal animal) {
         money = money + 0;
         //actual érték needed
@@ -191,7 +200,7 @@ public class GameEngine {
         } else {
             carnivores.remove(animal);
         }
-    }
+    }*/
 
 
 }

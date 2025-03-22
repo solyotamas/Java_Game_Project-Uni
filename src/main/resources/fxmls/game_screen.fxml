@@ -93,12 +93,12 @@
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="100.0" style="-fx-background-color: #f9c771; -fx-background-radius: 12px;" text="Hour" textFill="#3e2415">
+                  <Button fx:id="gameSpeedHourButton" mnemonicParsing="false" onAction="#speedGameToHour" prefHeight="44.0" prefWidth="100.0" style="-fx-background-color: #f9c771; -fx-background-radius: 12px;" text="Hour" textFill="#3e2415">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="110.0" style="-fx-background-color: #f9c771; -fx-background-radius: 12px;" text="Day" textFill="#3e2415">
+                  <Button fx:id="gameSpeedDayButton" mnemonicParsing="false" onAction="#speedGameToDay" prefHeight="44.0" prefWidth="110.0" style="-fx-background-color: #f9c771; -fx-background-radius: 12px;" text="Day" textFill="#3e2415">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>

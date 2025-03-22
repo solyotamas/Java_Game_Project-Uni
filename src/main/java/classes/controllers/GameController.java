@@ -1,6 +1,8 @@
 package classes.controllers;
 
-import classes.entities.animals.Peacocktest;
+import classes.entities.Direction;
+import classes.entities.animals.Elephant;
+import classes.entities.animals.Zebra;
 import classes.game.GameBoard;
 import classes.game.GameEngine;
 
@@ -10,7 +12,6 @@ import classes.landforms.plants.Bush;
 import classes.landforms.plants.Grass;
 import classes.landforms.plants.Tree;
 import classes.terrains.*;
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,7 +26,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Random;
 
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
@@ -55,8 +55,21 @@ public class GameController {
     private Label jeepCountLabel;
     @FXML
     private Label touristCountLabel;
+    @FXML
+    private Button gameSpeedHourButton;
+    @FXML
+    private Button gameSpeedDayButton;
 
 
+    @FXML
+    public void speedGameToDay(){
+
+    }
+
+    @FXML
+    public void speedGameToHour(){
+
+    }
 
     //Market appear, disappear
     @FXML
@@ -122,22 +135,17 @@ public class GameController {
     public void buyBush() {
         buyItem(new Bush(0, 0), "/images/bush1.png");
     }
-
     @FXML
     public void buyTree() {
         buyItem(new Tree(0, 0), "/images/tree2.png");
     }
-
     @FXML
     public void buyLake() {
         buyItem(new Lake(0, 0), "/images/lake.png");
     }
-
     public void buyGrass() {
         buyItem(new Grass(0, 0), "/images/grass.png");
     }
-
-
 
 
     public void preloadImages(){
@@ -165,29 +173,28 @@ public class GameController {
         gameBoard.setupBoard();
 
         //IDE MAJD KELL RENDESEN A PARAMÉTEREK
-        this.gameEngine = new GameEngine(this, EASY ,null);
+        this.gameEngine = new GameEngine(this, EASY);
         gameEngine.gameLoop();
 
-        Peacocktest pc = new Peacocktest(400, 400);
-        gamePane.getChildren().add(pc);
-        pc.toFront();
 
-        Timeline smoothSlowMove = new Timeline(new javafx.animation.KeyFrame(Duration.millis(50), e -> {
-            switch (pc.currentDirection) {
-                case UP -> pc.move(Peacocktest.Direction.UP, 0, -0.5);
-                case DOWN -> pc.move(Peacocktest.Direction.DOWN, 0, 0.5);
-                case LEFT -> pc.move(Peacocktest.Direction.LEFT, -0.5, 0);
-                case RIGHT -> pc.move(Peacocktest.Direction.RIGHT, 0.5, 0);
-            }
-        }));
-        smoothSlowMove.setCycleCount(Timeline.INDEFINITE);
-        smoothSlowMove.play();
+
+        Zebra zebra = new Zebra(400, 400);
+        gamePane.getChildren().add(zebra);
+        zebra.toFront();
+        gameEngine.buyHerbivore(zebra);
+        Elephant elephant = new Elephant(800,800);
+        gamePane.getChildren().add(elephant);
+        gameEngine.buyHerbivore(elephant);
+
+
+
 
         // Random direction change timeline every 2-4 seconds
         Timeline randomDirectionChange = new Timeline(new javafx.animation.KeyFrame(Duration.seconds(5), e -> {
-            Peacocktest.Direction[] directions = Peacocktest.Direction.values();
+            Direction[] directions = Direction.values();
             int randomIndex = new java.util.Random().nextInt(directions.length);
-            pc.currentDirection = directions[randomIndex];
+            zebra.setCurrentDirection(directions[randomIndex]);
+            elephant.setCurrentDirection(directions[randomIndex]);
         }));
         randomDirectionChange.setCycleCount(Timeline.INDEFINITE);
         randomDirectionChange.play();
