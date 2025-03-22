@@ -1,5 +1,6 @@
 package classes.game;
 
+import classes.placeables.Placeable;
 import classes.placeables.Plant;
 import classes.terrains.*;
 import javafx.scene.control.Button;
@@ -161,63 +162,57 @@ public class GameBoard{
             return terrainGrid[x][y];
         }else
             return null;
-
     }
+
+    public boolean canPlaceObject(int startX, int startY, int width, int height) {
+        for (int x = startX; x < startX + width; x++) {
+            for (int y = startY; y < startY + height; y++) {
+                Terrain terrain = getTerrainAt(x, y);
+                if (terrain == null || terrain.hasPlant() || terrain instanceof Hill ||
+                        terrain instanceof River || terrain instanceof Fence || terrain instanceof Floor) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public boolean canPlaceTree(int startX, int startY) {
-        for (int x = startX; x < startX + 2; x++) {
-            for (int y = startY; y < startY + 2; y++) {
-                Terrain terrain = getTerrainAt(x, y);
-                if (terrain == null || terrain.hasPlant() || terrain instanceof Hill || terrain instanceof River || terrain instanceof Fence || terrain instanceof Floor) {
-                    return false;
-                }
-            }
-        }
-        return true;
+        return canPlaceObject(startX, startY, 2, 2);
     }
+
     public boolean canPlaceLake(int startX, int startY) {
-        for (int x = startX; x < startX + 4; x++) {
-            for (int y = startY; y < startY + 2; y++) {
-                Terrain terrain = getTerrainAt(x, y);
-                if (terrain == null || terrain.hasPlant() || terrain instanceof Hill || terrain instanceof River  || terrain instanceof Fence || terrain instanceof Floor) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    public boolean canPlaceBush(int x, int y){
-        Terrain terrain = getTerrainAt(x, y);
-        if (terrain == null || terrain.hasPlant() || terrain instanceof Hill || terrain instanceof River  || terrain instanceof Fence || terrain instanceof Floor) {
-            return false;
-        }
-        return true;
+        return canPlaceObject(startX, startY, 4, 2);
     }
 
+    public boolean canPlaceBushGrass(int x, int y) {
+        return canPlaceObject(x, y, 1, 1);
+    }
 
-    public void placeMultiTilePlant(Plant plant, int x, int y, int widthInTiles, int heightInTiles) {
+    public void placeMultiTilePlant(Placeable placeable, int x, int y, int widthInTiles, int heightInTiles) {
 
         //Placing the plane in the global gamePane but still covering entirely the 2 panes underneath
-        plant.setLayoutX(x * 30);
-        plant.setLayoutY(y * 30);
-        gamePane.getChildren().add(plant);
+        placeable.setLayoutX(x * 30);
+        placeable.setLayoutY(y * 30);
+        gamePane.getChildren().add(placeable);
 
         //marking the 2 panes underneath it as occupied by the plant
         for (int i = x; i < x + widthInTiles; i++) {
             for (int j = y; j < y + heightInTiles; j++) {
                 Terrain terrain = getTerrainAt(i, j);
                 if (terrain != null) {
-                    terrain.placePlant(plant);
+                    terrain.placePlant(placeable);
                 }
             }
         }
     }
-    public void placeSingleTilePlant(Plant plant, int x, int y){
-        plant.setLayoutX(x * 30);
-        plant.setLayoutY(y * 30);
-        gamePane.getChildren().add(plant);
+    public void placeSingleTilePlant(Placeable placeable, int x, int y){
+        placeable.setLayoutX(x * 30);
+        placeable.setLayoutY(y * 30);
+        gamePane.getChildren().add(placeable);
 
         Terrain terrain = getTerrainAt(x,y);
-        terrain.placePlant(plant);
+        terrain.placePlant(placeable);
     }
 
 

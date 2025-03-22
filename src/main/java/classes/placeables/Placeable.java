@@ -4,30 +4,32 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import java.awt.im.spi.InputMethod;
-
 public abstract class Placeable extends Pane{
-    protected int x, y, size;
+    protected static final int TILE_SIZE = 30;
+
+    protected int x, y;
+    protected final int WIDTH_IN_TILES;
+    protected final int HEIGHT_IN_TILES;
     protected ImageView picture;
 
-    public Placeable(int x, int y, int size, String imgURL) {
+    public Placeable(int x, int y, int widthInTiles, int heightInTiles, String imgURL) {
         this.x = x;
         this.y = y;
-        this.size = size;
+        this.WIDTH_IN_TILES = widthInTiles;
+        this.HEIGHT_IN_TILES = heightInTiles;
 
         Image img = new Image(getClass().getResource(imgURL).toExternalForm());
         this.picture = new ImageView(img);
 
         //this.picture.setLayoutX(0);
         //this.picture.setLayoutX(0);
-        this.picture.setFitWidth(size);
-        this.picture.setFitHeight(size);
+        this.picture.setFitWidth(widthInTiles * TILE_SIZE);
+        this.picture.setFitHeight(heightInTiles * TILE_SIZE);
 
         this.getChildren().add(picture);
         //placing the pane itself
         //setLayoutX(x);
         //setLayoutY(y);
-
 
     }
 

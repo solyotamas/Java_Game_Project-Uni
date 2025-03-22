@@ -1,5 +1,6 @@
 package classes.terrains;
 
+import classes.placeables.Placeable;
 import classes.placeables.Plant;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -14,7 +15,7 @@ public class Terrain extends Pane{
     protected ImageView background;
     protected int crossingDifficulty;
 
-    private Plant plant;
+    private Placeable placeable;
 
     public Terrain(int row, int col, Image img, int crossingDifficulty) {
         //tulajdonsagok
@@ -37,12 +38,12 @@ public class Terrain extends Pane{
     }
 
 
-    public void placePlant(Plant plant) {
-        this.plant = plant;
+    public void placePlant(Placeable placeable) {
+        this.placeable = placeable;
     }
 
     public boolean hasPlant() {
-        return plant != null;
+        return placeable != null;
     }
 
 
