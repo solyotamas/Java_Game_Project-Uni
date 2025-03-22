@@ -29,29 +29,29 @@
          <children>
             <StackPane prefHeight="0.0" prefWidth="0.0">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="145.0" />
-                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="176.0" />
+                  <HBox alignment="CENTER" prefHeight="55.0" prefWidth="154.0" spacing="10.0">
                      <children>
-                        <Label contentDisplay="CENTER" prefHeight="33.0" prefWidth="78.0" style="-fx-alignment: center;" text="250 000" textFill="#3e2415">
+                        <Label fx:id="gameTimeLabel1" prefHeight="33.0" prefWidth="216.0" style="-fx-alignment: center;" text="1 000 000" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
                         </Label>
-                        <ImageView fitHeight="37.0" fitWidth="39.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="37.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/money.png" />
                            </image>
                            <HBox.margin>
-                              <Insets left="15.0" />
+                              <Insets right="15.0" />
                            </HBox.margin>
                         </ImageView>
                      </children>
                      <opaqueInsets>
                         <Insets />
                      </opaqueInsets>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
                   </HBox>
                </children>
                <opaqueInsets>
@@ -63,17 +63,20 @@
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="209.0" />
                   <HBox alignment="CENTER" prefHeight="55.0" prefWidth="192.0" spacing="10.0">
                      <children>
-                        <Label fx:id="gameTimeLabel" prefHeight="33.0" prefWidth="131.0" style="-fx-alignment: center;" text="0 days 0 hours" textFill="#3e2415">
+                        <Label fx:id="gameTimeLabel" prefHeight="33.0" prefWidth="300.0" style="-fx-alignment: center;" text="0 days 0 hours" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
                         </Label>
-                        <ImageView fitHeight="34.0" fitWidth="31.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                        <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
                            <image>
                               <Image url="@../images/time.png" />
                            </image>
                            <HBox.margin>
-                              <Insets left="15.0" />
+                              <Insets right="15.0" />
                            </HBox.margin>
                         </ImageView>
                      </children>
@@ -181,7 +184,7 @@
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
                   <HBox alignment="CENTER" prefHeight="45.0" prefWidth="125.0" spacing="10.0">
                      <children>
-                        <ImageView fitHeight="37.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="23.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/jeep.png" />
                            </image>
@@ -189,75 +192,16 @@
                               <Insets left="15.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Label fx:id="jeepCountLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" textFill="#3e2415">
+                        <Label fx:id="jeepCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="174.0" style="-fx-alignment: center;" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
                            <opaqueInsets>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                            </opaqueInsets>
-                        </Label>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </StackPane>
-            <StackPane prefHeight="0.0" prefWidth="0.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
-                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
-                     <children>
-                        <ImageView fitHeight="37.0" fitWidth="35.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/caprinae.png" />
-                           </image>
                            <HBox.margin>
-                              <Insets left="15.0" />
+                              <Insets right="15.0" />
                            </HBox.margin>
-                        </ImageView>
-                        <Label fx:id="herbivoreCountLabel" alignment="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" textFill="#3e2415">
-                           <font>
-                              <Font name="Calibri Bold" size="20.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </StackPane>
-            <StackPane prefHeight="0.0" prefWidth="0.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
-                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
-                     <children>
-                        <ImageView fitHeight="37.0" fitWidth="35.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/caprinae.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="15.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label fx:id="carnivoreCountLabel" alignment="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" textFill="#3e2415">
-                           <font>
-                              <Font name="Calibri Bold" size="20.0" />
-                           </font>
                         </Label>
                      </children>
                      <opaqueInsets>
@@ -279,16 +223,19 @@
                      <children>
                         <ImageView fitHeight="37.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../images/money2.png" />
+                              <Image url="@../images/zebra.png" />
                            </image>
                            <HBox.margin>
                               <Insets left="15.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" text="250 000" textFill="#3e2415">
+                        <Label fx:id="herbivoreCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="222.0" style="-fx-alignment: center;" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin>
                         </Label>
                      </children>
                      <opaqueInsets>
@@ -308,7 +255,75 @@
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
                   <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
                      <children>
-                        <ImageView fitHeight="24.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="37.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/tiger.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label fx:id="carnivoreCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="224.0" style="-fx-alignment: center;" textFill="#3e2415">
+                           <font>
+                              <Font name="Calibri Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </HBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </StackPane>
+            <StackPane prefHeight="0.0" prefWidth="0.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
+                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
+                     <children>
+                        <ImageView fitHeight="23.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/ticket.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="165.0" style="-fx-alignment: center;" text="250 000" textFill="#3e2415">
+                           <font>
+                              <Font name="Calibri Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </HBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </StackPane>
+            <StackPane prefHeight="0.0" prefWidth="0.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
+                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
+                     <children>
+                        <ImageView fitHeight="32.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../images/camera.png" />
                            </image>
@@ -316,10 +331,13 @@
                               <Insets left="15.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Label fx:id="touristCountLabel" alignment="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" textFill="#3e2415">
+                        <Label fx:id="touristCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="175.0" style="-fx-alignment: center;" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets right="15.0" />
+                           </HBox.margin>
                         </Label>
                      </children>
                      <opaqueInsets>
@@ -664,10 +682,13 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="59.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="53.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/elephant.png" />
                                  </image>
+                                 <VBox.margin>
+                                    <Insets top="6.0" />
+                                 </VBox.margin>
                               </ImageView>
                               <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Elephant 500$" textFill="#3e2415">
                                  <VBox.margin>
@@ -707,15 +728,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="64.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="44.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/gazelle.png" />
+                                    <Image url="@../images/rhino.png" />
                                  </image>
                                  <VBox.margin>
-                                    <Insets top="5.0" />
+                                    <Insets top="17.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Gazelle 250$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Rhino 400$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -753,15 +774,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="56.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/giraffe.png" />
+                                    <Image url="@../images/hippo.png" />
                                  </image>
                                  <VBox.margin>
-                                    <Insets top="5.0" />
+                                    <Insets top="20.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" graphicTextGap="0.0" prefHeight="23.0" prefWidth="113.0" text="Giraffe 450$" textFill="#3e2415">
+                              <Label alignment="CENTER" graphicTextGap="0.0" prefHeight="23.0" prefWidth="113.0" text="Hippo 400$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -797,60 +818,17 @@
                               </DropShadow>
                            </effect>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                           <children>
-                              <ImageView fitHeight="50.0" fitWidth="47.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/kecske.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="12.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Goat 200$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="4" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="59.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="52.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/ostrich.png" />
+                                    <Image url="@../images/zebra.png" />
                                  </image>
+                                 <VBox.margin>
+                                    <Insets top="7.0" />
+                                 </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Ostrich 300$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Zebra 300$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -888,12 +866,58 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="5" GridPane.rowIndex="1">
                            <children>
+                              <ImageView fitHeight="48.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/kangaroo.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets top="9.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Kangaroo 300$" textFill="#3e2415">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Calibri Bold" size="16.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
+                                 <font>
+                                    <Font name="Calibri Bold" size="16.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <effect>
+                              <DropShadow height="15.0" radius="7.0" width="15.0">
+                                 <color>
+                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="6" GridPane.rowIndex="1">
+                           <children>
                               <ImageView fitHeight="44.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/turtle.png" />
                                  </image>
                                  <VBox.margin>
-                                    <Insets top="16.0" />
+                                    <Insets bottom="10.0" top="25.0" />
                                  </VBox.margin>
                               </ImageView>
                               <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Turtle 100$" textFill="#3e2415">
@@ -932,17 +956,17 @@
                               </DropShadow>
                            </effect>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="6" GridPane.rowIndex="1">
+                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="3" GridPane.rowIndex="1">
                            <children>
-                              <ImageView fitHeight="59.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="44.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/caprinae.png" />
+                                    <Image url="@../images/buffalo.png" />
                                  </image>
                                  <VBox.margin>
-                                    <Insets top="5.0" />
+                                    <Insets top="15.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Caprinae 250$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Buffalo 350$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -978,14 +1002,63 @@
                               </DropShadow>
                            </effect>
                         </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.rowIndex="2">
                            <children>
-                              <ImageView fitHeight="64.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="42.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/lion.png" />
                                  </image>
+                                 <VBox.margin>
+                                    <Insets top="13.0" />
+                                 </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Lion 400$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Lion 450$" textFill="#3e2415">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Calibri Bold" size="16.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore" textFill="#ff3a00">
+                                 <font>
+                                    <Font name="Calibri Bold" size="16.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <effect>
+                              <DropShadow height="15.0" radius="7.0" width="15.0">
+                                 <color>
+                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <children>
+                              <ImageView fitHeight="41.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/tiger.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets top="14.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Tiger 450$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1023,12 +1096,15 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <children>
-                              <ImageView fitHeight="62.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="41.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../images/lynx.png" />
+                                    <Image url="@../images/panther.png" />
                                  </image>
+                                 <VBox.margin>
+                                    <Insets top="14.0" />
+                                 </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Lynx 200$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Panther 400$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1040,49 +1116,6 @@
                                  </opaqueInsets>
                               </Label>
                               <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore" textFill="#ff3a00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.rowIndex="2">
-                           <children>
-                              <ImageView fitHeight="58.0" fitWidth="62.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/bison.png" />
-                                 </image>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Bison 300$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
                                  <font>
                                     <Font name="Calibri Bold" size="16.0" />
                                  </font>
@@ -1135,6 +1168,52 @@
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
+                              </Button>
+                           </children>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <effect>
+                              <DropShadow height="15.0" radius="7.0" width="15.0">
+                                 <color>
+                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
+                                 </color>
+                              </DropShadow>
+                           </effect>
+                        </VBox>
+                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                           <children>
+                              <ImageView fitHeight="23.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../images/vulture.png" />
+                                 </image>
+                                 <VBox.margin>
+                                    <Insets bottom="8.0" top="22.0" />
+                                 </VBox.margin>
+                              </ImageView>
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Vulture 250$" textFill="#3e2415">
+                                 <VBox.margin>
+                                    <Insets top="10.0" />
+                                 </VBox.margin>
+                                 <font>
+                                    <Font name="Calibri Bold" size="16.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore" textFill="#ff3a00">
+                                 <font>
+                                    <Font name="Calibri Bold" size="16.0" />
+                                 </font>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                              </Label>
+                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
                               </Button>
                            </children>
                            <opaqueInsets>
