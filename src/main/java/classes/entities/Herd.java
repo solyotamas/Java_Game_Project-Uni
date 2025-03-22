@@ -1,4 +1,4 @@
-package classes.placeables;
+package classes.entities;
 
 import java.util.ArrayList;
 

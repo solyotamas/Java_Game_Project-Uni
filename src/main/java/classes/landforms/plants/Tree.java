@@ -1,4 +1,6 @@
-package classes.placeables;
+package classes.landforms.plants;
+
+import classes.landforms.Plant;
 
 import java.util.Random;
 

@@ -1,4 +1,6 @@
-package classes.placeables;
+package classes.landforms.plants;
+
+import classes.landforms.Plant;
 
 public class Grass extends Plant {
     public Grass(int x, int y) {

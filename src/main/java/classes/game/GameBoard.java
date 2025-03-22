@@ -1,6 +1,6 @@
 package classes.game;
 
-import classes.placeables.Placeable;
+import classes.landforms.Landform;
 import classes.terrains.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -164,9 +164,9 @@ public class GameBoard{
             return null;
     }
 
-    public boolean canPlaceObject(Placeable placeable, int startX, int startY) {
-        for (int x = startX; x < startX + placeable.getWidthInTiles(); x++) {
-            for (int y = startY; y < startY + placeable.getHeightInTiles(); y++) {
+    public boolean canPlaceItem(Landform landform, int startX, int startY) {
+        for (int x = startX; x < startX + landform.getWidthInTiles(); x++) {
+            for (int y = startY; y < startY + landform.getHeightInTiles(); y++) {
                 Terrain terrain = getTerrainAt(x, y);
                 if (terrain == null || terrain.hasPlaceable() || terrain instanceof Hill ||
                         terrain instanceof River || terrain instanceof Fence || terrain instanceof Floor) {
@@ -177,16 +177,16 @@ public class GameBoard{
         return true;
     }
 
-    public void placeItem(Placeable placeable, int x, int y) {
-        placeable.setLayoutX(x * TILE_SIZE);
-        placeable.setLayoutY(y * TILE_SIZE);
-        gamePane.getChildren().add(placeable);
+    public void placeItem(Landform landform, int x, int y) {
+        landform.setLayoutX(x * TILE_SIZE);
+        landform.setLayoutY(y * TILE_SIZE);
+        gamePane.getChildren().add(landform);
 
-        for (int i = x; i < x + placeable.getWidthInTiles(); i++) {
-            for (int j = y; j < y + placeable.getHeightInTiles(); j++) {
+        for (int i = x; i < x + landform.getWidthInTiles(); i++) {
+            for (int j = y; j < y + landform.getHeightInTiles(); j++) {
                 Terrain terrain = getTerrainAt(i, j);
                 if (terrain != null) {
-                    terrain.placeItem(placeable);
+                    terrain.placeItem(landform);
                 }
             }
         }

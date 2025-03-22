@@ -1,10 +1,10 @@
-package classes.placeables;
+package classes.landforms;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public abstract class Placeable extends Pane{
+public abstract class Landform extends Pane{
     protected static final int TILE_SIZE = 30;
 
     protected int x, y;
@@ -12,7 +12,7 @@ public abstract class Placeable extends Pane{
     protected final int heightInTiles;
     protected ImageView picture;
 
-    public Placeable(int x, int y, int widthInTiles, int heightInTiles, String imgURL) {
+    public Landform(int x, int y, int widthInTiles, int heightInTiles, String imgURL) {
         this.x = x;
         this.y = y;
         this.widthInTiles = widthInTiles;

@@ -1,7 +1,10 @@
 package classes.controllers;
 
 import classes.game.GameBoard;
-import classes.placeables.*;
+import classes.landforms.*;
+import classes.landforms.plants.Bush;
+import classes.landforms.plants.Grass;
+import classes.landforms.plants.Tree;
 import classes.terrains.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -48,15 +51,15 @@ public class GameController {
     //todo
     // need to simplify
     @FXML
-    private void buyItem(Placeable placeable, String imagePath) {
+    private void buyItem(Landform landform, String imagePath) {
         shopPane.setVisible(false);
 
         Image plantImage = new Image(getClass().getResource(imagePath).toExternalForm());
         ImageView ghostImage = new ImageView(plantImage);
         ghostImage.setOpacity(0.5);
         ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(TILE_SIZE * placeable.getWidthInTiles());
-        ghostImage.setFitHeight(TILE_SIZE * placeable.getHeightInTiles());
+        ghostImage.setFitWidth(TILE_SIZE * landform.getWidthInTiles());
+        ghostImage.setFitHeight(TILE_SIZE * landform.getHeightInTiles());
 
         gamePane.getChildren().add(ghostImage);
 
@@ -64,8 +67,8 @@ public class GameController {
             double snappedX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
             double snappedY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
 
-            int maxX = (gameBoard.getColumns() - placeable.getWidthInTiles()) * TILE_SIZE;
-            int maxY = (gameBoard.getRows() - placeable.getHeightInTiles()) * TILE_SIZE;
+            int maxX = (gameBoard.getColumns() - landform.getWidthInTiles()) * TILE_SIZE;
+            int maxY = (gameBoard.getRows() - landform.getHeightInTiles()) * TILE_SIZE;
             snappedX = Math.max(0, Math.min(snappedX, maxX));
             snappedY = Math.max(0, Math.min(snappedY, maxY));
 
@@ -77,10 +80,10 @@ public class GameController {
             int tileX = ((int) e.getX()) / TILE_SIZE;
             int tileY = ((int) e.getY()) / TILE_SIZE;
 
-            boolean canPlace = gameBoard.canPlaceObject(placeable, tileX, tileY);
+            boolean canPlace = gameBoard.canPlaceItem(landform, tileX, tileY);
 
             if (canPlace) {
-                gameBoard.placeItem(placeable, tileX, tileY);
+                gameBoard.placeItem(landform, tileX, tileY);
             } else {
                 System.out.println("Cannot place here.");
             }

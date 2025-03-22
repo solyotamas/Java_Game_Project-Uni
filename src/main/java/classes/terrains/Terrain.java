@@ -1,6 +1,6 @@
 package classes.terrains;
 
-import classes.placeables.Placeable;
+import classes.landforms.Landform;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -14,7 +14,7 @@ public class Terrain extends Pane{
     protected ImageView background;
     protected int crossingDifficulty;
 
-    private Placeable placeable;
+    private Landform landform;
 
     public Terrain(int row, int col, Image img, int crossingDifficulty) {
         //properties
@@ -36,12 +36,12 @@ public class Terrain extends Pane{
         getChildren().add(background);
     }
 
-    public void placeItem(Placeable placeable) {
-        this.placeable = placeable;
+    public void placeItem(Landform landform) {
+        this.landform = landform;
     }
 
     public boolean hasPlaceable() {
-        return placeable != null;
+        return landform != null;
     }
 
 }
