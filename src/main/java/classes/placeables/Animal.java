@@ -12,8 +12,8 @@ public abstract class Animal extends Placeable {
     private ArrayList<Placeable> consumes;
     private Herd herd;
 
-    public Animal(int x, int y, int size, String imgURL, ArrayList<Placeable> consumes)  {
-        super(x, y, size, imgURL);
+    public Animal(int x, int y, int widthInTiles, int heightInTiles, String imgURL, ArrayList<Placeable> consumes)  {
+        super(x, y, widthInTiles, heightInTiles, imgURL);
         this.appetite = 1;
         this.consumes = consumes;
     }

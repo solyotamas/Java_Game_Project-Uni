@@ -1,6 +1,6 @@
 package classes.game;
 
-import classes.placeables.Plant;
+import classes.placeables.Placeable;
 import classes.terrains.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -13,6 +13,7 @@ public class GameBoard{
     //stats
     private static final int ROWS = 31;
     private static final int COLUMNS = 64;
+    private static final int TILE_SIZE = 30;
 
 
     //representation
@@ -161,65 +162,35 @@ public class GameBoard{
             return terrainGrid[x][y];
         }else
             return null;
-
     }
-    public boolean canPlaceTree(int startX, int startY) {
-        for (int x = startX; x < startX + 2; x++) {
-            for (int y = startY; y < startY + 2; y++) {
+
+    public boolean canPlaceObject(Placeable placeable, int startX, int startY) {
+        for (int x = startX; x < startX + placeable.getWidthInTiles(); x++) {
+            for (int y = startY; y < startY + placeable.getHeightInTiles(); y++) {
                 Terrain terrain = getTerrainAt(x, y);
-                if (terrain == null || terrain.hasPlant() || terrain instanceof Hill || terrain instanceof River || terrain instanceof Fence || terrain instanceof Floor) {
+                if (terrain == null || terrain.hasPlaceable() || terrain instanceof Hill ||
+                        terrain instanceof River || terrain instanceof Fence || terrain instanceof Floor) {
                     return false;
                 }
             }
         }
         return true;
     }
-    public boolean canPlaceLake(int startX, int startY) {
-        for (int x = startX; x < startX + 4; x++) {
-            for (int y = startY; y < startY + 2; y++) {
-                Terrain terrain = getTerrainAt(x, y);
-                if (terrain == null || terrain.hasPlant() || terrain instanceof Hill || terrain instanceof River  || terrain instanceof Fence || terrain instanceof Floor) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-    public boolean canPlaceBush(int x, int y){
-        Terrain terrain = getTerrainAt(x, y);
-        if (terrain == null || terrain.hasPlant() || terrain instanceof Hill || terrain instanceof River  || terrain instanceof Fence || terrain instanceof Floor) {
-            return false;
-        }
-        return true;
-    }
 
+    public void placeItem(Placeable placeable, int x, int y) {
+        placeable.setLayoutX(x * TILE_SIZE);
+        placeable.setLayoutY(y * TILE_SIZE);
+        gamePane.getChildren().add(placeable);
 
-    public void placeMultiTilePlant(Plant plant, int x, int y, int widthInTiles, int heightInTiles) {
-
-        //Placing the plane in the global gamePane but still covering entirely the 2 panes underneath
-        plant.setLayoutX(x * 30);
-        plant.setLayoutY(y * 30);
-        gamePane.getChildren().add(plant);
-
-        //marking the 2 panes underneath it as occupied by the plant
-        for (int i = x; i < x + widthInTiles; i++) {
-            for (int j = y; j < y + heightInTiles; j++) {
+        for (int i = x; i < x + placeable.getWidthInTiles(); i++) {
+            for (int j = y; j < y + placeable.getHeightInTiles(); j++) {
                 Terrain terrain = getTerrainAt(i, j);
                 if (terrain != null) {
-                    terrain.placePlant(plant);
+                    terrain.placeItem(placeable);
                 }
             }
         }
     }
-    public void placeSingleTilePlant(Plant plant, int x, int y){
-        plant.setLayoutX(x * 30);
-        plant.setLayoutY(y * 30);
-        gamePane.getChildren().add(plant);
-
-        Terrain terrain = getTerrainAt(x,y);
-        terrain.placePlant(plant);
-    }
-
 
     public int getColumns(){
         return COLUMNS;

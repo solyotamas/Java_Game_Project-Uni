@@ -1,12 +1,7 @@
 package classes.placeables;
 
-public class Lake extends Plant{
-    private static final int WIDTH_IN_TILES = 4;
-    private static final int HEIGHT_IN_TILES = 2;
-
-
+public class Lake extends Placeable {
     public Lake(int x, int y) {
-        super(x, y, HEIGHT_IN_TILES, WIDTH_IN_TILES,"/images/lake.png" );
+        super(x, y, 4, 2, "/images/lake.png");
     }
-
 }
