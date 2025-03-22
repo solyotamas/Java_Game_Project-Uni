@@ -1,10 +1,17 @@
 package classes.controllers;
 
+import classes.entities.animals.Peacocktest;
 import classes.game.GameBoard;
-import classes.placeables.Bush;
-import classes.placeables.Lake;
-import classes.placeables.Tree;
+import classes.game.GameEngine;
+
+import classes.landforms.Lake;
+import classes.landforms.Landform;
+import classes.landforms.plants.Bush;
+import classes.landforms.plants.Grass;
+import classes.landforms.plants.Tree;
 import classes.terrains.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,16 +19,24 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Random;
+
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
+
+import static classes.Difficulty.EASY;
 
 
 public class GameController {
     private GameBoard gameBoard;
+    private GameEngine gameEngine;
+    private static final int TILE_SIZE = 30;
 
 
     @FXML
@@ -30,6 +45,17 @@ public class GameController {
     private Button marketButton;
     @FXML
     private Pane shopPane;
+    @FXML
+    private Label gameTimeLabel;
+    @FXML
+    private Label herbivoreCountLabel;
+    @FXML
+    private Label carnivoreCountLabel;
+    @FXML
+    private Label jeepCountLabel;
+    @FXML
+    private Label touristCountLabel;
+
 
 
     //Market appear, disappear
@@ -49,25 +75,24 @@ public class GameController {
     //todo
     // need to simplify
     @FXML
-    public void buyBush() {
+    private void buyItem(Landform landform, String imagePath) {
         shopPane.setVisible(false);
 
-        Image plantImage = new Image(getClass().getResource("/images/bush1.png").toExternalForm());
+        Image plantImage = new Image(getClass().getResource(imagePath).toExternalForm());
         ImageView ghostImage = new ImageView(plantImage);
         ghostImage.setOpacity(0.5);
         ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(30);
-        ghostImage.setFitHeight(30);
+        ghostImage.setFitWidth(TILE_SIZE * landform.getWidthInTiles());
+        ghostImage.setFitHeight(TILE_SIZE * landform.getHeightInTiles());
 
         gamePane.getChildren().add(ghostImage);
 
         gamePane.setOnMouseMoved(e -> {
-            int gridSize = 30;
-            double snappedX = Math.floor(e.getX() / gridSize) * gridSize;
-            double snappedY = Math.floor(e.getY() / gridSize) * gridSize;
+            double snappedX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
+            double snappedY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
 
-            int maxX = (gameBoard.getColumns() - 1) * gridSize;
-            int maxY = (gameBoard.getRows() - 1) * gridSize;
+            int maxX = (gameBoard.getColumns() - landform.getWidthInTiles()) * TILE_SIZE;
+            int maxY = (gameBoard.getRows() - landform.getHeightInTiles()) * TILE_SIZE;
             snappedX = Math.max(0, Math.min(snappedX, maxX));
             snappedY = Math.max(0, Math.min(snappedY, maxY));
 
@@ -76,110 +101,42 @@ public class GameController {
         });
 
         gamePane.setOnMouseClicked(e -> {
+            int tileX = ((int) e.getX()) / TILE_SIZE;
+            int tileY = ((int) e.getY()) / TILE_SIZE;
 
-            int tileX = ((int) e.getX()) / 30;
-            int tileY = ((int) e.getY()) / 30;
+            boolean canPlace = gameBoard.canPlaceItem(landform, tileX, tileY);
 
-            if (gameBoard.canPlaceBush(tileX, tileY)) {
-                Bush bush = new Bush(tileX, tileY);
-                gameBoard.placeSingleTilePlant(bush, tileX, tileY);
+            if (canPlace) {
+                gameBoard.placeItem(landform, tileX, tileY);
             } else {
-                System.out.println("Cannot place tree here.");
+                System.out.println("Cannot place here.");
             }
 
-
-            // Clean up ghost image and listeners
             gamePane.getChildren().remove(ghostImage);
             gamePane.setOnMouseMoved(null);
             gamePane.setOnMouseClicked(null);
         });
     }
+
+    @FXML
+    public void buyBush() {
+        buyItem(new Bush(0, 0), "/images/bush1.png");
+    }
+
     @FXML
     public void buyTree() {
-        shopPane.setVisible(false);
-
-        Image treeImage = new Image(getClass().getResource("/images/tree2.png").toExternalForm());
-        ImageView ghostImage = new ImageView(treeImage);
-        ghostImage.setOpacity(0.5);
-        ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(60);
-        ghostImage.setFitHeight(60);
-
-        gamePane.getChildren().add(ghostImage);
-
-        gamePane.setOnMouseMoved(e -> {
-            int gridSize = 30;
-            double snappedX = Math.floor(e.getX() / gridSize) * gridSize;
-            double snappedY = Math.floor(e.getY() / gridSize) * gridSize;
-
-            int maxX = (gameBoard.getColumns() - 1) * gridSize;
-            int maxY = (gameBoard.getRows() - 2) * gridSize;
-            snappedX = Math.max(0, Math.min(snappedX, maxX));
-            snappedY = Math.max(0, Math.min(snappedY, maxY));
-
-            ghostImage.setLayoutX(snappedX);
-            ghostImage.setLayoutY(snappedY);
-        });
-
-        gamePane.setOnMouseClicked(e -> {
-            int tileX = ((int) e.getX()) / 30;
-            int tileY = ((int) e.getY()) / 30;
-
-            if (gameBoard.canPlaceTree(tileX, tileY)) {
-                Tree tree = new Tree(tileX, tileY);
-                gameBoard.placeMultiTilePlant(tree, tileX, tileY, 2, 2);
-            } else {
-                System.out.println("Cannot place tree here.");
-            }
-
-            gamePane.getChildren().remove(ghostImage);
-            gamePane.setOnMouseMoved(null);
-            gamePane.setOnMouseClicked(null);
-        });
+        buyItem(new Tree(0, 0), "/images/tree2.png");
     }
+
     @FXML
     public void buyLake() {
-        shopPane.setVisible(false);
-
-        Image lakeImage = new Image(getClass().getResource("/images/lake.png").toExternalForm());
-        ImageView ghostImage = new ImageView(lakeImage);
-        ghostImage.setOpacity(0.5);
-        ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(120);
-        ghostImage.setFitHeight(60);
-
-        gamePane.getChildren().add(ghostImage);
-
-        gamePane.setOnMouseMoved(e -> {
-            int gridSize = 30;
-            double snappedX = Math.floor(e.getX() / gridSize) * gridSize;
-            double snappedY = Math.floor(e.getY() / gridSize) * gridSize;
-
-            int maxX = (gameBoard.getColumns() - 2) * gridSize;
-            int maxY = (gameBoard.getRows() - 1) * gridSize;
-            snappedX = Math.max(0, Math.min(snappedX, maxX));
-            snappedY = Math.max(0, Math.min(snappedY, maxY));
-
-            ghostImage.setLayoutX(snappedX);
-            ghostImage.setLayoutY(snappedY);
-        });
-
-        gamePane.setOnMouseClicked(e -> {
-            int tileX = ((int) e.getX()) / 30;
-            int tileY = ((int) e.getY()) / 30;
-
-            if (gameBoard.canPlaceLake(tileX, tileY)) {
-                Lake lake = new Lake(tileX, tileY);
-                gameBoard.placeMultiTilePlant(lake, tileX, tileY, 4, 2);
-            } else {
-                System.out.println("Cannot place lake here.");
-            }
-
-            gamePane.getChildren().remove(ghostImage);
-            gamePane.setOnMouseMoved(null);
-            gamePane.setOnMouseClicked(null);
-        });
+        buyItem(new Lake(0, 0), "/images/lake.png");
     }
+
+    public void buyGrass() {
+        buyItem(new Grass(0, 0), "/images/grass.png");
+    }
+
 
 
 
@@ -192,6 +149,7 @@ public class GameController {
     }
 
 
+
     //starting game
     //TODO
     // - make a game loop, maybe game factory to separate placing the plants, track placed plants somewhere
@@ -200,15 +158,55 @@ public class GameController {
     @FXML
     public void initialize() {
         //preloading images for faster start
-            preloadImages();
+        preloadImages();
         //-------------------------------
 
         this.gameBoard = new GameBoard(gamePane, shopPane, marketButton);
         gameBoard.setupBoard();
 
+        //IDE MAJD KELL RENDESEN A PARAMÉTEREK
+        this.gameEngine = new GameEngine(this, EASY ,null);
+        gameEngine.gameLoop();
+
+        Peacocktest pc = new Peacocktest(400, 400);
+        gamePane.getChildren().add(pc);
+        pc.toFront();
+
+        Timeline smoothSlowMove = new Timeline(new javafx.animation.KeyFrame(Duration.millis(50), e -> {
+            switch (pc.currentDirection) {
+                case UP -> pc.move(Peacocktest.Direction.UP, 0, -0.5);
+                case DOWN -> pc.move(Peacocktest.Direction.DOWN, 0, 0.5);
+                case LEFT -> pc.move(Peacocktest.Direction.LEFT, -0.5, 0);
+                case RIGHT -> pc.move(Peacocktest.Direction.RIGHT, 0.5, 0);
+            }
+        }));
+        smoothSlowMove.setCycleCount(Timeline.INDEFINITE);
+        smoothSlowMove.play();
+
+        // Random direction change timeline every 2-4 seconds
+        Timeline randomDirectionChange = new Timeline(new javafx.animation.KeyFrame(Duration.seconds(5), e -> {
+            Peacocktest.Direction[] directions = Peacocktest.Direction.values();
+            int randomIndex = new java.util.Random().nextInt(directions.length);
+            pc.currentDirection = directions[randomIndex];
+        }));
+        randomDirectionChange.setCycleCount(Timeline.INDEFINITE);
+        randomDirectionChange.play();
+
     }
 
+    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists){
+        //STATS
+        int days = (int) time / 24;
+        int hours = (int) time % 24;
 
+        gameTimeLabel.setText("Day: " + days + " Hour: " + hours);
+        carnivoreCountLabel.setText(carnivores + "");
+        herbivoreCountLabel.setText(herbivores + "");
+        jeepCountLabel.setText(jeeps + "");
+        touristCountLabel.setText(tourists + "");
+
+
+    }
 
 
     //SWITCHING SCENES

@@ -1,6 +1,7 @@
 package classes.game;
 
-import classes.placeables.Plant;
+import classes.landforms.Landform;
+import classes.landforms.Plant;
 import classes.terrains.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -13,6 +14,7 @@ public class GameBoard{
     //stats
     private static final int ROWS = 31;
     private static final int COLUMNS = 64;
+    private static final int TILE_SIZE = 30;
 
 
     //representation
@@ -161,8 +163,44 @@ public class GameBoard{
             return terrainGrid[x][y];
         }else
             return null;
-
     }
+
+    public boolean canPlaceItem(Landform landform, int startX, int startY) {
+        for (int x = startX; x < startX + landform.getWidthInTiles(); x++) {
+            for (int y = startY; y < startY + landform.getHeightInTiles(); y++) {
+                Terrain terrain = getTerrainAt(x, y);
+                if (terrain == null || terrain.hasPlaceable() || terrain instanceof Hill ||
+                        terrain instanceof River || terrain instanceof Fence || terrain instanceof Floor) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void placeItem(Landform landform, int x, int y) {
+        landform.setLayoutX(x * TILE_SIZE);
+        landform.setLayoutY(y * TILE_SIZE);
+        gamePane.getChildren().add(landform);
+
+        for (int i = x; i < x + landform.getWidthInTiles(); i++) {
+            for (int j = y; j < y + landform.getHeightInTiles(); j++) {
+                Terrain terrain = getTerrainAt(i, j);
+                if (terrain != null) {
+                    terrain.placeItem(landform);
+                }
+            }
+        }
+    }
+
+    public int getColumns(){
+        return COLUMNS;
+    }
+    public int getRows(){
+        return ROWS;
+    }
+
+    /*
     public boolean canPlaceTree(int startX, int startY) {
         for (int x = startX; x < startX + 2; x++) {
             for (int y = startY; y < startY + 2; y++) {
@@ -193,7 +231,6 @@ public class GameBoard{
         return true;
     }
 
-
     public void placeMultiTilePlant(Plant plant, int x, int y, int widthInTiles, int heightInTiles) {
 
         //Placing the plane in the global gamePane but still covering entirely the 2 panes underneath
@@ -219,14 +256,6 @@ public class GameBoard{
         Terrain terrain = getTerrainAt(x,y);
         terrain.placePlant(plant);
     }
-
-
-    public int getColumns(){
-        return COLUMNS;
-    }
-    public int getRows(){
-        return ROWS;
-    }
-
+    */
 
 }

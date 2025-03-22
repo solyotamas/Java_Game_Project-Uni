@@ -1,16 +1,16 @@
-package classes.placeables;
+package classes.entities;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import java.awt.im.spi.InputMethod;
 
-public abstract class Placeable extends Pane{
+//mire kell az absrtact?
+public abstract class Human extends Pane{
     protected int x, y, size;
     protected ImageView picture;
 
-    public Placeable(int x, int y, int size, String imgURL) {
+    public Human(int x, int y, int size, String imgURL) {
         this.x = x;
         this.y = y;
         this.size = size;
@@ -27,10 +27,6 @@ public abstract class Placeable extends Pane{
         //placing the pane itself
         //setLayoutX(x);
         //setLayoutY(y);
-
-
     }
-
-
 
 }

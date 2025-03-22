@@ -1,10 +1,10 @@
-package classes.placeables;
+package classes.landforms;
 
 import java.util.Random;
 
-public class Road extends Placeable {
-    public Road(int x, int y, int size) {
-        super(x, y, size, getRandomRoadImage());
+public class Road extends Landform {
+    public Road(int x, int y) {
+        super(x, y, 1, 1, getRandomRoadImage());
     }
 
     private static String getRandomRoadImage() {
