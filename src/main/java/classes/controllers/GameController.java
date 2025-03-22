@@ -1,11 +1,17 @@
 package classes.controllers;
 
+import classes.entities.animals.Peacocktest;
 import classes.game.GameBoard;
-import classes.landforms.*;
+import classes.game.GameEngine;
+
+import classes.landforms.Lake;
+import classes.landforms.Landform;
 import classes.landforms.plants.Bush;
 import classes.landforms.plants.Grass;
 import classes.landforms.plants.Tree;
 import classes.terrains.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,16 +19,23 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Random;
+
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
+
+import static classes.Difficulty.EASY;
 
 
 public class GameController {
     private GameBoard gameBoard;
+    private GameEngine gameEngine;
     private static final int TILE_SIZE = 30;
 
 
@@ -32,6 +45,17 @@ public class GameController {
     private Button marketButton;
     @FXML
     private Pane shopPane;
+    @FXML
+    private Label gameTimeLabel;
+    @FXML
+    private Label herbivoreCountLabel;
+    @FXML
+    private Label carnivoreCountLabel;
+    @FXML
+    private Label jeepCountLabel;
+    @FXML
+    private Label touristCountLabel;
+
 
 
     //Market appear, disappear
@@ -113,6 +137,9 @@ public class GameController {
         buyItem(new Grass(0, 0), "/images/grass.png");
     }
 
+
+
+
     public void preloadImages(){
         Ground.preloadGroundImages();
         Hill.preloadHillImages();
@@ -120,6 +147,7 @@ public class GameController {
         Fence.preloadFenceImages();
         River.preloadRiverImage();
     }
+
 
 
     //starting game
@@ -130,15 +158,55 @@ public class GameController {
     @FXML
     public void initialize() {
         //preloading images for faster start
-            preloadImages();
+        preloadImages();
         //-------------------------------
 
         this.gameBoard = new GameBoard(gamePane, shopPane, marketButton);
         gameBoard.setupBoard();
 
+        //IDE MAJD KELL RENDESEN A PARAMÉTEREK
+        this.gameEngine = new GameEngine(this, EASY ,null);
+        gameEngine.gameLoop();
+
+        Peacocktest pc = new Peacocktest(400, 400);
+        gamePane.getChildren().add(pc);
+        pc.toFront();
+
+        Timeline smoothSlowMove = new Timeline(new javafx.animation.KeyFrame(Duration.millis(50), e -> {
+            switch (pc.currentDirection) {
+                case UP -> pc.move(Peacocktest.Direction.UP, 0, -0.5);
+                case DOWN -> pc.move(Peacocktest.Direction.DOWN, 0, 0.5);
+                case LEFT -> pc.move(Peacocktest.Direction.LEFT, -0.5, 0);
+                case RIGHT -> pc.move(Peacocktest.Direction.RIGHT, 0.5, 0);
+            }
+        }));
+        smoothSlowMove.setCycleCount(Timeline.INDEFINITE);
+        smoothSlowMove.play();
+
+        // Random direction change timeline every 2-4 seconds
+        Timeline randomDirectionChange = new Timeline(new javafx.animation.KeyFrame(Duration.seconds(5), e -> {
+            Peacocktest.Direction[] directions = Peacocktest.Direction.values();
+            int randomIndex = new java.util.Random().nextInt(directions.length);
+            pc.currentDirection = directions[randomIndex];
+        }));
+        randomDirectionChange.setCycleCount(Timeline.INDEFINITE);
+        randomDirectionChange.play();
+
     }
 
+    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists){
+        //STATS
+        int days = (int) time / 24;
+        int hours = (int) time % 24;
 
+        gameTimeLabel.setText("Day: " + days + " Hour: " + hours);
+        carnivoreCountLabel.setText(carnivores + "");
+        herbivoreCountLabel.setText(herbivores + "");
+        jeepCountLabel.setText(jeeps + "");
+        touristCountLabel.setText(tourists + "");
+
+
+    }
 
 
     //SWITCHING SCENES

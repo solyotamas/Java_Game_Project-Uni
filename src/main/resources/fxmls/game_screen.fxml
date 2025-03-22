@@ -63,7 +63,7 @@
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="209.0" />
                   <HBox alignment="CENTER" prefHeight="55.0" prefWidth="192.0" spacing="10.0">
                      <children>
-                        <Label prefHeight="33.0" prefWidth="131.0" style="-fx-alignment: center;" text="0 days 0 hours" textFill="#3e2415">
+                        <Label fx:id="gameTimeLabel" prefHeight="33.0" prefWidth="131.0" style="-fx-alignment: center;" text="0 days 0 hours" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
@@ -189,7 +189,7 @@
                               <Insets left="15.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" text="250 000" textFill="#3e2415">
+                        <Label fx:id="jeepCountLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
@@ -223,7 +223,38 @@
                               <Insets left="15.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" text="250 000" textFill="#3e2415">
+                        <Label fx:id="herbivoreCountLabel" alignment="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" textFill="#3e2415">
+                           <font>
+                              <Font name="Calibri Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                  </HBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </StackPane>
+            <StackPane prefHeight="0.0" prefWidth="0.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
+                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
+                     <children>
+                        <ImageView fitHeight="37.0" fitWidth="35.0" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/caprinae.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="15.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <Label fx:id="carnivoreCountLabel" alignment="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
@@ -285,7 +316,7 @@
                               <Insets left="15.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" text="250 000" textFill="#3e2415">
+                        <Label fx:id="touristCountLabel" alignment="CENTER" prefHeight="33.0" prefWidth="110.0" style="-fx-alignment: center;" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
