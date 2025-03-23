@@ -1,7 +1,6 @@
 package classes.game;
 
 import classes.landforms.Landform;
-import classes.landforms.Plant;
 import classes.terrains.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -18,22 +17,39 @@ public class GameBoard{
 
 
     //representation
-    private final Pane gamePane;
+    private final Pane terrainLayer;
+    private final Pane environmentLayer;
+    private final Pane entityLayer;
+    private final Pane uiLayer;
+
+    private final Pane shopPane;
+    private final Button marketButton;
     private final Terrain[][] terrainGrid = new Terrain[COLUMNS][ROWS];
 
-    //market
-    private Button marketButton;
-    private Pane shopPane;
+
 
 
     //conf
     private final Random rand = new Random();
 
 
-    public GameBoard(Pane gamePane, Pane shopPane, Button marketButton) {
-        this.gamePane = gamePane;
+    public GameBoard(
+            Pane terrainLayer, Pane environmentLayer, Pane entityLayer, Pane uiLayer,
+            Pane shopPane, Button marketButton
+    ) {
+        this.terrainLayer = terrainLayer;
+        this.environmentLayer = environmentLayer;
+        this.entityLayer = entityLayer;
+        this.uiLayer = uiLayer;
+
         this.shopPane = shopPane;
         this.marketButton = marketButton;
+
+        environmentLayer.setPrefWidth(COLUMNS * TILE_SIZE);
+        environmentLayer.setPrefHeight(ROWS * TILE_SIZE);
+        entityLayer.setPrefWidth(COLUMNS * TILE_SIZE);
+        entityLayer.setPrefHeight(ROWS * TILE_SIZE);
+
     }
 
     public void setupBoard() {
@@ -59,42 +75,60 @@ public class GameBoard{
             generateRiver(rand.nextInt(49) + 8, 0);
         }
 
-        //Shop config at start
-        shopPane.setVisible(false);
-        //shopPane.setManaged(false);
-        //shopPane.toFront();
 
-        //Market config at start
-        marketButton.toFront();
 
     }
+
+    public void setupGroundBoard(){
+        //Map config at start
+        for (int x = 0; x < COLUMNS; x++) {
+            for (int y = 0; y < ROWS; y++) {
+                switch (x){
+                    case 0,1,2,3, COLUMNS-1, COLUMNS-2, COLUMNS-3, COLUMNS-4:
+                        makeFloorTerrain(x,y);
+                        break;
+                    case 4, COLUMNS-5:
+                        makeFenceTerrain(x,y);
+                        break;
+                    default:
+                        makeRandomMapTerrain(x,y);
+                }
+            }
+        }
+
+
+    }
+
     private void makeFenceTerrain(int x, int y){
         Terrain fence = new Fence(x,y);
 
-        gamePane.getChildren().add(fence);
+        terrainLayer.getChildren().add(fence);
         terrainGrid[x][y] = fence;
     }
 
     private void makeFloorTerrain(int x, int y){
         Terrain floor = new Floor(x,y);
 
-        gamePane.getChildren().add(floor);
+        terrainLayer.getChildren().add(floor);
         terrainGrid[x][y] = floor;
     }
 
     private void makeRandomMapTerrain(int x, int y) {
         int terrainType = rand.nextInt(500);
 
+
         Terrain terrain;
+        /*
         if (terrainType < 5){
             terrain = new Hill(x, y);
             addHillCluster(x, y);
         }
         else
-            terrain = new Ground(x, y);
+            terrain = new Ground(x, y);*/
+        terrain = new Ground(x, y);
 
         //Placing inside gamePane and keeping track inside the matrix
-        gamePane.getChildren().add(terrain);
+        terrainLayer.getChildren().add(terrain);
         terrainGrid[x][y] = terrain;
     }
 
@@ -110,7 +144,7 @@ public class GameBoard{
 
             if (terrain != null) {
                 Terrain river = new River(x, y);
-                gamePane.getChildren().add(river);
+                terrainLayer.getChildren().add(river);
                 terrainGrid[x][y] = river;
             }
 
@@ -146,7 +180,7 @@ public class GameBoard{
 
             if ((x > 4 && x < COLUMNS - 5) && !(terrainGrid[x][y] instanceof Hill)) {
                 Terrain hillTerrain = new Hill(x, y);
-                gamePane.getChildren().add(hillTerrain);
+                terrainLayer.getChildren().add(hillTerrain);
                 terrainGrid[x][y] = hillTerrain;
                 placed++;
 
@@ -178,10 +212,10 @@ public class GameBoard{
         return true;
     }
 
-    public void placeItem(Landform landform, int x, int y) {
+    public void placeLandform(Landform landform, int x, int y) {
         landform.setLayoutX(x * TILE_SIZE);
         landform.setLayoutY(y * TILE_SIZE);
-        gamePane.getChildren().add(landform);
+        environmentLayer.getChildren().add(landform);
 
         for (int i = x; i < x + landform.getWidthInTiles(); i++) {
             for (int j = y; j < y + landform.getHeightInTiles(); j++) {
@@ -199,9 +233,12 @@ public class GameBoard{
     public int getRows(){
         return ROWS;
     }
-
-    public Pane getGamePane(){
-        return this.gamePane;
+    public Pane getEntityLayer(){
+        return this.entityLayer;
     }
+    public Pane getEnvironmentLayer(){
+        return this.environmentLayer;
+    }
+
 
 }

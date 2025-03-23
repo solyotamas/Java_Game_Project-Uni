@@ -14,6 +14,7 @@ import classes.terrains.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -35,13 +36,21 @@ public class GameController {
     private GameEngine gameEngine;
     private static final int TILE_SIZE = 30;
 
-
+    //For Gameboard
     @FXML
-    private Pane gamePane;
+    private Pane terrainLayer;
     @FXML
-    private Button marketButton;
+    private Pane environmentLayer;
+    @FXML
+    private Pane entityLayer;
+    @FXML
+    private Pane uiLayer;
     @FXML
     private Pane shopPane;
+    @FXML
+    private Button marketButton;
+
+    //top and bottom bar UI
     @FXML
     private Label gameTimeLabel;
     @FXML
@@ -83,21 +92,25 @@ public class GameController {
 
 
 
-    private void buyItem(Landform landform, String imagePath) {
+    private void buyLandform(Landform landform, String imagePath) {
         shopPane.setVisible(false);
 
         Image plantImage = new Image(getClass().getResource(imagePath).toExternalForm());
         ImageView ghostImage = new ImageView(plantImage);
         ghostImage.setOpacity(0.5);
-        ghostImage.setMouseTransparent(true);
+
+        //ghostImage.setMouseTransparent(true);
         ghostImage.setFitWidth(TILE_SIZE * landform.getWidthInTiles());
         ghostImage.setFitHeight(TILE_SIZE * landform.getHeightInTiles());
 
-        gamePane.getChildren().add(ghostImage);
+        gameBoard.getEnvironmentLayer().getChildren().add(ghostImage);
 
-        gamePane.setOnMouseMoved(e -> {
-            double snappedX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
-            double snappedY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
+        uiLayer.setMouseTransparent(true);
+        entityLayer.setMouseTransparent(true);
+        gameBoard.getEnvironmentLayer().setOnMouseMoved(e -> {
+            Point2D localPoint = gameBoard.getEnvironmentLayer().sceneToLocal(e.getSceneX(), e.getSceneY());
+            double snappedX = Math.floor(localPoint.getX() / TILE_SIZE) * TILE_SIZE;
+            double snappedY = Math.floor(localPoint.getY() / TILE_SIZE) * TILE_SIZE;
 
             int maxX = (gameBoard.getColumns() - landform.getWidthInTiles()) * TILE_SIZE;
             int maxY = (gameBoard.getRows() - landform.getHeightInTiles()) * TILE_SIZE;
@@ -108,38 +121,42 @@ public class GameController {
             ghostImage.setLayoutY(snappedY);
         });
 
-        gamePane.setOnMouseClicked(e -> {
+        gameBoard.getEnvironmentLayer().setOnMouseClicked(e -> {
             int tileX = ((int) e.getX()) / TILE_SIZE;
             int tileY = ((int) e.getY()) / TILE_SIZE;
 
             boolean canPlace = gameBoard.canPlaceItem(landform, tileX, tileY);
 
             if (canPlace) {
-                gameBoard.placeItem(landform, tileX, tileY);
+                gameBoard.placeLandform(landform, tileX, tileY);
             } else {
                 System.out.println("Cannot place here.");
             }
 
-            gamePane.getChildren().remove(ghostImage);
-            gamePane.setOnMouseMoved(null);
-            gamePane.setOnMouseClicked(null);
+            gameBoard.getEnvironmentLayer().getChildren().remove(ghostImage);
+            gameBoard.getEnvironmentLayer().setOnMouseMoved(null);
+            gameBoard.getEnvironmentLayer().setOnMouseClicked(null);
+
+            uiLayer.setMouseTransparent(false);
+            entityLayer.setMouseTransparent(false);
         });
+
     }
     @FXML
     public void buyBush() {
-        buyItem(new Bush(0, 0), "/images/bush1.png");
+        buyLandform(new Bush(0, 0), "/images/bush1.png");
     }
     @FXML
     public void buyTree() {
-        buyItem(new Tree(0, 0), "/images/tree2.png");
+        buyLandform(new Tree(0, 0), "/images/tree2.png");
     }
     @FXML
     public void buyLake() {
-        buyItem(new Lake(0, 0), "/images/lake.png");
+        buyLandform(new Lake(0, 0), "/images/lake.png");
     }
     @FXML
     public void buyGrass() {
-        buyItem(new Grass(0, 0), "/images/grass.png");
+        buyLandform(new Grass(0, 0), "/images/grass.png");
     }
 
 
@@ -157,14 +174,16 @@ public class GameController {
         ghostImage.setFitWidth(50);
         ghostImage.setFitHeight(50);
 
-        gamePane.getChildren().add(ghostImage);
 
-        gamePane.setOnMouseMoved(e -> {
+        gameBoard.getEntityLayer().getChildren().add(ghostImage);
+
+        uiLayer.setMouseTransparent(true);
+        gameBoard.getEntityLayer().setOnMouseMoved(e -> {
             ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
             ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
         });
 
-        gamePane.setOnMouseClicked(e -> {
+        gameBoard.getEntityLayer().setOnMouseClicked(e -> {
             double placeX = e.getX() - (ghostImage.getFitWidth() / 2);
             double placeY = e.getY() - (ghostImage.getFitHeight() / 2);
 
@@ -177,7 +196,7 @@ public class GameController {
                 animalInstance.setLayoutX(placeX);
                 animalInstance.setLayoutY(placeY);
 
-                gamePane.getChildren().add(animalInstance);
+                gameBoard.getEntityLayer().getChildren().add(animalInstance);
                 gameEngine.buyAnimal(animalInstance);
 
                 System.out.println("Added animal at " + placeX + ", " + placeY);
@@ -185,14 +204,20 @@ public class GameController {
                 ex.printStackTrace();
             }
 
-            gamePane.getChildren().remove(ghostImage);
-            gamePane.setOnMouseMoved(null);
-            gamePane.setOnMouseClicked(null);
+            gameBoard.getEntityLayer().getChildren().remove(ghostImage);
+            gameBoard.getEntityLayer().setOnMouseMoved(null);
+            gameBoard.getEntityLayer().setOnMouseClicked(null);
+
+            uiLayer.setMouseTransparent(false);
         });
+
     }
     @FXML
     public void buyElephant(){
-        buyAnimal(Elephant.class, "/images/animated/elephant.png");
+
+        buyAnimal(Elephant.class, "/images/elephant.png");
+
+
     }
     @FXML
     public void buyRhino(){
@@ -248,8 +273,8 @@ public class GameController {
         preloadImages();
         //-------------------------------
 
-        this.gameBoard = new GameBoard(gamePane, shopPane, marketButton);
-        gameBoard.setupBoard();
+        this.gameBoard = new GameBoard(terrainLayer, environmentLayer, entityLayer, uiLayer, shopPane, marketButton);
+        gameBoard.setupGroundBoard();
 
         //IDE MAJD KELL RENDESEN A PARAMÉTEREK
         this.gameEngine = new GameEngine(this, EASY);
