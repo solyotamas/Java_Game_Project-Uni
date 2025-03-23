@@ -1,7 +1,11 @@
 package classes.controllers;
 
 import classes.entities.animals.Animal;
-import classes.entities.animals.herbivores.Elephant;
+import classes.entities.animals.carnivores.Lion;
+import classes.entities.animals.carnivores.Panther;
+import classes.entities.animals.carnivores.Tiger;
+import classes.entities.animals.carnivores.Vulture;
+import classes.entities.animals.herbivores.*;
 import classes.game.GameBoard;
 import classes.game.GameEngine;
 
@@ -177,7 +181,9 @@ public class GameController {
 
         gameBoard.getEntityLayer().getChildren().add(ghostImage);
 
+        //disable clicks on top layer
         uiLayer.setMouseTransparent(true);
+
         gameBoard.getEntityLayer().setOnMouseMoved(e -> {
             ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
             ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
@@ -208,56 +214,54 @@ public class GameController {
             gameBoard.getEntityLayer().setOnMouseMoved(null);
             gameBoard.getEntityLayer().setOnMouseClicked(null);
 
+            //enable clicks on top layer
             uiLayer.setMouseTransparent(false);
         });
 
     }
     @FXML
     public void buyElephant(){
-
         buyAnimal(Elephant.class, "/images/elephant.png");
-
-
     }
     @FXML
     public void buyRhino(){
-
+        buyAnimal(Rhino.class, "/images/rhino.png");
     }
     @FXML
     public void buyHippo(){
-
+        buyAnimal(Hippo.class, "/images/hippo.png");
     }
     @FXML
     public void buyBuffalo(){
-
+        buyAnimal(Buffalo.class, "/images/buffalo.png");
     }
     @FXML
     public void buyZebra(){
-
+        buyAnimal(Zebra.class, "/images/zebra.png");
     }
     @FXML
     public void buyKangaroo(){
-
+        buyAnimal(Kangaroo.class, "/images/kangaroo.png");
     }
     @FXML
     public void buyTurtle(){
-
+        buyAnimal(Turtle.class, "/images/turtle.png");
     }
     @FXML
     public void buyLion(){
-
+        buyAnimal(Lion.class, "/images/lion.png");
     }
     @FXML
     public void buyTiger(){
-
+        buyAnimal(Tiger.class, "/images/tiger.png");
     }
     @FXML
     public void buyPanther(){
-
+        buyAnimal(Panther.class, "/images/panther.png");
     }
     @FXML
     public void buyVulture(){
-
+        buyAnimal(Vulture.class, "/images/vulture.png");
     }
 
 

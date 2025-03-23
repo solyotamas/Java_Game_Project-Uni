@@ -84,7 +84,10 @@ public class GameEngine {
 
 
     public void buyAnimal(Animal animal){
-        this.herbivores.add((Herbivore) animal);
+        if(animal instanceof Herbivore)
+            this.herbivores.add((Herbivore) animal);
+        else
+            this.carnivores.add((Carnivore) animal);
     }
 
     private void updateAnimalPositions() {
@@ -92,8 +95,8 @@ public class GameEngine {
             herbivore.moveTowardsTarget();
         }
 
-        for (Carnivore c : carnivores) {
-            //c.moveHunting(herbivores);
+        for (Carnivore carnivore : carnivores) {
+            carnivore.moveTowardsTarget();
         }
     }
 
