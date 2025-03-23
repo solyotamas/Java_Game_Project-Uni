@@ -1,11 +1,10 @@
-package classes.entities;
+package classes.entities.animals;
 
+import classes.entities.Direction;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
-
-import java.util.Random;
 
 public abstract class Animal extends Pane {
 
@@ -36,7 +35,7 @@ public abstract class Animal extends Pane {
     private ImageView imageView;
     private int frameWidth;
     private int frameHeight;
-    protected Direction currentDirection = Direction.DOWN;
+    protected Direction currentDirection = Direction.RIGHT;
 
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed)  {

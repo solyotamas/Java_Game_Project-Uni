@@ -1,8 +1,7 @@
 package classes.controllers;
 
-import classes.entities.Direction;
-import classes.entities.animals.Elephant;
-import classes.entities.animals.Zebra;
+import classes.entities.animals.Animal;
+import classes.entities.animals.herbivores.Elephant;
 import classes.game.GameBoard;
 import classes.game.GameEngine;
 
@@ -12,7 +11,6 @@ import classes.landforms.plants.Bush;
 import classes.landforms.plants.Grass;
 import classes.landforms.plants.Tree;
 import classes.terrains.*;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +26,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 
 import static classes.Difficulty.EASY;
 
@@ -84,10 +81,8 @@ public class GameController {
 
 
 
-    //Market button actions
-    //todo
-    // need to simplify
-    @FXML
+
+
     private void buyItem(Landform landform, String imagePath) {
         shopPane.setVisible(false);
 
@@ -130,7 +125,6 @@ public class GameController {
             gamePane.setOnMouseClicked(null);
         });
     }
-
     @FXML
     public void buyBush() {
         buyItem(new Bush(0, 0), "/images/bush1.png");
@@ -143,17 +137,102 @@ public class GameController {
     public void buyLake() {
         buyItem(new Lake(0, 0), "/images/lake.png");
     }
+    @FXML
     public void buyGrass() {
         buyItem(new Grass(0, 0), "/images/grass.png");
     }
 
 
-    public void preloadImages(){
-        Ground.preloadGroundImages();
-        Hill.preloadHillImages();
-        Floor.preloadFloorImages();
-        Fence.preloadFenceImages();
-        River.preloadRiverImage();
+    //Class<? extends Animal> animalClass: nem akarom elore letrehozni az
+    // instancet mert akkor nem tudom a egerre spawnolni
+    //kinda ugly idk if it can be improved, ghostimage still whole sprite need to fix
+    //needs work
+    private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
+        shopPane.setVisible(false);
+
+        Image animalImage = new Image(getClass().getResource(imagePath).toExternalForm());
+        ImageView ghostImage = new ImageView(animalImage);
+        ghostImage.setOpacity(0.5);
+        ghostImage.setMouseTransparent(true);
+        ghostImage.setFitWidth(50);
+        ghostImage.setFitHeight(50);
+
+        gamePane.getChildren().add(ghostImage);
+
+        gamePane.setOnMouseMoved(e -> {
+            ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
+            ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
+        });
+
+        gamePane.setOnMouseClicked(e -> {
+            double placeX = e.getX() - (ghostImage.getFitWidth() / 2);
+            double placeY = e.getY() - (ghostImage.getFitHeight() / 2);
+
+            try {
+                Animal animalInstance = animalClass
+                        .getDeclaredConstructor(double.class, double.class)
+                        .newInstance(placeX, placeY);
+
+                // Set actual position here:
+                animalInstance.setLayoutX(placeX);
+                animalInstance.setLayoutY(placeY);
+
+                gamePane.getChildren().add(animalInstance);
+                gameEngine.buyAnimal(animalInstance);
+
+                System.out.println("Added animal at " + placeX + ", " + placeY);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            gamePane.getChildren().remove(ghostImage);
+            gamePane.setOnMouseMoved(null);
+            gamePane.setOnMouseClicked(null);
+        });
+    }
+    @FXML
+    public void buyElephant(){
+        buyAnimal(Elephant.class, "/images/animated/elephant.png");
+    }
+    @FXML
+    public void buyRhino(){
+
+    }
+    @FXML
+    public void buyHippo(){
+
+    }
+    @FXML
+    public void buyBuffalo(){
+
+    }
+    @FXML
+    public void buyZebra(){
+
+    }
+    @FXML
+    public void buyKangaroo(){
+
+    }
+    @FXML
+    public void buyTurtle(){
+
+    }
+    @FXML
+    public void buyLion(){
+
+    }
+    @FXML
+    public void buyTiger(){
+
+    }
+    @FXML
+    public void buyPanther(){
+
+    }
+    @FXML
+    public void buyVulture(){
+
     }
 
 
@@ -178,28 +257,10 @@ public class GameController {
 
 
 
-        Zebra zebra = new Zebra(400, 400);
-        gamePane.getChildren().add(zebra);
-        zebra.toFront();
-        gameEngine.buyHerbivore(zebra);
-        Elephant elephant = new Elephant(800,800);
-        gamePane.getChildren().add(elephant);
-        gameEngine.buyHerbivore(elephant);
 
-
-
-
-        // Random direction change timeline every 2-4 seconds
-        Timeline randomDirectionChange = new Timeline(new javafx.animation.KeyFrame(Duration.seconds(5), e -> {
-            Direction[] directions = Direction.values();
-            int randomIndex = new java.util.Random().nextInt(directions.length);
-            zebra.setCurrentDirection(directions[randomIndex]);
-            elephant.setCurrentDirection(directions[randomIndex]);
-        }));
-        randomDirectionChange.setCycleCount(Timeline.INDEFINITE);
-        randomDirectionChange.play();
 
     }
+
 
     public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists){
         //STATS
@@ -214,6 +275,14 @@ public class GameController {
 
 
     }
+    public void preloadImages(){
+        Ground.preloadGroundImages();
+        Hill.preloadHillImages();
+        Floor.preloadFloorImages();
+        Fence.preloadFenceImages();
+        River.preloadRiverImage();
+    }
+
 
 
     //SWITCHING SCENES

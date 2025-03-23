@@ -4,8 +4,6 @@ package classes.entities.human;
 //  Poachernek csak Animal lehet
 //bár az is lehet hogy amikor visszalő a Rangerre akkor már ő az idk
 
-import classes.entities.Human;
-
 public class Hunter extends Human {
     private Object target;
     public int radius;

@@ -1,14 +1,11 @@
 package classes.game;
 
 import classes.Difficulty;
-import classes.controllers.*;
-import classes.entities.*;
 import classes.entities.human.*;
 import classes.entities.animals.*;
 import classes.Jeep;
 import classes.Speed;
 import classes.landforms.*;
-import classes.landforms.plants.*;
 import classes.controllers.GameController;
 import classes.landforms.Plant;
 import javafx.animation.KeyFrame;
@@ -36,8 +33,8 @@ public class GameEngine {
     private GameController gameController;
     private Timeline timeline;
     private double spentTime;
-    private ArrayList<Carnivore> carnivores;
-    private ArrayList<Herbivore> herbivores;
+    protected ArrayList<Carnivore> carnivores;
+    protected ArrayList<Herbivore> herbivores;
     private int touristCount = 0;
     private int jeepCount = 0;
 
@@ -86,8 +83,8 @@ public class GameEngine {
 
 
 
-    public void buyHerbivore(Herbivore herbivore){
-        this.herbivores.add(herbivore);
+    public void buyAnimal(Animal animal){
+        this.herbivores.add((Herbivore) animal);
     }
 
     private void updateAnimalPositions() {

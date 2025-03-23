@@ -1,7 +1,5 @@
 package classes.entities.human;
 
-import classes.entities.Human;
-
 public class Ranger extends Human {
 
     public boolean paid;

@@ -709,7 +709,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyElephant" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -755,7 +755,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyRhino" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -801,7 +801,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyHippo" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -847,7 +847,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyZebra" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -893,7 +893,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyKangaroo" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -939,7 +939,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyTurtle" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -985,7 +985,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyBuffalo" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -1031,7 +1031,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyLion" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -1077,7 +1077,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyTiger" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -1123,7 +1123,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyPanther" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -1210,7 +1210,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyVulture" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
