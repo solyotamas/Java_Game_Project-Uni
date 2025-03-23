@@ -10,10 +10,15 @@ import classes.controllers.GameController;
 import classes.landforms.Plant;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import static classes.Difficulty.EASY;
 import static classes.Difficulty.MEDIUM;
@@ -31,14 +36,16 @@ notes:
 
 public class GameEngine {
     private GameController gameController;
-    private Timeline timeline;
+    private GameBoard gameBoard;
+
     private double spentTime;
     protected ArrayList<Carnivore> carnivores;
     protected ArrayList<Herbivore> herbivores;
     private int touristCount = 0;
     private int jeepCount = 0;
 
-    //protected int speedMultiplier  = 1;
+
+
 
     public void gameLoop() {
 
@@ -46,6 +53,7 @@ public class GameEngine {
             new KeyFrame(Duration.millis(50), e -> {
                 // 1️⃣ Move animals
                 updateAnimalPositions();
+                sortDynamicLayer();
 
                 // 2️⃣ Update herds
                 //updateHerds();
@@ -55,7 +63,7 @@ public class GameEngine {
                 //maybeSpawnPoacher();
 
                 // 4️⃣ Update money, time, conditions
-                updateGameConditions();
+                //updateGameConditions();
 
                 // 5️⃣ Check win/lose conditions
                 if (gameOver()) {
@@ -64,23 +72,48 @@ public class GameEngine {
                     //handleGameWin();
                 }
 
-                // 6️⃣ Possibly UI sync — show condition updates
-                //gameController.updateUI(money, touristCount, animalCount); // optional if you add this
+                // UI sync, Display things
+                spentTime += 0.05;
+                gameController.updateDisplay(
+                        spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount
+                );
+
             })
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
 
-    private void updateGameConditions() {
-        spentTime += 0.05;
-        gameController.updateDisplay(
-                spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount
-        );
+
+    private void sortDynamicLayer() {
+        Pane dynamicLayer = gameBoard.getDynamicLayer();
+
+        List<Node> sortedNodes = new ArrayList<>(dynamicLayer.getChildren());
+        //without reversed min -> max, with reversed max -> min
+        sortedNodes.sort(Comparator.comparingDouble(this::extractDepthY));
+
+        // ✅ Debugging output
+        System.out.println();
+        for (Node node : sortedNodes) {
+            double depth = extractDepthY(node);
+            System.out.println(node.getClass().getSimpleName() + " @ depthY: " + depth);
+        }
+
+
+        Platform.runLater(() -> {
+            dynamicLayer.getChildren().setAll(sortedNodes);
+        });
     }
 
+    private double extractDepthY(Node node) {
+        if (node instanceof Animal animal) {
+            return animal.getY();
+        } else if(node instanceof Landform landform)
+            return landform.getDepth();
+        else
+            return 1.0;
 
-
+    }
 
 
     public void buyAnimal(Animal animal){
@@ -92,11 +125,17 @@ public class GameEngine {
 
     private void updateAnimalPositions() {
         for (Herbivore herbivore : herbivores) {
-            herbivore.moveTowardsTarget();
+            if(!herbivore.getResting())
+                herbivore.moveTowardsTarget();
+            else
+                herbivore.rest(1920, 930);
         }
 
         for (Carnivore carnivore : carnivores) {
-            carnivore.moveTowardsTarget();
+            if(!carnivore.getResting())
+                carnivore.moveTowardsTarget();
+            else
+                carnivore.rest(1920, 930);
         }
     }
 
@@ -125,10 +164,10 @@ public class GameEngine {
 
 
 
-    public GameEngine(GameController gameController, Difficulty difficulty) {
+    public GameEngine(GameController gameController, Difficulty difficulty, GameBoard gameBoard) {
         this.gameController = gameController;
-
         this.difficulty = difficulty;
+        this.gameBoard = gameBoard;
 
 
         money = 0;

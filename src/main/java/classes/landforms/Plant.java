@@ -1,7 +1,7 @@
 package classes.landforms;
 
 public abstract class Plant extends Landform {
-    public Plant(int x, int y, int widthInTiles, int heightInTiles, String imgURL) {
-        super(x, y, widthInTiles, heightInTiles, imgURL);
+    public Plant(double x, double y, int widthInTiles, int heightInTiles, String imgURL, double depth) {
+        super(x, y, widthInTiles, heightInTiles, imgURL, depth);
     }
 }

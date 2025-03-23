@@ -21,8 +21,11 @@ public abstract class Animal extends Pane {
     private double x;
     private double y;
     protected double speed;
-    protected double targetX = 1200;
-    protected double targetY = 600;
+    protected double targetX;
+    protected double targetY;
+    private double restingTimePassed = 0.0;
+    private double restDuration = 15.0;
+    private boolean resting = false;
 
     //Images of the Animal, ui
     private Image spriteSheet;
@@ -39,8 +42,6 @@ public abstract class Animal extends Pane {
 
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed)  {
-        this.x = x;
-        this.y = y;
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.speed = speed;
@@ -55,12 +56,16 @@ public abstract class Animal extends Pane {
         imageView.setFitHeight(50);
         getChildren().add(imageView);
 
-        setLayoutX(x);
-        setLayoutY(y);
+        //the picture will appear where the user clicked but the x and y coordinates are its feet for dynamic depth
+        setLayoutX(x - (50 / 2.0));
+        setLayoutY(y - (50 / 2.0));
+        this.x = x;
+        this.y = y + (50 / 2.0);
+
+        pickNewTarget(1920,930);
     }
 
     private void loadStaticDirectionImages() {
-
         for (int i = 0; i < 3; i++) {
             walkDownImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 0 * frameHeight, frameWidth, frameHeight);
         }
@@ -73,7 +78,6 @@ public abstract class Animal extends Pane {
         for (int i = 0; i < 3; i++) {
             walkUpImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 3 * frameHeight, frameWidth, frameHeight);
         }
-
     }
 
     public void move(Direction dir, double dx, double dy) {
@@ -121,15 +125,12 @@ public abstract class Animal extends Pane {
             }
         }
     }
-
     public void moveTowardsTarget() {
-
-
         double dx = targetX - x;
         double dy = targetY - y;
 
-        // If close enough, pick a new target
-        if (Math.abs(dx) == 0 && Math.abs(dy) == 0) {
+        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
+            resting = true;
             return;
         }
 
@@ -150,19 +151,39 @@ public abstract class Animal extends Pane {
             }
         }
     }
+    public void rest(double mapWidth, double mapHeight) {
+        restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
+
+        if (restingTimePassed >= restDuration) {
+            resting = false;
+            restingTimePassed = 0.0;
+            pickNewTarget(mapWidth, mapHeight);
+        }
+    }
+    public void pickNewTarget(double mapWidth, double mapHeight) {
+        double marginX = 200;
+        double marginY = 50;
+        this.targetX = marginX + Math.random() * (mapWidth - 2 * marginX);
+        this.targetY = marginY + Math.random() * (mapHeight - 2 * marginY);
+    }
 
 
     //Getters, Setters
-    public Direction getCurrentDirection(){
-        return this.currentDirection;
-    }
-    public void setCurrentDirection(Direction direction){
-        this.currentDirection = direction;
-    }
     public double getSpeed(){
         return this.speed;
     }
+    public boolean getResting(){
+        return this.resting;
+    }
+    public int getFrameWidth(){
+        return this.frameWidth;
+    }
+    public int getFrameHeight(){
+        return this.frameHeight;
+    }
 
-
+    public double getY(){
+        return this.y;
+    }
 
 }

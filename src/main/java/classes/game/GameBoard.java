@@ -1,5 +1,6 @@
 package classes.game;
 
+import classes.landforms.Lake;
 import classes.landforms.Landform;
 import classes.terrains.*;
 import javafx.scene.control.Button;
@@ -18,8 +19,7 @@ public class GameBoard{
 
     //representation
     private final Pane terrainLayer;
-    private final Pane environmentLayer;
-    private final Pane entityLayer;
+    private final Pane dynamicLayer;
     private final Pane uiLayer;
 
     private final Pane shopPane;
@@ -34,21 +34,17 @@ public class GameBoard{
 
 
     public GameBoard(
-            Pane terrainLayer, Pane environmentLayer, Pane entityLayer, Pane uiLayer,
+            Pane terrainLayer, Pane dynamicLayer, Pane uiLayer,
             Pane shopPane, Button marketButton
     ) {
         this.terrainLayer = terrainLayer;
-        this.environmentLayer = environmentLayer;
-        this.entityLayer = entityLayer;
+        this.dynamicLayer = dynamicLayer;
         this.uiLayer = uiLayer;
 
         this.shopPane = shopPane;
         this.marketButton = marketButton;
 
-        environmentLayer.setPrefWidth(COLUMNS * TILE_SIZE);
-        environmentLayer.setPrefHeight(ROWS * TILE_SIZE);
-        entityLayer.setPrefWidth(COLUMNS * TILE_SIZE);
-        entityLayer.setPrefHeight(ROWS * TILE_SIZE);
+
 
     }
 
@@ -213,9 +209,12 @@ public class GameBoard{
     }
 
     public void placeLandform(Landform landform, int x, int y) {
+        if(!(landform instanceof Lake))
+            landform.setDepth(y * TILE_SIZE + landform.getHeightInTiles() * TILE_SIZE);
         landform.setLayoutX(x * TILE_SIZE);
         landform.setLayoutY(y * TILE_SIZE);
-        environmentLayer.getChildren().add(landform);
+
+        dynamicLayer.getChildren().add(landform);
 
         for (int i = x; i < x + landform.getWidthInTiles(); i++) {
             for (int j = y; j < y + landform.getHeightInTiles(); j++) {
@@ -233,12 +232,10 @@ public class GameBoard{
     public int getRows(){
         return ROWS;
     }
-    public Pane getEntityLayer(){
-        return this.entityLayer;
+    public Pane getDynamicLayer(){
+        return this.dynamicLayer;
     }
-    public Pane getEnvironmentLayer(){
-        return this.environmentLayer;
-    }
+
 
 
 }

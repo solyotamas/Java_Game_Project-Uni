@@ -3,8 +3,10 @@ package classes.landforms;
 import java.util.Random;
 
 public class Road extends Landform {
-    public Road(int x, int y) {
-        super(x, y, 1, 1, getRandomRoadImage());
+    private static final double depth = Double.MIN_VALUE + 1;
+
+    public Road(double x, double y) {
+        super(x, y, 1, 1, getRandomRoadImage(), depth);
     }
 
     private static String getRandomRoadImage() {

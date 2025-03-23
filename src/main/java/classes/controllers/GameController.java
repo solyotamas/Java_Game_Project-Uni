@@ -44,9 +44,7 @@ public class GameController {
     @FXML
     private Pane terrainLayer;
     @FXML
-    private Pane environmentLayer;
-    @FXML
-    private Pane entityLayer;
+    private Pane dynamicLayer;
     @FXML
     private Pane uiLayer;
     @FXML
@@ -107,12 +105,12 @@ public class GameController {
         ghostImage.setFitWidth(TILE_SIZE * landform.getWidthInTiles());
         ghostImage.setFitHeight(TILE_SIZE * landform.getHeightInTiles());
 
-        gameBoard.getEnvironmentLayer().getChildren().add(ghostImage);
+        gameBoard.getDynamicLayer().getChildren().add(ghostImage);
 
         uiLayer.setMouseTransparent(true);
-        entityLayer.setMouseTransparent(true);
-        gameBoard.getEnvironmentLayer().setOnMouseMoved(e -> {
-            Point2D localPoint = gameBoard.getEnvironmentLayer().sceneToLocal(e.getSceneX(), e.getSceneY());
+
+        gameBoard.getDynamicLayer().setOnMouseMoved(e -> {
+            Point2D localPoint = gameBoard.getDynamicLayer().sceneToLocal(e.getSceneX(), e.getSceneY());
             double snappedX = Math.floor(localPoint.getX() / TILE_SIZE) * TILE_SIZE;
             double snappedY = Math.floor(localPoint.getY() / TILE_SIZE) * TILE_SIZE;
 
@@ -125,7 +123,7 @@ public class GameController {
             ghostImage.setLayoutY(snappedY);
         });
 
-        gameBoard.getEnvironmentLayer().setOnMouseClicked(e -> {
+        gameBoard.getDynamicLayer().setOnMouseClicked(e -> {
             int tileX = ((int) e.getX()) / TILE_SIZE;
             int tileY = ((int) e.getY()) / TILE_SIZE;
 
@@ -133,26 +131,23 @@ public class GameController {
 
             if (canPlace) {
                 gameBoard.placeLandform(landform, tileX, tileY);
-            } else {
-                System.out.println("Cannot place here.");
             }
 
-            gameBoard.getEnvironmentLayer().getChildren().remove(ghostImage);
-            gameBoard.getEnvironmentLayer().setOnMouseMoved(null);
-            gameBoard.getEnvironmentLayer().setOnMouseClicked(null);
+            gameBoard.getDynamicLayer().getChildren().remove(ghostImage);
+            gameBoard.getDynamicLayer().setOnMouseMoved(null);
+            gameBoard.getDynamicLayer().setOnMouseClicked(null);
 
             uiLayer.setMouseTransparent(false);
-            entityLayer.setMouseTransparent(false);
         });
 
     }
     @FXML
     public void buyBush() {
-        buyLandform(new Bush(0, 0), "/images/bush1.png");
+        buyLandform(new Bush(0, 0, 0), "/images/bush1.png");
     }
     @FXML
     public void buyTree() {
-        buyLandform(new Tree(0, 0), "/images/tree2.png");
+        buyLandform(new Tree(0, 0, 2), "/images/tree2.png");
     }
     @FXML
     public void buyLake() {
@@ -160,14 +155,11 @@ public class GameController {
     }
     @FXML
     public void buyGrass() {
-        buyLandform(new Grass(0, 0), "/images/grass.png");
+        buyLandform(new Grass(0, 0, 0), "/images/grass.png");
     }
 
 
-    //Class<? extends Animal> animalClass: nem akarom elore letrehozni az
-    // instancet mert akkor nem tudom a egerre spawnolni
-    //kinda ugly idk if it can be improved, ghostimage still whole sprite need to fix
-    //needs work
+    //Class<? extends Animal> animalClass mert ugy lehet atadni jol az x y -t
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
         shopPane.setVisible(false);
 
@@ -179,30 +171,29 @@ public class GameController {
         ghostImage.setFitHeight(50);
 
 
-        gameBoard.getEntityLayer().getChildren().add(ghostImage);
+        gameBoard.getDynamicLayer().getChildren().add(ghostImage);
 
         //disable clicks on top layer
         uiLayer.setMouseTransparent(true);
 
-        gameBoard.getEntityLayer().setOnMouseMoved(e -> {
+        gameBoard.getDynamicLayer().setOnMouseMoved(e -> {
             ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
             ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
         });
 
-        gameBoard.getEntityLayer().setOnMouseClicked(e -> {
-            double placeX = e.getX() - (ghostImage.getFitWidth() / 2);
-            double placeY = e.getY() - (ghostImage.getFitHeight() / 2);
+        gameBoard.getDynamicLayer().setOnMouseClicked(e -> {
+
 
             try {
+
+                double placeX = e.getX();
+                double placeY = e.getY();
                 Animal animalInstance = animalClass
                         .getDeclaredConstructor(double.class, double.class)
                         .newInstance(placeX, placeY);
 
-                // Set actual position here:
-                animalInstance.setLayoutX(placeX);
-                animalInstance.setLayoutY(placeY);
 
-                gameBoard.getEntityLayer().getChildren().add(animalInstance);
+                gameBoard.getDynamicLayer().getChildren().add(animalInstance);
                 gameEngine.buyAnimal(animalInstance);
 
                 System.out.println("Added animal at " + placeX + ", " + placeY);
@@ -210,9 +201,9 @@ public class GameController {
                 ex.printStackTrace();
             }
 
-            gameBoard.getEntityLayer().getChildren().remove(ghostImage);
-            gameBoard.getEntityLayer().setOnMouseMoved(null);
-            gameBoard.getEntityLayer().setOnMouseClicked(null);
+            gameBoard.getDynamicLayer().getChildren().remove(ghostImage);
+            gameBoard.getDynamicLayer().setOnMouseMoved(null);
+            gameBoard.getDynamicLayer().setOnMouseClicked(null);
 
             //enable clicks on top layer
             uiLayer.setMouseTransparent(false);
@@ -277,11 +268,11 @@ public class GameController {
         preloadImages();
         //-------------------------------
 
-        this.gameBoard = new GameBoard(terrainLayer, environmentLayer, entityLayer, uiLayer, shopPane, marketButton);
+        this.gameBoard = new GameBoard(terrainLayer, dynamicLayer, uiLayer, shopPane, marketButton);
         gameBoard.setupGroundBoard();
 
         //IDE MAJD KELL RENDESEN A PARAMÉTEREK
-        this.gameEngine = new GameEngine(this, EASY);
+        this.gameEngine = new GameEngine(this, EASY, gameBoard);
         gameEngine.gameLoop();
 
 
