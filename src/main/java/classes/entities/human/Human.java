@@ -1,4 +1,4 @@
-package classes.entities;
+package classes.entities.human;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

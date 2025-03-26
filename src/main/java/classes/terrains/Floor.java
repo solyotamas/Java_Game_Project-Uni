@@ -17,8 +17,7 @@ public class Floor extends Terrain{
         return floorImages.get(rand.nextInt(floorImages.size()));
     }
 
-    //preload
-    public static void preloadFloorImages() {
+    static {
         for (int i = 1; i <= 3; i++) {
             String path = "/images/road" + i + ".png";
             floorImages.add(new Image(Floor.class.getResource(path).toExternalForm()));
