@@ -7,7 +7,7 @@ import classes.Jeep;
 import classes.Speed;
 import classes.landforms.*;
 import classes.controllers.GameController;
-import classes.landforms.Plant;
+import classes.landforms.plants.Plant;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -92,19 +92,18 @@ public class GameEngine {
         //without reversed min -> max, with reversed max -> min
         sortedNodes.sort(Comparator.comparingDouble(this::extractDepthY));
 
-        // ✅ Debugging output
+        /*
         System.out.println();
         for (Node node : sortedNodes) {
             double depth = extractDepthY(node);
             System.out.println(node.getClass().getSimpleName() + " @ depthY: " + depth);
-        }
+        }*/
 
 
         Platform.runLater(() -> {
             dynamicLayer.getChildren().setAll(sortedNodes);
         });
     }
-
     private double extractDepthY(Node node) {
         if (node instanceof Animal animal) {
             return animal.getY();
@@ -114,15 +113,12 @@ public class GameEngine {
             return 1.0;
 
     }
-
-
     public void buyAnimal(Animal animal){
         if(animal instanceof Herbivore)
             this.herbivores.add((Herbivore) animal);
         else
             this.carnivores.add((Carnivore) animal);
     }
-
     private void updateAnimalPositions() {
         for (Herbivore herbivore : herbivores) {
             if(!herbivore.getResting())
@@ -138,6 +134,11 @@ public class GameEngine {
                 carnivore.rest(1920, 930);
         }
     }
+
+
+
+
+
 
     public int money;
     public int ticketPrice;

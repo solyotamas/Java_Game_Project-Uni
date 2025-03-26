@@ -13,18 +13,19 @@ public abstract class Landform extends Pane{
     protected final int heightInTiles;
     protected ImageView picture;
 
-    public Landform(double x, double y, int widthInTiles, int heightInTiles, String imgURL, double depth) {
+    public Landform(double x, double y, int widthInTiles, int heightInTiles, Image img, double depth) {
         this.x = x;
         this.y = y;
         this.depth = depth;
         this.widthInTiles = widthInTiles;
         this.heightInTiles = heightInTiles;
 
-        Image img = new Image(getClass().getResource(imgURL).toExternalForm());
         this.picture = new ImageView(img);
         this.picture.setFitWidth(widthInTiles * TILE_SIZE);
         this.picture.setFitHeight(heightInTiles * TILE_SIZE);
 
+        setLayoutX(x);
+        setLayoutY(y);
 
         this.getChildren().add(picture);
 
@@ -38,10 +39,6 @@ public abstract class Landform extends Pane{
         return heightInTiles;
     }
 
-    public void setXandY(double x, double y){
-        this.x = x;
-        this.y = y;
-    }
     public double getDepth(){
         return this.depth;
     }
@@ -49,6 +46,13 @@ public abstract class Landform extends Pane{
         this.depth = depth;
     }
 
+    public ImageView getPicture(){
+        return this.picture;
+    }
+
+    public void setPicture(Image img){
+        picture.setImage(img);
+    }
 
 
 

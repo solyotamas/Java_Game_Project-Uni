@@ -40,8 +40,12 @@ public class Terrain extends Pane{
         this.landform = landform;
     }
 
-    public boolean hasPlaceable() {
+    public boolean hasLandform() {
         return landform != null;
+    }
+
+    public Landform getLandform(){
+        return this.landform;
     }
 
 

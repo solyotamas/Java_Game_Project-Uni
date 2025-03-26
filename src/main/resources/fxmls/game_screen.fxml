@@ -664,7 +664,7 @@
                                           <Insets />
                                        </opaqueInsets>
                                     </Label>
-                                    <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                                    <Button mnemonicParsing="false" onAction="#buyRoad" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                        <font>
                                           <Font size="20.0" />
                                        </font>

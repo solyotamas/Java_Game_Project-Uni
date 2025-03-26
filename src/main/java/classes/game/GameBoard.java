@@ -2,6 +2,7 @@ package classes.game;
 
 import classes.landforms.Lake;
 import classes.landforms.Landform;
+import classes.landforms.Road;
 import classes.terrains.*;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -48,6 +49,7 @@ public class GameBoard{
 
     }
 
+    //board setups
     public void setupBoard() {
 
         //Map config at start
@@ -74,7 +76,6 @@ public class GameBoard{
 
 
     }
-
     public void setupGroundBoard(){
         //Map config at start
         for (int x = 0; x < COLUMNS; x++) {
@@ -95,20 +96,25 @@ public class GameBoard{
 
     }
 
+    //terrain generating
     private void makeFenceTerrain(int x, int y){
         Terrain fence = new Fence(x,y);
 
         terrainLayer.getChildren().add(fence);
         terrainGrid[x][y] = fence;
     }
-
     private void makeFloorTerrain(int x, int y){
         Terrain floor = new Floor(x,y);
 
         terrainLayer.getChildren().add(floor);
         terrainGrid[x][y] = floor;
     }
+    private void makeRiverTerrain(int x, int y){
+        River river = new River(x,y);
 
+        terrainLayer.getChildren().add(river);
+        terrainGrid[x][y] = river;
+    }
     private void makeRandomMapTerrain(int x, int y) {
         int terrainType = rand.nextInt(500);
 
@@ -127,7 +133,6 @@ public class GameBoard{
         terrainLayer.getChildren().add(terrain);
         terrainGrid[x][y] = terrain;
     }
-
     private void generateRiver(int startX, int startY) {
         int x = startX;
         int y = startY;
@@ -161,7 +166,6 @@ public class GameBoard{
             }
         }
     }
-
     private void addHillCluster(int startX, int startY) {
         int clusterSize = rand.nextInt(20) + 5;
         ArrayList<int[]> positions = new ArrayList<>();
@@ -187,7 +191,6 @@ public class GameBoard{
             }
         }
     }
-
     public Terrain getTerrainAt(int x, int y) {
         if (x >= 0 && y >= 0 && x < COLUMNS && y < ROWS) {
             return terrainGrid[x][y];
@@ -195,11 +198,12 @@ public class GameBoard{
             return null;
     }
 
+    //Placing landforms
     public boolean canPlaceItem(Landform landform, int startX, int startY) {
         for (int x = startX; x < startX + landform.getWidthInTiles(); x++) {
             for (int y = startY; y < startY + landform.getHeightInTiles(); y++) {
                 Terrain terrain = getTerrainAt(x, y);
-                if (terrain == null || terrain.hasPlaceable() || terrain instanceof Hill ||
+                if (terrain == null || terrain.hasLandform() || terrain instanceof Hill ||
                         terrain instanceof River || terrain instanceof Fence || terrain instanceof Floor) {
                     return false;
                 }
@@ -207,31 +211,60 @@ public class GameBoard{
         }
         return true;
     }
-
     public void placeLandform(Landform landform, int x, int y) {
-        if(!(landform instanceof Lake))
-            landform.setDepth(y * TILE_SIZE + landform.getHeightInTiles() * TILE_SIZE);
-        landform.setLayoutX(x * TILE_SIZE);
-        landform.setLayoutY(y * TILE_SIZE);
-
-        dynamicLayer.getChildren().add(landform);
-
         for (int i = x; i < x + landform.getWidthInTiles(); i++) {
             for (int j = y; j < y + landform.getHeightInTiles(); j++) {
                 Terrain terrain = getTerrainAt(i, j);
                 if (terrain != null) {
                     terrain.placeItem(landform);
+                    if(landform instanceof Road){
+                        updateRoadAndNeighbors(i, j);
+                    }
                 }
             }
         }
     }
 
-    public int getColumns(){
-        return COLUMNS;
+    //road updates
+    private void updateRoadAndNeighbors(int x, int y) {
+        updateRoadTextureAt(x, y);
+        updateRoadTextureAt(x + 1, y);
+        updateRoadTextureAt(x - 1, y);
+        updateRoadTextureAt(x, y + 1);
+        updateRoadTextureAt(x, y - 1);
     }
-    public int getRows(){
-        return ROWS;
+    private void updateRoadTextureAt(int x, int y) {
+        Terrain terrain = getTerrainAt(x, y);
+        if (terrain != null && terrain.hasLandform() && terrain.getLandform() instanceof Road road) {
+            int bitmask = calculateBitmask(x, y);
+            road.setPicture(Road.roadImages[bitmask]);
+        }
     }
+    private int calculateBitmask(int x, int y) {
+        int bitmask = 0;
+
+        if (isRoadAt(x, y - 1)) { // Top
+            bitmask += 1;
+        }
+        if (isRoadAt(x + 1, y)) { // Right
+            bitmask += 2;
+        }
+        if (isRoadAt(x, y + 1)) { // Bottom
+            bitmask += 4;
+        }
+        if (isRoadAt(x - 1, y)) { // Left
+            bitmask += 8;
+        }
+
+        return bitmask;
+    }
+    private boolean isRoadAt(int gridX, int gridY) {
+        Landform landform = getTerrainAt(gridX, gridY).getLandform();
+        return landform instanceof Road;
+    }
+
+
+    //getters, setters
     public Pane getDynamicLayer(){
         return this.dynamicLayer;
     }

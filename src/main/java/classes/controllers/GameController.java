@@ -11,6 +11,7 @@ import classes.game.GameEngine;
 
 import classes.landforms.Lake;
 import classes.landforms.Landform;
+import classes.landforms.Road;
 import classes.landforms.plants.Bush;
 import classes.landforms.plants.Grass;
 import classes.landforms.plants.Tree;
@@ -94,43 +95,67 @@ public class GameController {
 
 
 
-    private void buyLandform(Landform landform, String imagePath) {
+    private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
+        //just because of a bug sometimes
+        gameBoard.getDynamicLayer().getChildren().removeIf(node -> node.getOpacity() == 0.5);
+
+        //shop disappear
         shopPane.setVisible(false);
 
-        Image plantImage = new Image(getClass().getResource(imagePath).toExternalForm());
-        ImageView ghostImage = new ImageView(plantImage);
+
+        //For ghostImage pic to be equivalent of the image of the instance that will be placed
+        Landform tempInstance = null;
+        try {
+            tempInstance = landformClass
+                    .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
+                    .newInstance(0.0, 0.0, 0.0, chosen);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ImageView ghostImage = new ImageView(chosen);
         ghostImage.setOpacity(0.5);
-
-        //ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(TILE_SIZE * landform.getWidthInTiles());
-        ghostImage.setFitHeight(TILE_SIZE * landform.getHeightInTiles());
-
+        ghostImage.setFitWidth(TILE_SIZE * tempInstance.getWidthInTiles());
+        ghostImage.setFitHeight(TILE_SIZE * tempInstance.getHeightInTiles());
         gameBoard.getDynamicLayer().getChildren().add(ghostImage);
 
+
+        //snapping ghost image to terrains
         uiLayer.setMouseTransparent(true);
-
         gameBoard.getDynamicLayer().setOnMouseMoved(e -> {
-            Point2D localPoint = gameBoard.getDynamicLayer().sceneToLocal(e.getSceneX(), e.getSceneY());
-            double snappedX = Math.floor(localPoint.getX() / TILE_SIZE) * TILE_SIZE;
-            double snappedY = Math.floor(localPoint.getY() / TILE_SIZE) * TILE_SIZE;
-
-            int maxX = (gameBoard.getColumns() - landform.getWidthInTiles()) * TILE_SIZE;
-            int maxY = (gameBoard.getRows() - landform.getHeightInTiles()) * TILE_SIZE;
-            snappedX = Math.max(0, Math.min(snappedX, maxX));
-            snappedY = Math.max(0, Math.min(snappedY, maxY));
-
-            ghostImage.setLayoutX(snappedX);
-            ghostImage.setLayoutY(snappedY);
+            double snapX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
+            double snapY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
+            ghostImage.setLayoutX(snapX);
+            ghostImage.setLayoutY(snapY);
         });
 
+
+        final Landform finalTempInstance = tempInstance;
         gameBoard.getDynamicLayer().setOnMouseClicked(e -> {
-            int tileX = ((int) e.getX()) / TILE_SIZE;
-            int tileY = ((int) e.getY()) / TILE_SIZE;
+            int tileX = (int) e.getX() / TILE_SIZE;
+            int tileY = (int) e.getY() / TILE_SIZE;
 
-            boolean canPlace = gameBoard.canPlaceItem(landform, tileX, tileY);
+            double depth = tileY * TILE_SIZE + finalTempInstance.getHeightInTiles() * TILE_SIZE;
 
-            if (canPlace) {
-                gameBoard.placeLandform(landform, tileX, tileY);
+            // Special depth for lakes and roads
+            if (Lake.class.isAssignableFrom(landformClass)) {
+                depth = Double.MIN_VALUE;
+            } else if (Road.class.isAssignableFrom(landformClass)) {
+                depth = Double.MIN_VALUE + 1;
+            }
+
+            try {
+                Landform placedLandform = landformClass
+                        .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
+                        .newInstance(tileX * TILE_SIZE, tileY * TILE_SIZE, depth, chosen);
+
+                if (gameBoard.canPlaceItem(placedLandform, tileX, tileY)) {
+
+                    gameBoard.placeLandform(placedLandform, tileX, tileY);
+                    gameBoard.getDynamicLayer().getChildren().add(placedLandform);
+
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
 
             gameBoard.getDynamicLayer().getChildren().remove(ghostImage);
@@ -143,19 +168,23 @@ public class GameController {
     }
     @FXML
     public void buyBush() {
-        buyLandform(new Bush(0, 0, 0), "/images/bush1.png");
+        buyLandform(Bush.class, Bush.getRandomBushImage());
     }
     @FXML
     public void buyTree() {
-        buyLandform(new Tree(0, 0, 2), "/images/tree2.png");
+        buyLandform(Tree.class, Tree.getRandomTreeImage());
     }
     @FXML
     public void buyLake() {
-        buyLandform(new Lake(0, 0), "/images/lake.png");
+        buyLandform(Lake.class, Lake.lakePicture);
     }
     @FXML
     public void buyGrass() {
-        buyLandform(new Grass(0, 0, 0), "/images/grass.png");
+        buyLandform(Grass.class, Grass.grassPicture);
+    }
+    @FXML
+    public void buyRoad() {
+        buyLandform(Road.class, Road.roadImages[0]);
     }
 
 
@@ -265,7 +294,7 @@ public class GameController {
     @FXML
     public void initialize() {
         //preloading images for faster start
-        preloadImages();
+        // swapped for cleaner code using statics methods inside classes
         //-------------------------------
 
         this.gameBoard = new GameBoard(terrainLayer, dynamicLayer, uiLayer, shopPane, marketButton);
@@ -295,13 +324,8 @@ public class GameController {
 
 
     }
-    public void preloadImages(){
-        Ground.preloadGroundImages();
-        Hill.preloadHillImages();
-        Floor.preloadFloorImages();
-        Fence.preloadFenceImages();
-        River.preloadRiverImage();
-    }
+
+
 
 
 
