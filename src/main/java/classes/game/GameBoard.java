@@ -93,6 +93,10 @@ public class GameBoard{
             }
         }
 
+        Random rand = new Random();
+        for (int i = 0; i < 3; i++) {
+            generateRiver(rand.nextInt(49) + 8, 0);
+        }
 
     }
 
@@ -114,25 +118,24 @@ public class GameBoard{
         terrainLayer.getChildren().add(floor);
         terrainGrid[x][y] = floor;
     }
-    private void makeRiverTerrain(int x, int y){
+    /*private void makeRiverTerrain(int x, int y){
         River river = new River(x,y);
 
         terrainLayer.getChildren().add(river);
         terrainGrid[x][y] = river;
-    }
+    }*/
     private void makeRandomMapTerrain(int x, int y) {
         int terrainType = rand.nextInt(500);
 
 
         Terrain terrain;
-        /*
+
         if (terrainType < 5){
             terrain = new Hill(x, y);
             addHillCluster(x, y);
         }
         else
-            terrain = new Ground(x, y);*/
-        terrain = new Ground(x, y);
+            terrain = new Ground(x, y);
 
         //Placing inside gamePane and keeping track inside the matrix
         terrainLayer.getChildren().add(terrain);
