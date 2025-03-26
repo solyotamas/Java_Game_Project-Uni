@@ -1,22 +1,24 @@
 package classes.game;
 
 import classes.Difficulty;
-import classes.controllers.*;
-import classes.entities.*;
 import classes.entities.human.*;
 import classes.entities.animals.*;
 import classes.Jeep;
 import classes.Speed;
 import classes.landforms.*;
-import classes.landforms.plants.*;
 import classes.controllers.GameController;
-import classes.landforms.Plant;
+import classes.landforms.plants.Plant;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
+import javafx.scene.Node;
+import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 import static classes.Difficulty.EASY;
 import static classes.Difficulty.MEDIUM;
@@ -34,29 +36,34 @@ notes:
 
 public class GameEngine {
     private GameController gameController;
-    private Timeline timeline;
+    private GameBoard gameBoard;
+
     private double spentTime;
-    private ArrayList<Carnivore> carnivores;
-    private ArrayList<Herbivore> herbivores;
+    protected ArrayList<Carnivore> carnivores;
+    protected ArrayList<Herbivore> herbivores;
     private int touristCount = 0;
     private int jeepCount = 0;
 
 
+
+
     public void gameLoop() {
+
         Timeline timeline = new Timeline(
-            new KeyFrame(Duration.millis(100), e -> {
+            new KeyFrame(Duration.millis(50), e -> {
                 // 1️⃣ Move animals
                 updateAnimalPositions();
+                sortUiLayer();
 
                 // 2️⃣ Update herds
                 //updateHerds();
 
                 // 3️⃣ Possibly spawn tourists/poachers
-                maybeSpawnTourist();
+                //maybeSpawnTourist();
                 //maybeSpawnPoacher();
 
                 // 4️⃣ Update money, time, conditions
-                updateGameConditions();
+                //updateGameConditions();
 
                 // 5️⃣ Check win/lose conditions
                 if (gameOver()) {
@@ -65,33 +72,73 @@ public class GameEngine {
                     //handleGameWin();
                 }
 
-                // 6️⃣ Possibly UI sync — show condition updates
-                //gameController.updateUI(money, touristCount, animalCount); // optional if you add this
+                // UI sync, Display things
+                spentTime += 0.05;
+                gameController.updateDisplay(
+                        spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount
+                );
+
             })
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
 
-    private void updateGameConditions() {
-        spentTime += 0.1;
-        gameController.updateDisplay(
-                spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount
-        );
+
+    private void sortUiLayer() {
+        Pane uiLayer = gameBoard.getUiLayer();
+
+        List<Node> sortedNodes = new ArrayList<>(uiLayer.getChildren());
+        //without reversed min -> max, with reversed max -> min
+        sortedNodes.sort(Comparator.comparingDouble(this::extractDepthY));
+
+        /*
+        System.out.println();
+        for (Node node : sortedNodes) {
+            double depth = extractDepthY(node);
+            System.out.println(node.getClass().getSimpleName() + " @ depthY: " + depth);
+        }*/
+
+
+        Platform.runLater(() -> {
+            uiLayer.getChildren().setAll(sortedNodes);
+        });
     }
-
-    private void maybeSpawnTourist() {
+    private double extractDepthY(Node node) {
+        if (node instanceof Animal animal) {
+            return animal.getY();
+        } else if(node instanceof Landform landform)
+            return landform.getDepth();
+        else
+            return 1.0;
 
     }
-
+    public void buyAnimal(Animal animal){
+        if(animal instanceof Herbivore)
+            this.herbivores.add((Herbivore) animal);
+        else
+            this.carnivores.add((Carnivore) animal);
+    }
     private void updateAnimalPositions() {
-        for (Herbivore h : herbivores) {
-            //h.moveRandomly();
+        for (Herbivore herbivore : herbivores) {
+            if(!herbivore.getResting())
+                herbivore.moveTowardsTarget();
+            else
+                herbivore.rest(1920, 930);
         }
-        for (Carnivore c : carnivores) {
-            //c.moveHunting(herbivores);
+
+        for (Carnivore carnivore : carnivores) {
+            if(!carnivore.getResting())
+                carnivore.moveTowardsTarget();
+            else
+                carnivore.rest(1920, 930);
         }
     }
+
+
+
+
+
 
     public int money;
     public int ticketPrice;
@@ -116,12 +163,11 @@ public class GameEngine {
     private ArrayList<Road> roads;
 
 
-
-    public GameEngine(GameController gameController, Difficulty difficulty, ArrayList<Plant> plants) {
+    public GameEngine(GameController gameController, Difficulty difficulty, GameBoard gameBoard) {
         this.gameController = gameController;
-
         this.difficulty = difficulty;
-        this.plants = plants;
+        this.gameBoard = gameBoard;
+
 
         money = 0;
         ticketPrice = 0;
@@ -173,6 +219,15 @@ public class GameEngine {
 
     }
 
+    //todo: jeep méretek
+    public void addJeep() {
+        jeepCount++;
+        jeeps.add(new Jeep(100, 100, 300));
+        gameController.updateDisplay(
+                spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount
+        );
+    }
+
 
 
     public void pays(Ranger ranger) {
@@ -182,6 +237,7 @@ public class GameEngine {
 
     }
 
+    /*
     public void sells(Animal animal) {
         money = money + 0;
         //actual érték needed
@@ -191,7 +247,7 @@ public class GameEngine {
         } else {
             carnivores.remove(animal);
         }
-    }
+    }*/
 
 
 }

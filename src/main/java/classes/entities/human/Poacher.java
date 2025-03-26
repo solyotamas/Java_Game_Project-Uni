@@ -1,6 +1,6 @@
 package classes.entities.human;
 
-import classes.entities.Animal;
+import classes.entities.animals.Animal;
 
 public class Poacher extends Hunter {
     public Poacher(int x, int y, int size, String imgURL) {

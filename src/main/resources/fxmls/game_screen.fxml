@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1635.0" styleClass="background" stylesheets="@../css/game_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.GameController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/game_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.GameController">
    <children>
       <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="1920.0" spacing="50.0" style="-fx-background-color: #EC9043;">
          <padding>
@@ -96,12 +96,12 @@
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Label>
-                  <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="100.0" style="-fx-background-color: #f9c771; -fx-background-radius: 12px;" text="Hour" textFill="#3e2415">
+                  <Button fx:id="gameSpeedHourButton" mnemonicParsing="false" onAction="#speedGameToHour" prefHeight="44.0" prefWidth="100.0" style="-fx-background-color: #f9c771; -fx-background-radius: 12px;" text="Hour" textFill="#3e2415">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Button>
-                  <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="110.0" style="-fx-background-color: #f9c771; -fx-background-radius: 12px;" text="Day" textFill="#3e2415">
+                  <Button fx:id="gameSpeedDayButton" mnemonicParsing="false" onAction="#speedGameToDay" prefHeight="44.0" prefWidth="110.0" style="-fx-background-color: #f9c771; -fx-background-radius: 12px;" text="Day" textFill="#3e2415">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
@@ -354,9 +354,17 @@
             </StackPane>
          </children>
       </HBox>
-      <Pane fx:id="gamePane" layoutY="75.0" maxHeight="930.0" maxWidth="1920.0" minHeight="930.0" minWidth="1920.0" prefHeight="930.0" prefWidth="1920.0">
+      <StackPane fx:id="rootPane" layoutY="75.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0">
          <children>
-            <Pane fx:id="shopPane" layoutX="382.0" layoutY="86.0" prefHeight="746.0" prefWidth="1156.0" stylesheets="@../css/game_screen.css" visible="true">
+            <Pane fx:id="terrainLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" />
+            <Pane fx:id="dynamicLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" />
+            <Pane fx:id="uiLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0">
+               <children>
+            
+                                                                     <Button id="market" fx:id="marketButton" layoutX="1800.0" mnemonicParsing="false" onMouseClicked="#happens" prefHeight="120.0" prefWidth="120.0" />
+               </children>
+            </Pane>
+            <Pane fx:id="shopPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1150.0" stylesheets="@../css/game_screen.css" visible="false" StackPane.alignment="CENTER">
                <children>
                   <Label fx:id="diffLabel" layoutX="486.0" layoutY="24.0" text="Market" textFill="WHITE">
                      <effect>
@@ -616,7 +624,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyJeep" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -660,7 +668,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyRoad" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -709,7 +717,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyElephant" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -755,7 +763,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyRhino" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -801,7 +809,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyHippo" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -847,7 +855,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyZebra" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -893,7 +901,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyKangaroo" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -939,7 +947,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyTurtle" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -985,7 +993,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyBuffalo" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -1031,7 +1039,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyLion" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -1077,7 +1085,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyTiger" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -1123,7 +1131,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyPanther" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -1210,7 +1218,7 @@
                                     <Insets />
                                  </opaqueInsets>
                               </Label>
-                              <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                              <Button mnemonicParsing="false" onAction="#buyVulture" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                  <font>
                                     <Font size="20.0" />
                                  </font>
@@ -1235,10 +1243,9 @@
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                      </padding>
                   </GridPane>
-               </children></Pane>
-
-               <Button id="market" fx:id="marketButton" layoutX="1800.0" mnemonicParsing="false" onMouseClicked="#happens" prefHeight="120.0" prefWidth="120.0" />
-
-         </children></Pane>
+               </children>
+            </Pane>
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>

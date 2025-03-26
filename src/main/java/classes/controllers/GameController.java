@@ -1,20 +1,25 @@
 package classes.controllers;
 
-import classes.entities.animals.Peacocktest;
+import classes.entities.animals.Animal;
+import classes.entities.animals.carnivores.Lion;
+import classes.entities.animals.carnivores.Panther;
+import classes.entities.animals.carnivores.Tiger;
+import classes.entities.animals.carnivores.Vulture;
+import classes.entities.animals.herbivores.*;
 import classes.game.GameBoard;
 import classes.game.GameEngine;
 
 import classes.landforms.Lake;
 import classes.landforms.Landform;
+import classes.landforms.Road;
 import classes.landforms.plants.Bush;
 import classes.landforms.plants.Grass;
 import classes.landforms.plants.Tree;
 import classes.terrains.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -25,10 +30,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Random;
 
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 
 import static classes.Difficulty.EASY;
 
@@ -38,13 +41,19 @@ public class GameController {
     private GameEngine gameEngine;
     private static final int TILE_SIZE = 30;
 
-
+    //For Gameboard
     @FXML
-    private Pane gamePane;
+    private Pane terrainLayer;
     @FXML
-    private Button marketButton;
+    private Pane dynamicLayer;
+    @FXML
+    private Pane uiLayer;
     @FXML
     private Pane shopPane;
+    @FXML
+    private Button marketButton;
+
+    //top and bottom bar UI
     @FXML
     private Label gameTimeLabel;
     @FXML
@@ -55,8 +64,21 @@ public class GameController {
     private Label jeepCountLabel;
     @FXML
     private Label touristCountLabel;
+    @FXML
+    private Button gameSpeedHourButton;
+    @FXML
+    private Button gameSpeedDayButton;
 
 
+    @FXML
+    public void speedGameToDay(){
+
+    }
+
+    @FXML
+    public void speedGameToHour(){
+
+    }
 
     //Market appear, disappear
     @FXML
@@ -71,81 +93,198 @@ public class GameController {
 
 
 
-    //Market button actions
-    //todo
-    // need to simplify
-    @FXML
-    private void buyItem(Landform landform, String imagePath) {
+
+
+    private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
+        //just because of a bug sometimes
+        dynamicLayer.getChildren().removeIf(node -> node.getOpacity() == 0.5);
+
+        //shop disappear
         shopPane.setVisible(false);
 
-        Image plantImage = new Image(getClass().getResource(imagePath).toExternalForm());
-        ImageView ghostImage = new ImageView(plantImage);
+
+        //For ghostImage pic to be equivalent of the image of the instance that will be placed
+        Landform tempInstance = null;
+        try {
+            tempInstance = landformClass
+                    .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
+                    .newInstance(0.0, 0.0, 0.0, chosen);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        ImageView ghostImage = new ImageView(chosen);
         ghostImage.setOpacity(0.5);
-        ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(TILE_SIZE * landform.getWidthInTiles());
-        ghostImage.setFitHeight(TILE_SIZE * landform.getHeightInTiles());
+        ghostImage.setFitWidth(TILE_SIZE * tempInstance.getWidthInTiles());
+        ghostImage.setFitHeight(TILE_SIZE * tempInstance.getHeightInTiles());
+        dynamicLayer.getChildren().add(ghostImage);
 
-        gamePane.getChildren().add(ghostImage);
 
-        gamePane.setOnMouseMoved(e -> {
-            double snappedX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
-            double snappedY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
-
-            int maxX = (gameBoard.getColumns() - landform.getWidthInTiles()) * TILE_SIZE;
-            int maxY = (gameBoard.getRows() - landform.getHeightInTiles()) * TILE_SIZE;
-            snappedX = Math.max(0, Math.min(snappedX, maxX));
-            snappedY = Math.max(0, Math.min(snappedY, maxY));
-
-            ghostImage.setLayoutX(snappedX);
-            ghostImage.setLayoutY(snappedY);
+        //snapping ghost image to terrains
+        uiLayer.setMouseTransparent(true);
+        dynamicLayer.setOnMouseMoved(e -> {
+            double snapX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
+            double snapY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
+            ghostImage.setLayoutX(snapX);
+            ghostImage.setLayoutY(snapY);
         });
 
-        gamePane.setOnMouseClicked(e -> {
-            int tileX = ((int) e.getX()) / TILE_SIZE;
-            int tileY = ((int) e.getY()) / TILE_SIZE;
 
-            boolean canPlace = gameBoard.canPlaceItem(landform, tileX, tileY);
+        final Landform finalTempInstance = tempInstance;
+        dynamicLayer.setOnMouseClicked(e -> {
+            int tileX = (int) e.getX() / TILE_SIZE;
+            int tileY = (int) e.getY() / TILE_SIZE;
 
-            if (canPlace) {
-                gameBoard.placeItem(landform, tileX, tileY);
-            } else {
-                System.out.println("Cannot place here.");
+            double depth = tileY * TILE_SIZE + finalTempInstance.getHeightInTiles() * TILE_SIZE;
+
+            // Special depth for lakes and roads
+            if (Lake.class.isAssignableFrom(landformClass)) {
+                depth = Double.MIN_VALUE;
+            } else if (Road.class.isAssignableFrom(landformClass)) {
+                depth = Double.MIN_VALUE + 1;
             }
 
-            gamePane.getChildren().remove(ghostImage);
-            gamePane.setOnMouseMoved(null);
-            gamePane.setOnMouseClicked(null);
-        });
-    }
+            try {
+                Landform placedLandform = landformClass
+                        .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
+                        .newInstance(tileX * TILE_SIZE, tileY * TILE_SIZE, depth, chosen);
 
+                if (gameBoard.canPlaceItem(placedLandform, tileX, tileY)) {
+
+                    gameBoard.placeLandform(placedLandform, tileX, tileY);
+                    uiLayer.getChildren().add(placedLandform);
+
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            dynamicLayer.getChildren().remove(ghostImage);
+            dynamicLayer.setOnMouseMoved(null);
+            dynamicLayer.setOnMouseClicked(null);
+
+            uiLayer.setMouseTransparent(false);
+        });
+
+    }
     @FXML
     public void buyBush() {
-        buyItem(new Bush(0, 0), "/images/bush1.png");
+        buyLandform(Bush.class, Bush.getRandomBushImage());
     }
-
     @FXML
     public void buyTree() {
-        buyItem(new Tree(0, 0), "/images/tree2.png");
+        buyLandform(Tree.class, Tree.getRandomTreeImage());
     }
-
     @FXML
     public void buyLake() {
-        buyItem(new Lake(0, 0), "/images/lake.png");
+        buyLandform(Lake.class, Lake.lakePicture);
     }
-
+    @FXML
     public void buyGrass() {
-        buyItem(new Grass(0, 0), "/images/grass.png");
+        buyLandform(Grass.class, Grass.grassPicture);
     }
+    @FXML
+    public void buyRoad() {
+        buyLandform(Road.class, Road.roadImages[0]);
+    }
+    @FXML
+    public void buyJeep() {{
+        gameEngine.addJeep();
+        closeShopPane();
+    }}
 
 
 
+    //Class<? extends Animal> animalClass mert ugy lehet atadni jol az x y -t
+    private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
+        shopPane.setVisible(false);
 
-    public void preloadImages(){
-        Ground.preloadGroundImages();
-        Hill.preloadHillImages();
-        Floor.preloadFloorImages();
-        Fence.preloadFenceImages();
-        River.preloadRiverImage();
+        Image animalImage = new Image(getClass().getResource(imagePath).toExternalForm());
+        ImageView ghostImage = new ImageView(animalImage);
+        ghostImage.setOpacity(0.5);
+        ghostImage.setMouseTransparent(true);
+        ghostImage.setFitWidth(50);
+        ghostImage.setFitHeight(50);
+
+
+        dynamicLayer.getChildren().add(ghostImage);
+
+        //disable clicks on top layer
+        uiLayer.setMouseTransparent(true);
+
+        dynamicLayer.setOnMouseMoved(e -> {
+            ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
+            ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
+        });
+
+        dynamicLayer.setOnMouseClicked(e -> {
+            try {
+                double placeX = e.getX();
+                double placeY = e.getY();
+                Animal animalInstance = animalClass
+                        .getDeclaredConstructor(double.class, double.class)
+                        .newInstance(placeX, placeY);
+
+
+                uiLayer.getChildren().add(animalInstance);
+                gameEngine.buyAnimal(animalInstance);
+
+                System.out.println("Added animal at " + placeX + ", " + placeY);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            dynamicLayer.getChildren().remove(ghostImage);
+            dynamicLayer.setOnMouseMoved(null);
+            dynamicLayer.setOnMouseClicked(null);
+
+            //enable clicks on top layer
+            uiLayer.setMouseTransparent(false);
+        });
+
+    }
+    @FXML
+    public void buyElephant(){
+        buyAnimal(Elephant.class, "/images/elephant.png");
+    }
+    @FXML
+    public void buyRhino(){
+        buyAnimal(Rhino.class, "/images/rhino.png");
+    }
+    @FXML
+    public void buyHippo(){
+        buyAnimal(Hippo.class, "/images/hippo.png");
+    }
+    @FXML
+    public void buyBuffalo(){
+        buyAnimal(Buffalo.class, "/images/buffalo.png");
+    }
+    @FXML
+    public void buyZebra(){
+        buyAnimal(Zebra.class, "/images/zebra.png");
+    }
+    @FXML
+    public void buyKangaroo(){
+        buyAnimal(Kangaroo.class, "/images/kangaroo.png");
+    }
+    @FXML
+    public void buyTurtle(){
+        buyAnimal(Turtle.class, "/images/turtle.png");
+    }
+    @FXML
+    public void buyLion(){
+        buyAnimal(Lion.class, "/images/lion.png");
+    }
+    @FXML
+    public void buyTiger(){
+        buyAnimal(Tiger.class, "/images/tiger.png");
+    }
+    @FXML
+    public void buyPanther(){
+        buyAnimal(Panther.class, "/images/panther.png");
+    }
+    @FXML
+    public void buyVulture(){
+        buyAnimal(Vulture.class, "/images/vulture.png");
     }
 
 
@@ -158,41 +297,22 @@ public class GameController {
     @FXML
     public void initialize() {
         //preloading images for faster start
-        preloadImages();
+        // swapped for cleaner code using statics methods inside classes
         //-------------------------------
 
-        this.gameBoard = new GameBoard(gamePane, shopPane, marketButton);
-        gameBoard.setupBoard();
+        this.gameBoard = new GameBoard(terrainLayer, dynamicLayer, uiLayer, shopPane, marketButton);
+        gameBoard.setupGroundBoard();
 
         //IDE MAJD KELL RENDESEN A PARAMÉTEREK
-        this.gameEngine = new GameEngine(this, EASY ,null);
+        this.gameEngine = new GameEngine(this, EASY, gameBoard);
         gameEngine.gameLoop();
 
-        Peacocktest pc = new Peacocktest(400, 400);
-        gamePane.getChildren().add(pc);
-        pc.toFront();
 
-        Timeline smoothSlowMove = new Timeline(new javafx.animation.KeyFrame(Duration.millis(50), e -> {
-            switch (pc.currentDirection) {
-                case UP -> pc.move(Peacocktest.Direction.UP, 0, -0.5);
-                case DOWN -> pc.move(Peacocktest.Direction.DOWN, 0, 0.5);
-                case LEFT -> pc.move(Peacocktest.Direction.LEFT, -0.5, 0);
-                case RIGHT -> pc.move(Peacocktest.Direction.RIGHT, 0.5, 0);
-            }
-        }));
-        smoothSlowMove.setCycleCount(Timeline.INDEFINITE);
-        smoothSlowMove.play();
 
-        // Random direction change timeline every 2-4 seconds
-        Timeline randomDirectionChange = new Timeline(new javafx.animation.KeyFrame(Duration.seconds(5), e -> {
-            Peacocktest.Direction[] directions = Peacocktest.Direction.values();
-            int randomIndex = new java.util.Random().nextInt(directions.length);
-            pc.currentDirection = directions[randomIndex];
-        }));
-        randomDirectionChange.setCycleCount(Timeline.INDEFINITE);
-        randomDirectionChange.play();
+
 
     }
+
 
     public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists){
         //STATS
@@ -207,6 +327,9 @@ public class GameController {
 
 
     }
+
+
+
 
 
     //SWITCHING SCENES

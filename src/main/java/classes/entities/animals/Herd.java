@@ -1,4 +1,4 @@
-package classes.entities;
+package classes.entities.animals;
 
 import java.util.ArrayList;
 
