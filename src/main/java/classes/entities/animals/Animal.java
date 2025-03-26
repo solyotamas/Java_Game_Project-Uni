@@ -1,6 +1,7 @@
 package classes.entities.animals;
 
 import classes.entities.Direction;
+import classes.entities.human.Ranger;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -46,7 +47,7 @@ public abstract class Animal extends Pane {
     protected Direction currentDirection = Direction.RIGHT;
 
     private Pane infoWindow;
-
+    private static Animal currentAnimalWithInfoWindow = null;
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed)  {
         this.frameWidth = frameWidth;
@@ -78,6 +79,10 @@ public abstract class Animal extends Pane {
     }
 
     private void showInfoWindow(double sceneX, double sceneY) {
+        if (currentAnimalWithInfoWindow != null && currentAnimalWithInfoWindow != this) {
+            currentAnimalWithInfoWindow.closeInfoWindow();
+        }
+
         Pane parent = (Pane) this.getParent();
         if (parent == null) return;
 
@@ -101,6 +106,8 @@ public abstract class Animal extends Pane {
         parent.getChildren().add(newInfoWindow);
         infoWindow = newInfoWindow;
 
+        currentAnimalWithInfoWindow = this;
+
         parent.setOnMouseClicked(event -> {
             if (infoWindow != null && !newInfoWindow.getBoundsInParent().contains(event.getX(), event.getY())) {
                 closeInfoWindow();
@@ -113,6 +120,7 @@ public abstract class Animal extends Pane {
             ((Pane) this.getParent()).getChildren().remove(infoWindow);
             infoWindow = null;
             this.setPaused(false);
+            currentAnimalWithInfoWindow = null;
         }
     }
 

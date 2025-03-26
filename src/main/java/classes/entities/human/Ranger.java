@@ -13,6 +13,7 @@ public class Ranger extends Human {
     private static final String imgURL = "/images/animated/ranger.png";
 
     private Pane infoWindow;
+    private static Ranger currentRangerWithInfoWindow = null;
 
     public Ranger(double x, double y){
         super(x, y, frameWidth, frameHeight, imgURL, speed);
@@ -24,6 +25,10 @@ public class Ranger extends Human {
     }
 
     private void showInfoWindow(double sceneX, double sceneY) {
+        if (currentRangerWithInfoWindow != null && currentRangerWithInfoWindow != this) {
+            currentRangerWithInfoWindow.closeInfoWindow();
+        }
+
         Pane parent = (Pane) this.getParent();
         if (parent == null) return;
 
@@ -51,6 +56,8 @@ public class Ranger extends Human {
         parent.getChildren().add(newInfoWindow);
         infoWindow = newInfoWindow;
 
+        currentRangerWithInfoWindow = this;
+
         parent.setOnMouseClicked(event -> {
             if (infoWindow != null && !newInfoWindow.getBoundsInParent().contains(event.getX(), event.getY())) {
                 closeInfoWindow();
@@ -63,6 +70,7 @@ public class Ranger extends Human {
             ((Pane) this.getParent()).getChildren().remove(infoWindow);
             infoWindow = null;
             this.setPaused(false);
+            currentRangerWithInfoWindow = null;
         }
     }
 
