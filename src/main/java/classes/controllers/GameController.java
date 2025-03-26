@@ -96,9 +96,6 @@ public class GameController {
     }
 
 
-
-
-
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
         //just because of a bug sometimes
         dynamicLayer.getChildren().removeIf(node -> node.getOpacity() == 0.5);
@@ -170,6 +167,7 @@ public class GameController {
         });
 
     }
+
     @FXML
     public void buyBush() {
         buyLandform(Bush.class, Bush.getRandomBushImage());
@@ -197,7 +195,6 @@ public class GameController {
     }}
 
 
-
     //Class<? extends Animal> animalClass mert ugy lehet atadni jol az x y -t
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
         shopPane.setVisible(false);
@@ -206,8 +203,9 @@ public class GameController {
         ImageView ghostImage = new ImageView(animalImage);
         ghostImage.setOpacity(0.5);
         ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(50);
-        ghostImage.setFitHeight(50);
+
+        ghostImage.setFitWidth(40);
+        ghostImage.setPreserveRatio(true);
 
 
         dynamicLayer.getChildren().add(ghostImage);
@@ -246,6 +244,7 @@ public class GameController {
         });
 
     }
+
     @FXML
     public void buyElephant(){
         buyAnimal(Elephant.class, "/images/elephant.png");

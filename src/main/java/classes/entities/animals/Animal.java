@@ -1,12 +1,14 @@
 package classes.entities.animals;
 
 import classes.entities.Direction;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 public abstract class Animal extends Pane {
 
@@ -28,6 +30,7 @@ public abstract class Animal extends Pane {
     private double restingTimePassed = 0.0;
     private double restDuration = 15.0;
     private boolean resting = false;
+    private boolean paused = false;
 
     //Images of the Animal, ui
     private Image spriteSheet;
@@ -41,6 +44,8 @@ public abstract class Animal extends Pane {
     private int frameWidth;
     private int frameHeight;
     protected Direction currentDirection = Direction.RIGHT;
+
+    private Pane infoWindow;
 
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed)  {
@@ -66,12 +71,49 @@ public abstract class Animal extends Pane {
 
         pickNewTarget(1920,930);
 
-        this.setOnMouseClicked(this::handleClick);
+        this.setOnMouseClicked(e -> {
+            e.consume(); //
+            showInfoWindow(e.getSceneX(), e.getSceneY());
+        });
     }
 
+    private void showInfoWindow(double sceneX, double sceneY) {
+        Pane parent = (Pane) this.getParent();
+        if (parent == null) return;
 
-    protected void handleClick(MouseEvent event) {
-        System.out.println("Animal clicked at: " + event.getX() + ", " + event.getY());
+        closeInfoWindow();
+
+        this.setPaused(true);
+
+        VBox newInfoWindow = new VBox();
+        newInfoWindow.getStyleClass().add("info-window");
+        newInfoWindow.setPrefSize(170, 70);
+
+        Button choosePreyButton = new Button("Sell animal");
+        choosePreyButton.getStyleClass().add("info-button");
+        choosePreyButton.setOnAction(e -> sellAnimal());;
+
+        newInfoWindow.getChildren().add(choosePreyButton);
+
+        newInfoWindow.setLayoutX(sceneX - 85);
+        newInfoWindow.setLayoutY(sceneY - 170);
+
+        parent.getChildren().add(newInfoWindow);
+        infoWindow = newInfoWindow;
+
+        parent.setOnMouseClicked(event -> {
+            if (infoWindow != null && !newInfoWindow.getBoundsInParent().contains(event.getX(), event.getY())) {
+                closeInfoWindow();
+            }
+        });
+    }
+
+    private void closeInfoWindow() {
+        if (infoWindow != null) {
+            ((Pane) this.getParent()).getChildren().remove(infoWindow);
+            infoWindow = null;
+            this.setPaused(false);
+        }
     }
 
     private void loadStaticDirectionImages() {
@@ -135,6 +177,10 @@ public abstract class Animal extends Pane {
         }
     }
     public void moveTowardsTarget() {
+        if (paused) {
+            return;
+        }
+
         double dx = targetX - x;
         double dy = targetY - y;
 
@@ -160,6 +206,7 @@ public abstract class Animal extends Pane {
             }
         }
     }
+
     public void rest(double mapWidth, double mapHeight) {
         restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
 
@@ -169,11 +216,17 @@ public abstract class Animal extends Pane {
             pickNewTarget(mapWidth, mapHeight);
         }
     }
+
     public void pickNewTarget(double mapWidth, double mapHeight) {
         double marginX = 200;
         double marginY = 50;
         this.targetX = marginX + Math.random() * (mapWidth - 2 * marginX);
         this.targetY = marginY + Math.random() * (mapHeight - 2 * marginY);
+    }
+
+    public void sellAnimal(){
+        System.out.println(this.getClass() + " sold");
+        //TODO sell animal
     }
 
 
@@ -190,9 +243,11 @@ public abstract class Animal extends Pane {
     public int getFrameHeight(){
         return this.frameHeight;
     }
-
     public double getY(){
         return this.y;
+    }
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 
 }

@@ -13,6 +13,7 @@ public abstract class Human extends Pane {
     protected double speed;
     protected double targetX;
     protected double targetY;
+    private boolean paused = false;
 
     //Images of the Animal, ui
     private Image spriteSheet;
@@ -113,6 +114,8 @@ public abstract class Human extends Pane {
         }
     }
     public void moveTowardsTarget() {
+        if (paused) return;
+
         double dx = targetX - x;
         double dy = targetY - y;
 
@@ -156,9 +159,10 @@ public abstract class Human extends Pane {
     public int getFrameHeight(){
         return this.frameHeight;
     }
-
     public double getY(){
         return this.y;
     }
-
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
 }
