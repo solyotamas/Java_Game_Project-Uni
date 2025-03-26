@@ -93,41 +93,49 @@ public class GameBoard{
             }
         }
 
+        Random rand = new Random();
+        for (int i = 0; i < 3; i++) {
+            generateRiver(rand.nextInt(49) + 8, 0);
+        }
 
     }
 
     //terrain generating
     private void makeFenceTerrain(int x, int y){
-        Terrain fence = new Fence(x,y);
+        Terrain fence = new Fence(x, y);
+
+        if (x == COLUMNS - 5) {
+            fence.setScaleX(-1);
+        }
 
         terrainLayer.getChildren().add(fence);
         terrainGrid[x][y] = fence;
     }
+
     private void makeFloorTerrain(int x, int y){
         Terrain floor = new Floor(x,y);
 
         terrainLayer.getChildren().add(floor);
         terrainGrid[x][y] = floor;
     }
-    private void makeRiverTerrain(int x, int y){
+    /*private void makeRiverTerrain(int x, int y){
         River river = new River(x,y);
 
         terrainLayer.getChildren().add(river);
         terrainGrid[x][y] = river;
-    }
+    }*/
     private void makeRandomMapTerrain(int x, int y) {
         int terrainType = rand.nextInt(500);
 
 
         Terrain terrain;
-        /*
+
         if (terrainType < 5){
             terrain = new Hill(x, y);
             addHillCluster(x, y);
         }
         else
-            terrain = new Ground(x, y);*/
-        terrain = new Ground(x, y);
+            terrain = new Ground(x, y);
 
         //Placing inside gamePane and keeping track inside the matrix
         terrainLayer.getChildren().add(terrain);
@@ -259,9 +267,10 @@ public class GameBoard{
         return bitmask;
     }
     private boolean isRoadAt(int gridX, int gridY) {
-        Landform landform = getTerrainAt(gridX, gridY).getLandform();
-        return landform instanceof Road;
+        Terrain terrain = getTerrainAt(gridX, gridY);
+        return terrain != null && terrain.hasLandform() && terrain.getLandform() instanceof Road;
     }
+
 
 
     //getters, setters

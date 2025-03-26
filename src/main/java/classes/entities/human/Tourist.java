@@ -1,3 +1,4 @@
+/*
 package classes.entities.human;
 
 public class Tourist extends Human {
@@ -5,3 +6,4 @@ public class Tourist extends Human {
         super(x, y, size, imgURL);
     }
 }
+*/

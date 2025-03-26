@@ -1,3 +1,4 @@
+/*
 package classes.entities.human;
 //todo
 //  most ezt Objectnek írtam mert a Rangernek lehet Animal és Poacher is
@@ -13,3 +14,4 @@ public class Hunter extends Human {
         this.target = null;
     }
 }
+*/

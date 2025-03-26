@@ -6,6 +6,8 @@ import classes.entities.animals.carnivores.Panther;
 import classes.entities.animals.carnivores.Tiger;
 import classes.entities.animals.carnivores.Vulture;
 import classes.entities.animals.herbivores.*;
+import classes.entities.human.Human;
+import classes.entities.human.Ranger;
 import classes.game.GameBoard;
 import classes.game.GameEngine;
 
@@ -68,6 +70,8 @@ public class GameController {
     private Button gameSpeedHourButton;
     @FXML
     private Button gameSpeedDayButton;
+    @FXML
+    private Label ticketPriceLabel;
 
 
     @FXML
@@ -287,7 +291,52 @@ public class GameController {
         buyAnimal(Vulture.class, "/images/vulture.png");
     }
 
+    @FXML
+    private void buyRanger() {
+        shopPane.setVisible(false);
 
+        Image rangerImage = new Image(getClass().getResource("/images/ranger.png").toExternalForm());
+        ImageView ghostImage = new ImageView(rangerImage);
+        ghostImage.setOpacity(0.5);
+        ghostImage.setMouseTransparent(true);
+        ghostImage.setFitWidth(50);
+        ghostImage.setFitHeight(50);
+
+
+        dynamicLayer.getChildren().add(ghostImage);
+
+        //disable clicks on top layer
+        uiLayer.setMouseTransparent(true);
+
+        dynamicLayer.setOnMouseMoved(e -> {
+            ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
+            ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
+        });
+
+        dynamicLayer.setOnMouseClicked(e -> {
+            try {
+                double placeX = e.getX();
+                double placeY = e.getY();
+
+                Ranger rangerInstance = new Ranger(placeX, placeY);
+
+                uiLayer.getChildren().add(rangerInstance);
+                gameEngine.buyRanger(rangerInstance);
+
+                System.out.println("Added ranger at " + placeX + ", " + placeY);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+            dynamicLayer.getChildren().remove(ghostImage);
+            dynamicLayer.setOnMouseMoved(null);
+            dynamicLayer.setOnMouseClicked(null);
+
+            //enable clicks on top layer
+            uiLayer.setMouseTransparent(false);
+        });
+
+    }
 
     //starting game
     //TODO
@@ -314,7 +363,7 @@ public class GameController {
     }
 
 
-    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists){
+    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice){
         //STATS
         int days = (int) time / 24;
         int hours = (int) time % 24;
@@ -324,6 +373,8 @@ public class GameController {
         herbivoreCountLabel.setText(herbivores + "");
         jeepCountLabel.setText(jeeps + "");
         touristCountLabel.setText(tourists + "");
+        ticketPriceLabel.setText(ticketPrice + "");
+
 
 
     }
