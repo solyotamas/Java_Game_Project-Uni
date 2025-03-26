@@ -101,7 +101,7 @@ public class GameController {
 
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
         //just because of a bug sometimes
-        gameBoard.getDynamicLayer().getChildren().removeIf(node -> node.getOpacity() == 0.5);
+        dynamicLayer.getChildren().removeIf(node -> node.getOpacity() == 0.5);
 
         //shop disappear
         shopPane.setVisible(false);
@@ -120,12 +120,12 @@ public class GameController {
         ghostImage.setOpacity(0.5);
         ghostImage.setFitWidth(TILE_SIZE * tempInstance.getWidthInTiles());
         ghostImage.setFitHeight(TILE_SIZE * tempInstance.getHeightInTiles());
-        gameBoard.getDynamicLayer().getChildren().add(ghostImage);
+        dynamicLayer.getChildren().add(ghostImage);
 
 
         //snapping ghost image to terrains
         uiLayer.setMouseTransparent(true);
-        gameBoard.getDynamicLayer().setOnMouseMoved(e -> {
+        dynamicLayer.setOnMouseMoved(e -> {
             double snapX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
             double snapY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
             ghostImage.setLayoutX(snapX);
@@ -134,7 +134,7 @@ public class GameController {
 
 
         final Landform finalTempInstance = tempInstance;
-        gameBoard.getDynamicLayer().setOnMouseClicked(e -> {
+        dynamicLayer.setOnMouseClicked(e -> {
             int tileX = (int) e.getX() / TILE_SIZE;
             int tileY = (int) e.getY() / TILE_SIZE;
 
@@ -155,16 +155,16 @@ public class GameController {
                 if (gameBoard.canPlaceItem(placedLandform, tileX, tileY)) {
 
                     gameBoard.placeLandform(placedLandform, tileX, tileY);
-                    gameBoard.getDynamicLayer().getChildren().add(placedLandform);
+                    uiLayer.getChildren().add(placedLandform);
 
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
-            gameBoard.getDynamicLayer().getChildren().remove(ghostImage);
-            gameBoard.getDynamicLayer().setOnMouseMoved(null);
-            gameBoard.getDynamicLayer().setOnMouseClicked(null);
+            dynamicLayer.getChildren().remove(ghostImage);
+            dynamicLayer.setOnMouseMoved(null);
+            dynamicLayer.setOnMouseClicked(null);
 
             uiLayer.setMouseTransparent(false);
         });
@@ -190,6 +190,12 @@ public class GameController {
     public void buyRoad() {
         buyLandform(Road.class, Road.roadImages[0]);
     }
+    @FXML
+    public void buyJeep() {{
+        gameEngine.addJeep();
+        closeShopPane();
+    }}
+
 
 
     //Class<? extends Animal> animalClass mert ugy lehet atadni jol az x y -t
@@ -204,21 +210,18 @@ public class GameController {
         ghostImage.setFitHeight(50);
 
 
-        gameBoard.getDynamicLayer().getChildren().add(ghostImage);
+        dynamicLayer.getChildren().add(ghostImage);
 
         //disable clicks on top layer
         uiLayer.setMouseTransparent(true);
 
-        gameBoard.getDynamicLayer().setOnMouseMoved(e -> {
+        dynamicLayer.setOnMouseMoved(e -> {
             ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
             ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
         });
 
-        gameBoard.getDynamicLayer().setOnMouseClicked(e -> {
-
-
+        dynamicLayer.setOnMouseClicked(e -> {
             try {
-
                 double placeX = e.getX();
                 double placeY = e.getY();
                 Animal animalInstance = animalClass
@@ -226,7 +229,7 @@ public class GameController {
                         .newInstance(placeX, placeY);
 
 
-                gameBoard.getDynamicLayer().getChildren().add(animalInstance);
+                uiLayer.getChildren().add(animalInstance);
                 gameEngine.buyAnimal(animalInstance);
 
                 System.out.println("Added animal at " + placeX + ", " + placeY);
@@ -234,9 +237,9 @@ public class GameController {
                 ex.printStackTrace();
             }
 
-            gameBoard.getDynamicLayer().getChildren().remove(ghostImage);
-            gameBoard.getDynamicLayer().setOnMouseMoved(null);
-            gameBoard.getDynamicLayer().setOnMouseClicked(null);
+            dynamicLayer.getChildren().remove(ghostImage);
+            dynamicLayer.setOnMouseMoved(null);
+            dynamicLayer.setOnMouseClicked(null);
 
             //enable clicks on top layer
             uiLayer.setMouseTransparent(false);

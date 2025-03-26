@@ -19,7 +19,7 @@ public class Jeep extends Pane{
     public int happyBonus;
     public int speciesSeen;
 
-    public Jeep(int x, int y, int size, String imgURL) {
+    public Jeep(int x, int y, int size) {
         this.x = x;
         this.y = y;
         this.size = size;

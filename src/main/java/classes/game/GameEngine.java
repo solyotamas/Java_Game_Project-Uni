@@ -87,10 +87,10 @@ public class GameEngine {
     }
 
 
-    private void sortDynamicLayer() {
-        Pane dynamicLayer = gameBoard.getDynamicLayer();
+    private void sortUiLayer() {
+        Pane uiLayer = gameBoard.getUiLayer();
 
-        List<Node> sortedNodes = new ArrayList<>(dynamicLayer.getChildren());
+        List<Node> sortedNodes = new ArrayList<>(uiLayer.getChildren());
         //without reversed min -> max, with reversed max -> min
         sortedNodes.sort(Comparator.comparingDouble(this::extractDepthY));
 
@@ -103,7 +103,7 @@ public class GameEngine {
 
 
         Platform.runLater(() -> {
-            dynamicLayer.getChildren().setAll(sortedNodes);
+            uiLayer.getChildren().setAll(sortedNodes);
         });
     }
     private double extractDepthY(Node node) {
@@ -178,8 +178,6 @@ public class GameEngine {
     private ArrayList<Road> roads;
 
 
-
-
     public GameEngine(GameController gameController, Difficulty difficulty, GameBoard gameBoard) {
         this.gameController = gameController;
         this.difficulty = difficulty;
@@ -234,6 +232,15 @@ public class GameEngine {
 
     public void startsJeep() {
 
+    }
+
+    //todo: jeep méretek
+    public void addJeep() {
+        jeepCount++;
+        jeeps.add(new Jeep(100, 100, 300));
+        gameController.updateDisplay(
+                spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount
+        );
     }
 
 
