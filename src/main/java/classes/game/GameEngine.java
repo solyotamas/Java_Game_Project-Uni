@@ -55,7 +55,7 @@ public class GameEngine {
                 // 1️⃣ Move animals
                 updateAnimalPositions();
                 updateHumanPositions();
-                sortDynamicLayer();
+                sortUiLayer();
 
                 // 2️⃣ Update herds
                 //updateHerds();
@@ -239,7 +239,7 @@ public class GameEngine {
         jeepCount++;
         jeeps.add(new Jeep(100, 100, 300));
         gameController.updateDisplay(
-                spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount
+                spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice
         );
     }
 
