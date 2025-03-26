@@ -647,7 +647,7 @@
                                  <children>
                                     <ImageView fitHeight="55.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../images/road1.png" />
+                                          <Image url="@../images/road.png" />
                                        </image>
                                        <VBox.margin>
                                           <Insets top="10.0" />
@@ -1165,7 +1165,7 @@
                                           <Insets />
                                        </opaqueInsets>
                                     </Label>
-                                    <Button onAction="#buyRanger" mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                                    <Button mnemonicParsing="false" onAction="#buyRanger" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                        <font>
                                           <Font size="20.0" />
                                        </font>

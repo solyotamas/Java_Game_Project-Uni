@@ -299,24 +299,25 @@ public class GameController {
         ghostImage.setFitWidth(50);
         ghostImage.setFitHeight(50);
 
-        gameBoard.getDynamicLayer().getChildren().add(ghostImage);
 
-        // Disable clicks on the top layer while placing the Ranger
+        dynamicLayer.getChildren().add(ghostImage);
+
+        //disable clicks on top layer
         uiLayer.setMouseTransparent(true);
 
-        gameBoard.getDynamicLayer().setOnMouseMoved(e -> {
+        dynamicLayer.setOnMouseMoved(e -> {
             ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
             ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
         });
 
-        gameBoard.getDynamicLayer().setOnMouseClicked(e -> {
+        dynamicLayer.setOnMouseClicked(e -> {
             try {
                 double placeX = e.getX();
                 double placeY = e.getY();
 
                 Ranger rangerInstance = new Ranger(placeX, placeY);
 
-                gameBoard.getDynamicLayer().getChildren().add(rangerInstance);
+                uiLayer.getChildren().add(rangerInstance);
                 gameEngine.buyRanger(rangerInstance);
 
                 System.out.println("Added ranger at " + placeX + ", " + placeY);
@@ -324,12 +325,14 @@ public class GameController {
                 ex.printStackTrace();
             }
 
-            gameBoard.getDynamicLayer().getChildren().remove(ghostImage);
-            gameBoard.getDynamicLayer().setOnMouseMoved(null);
-            gameBoard.getDynamicLayer().setOnMouseClicked(null);
+            dynamicLayer.getChildren().remove(ghostImage);
+            dynamicLayer.setOnMouseMoved(null);
+            dynamicLayer.setOnMouseClicked(null);
 
+            //enable clicks on top layer
             uiLayer.setMouseTransparent(false);
         });
+
     }
 
     //starting game

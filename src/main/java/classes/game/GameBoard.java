@@ -98,11 +98,16 @@ public class GameBoard{
 
     //terrain generating
     private void makeFenceTerrain(int x, int y){
-        Terrain fence = new Fence(x,y);
+        Terrain fence = new Fence(x, y);
+
+        if (x == COLUMNS - 5) {
+            fence.setScaleX(-1);
+        }
 
         terrainLayer.getChildren().add(fence);
         terrainGrid[x][y] = fence;
     }
+
     private void makeFloorTerrain(int x, int y){
         Terrain floor = new Floor(x,y);
 
