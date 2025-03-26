@@ -270,5 +270,5 @@ public class GameBoard{
     }
 
 
-
+    public Pane getUiLayer() { return this.uiLayer; }
 }

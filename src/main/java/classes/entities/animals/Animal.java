@@ -6,6 +6,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 
+import javafx.scene.input.MouseEvent;
+
 public abstract class Animal extends Pane {
 
 
@@ -63,6 +65,13 @@ public abstract class Animal extends Pane {
         this.y = y + (50 / 2.0);
 
         pickNewTarget(1920,930);
+
+        this.setOnMouseClicked(this::handleClick);
+    }
+
+
+    protected void handleClick(MouseEvent event) {
+        System.out.println("Animal clicked at: " + event.getX() + ", " + event.getY());
     }
 
     private void loadStaticDirectionImages() {
