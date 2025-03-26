@@ -43,6 +43,7 @@ public class GameEngine {
     protected ArrayList<Herbivore> herbivores;
     private int touristCount = 0;
     private int jeepCount = 0;
+    private int ticketPrice = 0;
 
 
 
@@ -53,6 +54,7 @@ public class GameEngine {
             new KeyFrame(Duration.millis(50), e -> {
                 // 1️⃣ Move animals
                 updateAnimalPositions();
+                updateHumanPositions();
                 sortDynamicLayer();
 
                 // 2️⃣ Update herds
@@ -75,7 +77,7 @@ public class GameEngine {
                 // UI sync, Display things
                 spentTime += 0.05;
                 gameController.updateDisplay(
-                        spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount
+                        spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice
                 );
 
             })
@@ -135,13 +137,26 @@ public class GameEngine {
         }
     }
 
+    public void buyRanger(Ranger ranger){
+        this.rangers.add(ranger);
+    }
+    private void updateHumanPositions() {
+        for (Ranger ranger : rangers) {
+            //TODO if for when not following target
+            ranger.moveTowardsTarget();
 
+        }
+
+        for (Poacher poacher : poachers) {
+            //TODO if for when not following target
+            poacher.moveTowardsTarget();
+        }
+    }
 
 
 
 
     public int money;
-    public int ticketPrice;
 
     public int winningDays;
     public Difficulty difficulty;

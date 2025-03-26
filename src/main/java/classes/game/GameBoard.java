@@ -259,9 +259,10 @@ public class GameBoard{
         return bitmask;
     }
     private boolean isRoadAt(int gridX, int gridY) {
-        Landform landform = getTerrainAt(gridX, gridY).getLandform();
-        return landform instanceof Road;
+        Terrain terrain = getTerrainAt(gridX, gridY);
+        return terrain != null && terrain.hasLandform() && terrain.getLandform() instanceof Road;
     }
+
 
 
     //getters, setters

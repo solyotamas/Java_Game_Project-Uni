@@ -297,7 +297,7 @@
                               <Insets left="15.0" />
                            </HBox.margin>
                         </ImageView>
-                        <Label alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="165.0" style="-fx-alignment: center;" text="250 000" textFill="#3e2415">
+                        <Label fx:id="ticketPriceLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="165.0" style="-fx-alignment: center;" text="250 000" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
@@ -1165,7 +1165,7 @@
                                           <Insets />
                                        </opaqueInsets>
                                     </Label>
-                                    <Button mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
+                                    <Button onAction="#buyRanger" mnemonicParsing="false" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
