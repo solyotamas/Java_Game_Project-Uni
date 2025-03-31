@@ -36,7 +36,7 @@ public class Terrain extends Pane{
         getChildren().add(background);
     }
 
-    public void placeItem(Landform landform) {
+    public void placeLandform(Landform landform) {
         this.landform = landform;
     }
 
