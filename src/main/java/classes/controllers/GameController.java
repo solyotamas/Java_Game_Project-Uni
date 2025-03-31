@@ -106,7 +106,7 @@ public class GameController {
 
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
         //Just because of a bug sometimes
-        dynamicLayer.getChildren().removeIf(node -> node.getOpacity() == 0.5);
+        ghostLayer.getChildren().removeIf(node -> node.getOpacity() == 0.5);
         //ezt nem írtam át ghostLayerre
         closeShopPane();
         ghostLayer.setVisible(true);
@@ -174,7 +174,7 @@ public class GameController {
                 ghostLayer.setOnMouseClicked(null);
                 uiLayer.setMouseTransparent(false);
 
-                ghostLayer.setVisible(false);
+                //ghostLayer.setVisible(false);
                 ghostLayer.setMouseTransparent(true);
             }
         });
@@ -255,7 +255,7 @@ public class GameController {
             ghostLayer.setOnMouseMoved(null);
             ghostLayer.setOnMouseClicked(null);
 
-            ghostLayer.setVisible(false);
+            //ghostLayer.setVisible(false);
             ghostLayer.setMouseTransparent(true);
 
             //Enable clicks on top layer
@@ -353,7 +353,7 @@ public class GameController {
             ghostLayer.setOnMouseClicked(null);
 
             //Enable clicks on top layer
-            ghostLayer.setVisible(false);
+            //ghostLayer.setVisible(false);
             ghostLayer.setMouseTransparent(true);
             uiLayer.setMouseTransparent(false);
         });

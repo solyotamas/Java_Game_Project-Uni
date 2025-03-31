@@ -53,7 +53,10 @@ public class Ranger extends Human {
         newInfoWindow.setLayoutX(sceneX - 85);
         newInfoWindow.setLayoutY(sceneY - 230);
 
-        parent.getChildren().add(newInfoWindow);
+        //parent.getChildren().add(newInfoWindow);
+        Pane rootPane = (Pane) parent.getParent();
+        Pane ghostLay = (Pane) rootPane.getChildren().get(3);
+        ghostLay.getChildren().add(newInfoWindow);
         infoWindow = newInfoWindow;
 
         currentRangerWithInfoWindow = this;
@@ -67,7 +70,11 @@ public class Ranger extends Human {
 
     private void closeInfoWindow() {
         if (infoWindow != null) {
-            ((Pane) this.getParent()).getChildren().remove(infoWindow);
+            Pane parent = (Pane) this.getParent();
+            Pane rootPane = (Pane) parent.getParent();
+            Pane ghostLay = (Pane) rootPane.getChildren().get(3);
+            ghostLay.getChildren().remove(infoWindow);
+            //((Pane) this.getParent()).getChildren().remove(infoWindow);
             infoWindow = null;
             this.setPaused(false);
             currentRangerWithInfoWindow = null;
