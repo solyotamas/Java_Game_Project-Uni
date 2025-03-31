@@ -52,22 +52,22 @@ public class GameEngine {
 
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(50), e -> {
-                // 1️⃣ Move animals
+                // Move animals
                 updateAnimalPositions();
                 updateHumanPositions();
                 sortUiLayer();
 
-                // 2️⃣ Update herds
+                // Update herds
                 //updateHerds();
 
-                // 3️⃣ Possibly spawn tourists/poachers
+                // Possibly spawn tourists/poachers
                 //maybeSpawnTourist();
                 //maybeSpawnPoacher();
 
-                // 4️⃣ Update money, time, conditions
+                // Update money, time, conditions
                 //updateGameConditions();
 
-                // 5️⃣ Check win/lose conditions
+                // Check win/lose conditions
                 if (gameOver()) {
                     //handleGameOver();
                 } else if (gameWon()) {
