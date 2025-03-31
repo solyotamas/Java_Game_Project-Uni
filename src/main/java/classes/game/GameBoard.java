@@ -197,6 +197,7 @@ public class GameBoard{
         }
     }
 
+    //TODO simplify createPlant and generatePlants into one, idk how tho
     private void createPlant(Class<? extends Plant> plantClass, int x, int y) {
         Image plantImage = switch (plantClass.getSimpleName()) {
             case "Tree" -> Tree.getRandomTreeImage();

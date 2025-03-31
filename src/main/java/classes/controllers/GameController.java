@@ -28,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -41,6 +42,10 @@ import static classes.Difficulty.EASY;
 public class GameController {
     private GameBoard gameBoard;
     private GameEngine gameEngine;
+
+    //info panel
+    private Pane infoWindow;
+    private static Animal currentAnimalInfoPane = null;
 
     //stats
     private static final int ROWS = 31;
@@ -79,6 +84,8 @@ public class GameController {
     private Button gameSpeedDayButton;
     @FXML
     private Label ticketPriceLabel;
+    @FXML
+    private Label moneyLabel;
 
     @FXML
     public void speedGameToDay(){
@@ -241,6 +248,7 @@ public class GameController {
                         .newInstance(placeX, placeY);
 
 
+                animalInstance.setOnMouseClicked(event -> showInfoWindow(animalInstance, event.getSceneX(), event.getSceneY()));
                 uiLayer.getChildren().add(animalInstance);
                 gameEngine.buyAnimal(animalInstance);
 
@@ -357,8 +365,49 @@ public class GameController {
         });
     }
 
-    //TODO simplify createPlant and generatePlants into one, idk how tho
+    private void showInfoWindow(Animal animal, double sceneX, double sceneY) {
+        if (currentAnimalInfoPane != null) {
+            closeInfoWindow(currentAnimalInfoPane);
+        }
 
+        System.out.println("Animal clicked");
+        animal.setPaused(true);
+
+        VBox newInfoWindow = new VBox();
+        newInfoWindow.getStyleClass().add("info-window");
+        newInfoWindow.setPrefSize(170, 70);
+
+        Button sellAnimalBtn = new Button("Sell animal");
+        sellAnimalBtn.getStyleClass().add("info-button");
+        sellAnimalBtn.setOnAction(e -> gameEngine.sellAnimal(animal));;
+
+        newInfoWindow.getChildren().add(sellAnimalBtn);
+
+        newInfoWindow.setLayoutX(sceneX - 85);
+        newInfoWindow.setLayoutY(sceneY - 170);
+
+        ghostLayer.getChildren().add(newInfoWindow);
+        infoWindow = newInfoWindow;
+
+        ghostLayer.setVisible(true);
+
+        currentAnimalInfoPane = animal;
+
+        uiLayer.setOnMouseClicked(event -> {
+            if (infoWindow != null && !newInfoWindow.getBoundsInParent().contains(event.getX(), event.getY())) {
+                closeInfoWindow(animal);
+            }
+        });
+    }
+
+    private void closeInfoWindow(Animal animal) {
+        if (infoWindow != null) {
+            ghostLayer.getChildren().remove(infoWindow);
+            infoWindow = null;
+            animal.setPaused(false);
+            currentAnimalInfoPane = null;
+        }
+    }
 
     //starting game
     //TODO
@@ -382,7 +431,7 @@ public class GameController {
 
     }
 
-    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice){
+    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int  money){
         //STATS
         int days = (int) time / 24;
         int hours = (int) time % 24;
@@ -393,6 +442,7 @@ public class GameController {
         jeepCountLabel.setText(jeeps + "");
         touristCountLabel.setText(tourists + "");
         ticketPriceLabel.setText(ticketPrice + "");
+        moneyLabel.setText(money + "");
 
     }
 

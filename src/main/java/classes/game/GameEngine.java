@@ -41,9 +41,10 @@ public class GameEngine {
     private double spentTime;
     protected ArrayList<Carnivore> carnivores;
     protected ArrayList<Herbivore> herbivores;
-    private int touristCount = 0;
-    private int jeepCount = 0;
-    private int ticketPrice = 0;
+    private int touristCount;
+    private int jeepCount ;
+    private int ticketPrice;
+    private int money = 5000;
 
 
 
@@ -76,9 +77,7 @@ public class GameEngine {
 
                 // UI sync, Display things
                 spentTime += 0.05;
-                gameController.updateDisplay(
-                        spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice
-                );
+                gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice, money);
 
             })
         );
@@ -154,10 +153,6 @@ public class GameEngine {
     }
 
 
-
-
-    public int money;
-
     public int winningDays;
     public Difficulty difficulty;
     public int animalCount;
@@ -184,13 +179,7 @@ public class GameEngine {
         this.gameBoard = gameBoard;
 
 
-        money = 0;
-        ticketPrice = 0;
-        spentTime = 0;
-        winningDays = 0;
-        animalCount = 0;
-        touristCount = 0;
-        jeepCount = 0;
+        money = 5000;
         carnivores = new ArrayList<Carnivore>();
         herbivores = new ArrayList<Herbivore>();
         herds = new ArrayList<Herd>();
@@ -238,31 +227,30 @@ public class GameEngine {
     public void addJeep() {
         jeepCount++;
         jeeps.add(new Jeep(100, 100, 300));
-        gameController.updateDisplay(
-                spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice
-        );
+        gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice, money);
     }
 
 
 
     public void pays(Ranger ranger) {
         //rangers.indexOf(ranger).paid = true;
-        money = money - 0;
-        //actual érték needed
+        money = money - 100;
 
     }
 
-    /*
-    public void sells(Animal animal) {
-        money = money + 0;
-        //actual érték needed
+    public void sellAnimal(Animal animal) {
+        money += animal.getPrice();
 
         if (animal instanceof Herbivore) {
             herbivores.remove(animal);
         } else {
             carnivores.remove(animal);
         }
-    }*/
 
+        Pane uiLayer = gameBoard.getUiLayer();
+        uiLayer.getChildren().remove(animal);
+
+        System.out.println("Eladtál egy állatot " + animal.getPrice() + " pénzért.");
+    }
 
 }

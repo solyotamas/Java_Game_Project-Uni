@@ -32,7 +32,7 @@
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="176.0" />
                   <HBox alignment="CENTER" prefHeight="55.0" prefWidth="154.0" spacing="10.0">
                      <children>
-                        <Label fx:id="gameTimeLabel1" prefHeight="33.0" prefWidth="216.0" style="-fx-alignment: center;" text="1 000 000" textFill="#3e2415">
+                        <Label fx:id="moneyLabel" prefHeight="33.0" prefWidth="216.0" style="-fx-alignment: center;" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
