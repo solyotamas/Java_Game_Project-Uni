@@ -54,8 +54,6 @@ public class GameController {
     @FXML
     private Pane terrainLayer;
     @FXML
-    private Pane dynamicLayer;
-    @FXML
     private Pane uiLayer;
     @FXML
     private Pane ghostLayer;
@@ -373,7 +371,7 @@ public class GameController {
         // swapped for cleaner code using statics methods inside classes
         //-------------------------------
 
-        this.gameBoard = new GameBoard(terrainLayer, dynamicLayer, uiLayer, shopPane, marketButton);
+        this.gameBoard = new GameBoard(terrainLayer, uiLayer, shopPane, marketButton);
         gameBoard.setupGroundBoard();
 
         //IDE MAJD KELL RENDESEN A PARAMÉTEREK

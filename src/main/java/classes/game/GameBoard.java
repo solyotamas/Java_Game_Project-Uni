@@ -23,7 +23,6 @@ public class GameBoard{
 
     //representation
     private final Pane terrainLayer;
-    private final Pane dynamicLayer;
     private final Pane uiLayer;
 
     private final Pane shopPane;
@@ -33,9 +32,8 @@ public class GameBoard{
     //conf
     private final Random rand = new Random();
 
-    public GameBoard( Pane terrainLayer, Pane dynamicLayer, Pane uiLayer, Pane shopPane, Button marketButton) {
+    public GameBoard( Pane terrainLayer, Pane uiLayer, Pane shopPane, Button marketButton) {
         this.terrainLayer = terrainLayer;
-        this.dynamicLayer = dynamicLayer;
         this.uiLayer = uiLayer;
 
         this.shopPane = shopPane;
@@ -306,6 +304,5 @@ public class GameBoard{
     }
 
     //getters, setters
-    public Pane getDynamicLayer() { return this.dynamicLayer; }
     public Pane getUiLayer() { return this.uiLayer; }
 }
