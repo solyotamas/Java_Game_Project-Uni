@@ -81,6 +81,7 @@ public class Ranger extends Human {
 
     private void unemploy() {
         System.out.println(this.getClass() + " unemployed");
+
         //TODO unemploy ranger
     }
 }

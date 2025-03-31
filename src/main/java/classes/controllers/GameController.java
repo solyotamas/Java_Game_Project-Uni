@@ -58,6 +58,8 @@ public class GameController {
     @FXML
     private Pane uiLayer;
     @FXML
+    private Pane ghostLayer;
+    @FXML
     private Pane shopPane;
     @FXML
     private Button marketButton;
@@ -105,7 +107,10 @@ public class GameController {
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
         //Just because of a bug sometimes
         dynamicLayer.getChildren().removeIf(node -> node.getOpacity() == 0.5);
-        shopPane.setVisible(false);
+        //ezt nem írtam át ghostLayerre
+        closeShopPane();
+        ghostLayer.setVisible(true);
+        ghostLayer.setMouseTransparent(false);
 
         boolean isRoad = Road.class.isAssignableFrom(landformClass);
         int[] remainingRoads = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
@@ -123,11 +128,11 @@ public class GameController {
         ghostImage.setOpacity(0.5);
         ghostImage.setFitWidth(TILE_SIZE * tempInstance.getWidthInTiles());
         ghostImage.setFitHeight(TILE_SIZE * tempInstance.getHeightInTiles());
-        dynamicLayer.getChildren().add(ghostImage);
+        ghostLayer.getChildren().add(ghostImage);
 
         //Snapping ghost image to terrains
         uiLayer.setMouseTransparent(true);
-        dynamicLayer.setOnMouseMoved(e -> {
+        ghostLayer.setOnMouseMoved(e -> {
             double snapX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
             double snapY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
             ghostImage.setLayoutX(snapX);
@@ -135,7 +140,7 @@ public class GameController {
         });
 
         final Landform finalTempInstance = tempInstance;
-        dynamicLayer.setOnMouseClicked(e -> {
+        ghostLayer.setOnMouseClicked(e -> {
             int tileX = (int) e.getX() / TILE_SIZE;
             int tileY = (int) e.getY() / TILE_SIZE;
 
@@ -164,12 +169,17 @@ public class GameController {
 
             //If road, place 10
             if (!isRoad || remainingRoads[0] <= 0) {
-                dynamicLayer.getChildren().remove(ghostImage);
-                dynamicLayer.setOnMouseMoved(null);
-                dynamicLayer.setOnMouseClicked(null);
+                ghostLayer.getChildren().remove(ghostImage);
+                ghostLayer.setOnMouseMoved(null);
+                ghostLayer.setOnMouseClicked(null);
                 uiLayer.setMouseTransparent(false);
+
+                ghostLayer.setVisible(false);
+                ghostLayer.setMouseTransparent(true);
             }
         });
+
+
     }
 
     @FXML
@@ -201,7 +211,9 @@ public class GameController {
 
     //Class<? extends Animal> animalClass mert ugy lehet atadni jol az x y -t
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
-        shopPane.setVisible(false);
+        closeShopPane();
+        ghostLayer.setVisible(true);
+        ghostLayer.setMouseTransparent(false);
 
         Image animalImage = new Image(getClass().getResource(imagePath).toExternalForm());
         ImageView ghostImage = new ImageView(animalImage);
@@ -212,17 +224,17 @@ public class GameController {
         ghostImage.setPreserveRatio(true);
 
 
-        dynamicLayer.getChildren().add(ghostImage);
+        ghostLayer.getChildren().add(ghostImage);
 
         //Disable clicks on top layer
         uiLayer.setMouseTransparent(true);
 
-        dynamicLayer.setOnMouseMoved(e -> {
+        ghostLayer.setOnMouseMoved(e -> {
             ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
             ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
         });
 
-        dynamicLayer.setOnMouseClicked(e -> {
+        ghostLayer.setOnMouseClicked(e -> {
             try {
                 double placeX = e.getX();
                 double placeY = e.getY();
@@ -239,9 +251,12 @@ public class GameController {
                 ex.printStackTrace();
             }
 
-            dynamicLayer.getChildren().remove(ghostImage);
-            dynamicLayer.setOnMouseMoved(null);
-            dynamicLayer.setOnMouseClicked(null);
+            ghostLayer.getChildren().remove(ghostImage);
+            ghostLayer.setOnMouseMoved(null);
+            ghostLayer.setOnMouseClicked(null);
+
+            ghostLayer.setVisible(false);
+            ghostLayer.setMouseTransparent(true);
 
             //Enable clicks on top layer
             uiLayer.setMouseTransparent(false);
@@ -295,7 +310,10 @@ public class GameController {
 
     @FXML
     private void buyRanger() {
-        shopPane.setVisible(false);
+        closeShopPane();
+
+        ghostLayer.setVisible(true);
+        ghostLayer.setMouseTransparent(false);
 
         Image rangerImage = new Image(getClass().getResource("/images/ranger.png").toExternalForm());
         ImageView ghostImage = new ImageView(rangerImage);
@@ -305,17 +323,17 @@ public class GameController {
         ghostImage.setFitHeight(50);
 
 
-        dynamicLayer.getChildren().add(ghostImage);
+        ghostLayer.getChildren().add(ghostImage);
 
         //Disable clicks on top layer
         uiLayer.setMouseTransparent(true);
 
-        dynamicLayer.setOnMouseMoved(e -> {
+        ghostLayer.setOnMouseMoved(e -> {
             ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
             ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
         });
 
-        dynamicLayer.setOnMouseClicked(e -> {
+        ghostLayer.setOnMouseClicked(e -> {
             try {
                 double placeX = e.getX();
                 double placeY = e.getY();
@@ -330,11 +348,13 @@ public class GameController {
                 ex.printStackTrace();
             }
 
-            dynamicLayer.getChildren().remove(ghostImage);
-            dynamicLayer.setOnMouseMoved(null);
-            dynamicLayer.setOnMouseClicked(null);
+            ghostLayer.getChildren().remove(ghostImage);
+            ghostLayer.setOnMouseMoved(null);
+            ghostLayer.setOnMouseClicked(null);
 
             //Enable clicks on top layer
+            ghostLayer.setVisible(false);
+            ghostLayer.setMouseTransparent(true);
             uiLayer.setMouseTransparent(false);
         });
     }
@@ -360,6 +380,7 @@ public class GameController {
         this.gameEngine = new GameEngine(this, EASY, gameBoard);
         gameEngine.gameLoop();
         gameBoard.generatePlants(rand.nextInt(10) + 10);
+        this.ghostLayer.setVisible(false);
 
     }
 
