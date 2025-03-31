@@ -1,6 +1,5 @@
 package classes.game;
 
-import classes.landforms.Lake;
 import classes.landforms.Landform;
 import classes.landforms.Road;
 import classes.terrains.*;
@@ -17,7 +16,6 @@ public class GameBoard{
     private static final int COLUMNS = 64;
     private static final int TILE_SIZE = 30;
 
-
     //representation
     private final Pane terrainLayer;
     private final Pane dynamicLayer;
@@ -27,17 +25,10 @@ public class GameBoard{
     private final Button marketButton;
     private final Terrain[][] terrainGrid = new Terrain[COLUMNS][ROWS];
 
-
-
-
     //conf
     private final Random rand = new Random();
 
-
-    public GameBoard(
-            Pane terrainLayer, Pane dynamicLayer, Pane uiLayer,
-            Pane shopPane, Button marketButton
-    ) {
+    public GameBoard( Pane terrainLayer, Pane dynamicLayer, Pane uiLayer, Pane shopPane, Button marketButton) {
         this.terrainLayer = terrainLayer;
         this.dynamicLayer = dynamicLayer;
         this.uiLayer = uiLayer;
@@ -45,37 +36,8 @@ public class GameBoard{
         this.shopPane = shopPane;
         this.marketButton = marketButton;
 
-
-
     }
 
-    //board setups
-    public void setupBoard() {
-
-        //Map config at start
-        for (int x = 0; x < COLUMNS; x++) {
-            for (int y = 0; y < ROWS; y++) {
-                switch (x){
-                    case 0,1,2,3, COLUMNS-1, COLUMNS-2, COLUMNS-3, COLUMNS-4:
-                        makeFloorTerrain(x,y);
-                        break;
-                    case 4, COLUMNS-5:
-                        makeFenceTerrain(x,y);
-                        break;
-                    default:
-                        makeRandomMapTerrain(x,y);
-                }
-            }
-        }
-
-        Random rand = new Random();
-        for (int i = 0; i < 3; i++) {
-            generateRiver(rand.nextInt(49) + 8, 0);
-        }
-
-
-
-    }
     public void setupGroundBoard(){
         //Map config at start
         for (int x = 0; x < COLUMNS; x++) {
@@ -118,12 +80,7 @@ public class GameBoard{
         terrainLayer.getChildren().add(floor);
         terrainGrid[x][y] = floor;
     }
-    /*private void makeRiverTerrain(int x, int y){
-        River river = new River(x,y);
 
-        terrainLayer.getChildren().add(river);
-        terrainGrid[x][y] = river;
-    }*/
     private void makeRandomMapTerrain(int x, int y) {
         int terrainType = rand.nextInt(500);
 
@@ -141,6 +98,7 @@ public class GameBoard{
         terrainLayer.getChildren().add(terrain);
         terrainGrid[x][y] = terrain;
     }
+
     private void generateRiver(int startX, int startY) {
         int x = startX;
         int y = startY;
@@ -174,6 +132,7 @@ public class GameBoard{
             }
         }
     }
+
     private void addHillCluster(int startX, int startY) {
         int clusterSize = rand.nextInt(20) + 5;
         ArrayList<int[]> positions = new ArrayList<>();
@@ -199,6 +158,7 @@ public class GameBoard{
             }
         }
     }
+
     public Terrain getTerrainAt(int x, int y) {
         if (x >= 0 && y >= 0 && x < COLUMNS && y < ROWS) {
             return terrainGrid[x][y];
@@ -207,7 +167,7 @@ public class GameBoard{
     }
 
     //Placing landforms
-    public boolean canPlaceItem(Landform landform, int startX, int startY) {
+    public boolean canPlaceLandform(Landform landform, int startX, int startY) {
         for (int x = startX; x < startX + landform.getWidthInTiles(); x++) {
             for (int y = startY; y < startY + landform.getHeightInTiles(); y++) {
                 Terrain terrain = getTerrainAt(x, y);
@@ -219,12 +179,13 @@ public class GameBoard{
         }
         return true;
     }
+
     public void placeLandform(Landform landform, int x, int y) {
         for (int i = x; i < x + landform.getWidthInTiles(); i++) {
             for (int j = y; j < y + landform.getHeightInTiles(); j++) {
                 Terrain terrain = getTerrainAt(i, j);
                 if (terrain != null) {
-                    terrain.placeItem(landform);
+                    terrain.placeLandform(landform);
                     if(landform instanceof Road){
                         updateRoadAndNeighbors(i, j);
                     }
@@ -241,6 +202,7 @@ public class GameBoard{
         updateRoadTextureAt(x, y + 1);
         updateRoadTextureAt(x, y - 1);
     }
+
     private void updateRoadTextureAt(int x, int y) {
         Terrain terrain = getTerrainAt(x, y);
         if (terrain != null && terrain.hasLandform() && terrain.getLandform() instanceof Road road) {
@@ -248,6 +210,7 @@ public class GameBoard{
             road.setPicture(Road.roadImages[bitmask]);
         }
     }
+
     private int calculateBitmask(int x, int y) {
         int bitmask = 0;
 
@@ -271,13 +234,7 @@ public class GameBoard{
         return terrain != null && terrain.hasLandform() && terrain.getLandform() instanceof Road;
     }
 
-
-
     //getters, setters
-    public Pane getDynamicLayer(){
-        return this.dynamicLayer;
-    }
-
-
+    public Pane getDynamicLayer() { return this.dynamicLayer; }
     public Pane getUiLayer() { return this.uiLayer; }
 }

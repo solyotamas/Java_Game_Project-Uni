@@ -6,7 +6,6 @@ import classes.entities.animals.carnivores.Panther;
 import classes.entities.animals.carnivores.Tiger;
 import classes.entities.animals.carnivores.Vulture;
 import classes.entities.animals.herbivores.*;
-import classes.entities.human.Human;
 import classes.entities.human.Ranger;
 import classes.game.GameBoard;
 import classes.game.GameEngine;
@@ -16,12 +15,12 @@ import classes.landforms.Landform;
 import classes.landforms.Road;
 import classes.landforms.plants.Bush;
 import classes.landforms.plants.Grass;
+import classes.landforms.plants.Plant;
 import classes.landforms.plants.Tree;
-import classes.terrains.*;
+import classes.terrains.Ground;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -32,6 +31,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Random;
 
 import javafx.scene.image.ImageView;
 
@@ -41,7 +41,14 @@ import static classes.Difficulty.EASY;
 public class GameController {
     private GameBoard gameBoard;
     private GameEngine gameEngine;
+
+    //stats
+    private static final int ROWS = 31;
+    private static final int COLUMNS = 64;
     private static final int TILE_SIZE = 30;
+
+    //conf
+    private final Random rand = new Random();
 
     //For Gameboard
     @FXML
@@ -55,7 +62,7 @@ public class GameController {
     @FXML
     private Button marketButton;
 
-    //top and bottom bar UI
+    //Top and bottom bar UI
     @FXML
     private Label gameTimeLabel;
     @FXML
@@ -73,7 +80,6 @@ public class GameController {
     @FXML
     private Label ticketPriceLabel;
 
-
     @FXML
     public void speedGameToDay(){
 
@@ -90,19 +96,19 @@ public class GameController {
         shopPane.setVisible(true);
         shopPane.toFront();
     }
+
     @FXML
     public void closeShopPane(){
         shopPane.setVisible(false);
     }
 
-
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
-        //just because of a bug sometimes
+        //Just because of a bug sometimes
         dynamicLayer.getChildren().removeIf(node -> node.getOpacity() == 0.5);
-
-        //shop disappear
         shopPane.setVisible(false);
 
+        boolean isRoad = Road.class.isAssignableFrom(landformClass);
+        int[] remainingRoads = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
 
         //For ghostImage pic to be equivalent of the image of the instance that will be placed
         Landform tempInstance = null;
@@ -119,8 +125,7 @@ public class GameController {
         ghostImage.setFitHeight(TILE_SIZE * tempInstance.getHeightInTiles());
         dynamicLayer.getChildren().add(ghostImage);
 
-
-        //snapping ghost image to terrains
+        //Snapping ghost image to terrains
         uiLayer.setMouseTransparent(true);
         dynamicLayer.setOnMouseMoved(e -> {
             double snapX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
@@ -129,7 +134,6 @@ public class GameController {
             ghostImage.setLayoutY(snapY);
         });
 
-
         final Landform finalTempInstance = tempInstance;
         dynamicLayer.setOnMouseClicked(e -> {
             int tileX = (int) e.getX() / TILE_SIZE;
@@ -137,10 +141,10 @@ public class GameController {
 
             double depth = tileY * TILE_SIZE + finalTempInstance.getHeightInTiles() * TILE_SIZE;
 
-            // Special depth for lakes and roads
+            //Special depth for lakes and roads
             if (Lake.class.isAssignableFrom(landformClass)) {
                 depth = Double.MIN_VALUE;
-            } else if (Road.class.isAssignableFrom(landformClass)) {
+            } else if (isRoad) {
                 depth = Double.MIN_VALUE + 1;
             }
 
@@ -149,23 +153,23 @@ public class GameController {
                         .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
                         .newInstance(tileX * TILE_SIZE, tileY * TILE_SIZE, depth, chosen);
 
-                if (gameBoard.canPlaceItem(placedLandform, tileX, tileY)) {
-
+                if (gameBoard.canPlaceLandform(placedLandform, tileX, tileY)) {
                     gameBoard.placeLandform(placedLandform, tileX, tileY);
                     uiLayer.getChildren().add(placedLandform);
-
+                    remainingRoads[0]--;
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
 
-            dynamicLayer.getChildren().remove(ghostImage);
-            dynamicLayer.setOnMouseMoved(null);
-            dynamicLayer.setOnMouseClicked(null);
-
-            uiLayer.setMouseTransparent(false);
+            //If road, place 10
+            if (!isRoad || remainingRoads[0] <= 0) {
+                dynamicLayer.getChildren().remove(ghostImage);
+                dynamicLayer.setOnMouseMoved(null);
+                dynamicLayer.setOnMouseClicked(null);
+                uiLayer.setMouseTransparent(false);
+            }
         });
-
     }
 
     @FXML
@@ -210,7 +214,7 @@ public class GameController {
 
         dynamicLayer.getChildren().add(ghostImage);
 
-        //disable clicks on top layer
+        //Disable clicks on top layer
         uiLayer.setMouseTransparent(true);
 
         dynamicLayer.setOnMouseMoved(e -> {
@@ -239,10 +243,9 @@ public class GameController {
             dynamicLayer.setOnMouseMoved(null);
             dynamicLayer.setOnMouseClicked(null);
 
-            //enable clicks on top layer
+            //Enable clicks on top layer
             uiLayer.setMouseTransparent(false);
         });
-
     }
 
     @FXML
@@ -304,7 +307,7 @@ public class GameController {
 
         dynamicLayer.getChildren().add(ghostImage);
 
-        //disable clicks on top layer
+        //Disable clicks on top layer
         uiLayer.setMouseTransparent(true);
 
         dynamicLayer.setOnMouseMoved(e -> {
@@ -331,10 +334,76 @@ public class GameController {
             dynamicLayer.setOnMouseMoved(null);
             dynamicLayer.setOnMouseClicked(null);
 
-            //enable clicks on top layer
+            //Enable clicks on top layer
             uiLayer.setMouseTransparent(false);
         });
+    }
 
+    //TODO simplify createPlant and generatePlants into one, idk how tho
+    private void createPlant(Class<? extends Plant> plantClass, int x, int y) {
+        Image plantImage = switch (plantClass.getSimpleName()) {
+            case "Tree" -> Tree.getRandomTreeImage();
+            case "Bush" -> Bush.getRandomBushImage();
+            case "Grass" -> Grass.grassPicture;
+            default -> null;
+        };
+
+        Landform tempInstance = null;
+        try {
+            tempInstance = plantClass.getDeclaredConstructor(double.class, double.class, double.class, Image.class).newInstance(0.0, 0.0, 0.0, plantImage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        double depth = y * TILE_SIZE + tempInstance.getHeightInTiles() * TILE_SIZE;
+
+        try {
+            Landform placedLandform = plantClass
+                    .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
+                    .newInstance(x * TILE_SIZE, y * TILE_SIZE, depth, plantImage);
+
+            if (gameBoard.canPlaceLandform(placedLandform, x, y)) {
+                gameBoard.placeLandform(placedLandform, x, y);
+                uiLayer.getChildren().add(placedLandform);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void generatePlants(int amount) {
+        for (int i = 0; i < amount; i++) {
+            int x, y;
+            Class<? extends Plant> plantClass = switch (rand.nextInt(3)) {
+                case 0 -> Tree.class;
+                case 1 -> Bush.class;
+                default -> Grass.class;
+            };
+
+            Image plantImage = switch (plantClass.getSimpleName()) {
+                case "Tree" -> Tree.getRandomTreeImage();
+                case "Bush" -> Bush.getRandomBushImage();
+                case "Grass" -> Grass.grassPicture;
+                default -> null;
+            };
+
+            if (plantImage == null) continue;
+
+            Landform tempInstance = null;
+            try {
+                tempInstance = plantClass.getDeclaredConstructor(double.class, double.class, double.class, Image.class)
+                        .newInstance(0.0, 0.0, 0.0, plantImage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+
+            do {
+                x = rand.nextInt(COLUMNS);
+                y = rand.nextInt(ROWS);
+            } while (!gameBoard.canPlaceLandform(tempInstance, x, y));
+
+            createPlant(plantClass, x, y);
+        }
     }
 
     //starting game
@@ -354,13 +423,9 @@ public class GameController {
         //IDE MAJD KELL RENDESEN A PARAMÉTEREK
         this.gameEngine = new GameEngine(this, EASY, gameBoard);
         gameEngine.gameLoop();
-
-
-
-
+        generatePlants(rand.nextInt(10) + 10);
 
     }
-
 
     public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice){
         //STATS
@@ -374,21 +439,18 @@ public class GameController {
         touristCountLabel.setText(tourists + "");
         ticketPriceLabel.setText(ticketPrice + "");
 
-
-
     }
-
-
-
 
 
     //SWITCHING SCENES
     public void switchToSave(ActionEvent event) throws IOException {
         switchScene(event, "/fxmls/save_screen.fxml");
     }
+
     public void switchToMain(ActionEvent event) throws IOException {
         switchScene(event, "/fxmls/main_screen.fxml");
     }
+
     private void switchScene(ActionEvent event, String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
@@ -399,6 +461,4 @@ public class GameController {
         stage.setScene(scene);
         stage.show();
     }
-
-
 }
