@@ -199,7 +199,7 @@ public class GameBoard{
         }
     }
 
-    public void createPlant(Class<? extends Plant> plantClass, int x, int y) {
+    private void createPlant(Class<? extends Plant> plantClass, int x, int y) {
         Image plantImage = switch (plantClass.getSimpleName()) {
             case "Tree" -> Tree.getRandomTreeImage();
             case "Bush" -> Bush.getRandomBushImage();
