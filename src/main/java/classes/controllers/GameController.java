@@ -340,71 +340,7 @@ public class GameController {
     }
 
     //TODO simplify createPlant and generatePlants into one, idk how tho
-    private void createPlant(Class<? extends Plant> plantClass, int x, int y) {
-        Image plantImage = switch (plantClass.getSimpleName()) {
-            case "Tree" -> Tree.getRandomTreeImage();
-            case "Bush" -> Bush.getRandomBushImage();
-            case "Grass" -> Grass.grassPicture;
-            default -> null;
-        };
 
-        Landform tempInstance = null;
-        try {
-            tempInstance = plantClass.getDeclaredConstructor(double.class, double.class, double.class, Image.class).newInstance(0.0, 0.0, 0.0, plantImage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        double depth = y * TILE_SIZE + tempInstance.getHeightInTiles() * TILE_SIZE;
-
-        try {
-            Landform placedLandform = plantClass
-                    .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
-                    .newInstance(x * TILE_SIZE, y * TILE_SIZE, depth, plantImage);
-
-            if (gameBoard.canPlaceLandform(placedLandform, x, y)) {
-                gameBoard.placeLandform(placedLandform, x, y);
-                uiLayer.getChildren().add(placedLandform);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    private void generatePlants(int amount) {
-        for (int i = 0; i < amount; i++) {
-            int x, y;
-            Class<? extends Plant> plantClass = switch (rand.nextInt(3)) {
-                case 0 -> Tree.class;
-                case 1 -> Bush.class;
-                default -> Grass.class;
-            };
-
-            Image plantImage = switch (plantClass.getSimpleName()) {
-                case "Tree" -> Tree.getRandomTreeImage();
-                case "Bush" -> Bush.getRandomBushImage();
-                case "Grass" -> Grass.grassPicture;
-                default -> null;
-            };
-
-            if (plantImage == null) continue;
-
-            Landform tempInstance = null;
-            try {
-                tempInstance = plantClass.getDeclaredConstructor(double.class, double.class, double.class, Image.class)
-                        .newInstance(0.0, 0.0, 0.0, plantImage);
-            } catch (Exception e) {
-                e.printStackTrace();
-                continue;
-            }
-
-            do {
-                x = rand.nextInt(COLUMNS);
-                y = rand.nextInt(ROWS);
-            } while (!gameBoard.canPlaceLandform(tempInstance, x, y));
-
-            createPlant(plantClass, x, y);
-        }
-    }
 
     //starting game
     //TODO
@@ -423,7 +359,7 @@ public class GameController {
         //IDE MAJD KELL RENDESEN A PARAMÉTEREK
         this.gameEngine = new GameEngine(this, EASY, gameBoard);
         gameEngine.gameLoop();
-        generatePlants(rand.nextInt(10) + 10);
+        gameBoard.generatePlants(rand.nextInt(10) + 10);
 
     }
 

@@ -2,8 +2,13 @@ package classes.game;
 
 import classes.landforms.Landform;
 import classes.landforms.Road;
+import classes.landforms.plants.Bush;
+import classes.landforms.plants.Grass;
+import classes.landforms.plants.Plant;
+import classes.landforms.plants.Tree;
 import classes.terrains.*;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 
 
@@ -191,6 +196,72 @@ public class GameBoard{
                     }
                 }
             }
+        }
+    }
+
+    public void createPlant(Class<? extends Plant> plantClass, int x, int y) {
+        Image plantImage = switch (plantClass.getSimpleName()) {
+            case "Tree" -> Tree.getRandomTreeImage();
+            case "Bush" -> Bush.getRandomBushImage();
+            case "Grass" -> Grass.grassPicture;
+            default -> null;
+        };
+
+        Landform tempInstance = null;
+        try {
+            tempInstance = plantClass.getDeclaredConstructor(double.class, double.class, double.class, Image.class).newInstance(0.0, 0.0, 0.0, plantImage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        double depth = y * TILE_SIZE + tempInstance.getHeightInTiles() * TILE_SIZE;
+
+        try {
+            Landform placedLandform = plantClass
+                    .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
+                    .newInstance(x * TILE_SIZE, y * TILE_SIZE, depth, plantImage);
+
+            if (canPlaceLandform(placedLandform, x, y)) {
+                placeLandform(placedLandform, x, y);
+                uiLayer.getChildren().add(placedLandform);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void generatePlants(int amount) {
+        for (int i = 0; i < amount; i++) {
+            int x, y;
+            Class<? extends Plant> plantClass = switch (rand.nextInt(3)) {
+                case 0 -> Tree.class;
+                case 1 -> Bush.class;
+                default -> Grass.class;
+            };
+
+            Image plantImage = switch (plantClass.getSimpleName()) {
+                case "Tree" -> Tree.getRandomTreeImage();
+                case "Bush" -> Bush.getRandomBushImage();
+                case "Grass" -> Grass.grassPicture;
+                default -> null;
+            };
+
+            if (plantImage == null) continue;
+
+            Landform tempInstance = null;
+            try {
+                tempInstance = plantClass.getDeclaredConstructor(double.class, double.class, double.class, Image.class)
+                        .newInstance(0.0, 0.0, 0.0, plantImage);
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+
+            do {
+                x = rand.nextInt(COLUMNS);
+                y = rand.nextInt(ROWS);
+            } while (!canPlaceLandform(tempInstance, x, y));
+
+            createPlant(plantClass, x, y);
         }
     }
 
