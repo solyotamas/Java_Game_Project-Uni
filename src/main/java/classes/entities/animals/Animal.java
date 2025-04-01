@@ -105,7 +105,7 @@ public abstract class Animal extends Pane {
 
         //parent.getChildren().add(newInfoWindow);
         Pane rootPane = (Pane) parent.getParent();
-        Pane ghostLay = (Pane) rootPane.getChildren().get(3);
+        Pane ghostLay = (Pane) rootPane.getChildren().get(2);
         ghostLay.getChildren().add(newInfoWindow);
         newInfoWindow.toFront();
         infoWindow = newInfoWindow;
@@ -123,7 +123,7 @@ public abstract class Animal extends Pane {
         if (infoWindow != null) {
             Pane parent = (Pane) this.getParent();
             Pane rootPane = (Pane) parent.getParent();
-            Pane ghostLay = (Pane) rootPane.getChildren().get(3);
+            Pane ghostLay = (Pane) rootPane.getChildren().get(2);
             ghostLay.getChildren().remove(infoWindow);
             //((Pane) this.getParent()).getChildren().remove(infoWindow);
             infoWindow = null;
