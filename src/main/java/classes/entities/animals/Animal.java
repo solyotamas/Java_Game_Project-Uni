@@ -11,9 +11,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+import java.util.function.Consumer;
+
 public abstract class Animal extends Pane {
 
-
+    private static Consumer<Animal> globalClickHandler;
+    public static void setGlobalClickHandler(Consumer<Animal> handler) {
+        globalClickHandler = handler;
+    }
     /*
     private Landform target;
     private int appetite;
@@ -47,8 +52,6 @@ public abstract class Animal extends Pane {
     private int frameHeight;
     protected Direction currentDirection = Direction.RIGHT;
 
-    private Pane infoWindow;
-    private static Animal currentAnimalWithInfoWindow = null;
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price)  {
         this.frameWidth = frameWidth;
@@ -61,23 +64,29 @@ public abstract class Animal extends Pane {
         loadStaticDirectionImages();
 
         //UI
-        imageView = new ImageView(walkDownImages[0]);
-        imageView.setFitWidth(50);
-        imageView.setFitHeight(50);
+        imageView = new ImageView(walkRightImages[0]);
+        imageView.setFitWidth(frameWidth * 0.6);
+        imageView.setFitHeight(frameHeight * 0.6);
         getChildren().add(imageView);
 
         //the picture will appear where the user clicked but the x and y coordinates are its feet for dynamic depth
-        setLayoutX(x - (50 / 2.0));
-        setLayoutY(y - (50 / 2.0));
+        setLayoutX(x - (frameWidth * 0.6 / 2.0));
+        setLayoutY(y - (frameHeight * 0.6 / 2.0));
         this.x = x;
-        this.y = y + (50 / 2.0);
+        this.y = y + (frameHeight * 0.6 / 2.0);
 
+        //start moving
         pickNewTarget(1920,930);
 
-/*        this.setOnMouseClicked(e -> {
-            e.consume(); //
-            showInfoWindow(e.getSceneX(), e.getSceneY());
-        });*/
+
+        this.setOnMouseClicked(e -> {
+            if (globalClickHandler != null) {
+                globalClickHandler.accept(this);
+                e.consume();
+            }
+        });
+
+
     }
 
 /*    private void showInfoWindow(double sceneX, double sceneY) {
@@ -268,5 +277,7 @@ public abstract class Animal extends Pane {
     public void setPaused(boolean paused) {
         this.paused = paused;
     }
-
+    public ImageView getImageView(){
+        return this.imageView;
+    }
 }

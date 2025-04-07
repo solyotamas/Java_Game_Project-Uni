@@ -354,17 +354,17 @@
             </StackPane>
          </children>
       </HBox>
-      <StackPane fx:id="rootPane" layoutY="75.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0">
+      <StackPane fx:id="rootPane" layoutY="75.0">
          <children>
             <Pane fx:id="terrainLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" />
             <Pane fx:id="uiLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0">
                <children>
-
-                  <Button id="market" fx:id="marketButton" layoutX="1800.0" mnemonicParsing="false" onMouseClicked="#happens" prefHeight="120.0" prefWidth="120.0" />
+      
+                                    <Button id="market" fx:id="marketButton" layoutX="1800.0" mnemonicParsing="false" onMouseClicked="#happens" prefHeight="120.0" prefWidth="120.0" />
                </children>
             </Pane>
             <Pane fx:id="ghostLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" visible="false" />
-            <Pane fx:id="shopPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1150.0" stylesheets="@../css/game_screen.css" visible="false" StackPane.alignment="CENTER">
+            <Pane fx:id="shopPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1150.0" stylesheets="@../css/game_screen.css" visible="false">
                <children>
                   <Label fx:id="diffLabel" layoutX="486.0" layoutY="24.0" text="Market" textFill="WHITE">
                      <effect>

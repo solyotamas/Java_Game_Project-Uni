@@ -1,5 +1,6 @@
 package classes.controllers;
 
+import classes.entities.additions.InfoWindow;
 import classes.entities.animals.Animal;
 import classes.entities.animals.carnivores.Lion;
 import classes.entities.animals.carnivores.Panther;
@@ -29,6 +30,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -43,8 +45,8 @@ public class GameController {
     private GameEngine gameEngine;
 
     //info panel
-    private Pane infoWindow;
-    private static Animal currentAnimalInfoPane = null;
+    private Animal currentAnimalWithInfo = null;
+    private InfoWindow currentInfoWindow = null;
 
     //stats
     private final int ROWS = 31;
@@ -88,7 +90,19 @@ public class GameController {
     public void initialize() {
         this.gameEngine = new GameEngine(this, EASY, terrainLayer, uiLayer, ghostLayer);
         gameEngine.gameLoop();
+
+
+        Animal.setGlobalClickHandler(this::showInfoWindow);
+        uiLayer.setOnMouseClicked(event -> {
+            if (currentInfoWindow != null && !currentInfoWindow.getBoundsInParent().contains(event.getX(), event.getY())) {
+                uiLayer.getChildren().remove(currentInfoWindow);
+                if (currentAnimalWithInfo != null) currentAnimalWithInfo.setPaused(false);
+                currentInfoWindow = null;
+                currentAnimalWithInfo = null;
+            }
+        });
     }
+
 
 
 
@@ -218,25 +232,28 @@ public class GameController {
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
         closeShopPane();
         ghostLayer.setVisible(true);
-        ghostLayer.setMouseTransparent(false);
 
-        Image animalImage = new Image(getClass().getResource(imagePath).toExternalForm());
-        ImageView ghostImage = new ImageView(animalImage);
+
+        // Create a temporary instance just to get size info
+        Animal tempAnimal = null;
+        try {
+            tempAnimal = animalClass.getDeclaredConstructor(double.class, double.class)
+                    .newInstance(0.0, 0.0);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+
+        ImageView ghostImage = tempAnimal.getImageView();
         ghostImage.setOpacity(0.5);
-        ghostImage.setMouseTransparent(true);
-
-        ghostImage.setFitWidth(40);
-        ghostImage.setPreserveRatio(true);
 
 
         ghostLayer.getChildren().add(ghostImage);
-
-        //Disable clicks on top layer
-        uiLayer.setMouseTransparent(true);
-
+        ghostLayer.setMouseTransparent(false);
         ghostLayer.setOnMouseMoved(e -> {
-            ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
-            ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
+            ghostImage.setLayoutX(e.getX() - ghostImage.getFitWidth() / 2);
+            ghostImage.setLayoutY(e.getY() - ghostImage.getFitHeight() / 2);
+
         });
 
         ghostLayer.setOnMouseClicked(e -> {
@@ -248,11 +265,10 @@ public class GameController {
                         .newInstance(placeX, placeY);
 
 
-                animalInstance.setOnMouseClicked(event -> showInfoWindow(animalInstance, event.getSceneX(), event.getSceneY()));
                 uiLayer.getChildren().add(animalInstance);
                 gameEngine.buyAnimal(animalInstance);
 
-                System.out.println("Added animal at " + placeX + ", " + placeY);
+                //System.out.println("Added animal at " + placeX + ", " + placeY);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -261,11 +277,9 @@ public class GameController {
             ghostLayer.setOnMouseMoved(null);
             ghostLayer.setOnMouseClicked(null);
 
-            //ghostLayer.setVisible(false);
+            ghostLayer.setVisible(false);
             ghostLayer.setMouseTransparent(true);
 
-            //Enable clicks on top layer
-            uiLayer.setMouseTransparent(false);
         });
     }
 
@@ -365,49 +379,29 @@ public class GameController {
         });
     }
 
-    private void showInfoWindow(Animal animal, double sceneX, double sceneY) {
-        if (currentAnimalInfoPane != null) {
-            closeInfoWindow(currentAnimalInfoPane);
-        }
-
-        System.out.println("Animal clicked");
-        animal.setPaused(true);
-
-        VBox newInfoWindow = new VBox();
-        newInfoWindow.getStyleClass().add("info-window");
-        newInfoWindow.setPrefSize(170, 70);
-
-        Button sellAnimalBtn = new Button("Sell animal");
-        sellAnimalBtn.getStyleClass().add("info-button");
-        sellAnimalBtn.setOnAction(e -> gameEngine.sellAnimal(animal));;
-
-        newInfoWindow.getChildren().add(sellAnimalBtn);
-
-        newInfoWindow.setLayoutX(sceneX - 85);
-        newInfoWindow.setLayoutY(sceneY - 170);
-
-        ghostLayer.getChildren().add(newInfoWindow);
-        infoWindow = newInfoWindow;
-
-        ghostLayer.setVisible(true);
-
-        currentAnimalInfoPane = animal;
-
-        uiLayer.setOnMouseClicked(event -> {
-            if (infoWindow != null && !newInfoWindow.getBoundsInParent().contains(event.getX(), event.getY())) {
-                closeInfoWindow(animal);
+    public void showInfoWindow(Animal animal) {
+        // Close existing window if open
+        // Remove current one if exists
+        if (currentInfoWindow != null) {
+            uiLayer.getChildren().remove(currentInfoWindow);
+            if (currentAnimalWithInfo != null) {
+                currentAnimalWithInfo.setPaused(false);
             }
+        }
+
+        currentAnimalWithInfo = animal;
+        currentAnimalWithInfo.setPaused(true);
+        currentInfoWindow = new InfoWindow(animal, () -> {
+            gameEngine.sellAnimal(animal);
+            uiLayer.getChildren().remove(currentInfoWindow);
+            currentInfoWindow = null;
+            currentAnimalWithInfo = null;
         });
+
+
+        uiLayer.getChildren().add(currentInfoWindow);
     }
 
-    private void closeInfoWindow(Animal animal) {
-        if (infoWindow != null) {
-            ghostLayer.getChildren().remove(infoWindow);
-            infoWindow = null;
-            animal.setPaused(false);
-            currentAnimalInfoPane = null;
-        }
-    }
 
 
 

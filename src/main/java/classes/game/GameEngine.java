@@ -13,6 +13,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
@@ -149,8 +150,11 @@ public class GameEngine {
     private double extractDepthY(Node node) {
         if (node instanceof Animal animal) {
             return animal.getY();
-        } else if(node instanceof Landform landform)
+        }
+        else if(node instanceof Landform landform)
             return landform.getDepth();
+        else if (node instanceof VBox)
+            return Double.MAX_VALUE;
         else
             return 1.0;
 
