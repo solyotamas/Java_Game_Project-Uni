@@ -53,14 +53,7 @@ public class ScreenController {
     }
 
     public void switchToGame(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/game_screen.fxml"));
-        Parent root = loader.load();
-
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        switchScene(event, "/fxmls/game_screen.fxml");
     }
 
     public void exit() {

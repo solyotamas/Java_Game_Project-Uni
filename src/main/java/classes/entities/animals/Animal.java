@@ -22,6 +22,7 @@ public abstract class Animal extends Pane {
     private ArrayList<Landform> consumes;
     private Herd herd;*/
 
+    private int price;
     private int age;
     private double x;
     private double y;
@@ -49,10 +50,11 @@ public abstract class Animal extends Pane {
     private Pane infoWindow;
     private static Animal currentAnimalWithInfoWindow = null;
 
-    public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed)  {
+    public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price)  {
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.speed = speed;
+        this.price = price;
 
         //Animation pictures
         this.spriteSheet = new Image(getClass().getResource(imgUrl).toExternalForm());
@@ -72,13 +74,13 @@ public abstract class Animal extends Pane {
 
         pickNewTarget(1920,930);
 
-        this.setOnMouseClicked(e -> {
+/*        this.setOnMouseClicked(e -> {
             e.consume(); //
             showInfoWindow(e.getSceneX(), e.getSceneY());
-        });
+        });*/
     }
 
-    private void showInfoWindow(double sceneX, double sceneY) {
+/*    private void showInfoWindow(double sceneX, double sceneY) {
         if (currentAnimalWithInfoWindow != null && currentAnimalWithInfoWindow != this) {
             currentAnimalWithInfoWindow.closeInfoWindow();
         }
@@ -130,7 +132,7 @@ public abstract class Animal extends Pane {
             this.setPaused(false);
             currentAnimalWithInfoWindow = null;
         }
-    }
+    }*/
 
     private void loadStaticDirectionImages() {
         for (int i = 0; i < 3; i++) {
@@ -253,6 +255,7 @@ public abstract class Animal extends Pane {
     public boolean getResting(){
         return this.resting;
     }
+    public int getPrice() { return this.price; }
     public int getFrameWidth(){
         return this.frameWidth;
     }

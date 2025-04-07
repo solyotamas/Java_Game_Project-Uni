@@ -32,7 +32,7 @@
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="176.0" />
                   <HBox alignment="CENTER" prefHeight="55.0" prefWidth="154.0" spacing="10.0">
                      <children>
-                        <Label fx:id="gameTimeLabel1" prefHeight="33.0" prefWidth="216.0" style="-fx-alignment: center;" text="1 000 000" textFill="#3e2415">
+                        <Label fx:id="moneyLabel" prefHeight="33.0" prefWidth="216.0" style="-fx-alignment: center;" textFill="#3e2415">
                            <font>
                               <Font name="Calibri Bold" size="20.0" />
                            </font>
@@ -363,7 +363,7 @@
                   <Button id="market" fx:id="marketButton" layoutX="1800.0" mnemonicParsing="false" onMouseClicked="#happens" prefHeight="120.0" prefWidth="120.0" />
                </children>
             </Pane>
-            <Pane fx:id="ghostLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" />
+            <Pane fx:id="ghostLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" visible="false" />
             <Pane fx:id="shopPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1150.0" stylesheets="@../css/game_screen.css" visible="false" StackPane.alignment="CENTER">
                <children>
                   <Label fx:id="diffLabel" layoutX="486.0" layoutY="24.0" text="Market" textFill="WHITE">

@@ -28,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -39,16 +40,17 @@ import static classes.Difficulty.EASY;
 
 
 public class GameController {
-    private GameBoard gameBoard;
     private GameEngine gameEngine;
 
-    //stats
-    private static final int ROWS = 31;
-    private static final int COLUMNS = 64;
-    private static final int TILE_SIZE = 30;
+    //info panel
+    private Pane infoWindow;
+    private static Animal currentAnimalInfoPane = null;
 
-    //conf
-    private final Random rand = new Random();
+    //stats
+    private final int ROWS = 31;
+    private final int COLUMNS = 64;
+    private final int TILE_SIZE = 30;
+
 
     //For Gameboard
     @FXML
@@ -79,12 +81,21 @@ public class GameController {
     private Button gameSpeedDayButton;
     @FXML
     private Label ticketPriceLabel;
+    @FXML
+    private Label moneyLabel;
+
+    @FXML
+    public void initialize() {
+        this.gameEngine = new GameEngine(this, EASY, terrainLayer, uiLayer, ghostLayer);
+        gameEngine.gameLoop();
+    }
+
+
 
     @FXML
     public void speedGameToDay(){
 
     }
-
     @FXML
     public void speedGameToHour(){
 
@@ -94,21 +105,16 @@ public class GameController {
     @FXML
     public void happens() {
         shopPane.setVisible(true);
-        shopPane.toFront();
     }
-
     @FXML
     public void closeShopPane(){
         shopPane.setVisible(false);
     }
 
+
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
-        //Just because of a bug sometimes
-        ghostLayer.getChildren().removeIf(node -> node.getOpacity() == 0.5);
-        //ezt nem írtam át ghostLayerre
         closeShopPane();
         ghostLayer.setVisible(true);
-        ghostLayer.setMouseTransparent(false);
 
         boolean isRoad = Road.class.isAssignableFrom(landformClass);
         int[] remainingRoads = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
@@ -129,7 +135,7 @@ public class GameController {
         ghostLayer.getChildren().add(ghostImage);
 
         //Snapping ghost image to terrains
-        uiLayer.setMouseTransparent(true);
+        ghostLayer.setMouseTransparent(false);
         ghostLayer.setOnMouseMoved(e -> {
             double snapX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
             double snapY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
@@ -156,8 +162,8 @@ public class GameController {
                         .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
                         .newInstance(tileX * TILE_SIZE, tileY * TILE_SIZE, depth, chosen);
 
-                if (gameBoard.canPlaceLandform(placedLandform, tileX, tileY)) {
-                    gameBoard.placeLandform(placedLandform, tileX, tileY);
+                if (gameEngine.getGameBoard().canPlaceLandform(placedLandform, tileX, tileY)) {
+                    gameEngine.getGameBoard().placeLandform(placedLandform, tileX, tileY);
                     uiLayer.getChildren().add(placedLandform);
                     remainingRoads[0]--;
                 }
@@ -179,6 +185,7 @@ public class GameController {
 
 
     }
+
 
     @FXML
     public void buyBush() {
@@ -241,6 +248,7 @@ public class GameController {
                         .newInstance(placeX, placeY);
 
 
+                animalInstance.setOnMouseClicked(event -> showInfoWindow(animalInstance, event.getSceneX(), event.getSceneY()));
                 uiLayer.getChildren().add(animalInstance);
                 gameEngine.buyAnimal(animalInstance);
 
@@ -357,32 +365,53 @@ public class GameController {
         });
     }
 
-    //TODO simplify createPlant and generatePlants into one, idk how tho
+    private void showInfoWindow(Animal animal, double sceneX, double sceneY) {
+        if (currentAnimalInfoPane != null) {
+            closeInfoWindow(currentAnimalInfoPane);
+        }
 
+        System.out.println("Animal clicked");
+        animal.setPaused(true);
 
-    //starting game
-    //TODO
-    // - make a game loop, maybe game factory to separate placing the plants, track placed plants somewhere
-    // and just manage the UI here
-    // -
-    @FXML
-    public void initialize() {
-        //preloading images for faster start
-        // swapped for cleaner code using statics methods inside classes
-        //-------------------------------
+        VBox newInfoWindow = new VBox();
+        newInfoWindow.getStyleClass().add("info-window");
+        newInfoWindow.setPrefSize(170, 70);
 
-        this.gameBoard = new GameBoard(terrainLayer, uiLayer, shopPane, marketButton);
-        gameBoard.setupGroundBoard();
+        Button sellAnimalBtn = new Button("Sell animal");
+        sellAnimalBtn.getStyleClass().add("info-button");
+        sellAnimalBtn.setOnAction(e -> gameEngine.sellAnimal(animal));;
 
-        //IDE MAJD KELL RENDESEN A PARAMÉTEREK
-        this.gameEngine = new GameEngine(this, EASY, gameBoard);
-        gameEngine.gameLoop();
-        gameBoard.generatePlants(rand.nextInt(10) + 10);
-        this.ghostLayer.setVisible(false);
+        newInfoWindow.getChildren().add(sellAnimalBtn);
 
+        newInfoWindow.setLayoutX(sceneX - 85);
+        newInfoWindow.setLayoutY(sceneY - 170);
+
+        ghostLayer.getChildren().add(newInfoWindow);
+        infoWindow = newInfoWindow;
+
+        ghostLayer.setVisible(true);
+
+        currentAnimalInfoPane = animal;
+
+        uiLayer.setOnMouseClicked(event -> {
+            if (infoWindow != null && !newInfoWindow.getBoundsInParent().contains(event.getX(), event.getY())) {
+                closeInfoWindow(animal);
+            }
+        });
     }
 
-    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice){
+    private void closeInfoWindow(Animal animal) {
+        if (infoWindow != null) {
+            ghostLayer.getChildren().remove(infoWindow);
+            infoWindow = null;
+            animal.setPaused(false);
+            currentAnimalInfoPane = null;
+        }
+    }
+
+
+
+    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int  money){
         //STATS
         int days = (int) time / 24;
         int hours = (int) time % 24;
@@ -393,19 +422,20 @@ public class GameController {
         jeepCountLabel.setText(jeeps + "");
         touristCountLabel.setText(tourists + "");
         ticketPriceLabel.setText(ticketPrice + "");
+        moneyLabel.setText(money + "");
 
     }
+
+
 
 
     //SWITCHING SCENES
     public void switchToSave(ActionEvent event) throws IOException {
         switchScene(event, "/fxmls/save_screen.fxml");
     }
-
     public void switchToMain(ActionEvent event) throws IOException {
         switchScene(event, "/fxmls/main_screen.fxml");
     }
-
     private void switchScene(ActionEvent event, String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
@@ -416,4 +446,6 @@ public class GameController {
         stage.setScene(scene);
         stage.show();
     }
+
+
 }
