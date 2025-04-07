@@ -149,6 +149,10 @@ public class GameController {
                     gameEngine.getGameBoard().placeLandform(placedLandform, tileX, tileY);
                     uiLayer.getChildren().add(placedLandform);
                     remainingRoads[0]--;
+
+                    if (isRoad && placedLandform instanceof Road road) {
+                        gameEngine.roads.add(road); // Itt add hozzá közvetlenül!
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -156,6 +160,7 @@ public class GameController {
 
             //If road, place 10
             if (!isRoad || remainingRoads[0] <= 0) {
+
                 ghostLayer.getChildren().remove(ghostImage);
                 ghostLayer.setOnMouseMoved(null);
                 ghostLayer.setOnMouseClicked(null);
@@ -185,7 +190,7 @@ public class GameController {
         buyLandform(Road.class, Road.roadImages[0]);
     }
     public void buyJeep() {{
-        gameEngine.addJeep();
+        gameEngine.buyJeep();
         closeShopPane();
     }}
 

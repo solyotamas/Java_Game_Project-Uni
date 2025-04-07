@@ -11,6 +11,7 @@ import classes.landforms.plants.Plant;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -98,6 +99,7 @@ public class GameEngine {
                 // Move animals
                 updateAnimalPositions();
                 updateHumanPositions();
+                updateJeepPositions();
                 sortUiLayer();
 
                 // Update herds
@@ -156,6 +158,9 @@ public class GameEngine {
             return 1.0;
 
     }
+
+    //Placing moving things
+    //ANIMAL
     public void buyAnimal(Animal animal){
         if(animal instanceof Herbivore)
             this.herbivores.add((Herbivore) animal);
@@ -178,6 +183,7 @@ public class GameEngine {
         }
     }
 
+    //RANGER
     public void buyRanger(Ranger ranger){
         this.rangers.add(ranger);
     }
@@ -187,13 +193,35 @@ public class GameEngine {
             ranger.moveTowardsTarget();
 
         }
-
         for (Poacher poacher : poachers) {
             //TODO if for when not following target
             poacher.moveTowardsTarget();
         }
     }
 
+    //JEEP
+    public void buyJeep() {
+/*        if (touristCount >= 4) {
+            touristCount -= 4;
+            startJeep();
+        } else {
+            System.out.println("Not enough tourists");
+        }*/
+        startJeep();
+    }
+    public void startJeep() {
+        jeepCount++;
+        Jeep jeep = new Jeep(150, 0);
+        // jeep = new Jeep(1770, 900);
+        jeeps.add(jeep);
+        gameBoard.getUiLayer().getChildren().add(jeep);
+        gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice, money);
+    }
+    public void updateJeepPositions() {
+        for (Jeep jeep : jeeps) {
+            jeep.autoMove(roads);
+        }
+    }
 
     public int winningDays;
     public Difficulty difficulty;
@@ -212,7 +240,7 @@ public class GameEngine {
     private ArrayList<Poacher> poachers;
     private ArrayList<Ranger> rangers;
     private ArrayList<Jeep> jeeps;
-    private ArrayList<Road> roads;
+    public ArrayList<Road> roads;
 
 
 
@@ -228,14 +256,6 @@ public class GameEngine {
     public GameBoard getGameBoard(){
         return this.gameBoard;
     }
-
-    //todo: jeep méretek
-    public void addJeep() {
-        jeepCount++;
-        jeeps.add(new Jeep(100, 100, 300));
-        gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice, money);
-    }
-
 
 
     public void pays(Ranger ranger) {
@@ -258,5 +278,4 @@ public class GameEngine {
 
         System.out.println("Eladtál egy állatot " + animal.getPrice() + " pénzért.");
     }
-
 }
