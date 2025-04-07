@@ -24,20 +24,17 @@ public class GameBoard{
     //representation
     private final Pane terrainLayer;
     private final Pane uiLayer;
+    private final Pane ghostLayer;
 
-    private final Pane shopPane;
-    private final Button marketButton;
     private final Terrain[][] terrainGrid = new Terrain[COLUMNS][ROWS];
 
     //conf
     private final Random rand = new Random();
 
-    public GameBoard( Pane terrainLayer, Pane uiLayer, Pane shopPane, Button marketButton) {
+    public GameBoard( Pane terrainLayer, Pane uiLayer, Pane ghostLayer) {
         this.terrainLayer = terrainLayer;
         this.uiLayer = uiLayer;
-
-        this.shopPane = shopPane;
-        this.marketButton = marketButton;
+        this.ghostLayer = ghostLayer;
 
     }
 
@@ -306,4 +303,5 @@ public class GameBoard{
 
     //getters, setters
     public Pane getUiLayer() { return this.uiLayer; }
+    public Pane getGhostLayer(){return this.ghostLayer;}
 }

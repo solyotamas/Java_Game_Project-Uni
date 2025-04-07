@@ -40,7 +40,6 @@ import static classes.Difficulty.EASY;
 
 
 public class GameController {
-    private GameBoard gameBoard;
     private GameEngine gameEngine;
 
     //info panel
@@ -48,12 +47,10 @@ public class GameController {
     private static Animal currentAnimalInfoPane = null;
 
     //stats
-    private static final int ROWS = 31;
-    private static final int COLUMNS = 64;
-    private static final int TILE_SIZE = 30;
+    private final int ROWS = 31;
+    private final int COLUMNS = 64;
+    private final int TILE_SIZE = 30;
 
-    //conf
-    private final Random rand = new Random();
 
     //For Gameboard
     @FXML
@@ -88,10 +85,17 @@ public class GameController {
     private Label moneyLabel;
 
     @FXML
+    public void initialize() {
+        this.gameEngine = new GameEngine(this, EASY, terrainLayer, uiLayer, ghostLayer);
+        gameEngine.gameLoop();
+    }
+
+
+
+    @FXML
     public void speedGameToDay(){
 
     }
-
     @FXML
     public void speedGameToHour(){
 
@@ -101,21 +105,16 @@ public class GameController {
     @FXML
     public void happens() {
         shopPane.setVisible(true);
-        shopPane.toFront();
     }
-
     @FXML
     public void closeShopPane(){
         shopPane.setVisible(false);
     }
 
+
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
-        //Just because of a bug sometimes
-        ghostLayer.getChildren().removeIf(node -> node.getOpacity() == 0.5);
-        //ezt nem írtam át ghostLayerre
         closeShopPane();
         ghostLayer.setVisible(true);
-        ghostLayer.setMouseTransparent(false);
 
         boolean isRoad = Road.class.isAssignableFrom(landformClass);
         int[] remainingRoads = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
@@ -136,7 +135,7 @@ public class GameController {
         ghostLayer.getChildren().add(ghostImage);
 
         //Snapping ghost image to terrains
-        uiLayer.setMouseTransparent(true);
+        ghostLayer.setMouseTransparent(false);
         ghostLayer.setOnMouseMoved(e -> {
             double snapX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
             double snapY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
@@ -163,8 +162,8 @@ public class GameController {
                         .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
                         .newInstance(tileX * TILE_SIZE, tileY * TILE_SIZE, depth, chosen);
 
-                if (gameBoard.canPlaceLandform(placedLandform, tileX, tileY)) {
-                    gameBoard.placeLandform(placedLandform, tileX, tileY);
+                if (gameEngine.getGameBoard().canPlaceLandform(placedLandform, tileX, tileY)) {
+                    gameEngine.getGameBoard().placeLandform(placedLandform, tileX, tileY);
                     uiLayer.getChildren().add(placedLandform);
                     remainingRoads[0]--;
                 }
@@ -186,6 +185,7 @@ public class GameController {
 
 
     }
+
 
     @FXML
     public void buyBush() {
@@ -409,27 +409,7 @@ public class GameController {
         }
     }
 
-    //starting game
-    //TODO
-    // - make a game loop, maybe game factory to separate placing the plants, track placed plants somewhere
-    // and just manage the UI here
-    // -
-    @FXML
-    public void initialize() {
-        //preloading images for faster start
-        // swapped for cleaner code using statics methods inside classes
-        //-------------------------------
 
-        this.gameBoard = new GameBoard(terrainLayer, uiLayer, shopPane, marketButton);
-        gameBoard.setupGroundBoard();
-
-        //IDE MAJD KELL RENDESEN A PARAMÉTEREK
-        this.gameEngine = new GameEngine(this, EASY, gameBoard);
-        gameEngine.gameLoop();
-        gameBoard.generatePlants(rand.nextInt(10) + 10);
-        this.ghostLayer.setVisible(false);
-
-    }
 
     public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int  money){
         //STATS
@@ -447,15 +427,15 @@ public class GameController {
     }
 
 
+
+
     //SWITCHING SCENES
     public void switchToSave(ActionEvent event) throws IOException {
         switchScene(event, "/fxmls/save_screen.fxml");
     }
-
     public void switchToMain(ActionEvent event) throws IOException {
         switchScene(event, "/fxmls/main_screen.fxml");
     }
-
     private void switchScene(ActionEvent event, String fxmlPath) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
         Parent root = loader.load();
@@ -466,4 +446,6 @@ public class GameController {
         stage.setScene(scene);
         stage.show();
     }
+
+
 }

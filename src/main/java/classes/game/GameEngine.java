@@ -19,6 +19,7 @@ import javafx.util.Pair;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 import static classes.Difficulty.EASY;
 import static classes.Difficulty.MEDIUM;
@@ -45,9 +46,49 @@ public class GameEngine {
     private int jeepCount ;
     private int ticketPrice;
     private int money = 5000;
+    private final Random rand = new Random();
 
 
+    public GameEngine(GameController gameController, Difficulty difficulty, Pane terrainLayer, Pane uiLayer, Pane ghostLayer) {
+        this.gameController = gameController;
+        this.difficulty = difficulty;
 
+        this.gameBoard = new GameBoard(terrainLayer, uiLayer, ghostLayer);
+        gameBoard.setupGroundBoard();
+        gameBoard.generatePlants(rand.nextInt(10) + 10);
+
+
+        money = 5000;
+        carnivores = new ArrayList<Carnivore>();
+        herbivores = new ArrayList<Herbivore>();
+        herds = new ArrayList<Herd>();
+        rangers = new ArrayList<Ranger>();
+        poachers = new ArrayList<Poacher>();
+        herds = new ArrayList<Herd>();
+        jeeps = new ArrayList<Jeep>();
+        roads = new ArrayList<Road>();
+
+        //todo: actual értékek
+        entrance = new Pair<>(0, 0);
+        exit = new Pair<>(0, 0);
+        conditions = new ArrayList<Integer>();
+        if (difficulty == EASY) {
+            conditions.add(0);
+            conditions.add(0);
+            conditions.add(0);
+            conditions.add(0);
+        } else if (difficulty == MEDIUM) {
+            conditions.add(0);
+            conditions.add(0);
+            conditions.add(0);
+            conditions.add(0);
+        } else {
+            conditions.add(0);
+            conditions.add(0);
+            conditions.add(0);
+            conditions.add(0);
+        }
+    }
 
     public void gameLoop() {
 
@@ -173,43 +214,7 @@ public class GameEngine {
     private ArrayList<Road> roads;
 
 
-    public GameEngine(GameController gameController, Difficulty difficulty, GameBoard gameBoard) {
-        this.gameController = gameController;
-        this.difficulty = difficulty;
-        this.gameBoard = gameBoard;
 
-
-        money = 5000;
-        carnivores = new ArrayList<Carnivore>();
-        herbivores = new ArrayList<Herbivore>();
-        herds = new ArrayList<Herd>();
-        rangers = new ArrayList<Ranger>();
-        poachers = new ArrayList<Poacher>();
-        herds = new ArrayList<Herd>();
-        jeeps = new ArrayList<Jeep>();
-        roads = new ArrayList<Road>();
-
-        //todo: actual értékek
-        entrance = new Pair<>(0, 0);
-        exit = new Pair<>(0, 0);
-        conditions = new ArrayList<Integer>();
-        if (difficulty == EASY) {
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
-        } else if (difficulty == MEDIUM) {
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
-        } else {
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
-        }
-    }
 
     public boolean gameOver() {
         return false;
@@ -219,8 +224,8 @@ public class GameEngine {
         return false;
     }
 
-    public void startsJeep() {
-
+    public GameBoard getGameBoard(){
+        return this.gameBoard;
     }
 
     //todo: jeep méretek
