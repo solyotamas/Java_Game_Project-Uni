@@ -68,6 +68,9 @@ public class GameEngine {
         jeeps = new ArrayList<Jeep>();
         roads = new ArrayList<Road>();
 
+        choose_x = Math.random() < 0.5;
+        frameCounter = 0;
+
         //todo: actual értékek
         entrance = new Pair<>(0, 0);
         exit = new Pair<>(0, 0);
@@ -95,7 +98,13 @@ public class GameEngine {
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(50), e -> {
                 // Move animals
-                updateAnimalPositions();
+                frameCounter++;
+                if (frameCounter % 100 == 0) {
+                    choose_x = Math.random() < 0.5;
+                    System.out.println("choose_x changed");
+                    System.out.println(choose_x);
+                }
+                updateAnimalPositions(choose_x);
                 updateHumanPositions();
                 sortUiLayer();
 
@@ -161,17 +170,17 @@ public class GameEngine {
         else
             this.carnivores.add((Carnivore) animal);
     }
-    private void updateAnimalPositions() {
+
+    private void updateAnimalPositions(boolean choose_x) {
         for (Herbivore herbivore : herbivores) {
             if(!herbivore.getResting())
-                herbivore.moveTowardsTarget();
+                herbivore.moveTowardsTarget(choose_x);
             else
                 herbivore.rest(1920, 930);
         }
-
         for (Carnivore carnivore : carnivores) {
             if(!carnivore.getResting())
-                carnivore.moveTowardsTarget();
+                carnivore.moveTowardsTarget(choose_x);
             else
                 carnivore.rest(1920, 930);
         }
@@ -212,6 +221,11 @@ public class GameEngine {
     private ArrayList<Ranger> rangers;
     private ArrayList<Jeep> jeeps;
     private ArrayList<Road> roads;
+
+    private boolean choose_x;
+    private int frameCounter;
+
+
 
 
 
