@@ -16,6 +16,8 @@ public class InfoWindow extends VBox {
         sellAnimalBtn.getStyleClass().add("info-button");
         sellAnimalBtn.setOnAction(e -> onSellClick.run());
 
+
+
         this.getChildren().add(sellAnimalBtn);
 
 

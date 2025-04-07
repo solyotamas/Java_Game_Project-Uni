@@ -1,6 +1,7 @@
 package classes.game;
 
 import classes.Difficulty;
+import classes.entities.additions.InfoWindow;
 import classes.entities.human.*;
 import classes.entities.animals.*;
 import classes.Jeep;
@@ -151,12 +152,15 @@ public class GameEngine {
         if (node instanceof Animal animal) {
             return animal.getY();
         }
-        else if(node instanceof Landform landform)
+        else if(node instanceof Landform landform){
             return landform.getDepth();
-        else if (node instanceof VBox)
+        }
+        else if (node instanceof InfoWindow){
             return Double.MAX_VALUE;
-        else
-            return 1.0;
+        }
+        else return
+            1.0;
+
 
     }
     public void buyAnimal(Animal animal){
@@ -255,11 +259,10 @@ public class GameEngine {
         } else {
             carnivores.remove(animal);
         }
-
-        Pane uiLayer = gameBoard.getUiLayer();
-        uiLayer.getChildren().remove(animal);
-
         System.out.println("Eladtál egy állatot " + animal.getPrice() + " pénzért.");
     }
 
+    public boolean haveEnoughMoneyForAnimal(Animal animalInstance) {
+        return true;
+    }
 }

@@ -19,15 +19,19 @@ import classes.landforms.plants.Grass;
 import classes.landforms.plants.Plant;
 import classes.landforms.plants.Tree;
 import classes.terrains.Ground;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Rectangle;
@@ -37,6 +41,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 import static classes.Difficulty.EASY;
 
@@ -45,14 +50,17 @@ public class GameController {
     private GameEngine gameEngine;
 
     //info panel
-    private Animal currentAnimalWithInfo = null;
     private InfoWindow currentInfoWindow = null;
+    private Animal currentAnimalWithInfo = null;
+    private boolean infoWindowJustOpened = false;
+
 
     //stats
-    private final int ROWS = 31;
-    private final int COLUMNS = 64;
     private final int TILE_SIZE = 30;
-
+    private final int SCREEN_WIDTH = 1920;
+    private final int SCREEN_HEIGHT = 930;
+    private final int TOURIST_SECTION = 150;
+    private final int HEADER_FOOTER = 75;
 
     //For Gameboard
     @FXML
@@ -91,16 +99,6 @@ public class GameController {
         this.gameEngine = new GameEngine(this, EASY, terrainLayer, uiLayer, ghostLayer);
         gameEngine.gameLoop();
 
-
-        Animal.setGlobalClickHandler(this::showInfoWindow);
-        uiLayer.setOnMouseClicked(event -> {
-            if (currentInfoWindow != null && !currentInfoWindow.getBoundsInParent().contains(event.getX(), event.getY())) {
-                uiLayer.getChildren().remove(currentInfoWindow);
-                if (currentAnimalWithInfo != null) currentAnimalWithInfo.setPaused(false);
-                currentInfoWindow = null;
-                currentAnimalWithInfo = null;
-            }
-        });
     }
 
 
@@ -128,7 +126,7 @@ public class GameController {
 
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
         closeShopPane();
-        ghostLayer.setVisible(true);
+
 
         boolean isRoad = Road.class.isAssignableFrom(landformClass);
         int[] remainingRoads = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
@@ -149,10 +147,19 @@ public class GameController {
         ghostLayer.getChildren().add(ghostImage);
 
         //Snapping ghost image to terrains
+        ghostLayer.setVisible(true);
         ghostLayer.setMouseTransparent(false);
         ghostLayer.setOnMouseMoved(e -> {
-            double snapX = Math.floor(e.getX() / TILE_SIZE) * TILE_SIZE;
-            double snapY = Math.floor(e.getY() / TILE_SIZE) * TILE_SIZE;
+            double minX = 150;
+            double minY = 0;
+            double maxX = terrainLayer.getWidth() - ghostImage.getFitWidth() - 150;
+            double maxY = terrainLayer.getHeight() - ghostImage.getFitHeight();
+
+            double clampedX = Math.max(minX, Math.min(e.getX(), maxX));
+            double clampedY = Math.max(minY, Math.min(e.getY(), maxY));
+
+            double snapX = Math.floor(clampedX / TILE_SIZE) * TILE_SIZE;
+            double snapY = Math.floor(clampedY / TILE_SIZE) * TILE_SIZE;
             ghostImage.setLayoutX(snapX);
             ghostImage.setLayoutY(snapY);
         });
@@ -199,8 +206,6 @@ public class GameController {
 
 
     }
-
-
     @FXML
     public void buyBush() {
         buyLandform(Bush.class, Bush.getRandomBushImage());
@@ -232,6 +237,7 @@ public class GameController {
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
         closeShopPane();
         ghostLayer.setVisible(true);
+        ghostLayer.setMouseTransparent(false);
 
 
         // Create a temporary instance just to get size info
@@ -243,16 +249,27 @@ public class GameController {
             e.printStackTrace();
             return;
         }
-
         ImageView ghostImage = tempAnimal.getImageView();
         ghostImage.setOpacity(0.5);
-
-
         ghostLayer.getChildren().add(ghostImage);
-        ghostLayer.setMouseTransparent(false);
+
         ghostLayer.setOnMouseMoved(e -> {
-            ghostImage.setLayoutX(e.getX() - ghostImage.getFitWidth() / 2);
-            ghostImage.setLayoutY(e.getY() - ghostImage.getFitHeight() / 2);
+            double imgWidth = ghostImage.getFitWidth();
+            double imgHeight = ghostImage.getFitHeight();
+
+            // Calculate edges of allowed area based on center-positioning
+            double minX = TOURIST_SECTION + imgWidth / 2;
+            double maxX = SCREEN_WIDTH - TOURIST_SECTION - imgWidth / 2;
+            double minY = imgHeight / 2;
+            double maxY = SCREEN_HEIGHT - imgHeight / 2;
+
+            // Clamp mouse position
+            double clampedX = Math.max(minX, Math.min(e.getX(), maxX));
+            double clampedY = Math.max(minY, Math.min(e.getY(), maxY));
+
+            // Position the ghost image centered on the clamped coordinates
+            ghostImage.setLayoutX(clampedX - imgWidth / 2);
+            ghostImage.setLayoutY(clampedY - imgHeight / 2);
 
         });
 
@@ -264,11 +281,15 @@ public class GameController {
                         .getDeclaredConstructor(double.class, double.class)
                         .newInstance(placeX, placeY);
 
+                //click
+                if(gameEngine.haveEnoughMoneyForAnimal(animalInstance) && canPlaceAnimal(animalInstance, placeX, placeY)){
+                    animalInstance.setOnMouseClicked(this::handleAnimalClicked);
 
-                uiLayer.getChildren().add(animalInstance);
-                gameEngine.buyAnimal(animalInstance);
+                    uiLayer.getChildren().add(animalInstance);
 
-                //System.out.println("Added animal at " + placeX + ", " + placeY);
+                    gameEngine.buyAnimal(animalInstance);
+                }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -281,6 +302,26 @@ public class GameController {
             ghostLayer.setMouseTransparent(true);
 
         });
+    }
+
+    private boolean canPlaceAnimal(Animal animalInstance, double placeX, double placeY) {
+
+        double imgWidth = animalInstance.getImageView().getFitWidth();
+        double imgHeight = animalInstance.getImageView().getFitHeight();
+        System.out.println(imgWidth + " " + imgHeight);
+
+        double leftX = placeX - imgWidth / 2.0;
+        double rightX = placeX + imgWidth / 2.0;
+        double topY = placeY - imgHeight / 2.0;
+        double bottomY = placeY + imgHeight / 2.0;
+        System.out.println(" left:" + leftX + " right: " + rightX + "top: " + topY + "bottom: " + bottomY);
+        System.out.println(placeY + " " + placeX);
+        return (
+                leftX >= TOURIST_SECTION &&
+                rightX <= SCREEN_WIDTH - TOURIST_SECTION &&
+                topY >= 0 &&
+                bottomY <= SCREEN_HEIGHT
+        );
     }
 
     @FXML
@@ -379,30 +420,45 @@ public class GameController {
         });
     }
 
-    public void showInfoWindow(Animal animal) {
-        // Close existing window if open
-        // Remove current one if exists
+
+    private void handleAnimalClicked(MouseEvent event) {
+        if (infoWindowJustOpened) return; // prevent rapid double fire
+
+        Animal clickedAnimal = (Animal) event.getSource();
+
+        // If there's already an InfoWindow (either same or different animal)
         if (currentInfoWindow != null) {
             uiLayer.getChildren().remove(currentInfoWindow);
-            if (currentAnimalWithInfo != null) {
-                currentAnimalWithInfo.setPaused(false);
-            }
+            if (currentAnimalWithInfo != null) currentAnimalWithInfo.setPaused(false);
         }
 
-        currentAnimalWithInfo = animal;
-        currentAnimalWithInfo.setPaused(true);
-        currentInfoWindow = new InfoWindow(animal, () -> {
-            gameEngine.sellAnimal(animal);
+        // If clicking the same animal (toggle behavior)
+        if (currentAnimalWithInfo == clickedAnimal) {
+            currentInfoWindow = null;
+            currentAnimalWithInfo = null;
+            return;
+        }
+
+        // Otherwise, open new InfoWindow for newly clicked animal
+        currentAnimalWithInfo = clickedAnimal;
+        clickedAnimal.setPaused(true);
+
+        currentInfoWindow = new InfoWindow(clickedAnimal, () -> {
+            gameEngine.sellAnimal(clickedAnimal);
+            uiLayer.getChildren().remove(clickedAnimal);
             uiLayer.getChildren().remove(currentInfoWindow);
             currentInfoWindow = null;
             currentAnimalWithInfo = null;
         });
 
-
         uiLayer.getChildren().add(currentInfoWindow);
+
+        // Prevent flicker/double open
+        infoWindowJustOpened = true;
+        javafx.application.Platform.runLater(() -> infoWindowJustOpened = false);
+
+        event.consume();
     }
-
-
 
 
     public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int  money){

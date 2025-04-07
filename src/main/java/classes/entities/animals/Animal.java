@@ -15,10 +15,6 @@ import java.util.function.Consumer;
 
 public abstract class Animal extends Pane {
 
-    private static Consumer<Animal> globalClickHandler;
-    public static void setGlobalClickHandler(Consumer<Animal> handler) {
-        globalClickHandler = handler;
-    }
     /*
     private Landform target;
     private int appetite;
@@ -77,14 +73,6 @@ public abstract class Animal extends Pane {
 
         //start moving
         pickNewTarget(1920,930);
-
-
-        this.setOnMouseClicked(e -> {
-            if (globalClickHandler != null) {
-                globalClickHandler.accept(this);
-                e.consume();
-            }
-        });
 
 
     }
