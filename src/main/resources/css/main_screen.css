@@ -3,7 +3,7 @@
     -fx-background-size: cover;
 }
 
-.button {
+.toggle-button, .button {
     -fx-background-radius: 10px;
     -fx-border-radius: 10px;
     -fx-padding: 10px;
@@ -13,8 +13,13 @@
     -fx-border-width: 3px;
 }
 
-.button:hover {
+.toggle-button:hover, .button:hover {
     -fx-background-color: #8B3D2D;
+}
+
+.toggle-button:selected {
+    -fx-background-color: linear-gradient(to bottom, #EB8E45, #EA6F2B);
+    -fx-border-color: #CE652C;
 }
 
 #startBtn, #backBtn {

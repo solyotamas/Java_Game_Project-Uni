@@ -20,6 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.scene.control.TextField?>
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/game_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.GameController">
    <children>
       <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="1920.0" spacing="50.0" style="-fx-background-color: #EC9043;">
@@ -126,7 +127,7 @@
                   <Insets />
                </opaqueInsets>
                <children>
-                  <Button mnemonicParsing="false" onAction="#switchToSave" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;" styleClass="fancyBtn" textFill="#3e2415">
+                  <Button mnemonicParsing="false" onAction="#showSaveOverlay" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;" styleClass="fancyBtn" textFill="#3e2415">
                      <font>
                         <Font name="Calibri" size="24.0" />
                      </font>
@@ -366,7 +367,7 @@
             <Pane fx:id="ghostLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" visible="false" />
             <Pane fx:id="shopPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1150.0" stylesheets="@../css/game_screen.css" visible="false" StackPane.alignment="CENTER">
                <children>
-                  <Label fx:id="diffLabel" layoutX="486.0" layoutY="24.0" text="Market" textFill="WHITE">
+                  <Label styleClass="diffLabel" layoutX="486.0" layoutY="24.0" text="Market" textFill="WHITE">
                      <effect>
                         <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                            <color>
@@ -1248,4 +1249,105 @@
          </children>
       </StackPane>
    </children>
+   <AnchorPane fx:id="saveOverlay" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/load_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" visible="false">
+      <children>
+         <!-- Load Game Label -->
+         <Label styleClass="diffLabel" layoutX="725.0" layoutY="115.0" text="Save Game" textFill="WHITE">
+            <effect>
+               <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
+                  <color>
+                     <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                  </color>
+               </DropShadow>
+            </effect>
+            <font>
+               <Font name="Franklin Gothic Demi" size="96.0" />
+            </font>
+         </Label>
+
+         <Button layoutX="1157.0" layoutY="869.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
+            <graphic>
+               <Text fill="WHITE" text="Save">
+                  <effect>
+                     <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
+                        <color>
+                           <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                        </color>
+                     </DropShadow>
+                  </effect>
+                  <font>
+                     <Font name="Franklin Gothic Demi" size="42.0" />
+                  </font>
+               </Text>
+            </graphic>
+         </Button>
+
+         <Button layoutX="567.0" layoutY="869.0" mnemonicParsing="false" onAction="#hideSaveOverlay" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
+            <graphic>
+               <Text fill="WHITE" text="Back">
+                  <effect>
+                     <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
+                        <color>
+                           <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                        </color>
+                     </DropShadow>
+                  </effect>
+                  <font>
+                     <Font name="Franklin Gothic Demi" size="42.0" />
+                  </font>
+               </Text>
+            </graphic>
+         </Button>
+         <TextField layoutX="420.0" layoutY="390.0" prefHeight="48.0" prefWidth="1080.0" promptText="game" style="-fx-background-radius: 10px;">
+            <font>
+               <Font name="Calibri" size="24.0" />
+            </font></TextField>
+         <Label layoutX="420.0" layoutY="358.0" text="Save Game" textFill="#3e2415">
+            <font>
+               <Font name="Calibri" size="24.0" />
+            </font>
+         </Label>
+         <Pane id="saveTaken" fx:id="saveTaken" layoutX="683.0" layoutY="388.0" prefHeight="261.0" prefWidth="533.0" visible="false">
+            <children>
+               <Label layoutX="59.0" layoutY="24.0" prefHeight="112.0" prefWidth="416.0" style="-fx-wrap-text: true;" text="This save name is taken. Do you want to overwrite the existing one?" textAlignment="CENTER" textFill="#683d26" wrapText="true">
+                  <font>
+                     <Font name="Calibri Bold" size="28.0" />
+                  </font>
+               </Label>
+               <Button layoutX="86.0" layoutY="152.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="150.0" text="" textFill="WHITE">
+                  <graphic>
+                     <Text fill="WHITE" text="No">
+                        <effect>
+                           <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
+                              <color>
+                                 <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                              </color>
+                           </DropShadow>
+                        </effect>
+                        <font>
+                           <Font name="Franklin Gothic Demi" size="42.0" />
+                        </font>
+                     </Text>
+                  </graphic>
+               </Button>
+               <Button id="yesBtn" layoutX="298.0" layoutY="152.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="150.0" text="" textFill="WHITE">
+                  <graphic>
+                     <Text fill="WHITE" text="Yes">
+                        <font>
+                           <Font name="Franklin Gothic Demi" size="42.0" />
+                        </font>
+                        <effect>
+                           <DropShadow blurType="ONE_PASS_BOX" height="18.0" radius="8.0" spread="1.0" width="16.0">
+                              <color>
+                                 <Color red="0.5333333611488342" green="0.4431372582912445" blue="0.003921568859368563" />
+                              </color>
+                           </DropShadow>
+                        </effect>
+                     </Text>
+                  </graphic>
+               </Button>
+            </children>
+         </Pane>
+      </children>
+   </AnchorPane>
 </AnchorPane>

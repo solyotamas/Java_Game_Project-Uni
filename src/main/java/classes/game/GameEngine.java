@@ -91,6 +91,7 @@ public class GameEngine {
     }
 
     public void gameLoop() {
+        System.out.println(difficulty);
 
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(50), e -> {
