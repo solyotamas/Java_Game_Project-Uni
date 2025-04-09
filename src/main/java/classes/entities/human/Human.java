@@ -8,19 +8,23 @@ import javafx.scene.layout.Pane;
 
 public abstract class Human extends Pane {
 
-    private double x;
-    private double y;
+    protected double x;
+    protected double y;
     protected double speed;
     protected double targetX;
     protected double targetY;
-    private boolean paused = false;
+    protected boolean paused = false;
+
+    protected double restingTimePassed = 0.0;
+    protected double restDuration = 10.0;
+    protected boolean resting = false;
 
     //Images of the Animal, ui
     private Image spriteSheet;
-    private Image walkDownImages[] = new Image[3];
-    private Image walkLeftImages[] = new Image[3];
-    private Image walkRightImages[] = new Image[3];
-    private Image walkUpImages[] = new Image[3];
+    private Image walkDownImages[] = new Image[4];
+    private Image walkLeftImages[] = new Image[4];
+    private Image walkRightImages[] = new Image[4];
+    private Image walkUpImages[] = new Image[4];
     int imageDelay = 0;
     int currentImage = 0;
     private ImageView imageView;
@@ -39,31 +43,33 @@ public abstract class Human extends Pane {
         loadStaticDirectionImages();
 
         //UI
-        imageView = new ImageView(walkDownImages[0]);
-        imageView.setFitWidth(50);
-        imageView.setFitHeight(50);
+        imageView = new ImageView(walkRightImages[0]);
+        imageView.setFitWidth(frameWidth * 0.8);
+        imageView.setFitHeight(frameHeight * 0.8);
         getChildren().add(imageView);
 
         //the picture will appear where the user clicked but the x and y coordinates are its feet for dynamic depth
-        setLayoutX(x - (50 / 2.0));
-        setLayoutY(y - (50 / 2.0));
+        //x and y value is the feet
+        //mouseclick is the middle
+        setLayoutX(x - (frameWidth * 0.8 / 2.0));
+        setLayoutY(y - (frameHeight * 0.8 / 2.0));
         this.x = x;
-        this.y = y + (50 / 2.0);
+        this.y = y + (frameHeight * 0.8 / 2.0);
 
         pickNewTarget(1920,930);
     }
 
     private void loadStaticDirectionImages() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             walkDownImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 0 * frameHeight, frameWidth, frameHeight);
         }
-        for (int i = 0; i < 3; i++) {
-            walkLeftImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 1 * frameHeight, frameWidth, frameHeight);
+        for (int i = 0; i < 4; i++) {
+            walkRightImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 1 * frameHeight, frameWidth, frameHeight);
         }
-        for (int i = 0; i < 3; i++) {
-            walkRightImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 2 * frameHeight, frameWidth, frameHeight);
+        for (int i = 0; i < 4; i++) {
+            walkLeftImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 2 * frameHeight, frameWidth, frameHeight);
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             walkUpImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 3 * frameHeight, frameWidth, frameHeight);
         }
     }
@@ -113,11 +119,16 @@ public abstract class Human extends Pane {
             }
         }
     }
-    public void moveTowardsTarget() {
+    public void moveTowardsTarget(double mapx, double mapy) {
         if (paused) return;
 
         double dx = targetX - x;
         double dy = targetY - y;
+
+        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
+            resting = true;
+            return;
+        }
 
         // Prioritize X-axis movement first
         if ((Math.abs(dx) > 1)) {
@@ -137,7 +148,7 @@ public abstract class Human extends Pane {
         }
 
         if (Math.abs(dx) <= 1 && Math.abs(dy) <= 1) {
-            pickNewTarget(1920, 930);  // Generate a new target once reached
+            pickNewTarget(mapx, mapy);  // Generate a new target once reached
         }
     }
 
@@ -148,6 +159,15 @@ public abstract class Human extends Pane {
         this.targetY = marginY + Math.random() * (mapHeight - 2 * marginY);
     }
 
+    public void rest(double mapWidth, double mapHeight) {
+        restingTimePassed += 0.05; // 50ms
+
+        if (restingTimePassed >= restDuration) {
+            resting = false;
+            restingTimePassed = 0.0;
+            pickNewTarget(mapWidth, mapHeight);
+        }
+    }
 
     //Getters, Setters
     public double getSpeed(){
@@ -165,4 +185,13 @@ public abstract class Human extends Pane {
     public void setPaused(boolean paused) {
         this.paused = paused;
     }
+    public ImageView getImageView(){
+        return this.imageView;
+    }
+
+    public boolean getResting(){
+        return this.resting;
+    }
+
+
 }
