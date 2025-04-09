@@ -15,7 +15,7 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.Random;
 
-public abstract class Animal extends Pane {
+public abstract class Animal<T extends Pane> extends Pane {
 
 
     /*
@@ -33,9 +33,9 @@ public abstract class Animal extends Pane {
     protected double speed;
     protected double targetX;
     protected double targetY;
-    private double restingTimePassed = 0.0;
-    private double restDuration = 15.0;
-    private boolean resting = false;
+    protected double restingTimePassed = 0.0;
+    protected double restDuration = 15.0;
+    protected boolean resting = false;
     private boolean paused = false;
 
     //Images of the Animal, ui
@@ -280,7 +280,7 @@ public void moveTowardsTarget() {
     }
 
     */
-//eredeti rest és pickNewTarget
+//eredeti rest és pickNewTarget ooooold
     /*public void rest(double mapWidth, double mapHeight) {
         restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
 
@@ -297,8 +297,8 @@ public void moveTowardsTarget() {
         this.targetX = marginX + Math.random() * (mapWidth - 2 * marginX);
         this.targetY = marginY + Math.random() * (mapHeight - 2 * marginY);
     }*/
-
-    public void rest(ArrayList<Plant> plants) {
+//rest and pickNewTarget csak növényekre
+    /*public void rest(ArrayList<Plant> plants) {
         restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
 
         if (restingTimePassed >= restDuration) {
@@ -316,7 +316,10 @@ public void moveTowardsTarget() {
         this.targetY = randomPlant.getY() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getHeightInTiles(); //randomPlant.getLayoutY();
        // System.out.println("target picked: " + targetX +  " : " +targetY);
 
-    }
+    }*/
+    public abstract void rest(ArrayList<T> panes);
+
+    public abstract void pickNewTarget(ArrayList<T> panes);
 
     public void sellAnimal(){
         System.out.println(this.getClass() + " sold");
@@ -337,6 +340,9 @@ public void moveTowardsTarget() {
     }
     public int getFrameHeight(){
         return this.frameHeight;
+    }
+    public double getX(){
+        return this.x;
     }
     public double getY(){
         return this.y;

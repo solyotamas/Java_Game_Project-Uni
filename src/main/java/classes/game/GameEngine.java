@@ -178,11 +178,12 @@ public class GameEngine {
                 herbivore.rest(plants);
         }
         for (Carnivore carnivore : carnivores) {
-            if(!carnivore.getResting())
+            if(!carnivore.getResting()) {
+                carnivore.updateTarget();
                 carnivore.moveTowardsTarget(choose_x);
-            else
+            } else
                 //carnivore.rest(1920, 930);
-                carnivore.rest(plants);
+                carnivore.rest(herbivores);
         }
     }
 
@@ -217,16 +218,21 @@ public class GameEngine {
         //System.out.println("plant added to list");
     }
 
-    public void buyAnimal(Animal animal){
-        animal.pickNewTarget(plants);
-        if(animal instanceof Herbivore)
-            this.herbivores.add((Herbivore) animal);
-        else
-            this.carnivores.add((Carnivore) animal);
+    public void buyAnimal(Animal<? extends Pane> animal) {
+
+        if (animal instanceof Herbivore herbivore) {
+            herbivore.pickNewTarget(plants);
+            this.herbivores.add(herbivore);
+            //this.herbivores.add((Herbivore) animal);
+        } else if (animal instanceof Carnivore carnivore) {
+            carnivore.pickNewTarget(herbivores);
+            this.carnivores.add(carnivore);
+
+        }
     }
 
 
-    public void sellAnimal(Animal animal) {
+    public void sellAnimal(Animal<? extends Pane> animal) {
         money += animal.getPrice();
 
         if (animal instanceof Herbivore) {
