@@ -1,5 +1,6 @@
 package classes.controllers;
 
+import classes.Difficulty;
 import classes.entities.additions.InfoWindowAnimal;
 import classes.entities.additions.InfoWindowRanger;
 import classes.entities.animals.Animal;
@@ -11,14 +12,13 @@ import classes.entities.animals.herbivores.*;
 import classes.entities.human.Ranger;
 import classes.entities.human.Tourist;
 import classes.game.GameEngine;
-import classes.landforms.*;
-import classes.landforms.plants.*;
 
 import classes.landforms.Lake;
 import classes.landforms.Landform;
 import classes.landforms.Road;
 import classes.landforms.plants.Bush;
 import classes.landforms.plants.Grass;
+import classes.landforms.plants.Plant;
 import classes.landforms.plants.Tree;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -31,9 +31,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.Random;
+
 import javafx.scene.image.ImageView;
 
 
@@ -91,6 +94,9 @@ public class GameController {
         Platform.runLater(() -> {
             this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer, ghostLayer);
             gameEngine.gameLoop();
+
+            Tourist t =  spawnTourist();
+            gameEngine.setTourist(t);
         });
     }
 
@@ -509,6 +515,31 @@ public class GameController {
     }
 
 
+    //UI handling
+    //Display
+    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int  money){
+        //STATS
+        int days = (int) time / 24;
+        int hours = (int) time % 24;
+
+        gameTimeLabel.setText("Day: " + days + " Hour: " + hours);
+        carnivoreCountLabel.setText(carnivores + "");
+        herbivoreCountLabel.setText(herbivores + "");
+        jeepCountLabel.setText(jeeps + "");
+        touristCountLabel.setText(tourists + "");
+        ticketPriceLabel.setText(ticketPrice + "");
+        moneyLabel.setText(money + "");
+
+    }
+
+    //Market appear, disappear
+    public void openShopPane() {
+        shopPane.setVisible(true);
+    }
+
+    public void closeShopPane(){
+        shopPane.setVisible(false);
+    }
 
     //Save screen pane
     public void showSaveOverlay() {

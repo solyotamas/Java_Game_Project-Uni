@@ -177,6 +177,8 @@ public class GameEngine {
             return landform.getDepth();
         else if (node instanceof InfoWindowAnimal || node instanceof InfoWindowRanger)
             return Double.MAX_VALUE;
+        else if (node instanceof Jeep jeep)
+            return jeep.getDepth();
         else
             return 0;
     }
@@ -250,18 +252,6 @@ public class GameEngine {
             jeep.autoMove(roads);
         }
     }
-
-    public void buyRanger(Ranger ranger) {
-        this.rangers.add(ranger);
-    }
-
-    //todo: jeep méretek
-    public void addJeep() {
-        jeepCount++;
-        jeeps.add(new Jeep(100, 100, 300));
-        gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice, money);
-    }
-
 
     public void buyPlant(Landform placesPlant) {
         plants.add((Plant) placesPlant); //konverzió elég funky
@@ -340,8 +330,6 @@ public class GameEngine {
     }
 
 
-
-
     public void pays(Ranger ranger) {
         //rangers.indexOf(ranger).paid = true;
         money = money - 100;
@@ -355,7 +343,6 @@ public class GameEngine {
                 plants.add((Plant) node);
             }
         }
-        System.out.println("Eladtál egy állatot " + animal.getPrice() + " pénzért.");
     }
 
     public boolean haveEnoughMoneyForAnimal(Animal animalInstance) {

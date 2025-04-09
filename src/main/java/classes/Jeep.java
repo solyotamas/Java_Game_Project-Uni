@@ -21,6 +21,7 @@ import java.util.ArrayList;
 //mire kell az absrtact?
 public class Jeep extends Pane {
     public double x, y;
+    private double depth;
     protected ImageView picture;
     private int frameWidth;
     private int frameHeight;
@@ -54,6 +55,7 @@ public class Jeep extends Pane {
         this.picture = new ImageView(jeepRight[0]);
         picture.setPreserveRatio(true);
         picture.setFitHeight(30);
+        this.depth = y + picture.getFitHeight();
 
         this.getChildren().add(picture);
 
@@ -153,5 +155,9 @@ public class Jeep extends Pane {
             case UP -> picture.setImage(jeepUp[currentFrame]);
             case DOWN -> picture.setImage(jeepDown[currentFrame]);
         }
+    }
+
+    public double getDepth() {
+        return this.depth;
     }
 }

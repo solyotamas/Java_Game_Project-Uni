@@ -17,7 +17,7 @@ import java.util.Random;
 
 public abstract class Animal<T extends Pane> extends Pane {
 
-public abstract class Animal extends Pane {
+//public abstract class Animal extends Pane {
 
     /*
     private Landform target;
