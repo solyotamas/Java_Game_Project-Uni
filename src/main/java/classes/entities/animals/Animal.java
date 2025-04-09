@@ -2,6 +2,7 @@ package classes.entities.animals;
 
 import classes.entities.Direction;
 import classes.entities.human.Ranger;
+import classes.landforms.plants.Plant;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,7 +12,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
-import java.util.function.Consumer;
+import java.util.ArrayList;
+import java.util.Random;
+
+public abstract class Animal<T extends Pane> extends Pane {
 
 public abstract class Animal extends Pane {
 
@@ -30,9 +34,9 @@ public abstract class Animal extends Pane {
     protected double speed;
     protected double targetX;
     protected double targetY;
-    private double restingTimePassed = 0.0;
-    private double restDuration = 15.0;
-    private boolean resting = false;
+    protected double restingTimePassed = 0.0;
+    protected double restDuration = 15.0;
+    protected boolean resting = false;
     private boolean paused = false;
 
     //Images of the Animal, ui
@@ -71,8 +75,7 @@ public abstract class Animal extends Pane {
         this.x = x;
         this.y = y + (frameHeight * 0.6 / 2.0);
 
-        //start moving
-        pickNewTarget(1920,930);
+        //pickNewTarget(1920,930);
 
 
     }
@@ -137,7 +140,57 @@ public abstract class Animal extends Pane {
             }
         }
     }
-    public void moveTowardsTarget() {
+
+    public void moveTowardsTarget(boolean choose_x) {
+        if (paused) {
+            return;
+        }
+
+        double dx = targetX - x;
+        double dy = targetY - y;
+
+        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
+            resting = true;
+            return;
+        }
+
+        if (choose_x) {
+            if ((Math.abs(dx) > 1)) {
+                if (dx > 0) {
+                    move(Direction.RIGHT, speed, 0);
+                } else {
+                    move(Direction.LEFT, -speed, 0);
+                }
+            }
+            else if (Math.abs(dy) > 1) {
+                if (dy > 0) {
+                    move(Direction.DOWN, 0, speed);
+                } else {
+                    move(Direction.UP, 0, -speed);
+                }
+            }
+        } else {
+            if (Math.abs(dy) > 1) {
+                if (dy > 0) {
+                    move(Direction.DOWN, 0, speed);
+                } else {
+                    move(Direction.UP, 0, -speed);
+                }
+            }
+            else if ((Math.abs(dx) > 1)) {
+                if (dx > 0) {
+                    move(Direction.RIGHT, speed, 0);
+                } else {
+                    move(Direction.LEFT, -speed, 0);
+                }
+            }
+        }
+
+    }
+//eredeti moveTowards
+/*
+
+public void moveTowardsTarget() {
         if (paused) {
             return;
         }
@@ -168,7 +221,9 @@ public abstract class Animal extends Pane {
         }
     }
 
-    public void rest(double mapWidth, double mapHeight) {
+    */
+//eredeti rest és pickNewTarget ooooold
+    /*public void rest(double mapWidth, double mapHeight) {
         restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
 
         if (restingTimePassed >= restDuration) {
@@ -183,7 +238,30 @@ public abstract class Animal extends Pane {
         double marginY = 50;
         this.targetX = marginX + Math.random() * (mapWidth - 2 * marginX);
         this.targetY = marginY + Math.random() * (mapHeight - 2 * marginY);
+    }*/
+//rest and pickNewTarget csak növényekre
+    /*public void rest(ArrayList<Plant> plants) {
+        restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
+
+        if (restingTimePassed >= restDuration) {
+            resting = false;
+            restingTimePassed = 0.0;
+            pickNewTarget(plants);
+        }
     }
+
+    public void pickNewTarget(ArrayList<Plant> plants) {
+        Random random = new Random();
+        Plant randomPlant = plants.get(random.nextInt(plants.size()));
+
+        this.targetX = randomPlant.getX() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getWidthInTiles(); //randomPlant.getLayoutX();
+        this.targetY = randomPlant.getY() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getHeightInTiles(); //randomPlant.getLayoutY();
+       // System.out.println("target picked: " + targetX +  " : " +targetY);
+
+    }*/
+    public abstract void rest(ArrayList<T> panes);
+
+    public abstract void pickNewTarget(ArrayList<T> panes);
 
     public void sellAnimal(){
         System.out.println(this.getClass() + " sold");
@@ -204,6 +282,9 @@ public abstract class Animal extends Pane {
     }
     public int getFrameHeight(){
         return this.frameHeight;
+    }
+    public double getX(){
+        return this.x;
     }
     public double getY(){
         return this.y;

@@ -170,6 +170,10 @@ public class GameController {
                 if (gameEngine.getGameBoard().canPlaceLandform(placedLandform, tileX, tileY)) {
                     gameEngine.getGameBoard().placeLandform(placedLandform, tileX, tileY);
                     uiLayer.getChildren().add(placedLandform);
+                    if (placedLandform instanceof Plant) {
+                        gameEngine.buyPlant(placedLandform);
+                        System.out.println("buyPlant called");
+                    }
                     remainingRoads[0]--;
 
                     if (isRoad && placedLandform instanceof Road road) {
@@ -277,6 +281,7 @@ public class GameController {
                     gameEngine.buyAnimal(animalInstance);
                 }
 
+                //System.out.println("Added animal at " + placeX + ", " + placeY);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

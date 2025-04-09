@@ -222,6 +222,7 @@ public class GameBoard{
             if (canPlaceLandform(placedLandform, x, y)) {
                 placeLandform(placedLandform, x, y);
                 uiLayer.getChildren().add(placedLandform);
+                //TODO add to gameEngine plant list
             }
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -53,6 +53,9 @@ public abstract class Landform extends Pane{
         picture.setImage(img);
     }
 
+    public double getX() { return this.x; }
+    public double getY() { return this.y; }
 
+    public int getTileSize() { return this.TILE_SIZE; }
 
 }
