@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 
 public class InfoWindowRanger extends VBox {
 
-    public InfoWindowRanger(Ranger ranger, Runnable onUnemployClick, Runnable onCloseClick, Runnable onChoosePreyClick) {
+    public InfoWindowRanger(Ranger ranger, Runnable onUnemployClick,  Runnable onChoosePreyClick, Runnable onCloseClick) {
         this.getStyleClass().add("info-window");
         this.setPrefSize(180, 70);
         this.setLayoutX(ranger.getLayoutX() - 60);

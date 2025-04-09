@@ -2,6 +2,7 @@ package classes.game;
 
 import classes.Difficulty;
 import classes.entities.additions.InfoWindowAnimal;
+import classes.entities.additions.InfoWindowRanger;
 import classes.entities.human.*;
 import classes.entities.animals.*;
 import classes.Jeep;
@@ -154,7 +155,7 @@ public class GameEngine {
         else if(node instanceof Landform landform){
             return landform.getDepth();
         }
-        else if (node instanceof InfoWindowAnimal){
+        else if (node instanceof InfoWindowAnimal || node instanceof InfoWindowRanger){
             return Double.MAX_VALUE;
         }
         else return

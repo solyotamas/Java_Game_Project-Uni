@@ -1,6 +1,7 @@
 package classes.controllers;
 
 import classes.entities.additions.InfoWindowAnimal;
+import classes.entities.additions.InfoWindowRanger;
 import classes.entities.animals.Animal;
 import classes.entities.animals.carnivores.Lion;
 import classes.entities.animals.carnivores.Panther;
@@ -40,8 +41,8 @@ public class GameController {
     private GameEngine gameEngine;
 
     //info panel
-    private InfoWindowAnimal currentInfoWindow = null;
-
+    private InfoWindowAnimal currentInfoWindowAnimal = null;
+    private InfoWindowRanger currentInfoWindowRanger = null;
 
 
     //stats
@@ -390,6 +391,7 @@ public class GameController {
 
                 Ranger rangerInstance = new Ranger(placeX, placeY);
 
+                rangerInstance.setOnMouseClicked(this::handleRangerClicked);
                 uiLayer.getChildren().add(rangerInstance);
                 gameEngine.buyRanger(rangerInstance);
 
@@ -413,33 +415,59 @@ public class GameController {
     //infowindows
 
     private void handleAnimalClicked(MouseEvent event) {
-        if (currentInfoWindow != null) return; // only one info window allowed at a time
+        if (currentInfoWindowAnimal != null) return; // only one info window allowed at a time
 
         Animal clickedAnimal = (Animal) event.getSource();
         clickedAnimal.setPaused(true);
 
-        currentInfoWindow = new InfoWindowAnimal(
+        currentInfoWindowAnimal = new InfoWindowAnimal(
                 clickedAnimal,
                 () -> {
                     // Sell action
                     gameEngine.sellAnimal(clickedAnimal);
                     uiLayer.getChildren().remove(clickedAnimal);
-                    uiLayer.getChildren().remove(currentInfoWindow);
+                    uiLayer.getChildren().remove(currentInfoWindowAnimal);
 
-                    currentInfoWindow = null;
+                    currentInfoWindowAnimal = null;
                 },
                 () -> {
                     // Close action
-                    uiLayer.getChildren().remove(currentInfoWindow);
+                    uiLayer.getChildren().remove(currentInfoWindowAnimal);
                     clickedAnimal.setPaused(false);
 
-                    currentInfoWindow = null;
+                    currentInfoWindowAnimal = null;
                 }
         );
 
-        uiLayer.getChildren().add(currentInfoWindow);
+        uiLayer.getChildren().add(currentInfoWindowAnimal);
     }
 
+
+    private void handleRangerClicked(MouseEvent event) {
+        if (currentInfoWindowRanger != null) return; // only one info window allowed at a time
+
+        Ranger clickedRanger = (Ranger) event.getSource();
+        clickedRanger.setPaused(true);
+
+        currentInfoWindowRanger = new InfoWindowRanger(
+                clickedRanger,
+                () -> {
+                    //...
+                },
+                () -> {
+                    //...
+                },
+                () -> {
+                    // Close action
+                    uiLayer.getChildren().remove(currentInfoWindowRanger);
+                    clickedRanger.setPaused(false);
+
+                    currentInfoWindowRanger = null;
+                }
+        );
+
+        uiLayer.getChildren().add(currentInfoWindowRanger);
+    }
 
 
 
