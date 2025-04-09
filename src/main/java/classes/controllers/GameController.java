@@ -1,6 +1,6 @@
 package classes.controllers;
 
-import classes.entities.additions.InfoWindow;
+import classes.entities.additions.InfoWindowAnimal;
 import classes.entities.animals.Animal;
 import classes.entities.animals.carnivores.Lion;
 import classes.entities.animals.carnivores.Panther;
@@ -8,7 +8,6 @@ import classes.entities.animals.carnivores.Tiger;
 import classes.entities.animals.carnivores.Vulture;
 import classes.entities.animals.herbivores.*;
 import classes.entities.human.Ranger;
-import classes.game.GameBoard;
 import classes.game.GameEngine;
 
 import classes.landforms.Lake;
@@ -16,15 +15,10 @@ import classes.landforms.Landform;
 import classes.landforms.Road;
 import classes.landforms.plants.Bush;
 import classes.landforms.plants.Grass;
-import classes.landforms.plants.Plant;
 import classes.landforms.plants.Tree;
-import classes.terrains.Ground;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -33,15 +27,11 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Random;
 
 import javafx.scene.image.ImageView;
-import javafx.util.Duration;
 
 import static classes.Difficulty.EASY;
 
@@ -50,9 +40,8 @@ public class GameController {
     private GameEngine gameEngine;
 
     //info panel
-    private InfoWindow currentInfoWindow = null;
-    private Animal currentAnimalWithInfo = null;
-    private boolean infoWindowJustOpened = false;
+    private InfoWindowAnimal currentInfoWindow = null;
+
 
 
     //stats
@@ -421,43 +410,48 @@ public class GameController {
     }
 
 
+    //infowindows
+
     private void handleAnimalClicked(MouseEvent event) {
-        if (infoWindowJustOpened) return; // prevent rapid double fire
+        if (currentInfoWindow != null) return; // only one info window allowed at a time
 
         Animal clickedAnimal = (Animal) event.getSource();
-
-        // If there's already an InfoWindow (either same or different animal)
-        if (currentInfoWindow != null) {
-            uiLayer.getChildren().remove(currentInfoWindow);
-            if (currentAnimalWithInfo != null) currentAnimalWithInfo.setPaused(false);
-        }
-
-        // If clicking the same animal (toggle behavior)
-        if (currentAnimalWithInfo == clickedAnimal) {
-            currentInfoWindow = null;
-            currentAnimalWithInfo = null;
-            return;
-        }
-
-        // Otherwise, open new InfoWindow for newly clicked animal
-        currentAnimalWithInfo = clickedAnimal;
         clickedAnimal.setPaused(true);
 
-        currentInfoWindow = new InfoWindow(clickedAnimal, () -> {
-            gameEngine.sellAnimal(clickedAnimal);
-            uiLayer.getChildren().remove(clickedAnimal);
-            uiLayer.getChildren().remove(currentInfoWindow);
-            currentInfoWindow = null;
-            currentAnimalWithInfo = null;
-        });
+        currentInfoWindow = new InfoWindowAnimal(
+                clickedAnimal,
+                () -> {
+                    // Sell action
+                    gameEngine.sellAnimal(clickedAnimal);
+                    uiLayer.getChildren().remove(clickedAnimal);
+                    uiLayer.getChildren().remove(currentInfoWindow);
+
+                    currentInfoWindow = null;
+                },
+                () -> {
+                    // Close action
+                    uiLayer.getChildren().remove(currentInfoWindow);
+                    clickedAnimal.setPaused(false);
+
+                    currentInfoWindow = null;
+                }
+        );
 
         uiLayer.getChildren().add(currentInfoWindow);
+    }
 
-        // Prevent flicker/double open
-        infoWindowJustOpened = true;
-        javafx.application.Platform.runLater(() -> infoWindowJustOpened = false);
 
-        event.consume();
+
+
+    private void choosePrey() {
+        System.out.println("choosing prey for " + this.getClass());
+        //TODO choose prey
+    }
+
+    private void unemploy() {
+        System.out.println(this.getClass() + " unemployed");
+
+        //TODO unemploy ranger
     }
 
 

@@ -1,7 +1,7 @@
 package classes.game;
 
 import classes.Difficulty;
-import classes.entities.additions.InfoWindow;
+import classes.entities.additions.InfoWindowAnimal;
 import classes.entities.human.*;
 import classes.entities.animals.*;
 import classes.Jeep;
@@ -14,7 +14,6 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
@@ -155,7 +154,7 @@ public class GameEngine {
         else if(node instanceof Landform landform){
             return landform.getDepth();
         }
-        else if (node instanceof InfoWindow){
+        else if (node instanceof InfoWindowAnimal){
             return Double.MAX_VALUE;
         }
         else return
