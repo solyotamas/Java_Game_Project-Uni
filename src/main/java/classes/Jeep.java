@@ -68,15 +68,15 @@ public class Jeep extends Pane {
         jeepUp = new WritableImage[2];
 
         // DOWN és UP: 32x47
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 2; i++) {
             jeepUp[i] = new WritableImage(spriteSheet.getPixelReader(), 0, i * 52, 54, 52);
-            jeepDown[i] = new WritableImage(spriteSheet.getPixelReader(), 53, i * 52, 54, 52);
+            jeepDown[i] = new WritableImage(spriteSheet.getPixelReader(), 52, i * 52, 54, 52);
         }
 
         // LEFT és RIGHT: 67x30
-        for (int i = 0; i < 1; i++) {
-            jeepLeft[i] = new WritableImage(spriteSheet.getPixelReader(), 109, i * 52, 103, 52);
-            jeepRight[i] = new WritableImage(spriteSheet.getPixelReader(), 213, i * 52, 103, 52);
+        for (int i = 0; i < 2; i++) {
+            jeepLeft[i] = new WritableImage(spriteSheet.getPixelReader(), 108, i * 52, 103, 52);
+            jeepRight[i] = new WritableImage(spriteSheet.getPixelReader(), 212, i * 52, 103, 52);
         }
     }
 
