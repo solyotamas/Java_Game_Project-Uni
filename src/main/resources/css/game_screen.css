@@ -56,8 +56,9 @@
     -fx-border-radius: 12px;
     -fx-spacing: 8px;
     -fx-alignment: center;
-    -fx-pref-width: 190px;
+    -fx-pref-width: 220px;
     -fx-pref-height: 63px;
+    -fx-padding: 8px;
 }
 
 .info-button {
@@ -71,6 +72,7 @@
     -fx-border-radius: 9px;
     -fx-background-radius: 12px;
     -fx-pref-height: 40px;
+    -fx-pref-width: 150px;
 }
 
 .info-button:hover {

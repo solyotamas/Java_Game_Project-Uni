@@ -1,7 +1,5 @@
 package classes.entities.additions;
 
-import classes.entities.animals.Animal;
-import classes.entities.human.Human;
 import classes.entities.human.Ranger;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -24,20 +22,22 @@ public class InfoWindowRanger extends VBox {
         //Choose prey
         Button choosePreyButton = new Button("Choose Prey");
         choosePreyButton.getStyleClass().add("info-button");
+        choosePreyButton.setPrefWidth(140);
         choosePreyButton.setOnAction(e -> onChoosePreyClick.run());
 
         //Unemploy
         Button unemployButton = new Button("Unemploy");
         unemployButton.getStyleClass().add("info-button");
+        unemployButton.setPrefWidth(140);
         unemployButton.setOnAction(e -> onUnemployClick.run());
 
+        VBox leftColumn = new VBox(5, choosePreyButton, unemployButton);
 
-
-        //edit
-        HBox row = new HBox(5, choosePreyButton, unemployButton, closeButton);
+        HBox row = new HBox(5, leftColumn, closeButton);
         row.setAlignment(Pos.CENTER);
-        this.getChildren().add(row);
+        closeButton.setAlignment(Pos.CENTER);
 
+        this.getChildren().add(row);
 
     }
 }
