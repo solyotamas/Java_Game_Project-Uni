@@ -34,7 +34,6 @@ public abstract class Landform extends Pane{
     public int getWidthInTiles() {
         return widthInTiles;
     }
-
     public int getHeightInTiles() {
         return heightInTiles;
     }

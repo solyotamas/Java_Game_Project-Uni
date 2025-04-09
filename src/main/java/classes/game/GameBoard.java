@@ -10,6 +10,7 @@ import classes.terrains.*;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 
 
 import java.util.ArrayList;
@@ -35,6 +36,8 @@ public class GameBoard{
         this.terrainLayer = terrainLayer;
         this.uiLayer = uiLayer;
         this.ghostLayer = ghostLayer;
+
+
 
     }
 
