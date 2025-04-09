@@ -44,6 +44,7 @@ public class GameEngine {
     private double spentTime;
     protected ArrayList<Carnivore> carnivores;
     protected ArrayList<Herbivore> herbivores;
+    protected ArrayList<Tourist> tourists = new ArrayList<>();
     private int touristCount;
     private int jeepCount ;
     private int ticketPrice;
@@ -96,7 +97,7 @@ public class GameEngine {
 
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(50), e -> {
-                // Move animals
+                // Move animals, humans
                 updateAnimalPositions();
                 updateHumanPositions();
                 sortUiLayer();
@@ -106,10 +107,6 @@ public class GameEngine {
 
                 // Possibly spawn tourists/poachers
                 //maybeSpawnTourist();
-                //maybeSpawnPoacher();
-
-                // Update money, time, conditions
-                //updateGameConditions();
 
                 // Check win/lose conditions
                 if (gameOver()) {
@@ -128,6 +125,20 @@ public class GameEngine {
         timeline.play();
     }
 
+    private void maybeSpawnTourist() {
+        double spawnChancePerTick = 0.1;
+        if (Math.random() < spawnChancePerTick){
+            touristCount++;
+            gameController.spawnTourist();
+            //tourists.add(tourist);
+        }
+
+    }
+
+    public void setTourist(Tourist tourist){
+        this.tourists.add(tourist);
+    }
+
 
     private void sortUiLayer() {
         Pane uiLayer = gameBoard.getUiLayer();
@@ -135,13 +146,6 @@ public class GameEngine {
         List<Node> sortedNodes = new ArrayList<>(uiLayer.getChildren());
         //without reversed min -> max, with reversed max -> min
         sortedNodes.sort(Comparator.comparingDouble(this::extractDepthY));
-
-        /*
-        System.out.println();
-        for (Node node : sortedNodes) {
-            double depth = extractDepthY(node);
-            System.out.println(node.getClass().getSimpleName() + " @ depthY: " + depth);
-        }*/
 
 
         Platform.runLater(() -> {
@@ -185,16 +189,24 @@ public class GameEngine {
     public void buyRanger(Ranger ranger){
         this.rangers.add(ranger);
     }
+
     private void updateHumanPositions() {
         for (Ranger ranger : rangers) {
             //TODO if for when not following target
-            ranger.moveTowardsTarget();
+            ranger.moveTowardsTarget(1920, 930);
 
         }
 
         for (Poacher poacher : poachers) {
             //TODO if for when not following target
-            poacher.moveTowardsTarget();
+            poacher.moveTowardsTarget(1920, 930);
+        }
+
+        for (Tourist tourist : tourists){
+            if(!tourist.getResting())
+                tourist.moveTowardsTarget(0,0);
+            else
+                tourist.rest(0,0);
         }
     }
 

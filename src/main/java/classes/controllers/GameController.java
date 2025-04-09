@@ -9,6 +9,7 @@ import classes.entities.animals.carnivores.Tiger;
 import classes.entities.animals.carnivores.Vulture;
 import classes.entities.animals.herbivores.*;
 import classes.entities.human.Ranger;
+import classes.entities.human.Tourist;
 import classes.game.GameEngine;
 
 import classes.landforms.Lake;
@@ -17,6 +18,7 @@ import classes.landforms.Road;
 import classes.landforms.plants.Bush;
 import classes.landforms.plants.Grass;
 import classes.landforms.plants.Tree;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +33,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Random;
 
 import javafx.scene.image.ImageView;
 
@@ -89,6 +92,8 @@ public class GameController {
         this.gameEngine = new GameEngine(this, EASY, terrainLayer, uiLayer, ghostLayer);
         gameEngine.gameLoop();
 
+        Tourist t =  spawnTourist();
+        gameEngine.setTourist(t);
     }
 
 
@@ -264,6 +269,8 @@ public class GameController {
         });
 
         ghostLayer.setOnMouseClicked(e -> {
+            e.consume();
+
             try {
                 double placeX = e.getX();
                 double placeY = e.getY();
@@ -273,10 +280,12 @@ public class GameController {
 
                 //click
                 if(gameEngine.haveEnoughMoneyForAnimal(animalInstance) && canPlaceAnimal(animalInstance, placeX, placeY)){
-                    animalInstance.setOnMouseClicked(this::handleAnimalClicked);
+
+                    Platform.runLater(() -> {
+                        animalInstance.setOnMouseClicked(this::handleAnimalClicked);
+                    });
 
                     uiLayer.getChildren().add(animalInstance);
-
                     gameEngine.buyAnimal(animalInstance);
                 }
 
@@ -385,6 +394,7 @@ public class GameController {
         });
 
         ghostLayer.setOnMouseClicked(e -> {
+            e.consume();
             try {
                 double placeX = e.getX();
                 double placeY = e.getY();
@@ -412,11 +422,14 @@ public class GameController {
     }
 
 
-    //infowindows
 
+
+    //infowindows
     private void handleAnimalClicked(MouseEvent event) {
         if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
             return;
+
+        event.consume();
 
         Animal clickedAnimal = (Animal) event.getSource();
         clickedAnimal.setPaused(true);
@@ -427,26 +440,29 @@ public class GameController {
                     // Sell action
                     gameEngine.sellAnimal(clickedAnimal);
                     uiLayer.getChildren().remove(clickedAnimal);
-                    uiLayer.getChildren().remove(currentInfoWindowAnimal);
 
-                    currentInfoWindowAnimal = null;
+                    closeAnimalWindow(clickedAnimal);
                 },
                 () -> {
                     // Close action
-                    uiLayer.getChildren().remove(currentInfoWindowAnimal);
-                    clickedAnimal.setPaused(false);
-
-                    currentInfoWindowAnimal = null;
+                    closeAnimalWindow(clickedAnimal);
                 }
         );
 
         uiLayer.getChildren().add(currentInfoWindowAnimal);
     }
-
-
+    private void closeAnimalWindow(Animal animal) {
+        if (currentInfoWindowAnimal != null) {
+            uiLayer.getChildren().remove(currentInfoWindowAnimal);
+            currentInfoWindowAnimal = null;
+        }
+        animal.setPaused(false);
+    }
     private void handleRangerClicked(MouseEvent event) {
         if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
             return;
+
+        event.consume();
 
         Ranger clickedRanger = (Ranger) event.getSource();
         clickedRanger.setPaused(true);
@@ -461,28 +477,56 @@ public class GameController {
                 },
                 () -> {
                     // Close action
-                    uiLayer.getChildren().remove(currentInfoWindowRanger);
-                    clickedRanger.setPaused(false);
-
-                    currentInfoWindowRanger = null;
+                    closeRangerWindow(clickedRanger);
                 }
         );
 
         uiLayer.getChildren().add(currentInfoWindowRanger);
     }
-
-
+    private void closeRangerWindow(Ranger ranger) {
+        if (currentInfoWindowRanger != null) {
+            uiLayer.getChildren().remove(currentInfoWindowRanger);
+            currentInfoWindowRanger = null;
+        }
+        ranger.setPaused(false);
+    }
 
     private void choosePrey() {
         System.out.println("choosing prey for " + this.getClass());
         //TODO choose prey
     }
-
     private void unemploy() {
         System.out.println(this.getClass() + " unemployed");
 
         //TODO unemploy ranger
     }
+
+
+
+    public Tourist spawnTourist(){
+        Tourist template = new Tourist(0,0);
+
+        //melyik oldal
+        Random random = new Random();
+        int coinFlip = random.nextBoolean() ? 0 : 1;
+
+        double minX = template.getImageView().getFitWidth() / 2;
+        double maxX = TILE_SIZE * 3 + template.getImageView().getFitWidth() / 2;
+        double minY = template.getImageView().getFitHeight() / 2;
+        double maxY = TILE_SIZE * 64 - template.getImageView().getFitHeight() / 2;
+
+        double randomX = minX + Math.random() * (maxX - minX);
+        double randomY = minY + Math.random() * (maxY - minY);
+
+        Tourist tourist = new Tourist(50, 200);
+        uiLayer.getChildren().add(tourist);
+
+        return tourist;
+
+    }
+
+
+
 
 
     public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int  money){
@@ -499,9 +543,6 @@ public class GameController {
         moneyLabel.setText(money + "");
 
     }
-
-
-
 
     //SWITCHING SCENES
     public void switchToSave(ActionEvent event) throws IOException {
