@@ -178,12 +178,16 @@ public class GameEngine {
                 herbivore.rest(plants);
         }
         for (Carnivore carnivore : carnivores) {
-            if(!carnivore.getResting()) {
+            if(!carnivore.getResting() && !herbivores.isEmpty()) {
+                //System.out.println("sent animal coz notEmpty");
                 carnivore.updateTarget();
                 carnivore.moveTowardsTarget(choose_x);
-            } else
+            } else {
                 //carnivore.rest(1920, 930);
                 carnivore.rest(herbivores);
+                //System.out.println("called rest on empty list");
+            }
+
         }
     }
 
@@ -225,7 +229,9 @@ public class GameEngine {
             this.herbivores.add(herbivore);
             //this.herbivores.add((Herbivore) animal);
         } else if (animal instanceof Carnivore carnivore) {
-            carnivore.pickNewTarget(herbivores);
+            if (!carnivores.isEmpty()) {
+                carnivore.pickNewTarget(herbivores);
+            }
             this.carnivores.add(carnivore);
 
         }

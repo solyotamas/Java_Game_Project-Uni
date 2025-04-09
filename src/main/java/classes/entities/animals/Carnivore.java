@@ -17,9 +17,13 @@ public abstract class Carnivore extends Animal<Herbivore> {
         restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
 
         if (restingTimePassed >= restDuration) {
-            resting = false;
-            restingTimePassed = 0.0;
-            pickNewTarget(herbivores);
+//            System.out.println("wants to move but empty list");
+            if (!herbivores.isEmpty()) {
+                resting = false;
+                restingTimePassed = 0.0;
+                pickNewTarget(herbivores);
+//                System.out.println("called pickNewTarget coz list notEmpty");
+            }
         }
     }
 
@@ -30,12 +34,14 @@ public abstract class Carnivore extends Animal<Herbivore> {
 
         this.targetX = prey.getX(); // + (double )(randomPrey.getTileSize() / 2);
         this.targetY = prey.getY(); // + (double )(randomPrey.getTileSize() / 2);
-         System.out.println("target picked: " + targetX +  " : " + targetY);
+        System.out.println("target picked: " + targetX +  " : " + targetY);
 
     }
 
     public void updateTarget() {
-        this.targetX = prey.getX(); // + (double )(randomPrey.getTileSize() / 2);
-        this.targetY = prey.getY(); // + (double )(randomPrey.getTileSize() / 2);
+        if (this.prey != null) {
+            this.targetX = prey.getX(); // + (double )(randomPrey.getTileSize() / 2);
+            this.targetY = prey.getY(); // + (double )(randomPrey.getTileSize() / 2);
+        }
     }
 }
