@@ -6,6 +6,7 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
@@ -28,24 +29,55 @@ public class Jeep extends Pane {
     public int speciesSeen;
     private Direction currentDirection;
 
+    private WritableImage[] jeepRight;
+    private WritableImage[] jeepLeft;
+    private WritableImage[] jeepUp;
+    private WritableImage[] jeepDown;
+    private Image spriteSheet;
+
+    private int currentFrame = 0;
+    private int frameDelay = 0;
+
     public Jeep(int x, int y) {
         this.x = x;
         this.y = y;
-        this.frameWidth = 57;
-        this.frameHeight = 30;
+        this.frameWidth = 37;
+        this.frameHeight = 10;
         this.radius = 0; //todo
         this.happyBonus = 0;
         this.speciesSeen = 0;
         this.currentDirection = Direction.RIGHT;
 
-        Image img = new Image(getClass().getResource("/images/jeep.png").toExternalForm());
-        this.picture = new ImageView(img);
-        this.picture.setFitWidth(frameWidth);
-        this.picture.setFitHeight(frameHeight);
+        spriteSheet = new Image(getClass().getResource("/images/jeep-spritesheet.png").toExternalForm());
+        loadFrames();
+
+        this.picture = new ImageView(jeepRight[0]);
+        picture.setPreserveRatio(true);
+        picture.setFitHeight(30);
+
         this.getChildren().add(picture);
 
         setLayoutX(x);
         setLayoutY(y);
+    }
+
+    private void loadFrames() {
+        jeepDown = new WritableImage[2];
+        jeepLeft = new WritableImage[2];
+        jeepRight = new WritableImage[2];
+        jeepUp = new WritableImage[2];
+
+        // DOWN és UP: 32x47
+        for (int i = 0; i < 1; i++) {
+            jeepUp[i] = new WritableImage(spriteSheet.getPixelReader(), 0, i * 52, 54, 52);
+            jeepDown[i] = new WritableImage(spriteSheet.getPixelReader(), 53, i * 52, 54, 52);
+        }
+
+        // LEFT és RIGHT: 67x30
+        for (int i = 0; i < 1; i++) {
+            jeepLeft[i] = new WritableImage(spriteSheet.getPixelReader(), 109, i * 52, 103, 52);
+            jeepRight[i] = new WritableImage(spriteSheet.getPixelReader(), 213, i * 52, 103, 52);
+        }
     }
 
     public void autoMove(ArrayList<Road> roads) {
@@ -66,12 +98,19 @@ public class Jeep extends Pane {
             y = newY;
             setLayoutX(x);
             setLayoutY(y);
-            //updateImage(currentDirection);
+
+            if (dx > 0) currentDirection = Direction.RIGHT;
+            else if (dx < 0) currentDirection = Direction.LEFT;
+            else if (dy > 0) currentDirection = Direction.DOWN;
+            else if (dy < 0) currentDirection = Direction.UP;
+
+            updateImage(currentDirection);
             return true;
         }
 
         return false;
     }
+
 
     private boolean isOnRoad(double newX, double newY, ArrayList<Road> roads) {
         double[][] corners = {
@@ -95,44 +134,24 @@ public class Jeep extends Pane {
         return true;
     }
 
-/*    private void updateImage(Direction direction) {
-        // Csak akkor változtatunk képet, ha az irány változott
+    private void updateImage(Direction direction) {
         if (this.currentDirection != direction) {
             this.currentDirection = direction;
-
-            // Eltávolítjuk az előző képet
-            this.getChildren().remove(picture);
-
-            // Kép frissítése az irány szerint
-            Image img = null;
-            switch (direction) {
-                case RIGHT:
-                    img = new Image(getClass().getResource("/images/jeep.png").toExternalForm());
-                    this.frameWidth = 57; // Módosítható méret
-                    this.frameHeight = 30;
-                    break;
-                case DOWN:
-                    img = new Image(getClass().getResource("/images/jeep.png").toExternalForm());
-                    this.frameWidth = 30;
-                    this.frameHeight = 30;
-                    break;
-                case LEFT:
-                    img = new Image(getClass().getResource("/images/jeep.png").toExternalForm());
-                    this.frameWidth = 57;
-                    this.frameHeight = 30;
-                    break;
-                case UP:
-                    img = new Image(getClass().getResource("/images/jeep.png").toExternalForm());
-                    this.frameWidth = 30;
-                    this.frameHeight = 30;
-                    break;
-            }
-
-            // Beállítjuk az új képet és méretet
-            picture = new ImageView(img);
-            picture.setFitWidth(frameWidth);
-            picture.setFitHeight(frameHeight);
-            this.getChildren().add(picture);
+            currentFrame = 0;
+            frameDelay = 0;
         }
-    }*/
+
+        frameDelay++;
+        if (frameDelay >= 10) {
+            currentFrame = (currentFrame + 1) % 2;
+            frameDelay = 0;
+        }
+
+        switch (currentDirection) {
+            case RIGHT -> picture.setImage(jeepRight[currentFrame]);
+            case LEFT -> picture.setImage(jeepLeft[currentFrame]);
+            case UP -> picture.setImage(jeepUp[currentFrame]);
+            case DOWN -> picture.setImage(jeepDown[currentFrame]);
+        }
+    }
 }
