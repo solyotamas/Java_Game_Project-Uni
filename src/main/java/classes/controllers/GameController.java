@@ -11,6 +11,8 @@ import classes.entities.animals.herbivores.*;
 import classes.entities.human.Ranger;
 import classes.entities.human.Tourist;
 import classes.game.GameEngine;
+import classes.landforms.*;
+import classes.landforms.plants.*;
 
 import classes.landforms.Lake;
 import classes.landforms.Landform;
@@ -31,17 +33,13 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.util.Random;
-
 import javafx.scene.image.ImageView;
-
-import static classes.Difficulty.EASY;
 
 
 public class GameController {
     private GameEngine gameEngine;
+    private Difficulty difficulty;
 
     //info panel
     private InfoWindowAnimal currentInfoWindowAnimal = null;
@@ -65,7 +63,7 @@ public class GameController {
     @FXML
     private Pane shopPane;
     @FXML
-    private Button marketButton;
+    private AnchorPane saveOverlay;
 
     //Top and bottom bar UI
     @FXML
@@ -89,14 +87,16 @@ public class GameController {
 
     @FXML
     public void initialize() {
-        this.gameEngine = new GameEngine(this, EASY, terrainLayer, uiLayer, ghostLayer);
-        gameEngine.gameLoop();
-
-        Tourist t =  spawnTourist();
-        gameEngine.setTourist(t);
+        //TODO somehow remove runLater but still get the right difficulty and not null
+        Platform.runLater(() -> {
+            this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer, ghostLayer);
+            gameEngine.gameLoop();
+        });
     }
 
-
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
 
 
     @FXML
@@ -107,17 +107,6 @@ public class GameController {
     public void speedGameToHour(){
 
     }
-
-    //Market appear, disappear
-    @FXML
-    public void happens() {
-        shopPane.setVisible(true);
-    }
-    @FXML
-    public void closeShopPane(){
-        shopPane.setVisible(false);
-    }
-
 
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
         closeShopPane();
@@ -182,6 +171,10 @@ public class GameController {
                     gameEngine.getGameBoard().placeLandform(placedLandform, tileX, tileY);
                     uiLayer.getChildren().add(placedLandform);
                     remainingRoads[0]--;
+
+                    if (isRoad && placedLandform instanceof Road road) {
+                        gameEngine.roads.add(road); // Itt add hozzá közvetlenül!
+                    }
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -189,6 +182,7 @@ public class GameController {
 
             //If road, place 10
             if (!isRoad || remainingRoads[0] <= 0) {
+
                 ghostLayer.getChildren().remove(ghostImage);
                 ghostLayer.setOnMouseMoved(null);
                 ghostLayer.setOnMouseClicked(null);
@@ -205,28 +199,22 @@ public class GameController {
     public void buyBush() {
         buyLandform(Bush.class, Bush.getRandomBushImage());
     }
-    @FXML
     public void buyTree() {
         buyLandform(Tree.class, Tree.getRandomTreeImage());
     }
-    @FXML
     public void buyLake() {
         buyLandform(Lake.class, Lake.lakePicture);
     }
-    @FXML
     public void buyGrass() {
         buyLandform(Grass.class, Grass.grassPicture);
     }
-    @FXML
     public void buyRoad() {
         buyLandform(Road.class, Road.roadImages[0]);
     }
-    @FXML
     public void buyJeep() {{
-        gameEngine.addJeep();
+        gameEngine.buyJeep();
         closeShopPane();
     }}
-
 
     //Class<? extends Animal> animalClass mert ugy lehet atadni jol az x y -t
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
@@ -327,43 +315,33 @@ public class GameController {
     public void buyElephant(){
         buyAnimal(Elephant.class, "/images/elephant.png");
     }
-    @FXML
     public void buyRhino(){
         buyAnimal(Rhino.class, "/images/rhino.png");
     }
-    @FXML
     public void buyHippo(){
         buyAnimal(Hippo.class, "/images/hippo.png");
     }
-    @FXML
     public void buyBuffalo(){
         buyAnimal(Buffalo.class, "/images/buffalo.png");
     }
-    @FXML
     public void buyZebra(){
         buyAnimal(Zebra.class, "/images/zebra.png");
     }
-    @FXML
     public void buyKangaroo(){
         buyAnimal(Kangaroo.class, "/images/kangaroo.png");
     }
-    @FXML
     public void buyTurtle(){
         buyAnimal(Turtle.class, "/images/turtle.png");
     }
-    @FXML
     public void buyLion(){
         buyAnimal(Lion.class, "/images/lion.png");
     }
-    @FXML
     public void buyTiger(){
         buyAnimal(Tiger.class, "/images/tiger.png");
     }
-    @FXML
     public void buyPanther(){
         buyAnimal(Panther.class, "/images/panther.png");
     }
-    @FXML
     public void buyVulture(){
         buyAnimal(Vulture.class, "/images/vulture.png");
     }
@@ -527,32 +505,18 @@ public class GameController {
 
 
 
-
-
-    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int  money){
-        //STATS
-        int days = (int) time / 24;
-        int hours = (int) time % 24;
-
-        gameTimeLabel.setText("Day: " + days + " Hour: " + hours);
-        carnivoreCountLabel.setText(carnivores + "");
-        herbivoreCountLabel.setText(herbivores + "");
-        jeepCountLabel.setText(jeeps + "");
-        touristCountLabel.setText(tourists + "");
-        ticketPriceLabel.setText(ticketPrice + "");
-        moneyLabel.setText(money + "");
-
+    //Save screen pane
+    public void showSaveOverlay() {
+        saveOverlay.setVisible(true);
     }
 
-    //SWITCHING SCENES
-    public void switchToSave(ActionEvent event) throws IOException {
-        switchScene(event, "/fxmls/save_screen.fxml");
+    public void hideSaveOverlay() {
+        saveOverlay.setVisible(false);
     }
+
+    //SWITCHING BACK TO MAIN
     public void switchToMain(ActionEvent event) throws IOException {
-        switchScene(event, "/fxmls/main_screen.fxml");
-    }
-    private void switchScene(ActionEvent event, String fxmlPath) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/main_screen.fxml"));
         Parent root = loader.load();
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -561,6 +525,4 @@ public class GameController {
         stage.setScene(scene);
         stage.show();
     }
-
-
 }
