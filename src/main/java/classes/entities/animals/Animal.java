@@ -73,66 +73,7 @@ public abstract class Animal extends Pane {
         this.y = y + (50 / 2.0);
 
         pickNewTarget(1920,930);
-
-/*        this.setOnMouseClicked(e -> {
-            e.consume(); //
-            showInfoWindow(e.getSceneX(), e.getSceneY());
-        });*/
     }
-
-/*    private void showInfoWindow(double sceneX, double sceneY) {
-        if (currentAnimalWithInfoWindow != null && currentAnimalWithInfoWindow != this) {
-            currentAnimalWithInfoWindow.closeInfoWindow();
-        }
-
-        Pane parent = (Pane) this.getParent();
-        if (parent == null) return;
-
-        closeInfoWindow();
-
-        this.setPaused(true);
-
-        VBox newInfoWindow = new VBox();
-        newInfoWindow.getStyleClass().add("info-window");
-        newInfoWindow.setPrefSize(170, 70);
-
-        Button choosePreyButton = new Button("Sell animal");
-        choosePreyButton.getStyleClass().add("info-button");
-        choosePreyButton.setOnAction(e -> sellAnimal());;
-
-        newInfoWindow.getChildren().add(choosePreyButton);
-
-        newInfoWindow.setLayoutX(sceneX - 85);
-        newInfoWindow.setLayoutY(sceneY - 170);
-
-        //parent.getChildren().add(newInfoWindow);
-        Pane rootPane = (Pane) parent.getParent();
-        Pane ghostLay = (Pane) rootPane.getChildren().get(2);
-        ghostLay.getChildren().add(newInfoWindow);
-        newInfoWindow.toFront();
-        infoWindow = newInfoWindow;
-
-        currentAnimalWithInfoWindow = this;
-
-        parent.setOnMouseClicked(event -> {
-            if (infoWindow != null && !newInfoWindow.getBoundsInParent().contains(event.getX(), event.getY())) {
-                closeInfoWindow();
-            }
-        });
-    }
-
-    private void closeInfoWindow() {
-        if (infoWindow != null) {
-            Pane parent = (Pane) this.getParent();
-            Pane rootPane = (Pane) parent.getParent();
-            Pane ghostLay = (Pane) rootPane.getChildren().get(2);
-            ghostLay.getChildren().remove(infoWindow);
-            //((Pane) this.getParent()).getChildren().remove(infoWindow);
-            infoWindow = null;
-            this.setPaused(false);
-            currentAnimalWithInfoWindow = null;
-        }
-    }*/
 
     private void loadStaticDirectionImages() {
         for (int i = 0; i < 3; i++) {
