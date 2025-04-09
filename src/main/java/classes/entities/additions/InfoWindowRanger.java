@@ -11,8 +11,8 @@ public class InfoWindowRanger extends VBox {
     public InfoWindowRanger(Ranger ranger, Runnable onUnemployClick,  Runnable onChoosePreyClick, Runnable onCloseClick) {
         this.getStyleClass().add("info-window");
         this.setPrefSize(180, 70);
-        this.setLayoutX(ranger.getLayoutX() - 60);
-        this.setLayoutY(ranger.getLayoutY() - 60);
+        this.setLayoutX(ranger.getLayoutX() - 85);
+        this.setLayoutY(ranger.getLayoutY() - 120);
 
         //Close
         Button closeButton = new Button("×");

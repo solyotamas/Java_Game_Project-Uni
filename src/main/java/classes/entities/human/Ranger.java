@@ -12,8 +12,6 @@ public class Ranger extends Human {
     private static double speed = 0.8;
     private static final String imgURL = "/images/animated/ranger.png";
 
-    private Pane infoWindow;
-    private static Ranger currentRangerWithInfoWindow = null;
 
     public Ranger(double x, double y){
         super(x, y, frameWidth, frameHeight, imgURL, speed);

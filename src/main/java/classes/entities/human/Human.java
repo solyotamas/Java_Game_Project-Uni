@@ -17,10 +17,10 @@ public abstract class Human extends Pane {
 
     //Images of the Animal, ui
     private Image spriteSheet;
-    private Image walkDownImages[] = new Image[3];
-    private Image walkLeftImages[] = new Image[3];
-    private Image walkRightImages[] = new Image[3];
-    private Image walkUpImages[] = new Image[3];
+    private Image walkDownImages[] = new Image[4];
+    private Image walkLeftImages[] = new Image[4];
+    private Image walkRightImages[] = new Image[4];
+    private Image walkUpImages[] = new Image[4];
     int imageDelay = 0;
     int currentImage = 0;
     private ImageView imageView;
@@ -39,31 +39,31 @@ public abstract class Human extends Pane {
         loadStaticDirectionImages();
 
         //UI
-        imageView = new ImageView(walkDownImages[0]);
-        imageView.setFitWidth(50);
-        imageView.setFitHeight(50);
+        imageView = new ImageView(walkRightImages[0]);
+        imageView.setFitWidth(frameWidth * 0.4);
+        imageView.setFitHeight(frameHeight * 0.4);
         getChildren().add(imageView);
 
         //the picture will appear where the user clicked but the x and y coordinates are its feet for dynamic depth
-        setLayoutX(x - (50 / 2.0));
-        setLayoutY(y - (50 / 2.0));
+        setLayoutX(x - (frameWidth * 0.8 / 2.0));
+        setLayoutY(y - (frameHeight * 0.8 / 2.0));
         this.x = x;
-        this.y = y + (50 / 2.0);
+        this.y = y + (frameHeight * 0.8 / 2.0);
 
         pickNewTarget(1920,930);
     }
 
     private void loadStaticDirectionImages() {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             walkDownImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 0 * frameHeight, frameWidth, frameHeight);
         }
-        for (int i = 0; i < 3; i++) {
-            walkLeftImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 1 * frameHeight, frameWidth, frameHeight);
+        for (int i = 0; i < 4; i++) {
+            walkRightImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 1 * frameHeight, frameWidth, frameHeight);
         }
-        for (int i = 0; i < 3; i++) {
-            walkRightImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 2 * frameHeight, frameWidth, frameHeight);
+        for (int i = 0; i < 4; i++) {
+            walkLeftImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 2 * frameHeight, frameWidth, frameHeight);
         }
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             walkUpImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 3 * frameHeight, frameWidth, frameHeight);
         }
     }

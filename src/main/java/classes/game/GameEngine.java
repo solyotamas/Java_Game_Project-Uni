@@ -149,19 +149,16 @@ public class GameEngine {
         });
     }
     private double extractDepthY(Node node) {
-        if (node instanceof Animal animal) {
+        if (node instanceof Animal animal)
             return animal.getY();
-        }
-        else if(node instanceof Landform landform){
+        else if(node instanceof Human human)
+                return human.getY();
+        else if(node instanceof Landform landform)
             return landform.getDepth();
-        }
-        else if (node instanceof InfoWindowAnimal || node instanceof InfoWindowRanger){
+        else if (node instanceof InfoWindowAnimal || node instanceof InfoWindowRanger)
             return Double.MAX_VALUE;
-        }
-        else return
-            1.0;
-
-
+        else
+            return 0;
     }
     public void buyAnimal(Animal animal){
         if(animal instanceof Herbivore)

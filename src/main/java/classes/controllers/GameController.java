@@ -415,7 +415,8 @@ public class GameController {
     //infowindows
 
     private void handleAnimalClicked(MouseEvent event) {
-        if (currentInfoWindowAnimal != null) return; // only one info window allowed at a time
+        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
+            return;
 
         Animal clickedAnimal = (Animal) event.getSource();
         clickedAnimal.setPaused(true);
@@ -444,7 +445,8 @@ public class GameController {
 
 
     private void handleRangerClicked(MouseEvent event) {
-        if (currentInfoWindowRanger != null) return; // only one info window allowed at a time
+        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
+            return;
 
         Ranger clickedRanger = (Ranger) event.getSource();
         clickedRanger.setPaused(true);
