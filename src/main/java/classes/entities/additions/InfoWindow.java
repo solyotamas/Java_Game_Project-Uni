@@ -14,7 +14,7 @@ public class InfoWindow extends VBox {
         this.setLayoutX(animal.getLayoutX() - 60);
         this.setLayoutY(animal.getLayoutY() - 60);
 
-        Button closeButton = new Button("X");
+        Button closeButton = new Button("×");
         closeButton.getStyleClass().add("close-button");
 
         Button sellAnimalBtn = new Button("Sell animal");
