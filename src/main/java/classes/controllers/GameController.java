@@ -87,6 +87,7 @@ public class GameController {
     @FXML
     public void initialize() {
         this.gameEngine = new GameEngine(this, EASY, terrainLayer, uiLayer, ghostLayer);
+        //gameEngine.savePlants();
         gameEngine.gameLoop();
     }
 
@@ -165,6 +166,10 @@ public class GameController {
                 if (gameEngine.getGameBoard().canPlaceLandform(placedLandform, tileX, tileY)) {
                     gameEngine.getGameBoard().placeLandform(placedLandform, tileX, tileY);
                     uiLayer.getChildren().add(placedLandform);
+                    if (placedLandform instanceof Plant) {
+                        gameEngine.buyPlant(placedLandform);
+                        System.out.println("buyPlant called");
+                    }
                     remainingRoads[0]--;
                 }
             } catch (Exception ex) {
@@ -252,7 +257,7 @@ public class GameController {
                 uiLayer.getChildren().add(animalInstance);
                 gameEngine.buyAnimal(animalInstance);
 
-                System.out.println("Added animal at " + placeX + ", " + placeY);
+                //System.out.println("Added animal at " + placeX + ", " + placeY);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

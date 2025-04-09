@@ -2,6 +2,7 @@ package classes.entities.animals;
 
 import classes.entities.Direction;
 import classes.entities.human.Ranger;
+import classes.landforms.plants.Plant;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,6 +11,9 @@ import javafx.scene.layout.Pane;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class Animal extends Pane {
 
@@ -72,7 +76,7 @@ public abstract class Animal extends Pane {
         this.x = x;
         this.y = y + (50 / 2.0);
 
-        pickNewTarget(1920,930);
+        //pickNewTarget(1920,930);
 
 /*        this.setOnMouseClicked(e -> {
             e.consume(); //
@@ -194,37 +198,6 @@ public abstract class Animal extends Pane {
             }
         }
     }
-/*
-    public void moveToTarget_dynamical() {
-        if (paused) {
-            return;
-        }
-
-        double dx = targetX - x;
-        double dy = targetY - y;
-
-        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
-            resting = true;
-            return;
-        }
-
-        boolean moveXFirst = Math.random() < 0.5;
-
-        if (moveXFirst && (Math.abs(dx) > 1)) {
-            if (dx > 0) {
-                move(Direction.RIGHT, speed, 0);
-            } else {
-                move(Direction.LEFT, -speed, 0);
-            }
-        } else if(Math.abs(dy) > 1) {
-            if (dy > 0) {
-                move(Direction.DOWN, 0, speed);
-            } else {
-                move(Direction.UP, 0, -speed);
-            }
-        }
-
-    }*/
 
     public void moveTowardsTarget(boolean choose_x) {
         if (paused) {
@@ -272,7 +245,8 @@ public abstract class Animal extends Pane {
         }
 
     }
-/* EZ A JÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓÓ
+//eredeti moveTowards
+/*
 
 public void moveTowardsTarget() {
         if (paused) {
@@ -306,93 +280,8 @@ public void moveTowardsTarget() {
     }
 
     */
-
-    /*
-    public void moveTowardsTargetY() {
-        if (paused) {
-            return;
-        }
-
-        double dx = targetX - x;
-        double dy = targetY - y;
-
-        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
-            resting = true;
-            return;
-        }
-        if (Math.abs(dy) > 1) {
-            if (dy > 0) {
-                move(Direction.DOWN, 0, speed);
-            } else {
-                move(Direction.UP, 0, -speed);
-            }
-        }
-
-        else if ((Math.abs(dx) > 1)) {
-            if (dx > 0) {
-                move(Direction.RIGHT, speed, 0);
-            } else {
-                move(Direction.LEFT, -speed, 0);
-            }
-        }
-    }*/
-        /*
-    public void moveToTargetRandom() {
-        if (paused) {
-            return;
-        }
-
-        double total_dx = targetX - x;
-        double total_dy = targetY - y;
-        double maxStepX = Math.abs(total_dx) / 2;
-        double maxStepY = Math.abs(total_dy) / 2;
-
-        if (Math.abs(total_dx) < 5 && Math.abs(total_dy) < 5) {
-            resting = true;
-            return;
-        }
-
-        while (Math.abs(x - targetX) > 1 || Math.abs(y - targetY) > 1) {
-            // 1. lépés: számoljuk az eltérést
-            double dx = targetX - x;
-            double dy = targetY - y;
-            double stepX = 0;
-            double stepY = 0;
-
-            // 2. lépés: véletlen lépés az x tengelyen
-            if (Math.abs(dx) > 1) {
-                if (dx >= maxStepX) {
-                    stepX = Math.random() * maxStepX;
-                } else {
-                    stepX = Math.random() * dx;
-                }
-
-                if (dx > 0) x += stepX;
-                else x -= stepX;
-            }
-
-            // 3. lépés: véletlen lépés az y tengelyen
-            if (Math.abs(dy) > 1) {
-                if (dx >= maxStepX) {
-                    stepY = Math.random() * maxStepY;
-                } else {
-                    stepY = Math.random() * dy;
-                }
-
-                if (dy > 0) y += stepY;
-                else y -= stepY;
-            }
-
-            // Itt megadhatsz delay-t vagy újrarenderelést is, ha idő-alapú animáció
-        }
-
-        // Elértük a célpontot
-        System.out.println("Célpont elérve: " + x + ", " + y);
-
-
-    }*/
-
-    public void rest(double mapWidth, double mapHeight) {
+//eredeti rest és pickNewTarget
+    /*public void rest(double mapWidth, double mapHeight) {
         restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
 
         if (restingTimePassed >= restDuration) {
@@ -407,6 +296,26 @@ public void moveTowardsTarget() {
         double marginY = 50;
         this.targetX = marginX + Math.random() * (mapWidth - 2 * marginX);
         this.targetY = marginY + Math.random() * (mapHeight - 2 * marginY);
+    }*/
+
+    public void rest(ArrayList<Plant> plants) {
+        restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
+
+        if (restingTimePassed >= restDuration) {
+            resting = false;
+            restingTimePassed = 0.0;
+            pickNewTarget(plants);
+        }
+    }
+
+    public void pickNewTarget(ArrayList<Plant> plants) {
+        Random random = new Random();
+        Plant randomPlant = plants.get(random.nextInt(plants.size()));
+
+        this.targetX = randomPlant.getX() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getWidthInTiles(); //randomPlant.getLayoutX();
+        this.targetY = randomPlant.getY() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getHeightInTiles(); //randomPlant.getLayoutY();
+       // System.out.println("target picked: " + targetX +  " : " +targetY);
+
     }
 
     public void sellAnimal(){
