@@ -42,7 +42,7 @@ public class Jeep extends Pane {
         this.x = x;
         this.y = y;
         this.frameWidth = 37;
-        this.frameHeight = 10;
+        this.frameHeight = 30;
         this.radius = 0; //todo
         this.happyBonus = 0;
         this.speciesSeen = 0;
@@ -70,13 +70,13 @@ public class Jeep extends Pane {
         // DOWN és UP: 32x47
         for (int i = 0; i < 2; i++) {
             jeepUp[i] = new WritableImage(spriteSheet.getPixelReader(), 0, i * 52, 54, 52);
-            jeepDown[i] = new WritableImage(spriteSheet.getPixelReader(), 52, i * 52, 54, 52);
+            jeepDown[i] = new WritableImage(spriteSheet.getPixelReader(), 54, i * 52, 54, 52);
         }
 
         // LEFT és RIGHT: 67x30
         for (int i = 0; i < 2; i++) {
             jeepLeft[i] = new WritableImage(spriteSheet.getPixelReader(), 108, i * 52, 103, 52);
-            jeepRight[i] = new WritableImage(spriteSheet.getPixelReader(), 212, i * 52, 103, 52);
+            jeepRight[i] = new WritableImage(spriteSheet.getPixelReader(), 211, i * 52, 103, 52);
         }
     }
 
