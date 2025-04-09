@@ -229,7 +229,7 @@ public class GameEngine {
             this.herbivores.add(herbivore);
             //this.herbivores.add((Herbivore) animal);
         } else if (animal instanceof Carnivore carnivore) {
-            if (!carnivores.isEmpty()) {
+            if (!herbivores.isEmpty()) {
                 carnivore.pickNewTarget(herbivores);
             }
             this.carnivores.add(carnivore);
