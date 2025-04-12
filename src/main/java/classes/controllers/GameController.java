@@ -4,6 +4,7 @@ import classes.Difficulty;
 import classes.entities.additions.InfoWindowAnimal;
 import classes.entities.additions.InfoWindowRanger;
 import classes.entities.animals.Animal;
+import classes.entities.animals.AnimalState;
 import classes.entities.animals.carnivores.Lion;
 import classes.entities.animals.carnivores.Panther;
 import classes.entities.animals.carnivores.Tiger;
@@ -92,7 +93,7 @@ public class GameController {
     public void initialize() {
         //TODO somehow remove runLater but still get the right difficulty and not null
         Platform.runLater(() -> {
-            this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer, ghostLayer);
+            this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer);
             gameEngine.gameLoop();
 
             Tourist t =  spawnTourist();
@@ -178,7 +179,7 @@ public class GameController {
                     uiLayer.getChildren().add(placedLandform);
                     if (placedLandform instanceof Plant) {
                         gameEngine.buyPlant(placedLandform);
-                        System.out.println("buyPlant called");
+                        //System.out.println("buyPlant called");
                     }
                     remainingRoads[0]--;
 
@@ -283,8 +284,9 @@ public class GameController {
                         animalInstance.setOnMouseClicked(this::handleAnimalClicked);
                     });
 
-                    uiLayer.getChildren().add(animalInstance);
                     gameEngine.buyAnimal(animalInstance);
+                    uiLayer.getChildren().add(animalInstance);
+                    animalInstance.transitionTo(AnimalState.IDLE);
                 }
 
                 //System.out.println("Added animal at " + placeX + ", " + placeY);
@@ -306,14 +308,13 @@ public class GameController {
 
         double imgWidth = animalInstance.getImageView().getFitWidth();
         double imgHeight = animalInstance.getImageView().getFitHeight();
-        System.out.println(imgWidth + " " + imgHeight);
+
 
         double leftX = placeX - imgWidth / 2.0;
         double rightX = placeX + imgWidth / 2.0;
         double topY = placeY - imgHeight / 2.0;
         double bottomY = placeY + imgHeight / 2.0;
-        System.out.println(" left:" + leftX + " right: " + rightX + "top: " + topY + "bottom: " + bottomY);
-        System.out.println(placeY + " " + placeX);
+
         return (
                 leftX >= TOURIST_SECTION &&
                 rightX <= SCREEN_WIDTH - TOURIST_SECTION &&
@@ -394,7 +395,7 @@ public class GameController {
                 uiLayer.getChildren().add(rangerInstance);
                 gameEngine.buyRanger(rangerInstance);
 
-                System.out.println("Added ranger at " + placeX + ", " + placeY);
+                //System.out.println("Added ranger at " + placeX + ", " + placeY);
             } catch (Exception ex) {
                 ex.printStackTrace();
             }

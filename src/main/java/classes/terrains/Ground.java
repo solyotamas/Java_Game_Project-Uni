@@ -10,7 +10,7 @@ public class Ground extends Terrain {
     private static final Random rand = new Random();
 
     public Ground(int row, int col) {
-        super(row, col, getRandomGrassImage(), 1);
+        super(row, col, getRandomGrassImage(), 1, true);
     }
 
     private static Image getRandomGrassImage() {

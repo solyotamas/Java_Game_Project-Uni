@@ -12,7 +12,7 @@ public class Fence extends Terrain {
     private static final Random rand = new Random();
 
     public Fence(int row, int col) {
-        super(row, col, getRandomFenceImage(), 0);
+        super(row, col, getRandomFenceImage(), 0, false);
     }
 
     private static Image getRandomFenceImage() {

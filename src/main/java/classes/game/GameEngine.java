@@ -10,10 +10,10 @@ import classes.Speed;
 import classes.landforms.*;
 import classes.controllers.GameController;
 import classes.landforms.plants.Plant;
+import classes.terrains.Terrain;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
-import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -26,6 +26,7 @@ import java.util.Random;
 
 import static classes.Difficulty.EASY;
 import static classes.Difficulty.MEDIUM;
+import static classes.entities.animals.AnimalState.*;
 
 /* todo
     - difficulty: konstruktorban kell megkapja, valahogy majd a difficultySCrrenből jön át
@@ -53,11 +54,11 @@ public class GameEngine {
     private final Random rand = new Random();
 
 
-    public GameEngine(GameController gameController, Difficulty difficulty, Pane terrainLayer, Pane uiLayer, Pane ghostLayer) {
+    public GameEngine(GameController gameController, Difficulty difficulty, Pane terrainLayer, Pane uiLayer) {
         this.gameController = gameController;
         this.difficulty = difficulty;
 
-        this.gameBoard = new GameBoard(terrainLayer, uiLayer, ghostLayer);
+        this.gameBoard = new GameBoard(terrainLayer, uiLayer);
         gameBoard.setupGroundBoard();
         gameBoard.generatePlants(rand.nextInt(10) + 10);
 
@@ -99,21 +100,15 @@ public class GameEngine {
     }
 
     public void gameLoop() {
-        System.out.println(difficulty);
+        //System.out.println(difficulty);
 
         savePlants();
 
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(50), e -> {
-                // Move animals
-                frameCounter++;
-                if (frameCounter % 100 == 0) {
-                    frameCounter = 0;
-                    choose_x = Math.random() < 0.5;
-                    //System.out.println("choose_x changed");
-                    //System.out.println(choose_x);
-                }
-                updateAnimalPositions(choose_x);
+
+                updateAnimalPositions();
+
                 updateHumanPositions();
                 updateJeepPositions();
                 sortUiLayer();
@@ -154,8 +149,6 @@ public class GameEngine {
     public void setTourist(Tourist tourist){
         this.tourists.add(tourist);
     }
-
-
     private void sortUiLayer() {
         Pane uiLayer = gameBoard.getUiLayer();
 
@@ -183,27 +176,37 @@ public class GameEngine {
             return 0;
     }
 
-    private void updateAnimalPositions(boolean choose_x) {
+    private void updateAnimalPositions() {
         for (Herbivore herbivore : herbivores) {
-            if(!herbivore.getResting())
-                herbivore.moveTowardsTarget(choose_x);
-            else
-                //herbivore.rest(1920, 930);
-                herbivore.rest(plants);
-        }
-        for (Carnivore carnivore : carnivores) {
-            if(!carnivore.getResting() && !herbivores.isEmpty()) {
-                //System.out.println("sent animal coz notEmpty");
-                carnivore.updateTarget();
-                carnivore.moveTowardsTarget(choose_x);
-            } else {
-                //carnivore.rest(1920, 930);
-                carnivore.rest(herbivores);
-                //System.out.println("called rest on empty list");
-            }
+            herbivore.changeThirst(-0.01);
+            herbivore.changeHunger(-0.03);
 
+
+            switch(herbivore.getState()){
+                case MOVING -> herbivore.moveTowardsTarget();
+                case RESTING -> herbivore.rest();
+                case EATING -> herbivore.eat();
+                case DRINKING -> herbivore.drink();
+                case PAUSED -> herbivore.pause();
+                case IDLE -> {
+                    if (herbivore.getThirst() < 25.0) {
+                        herbivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getLakeTerrains());
+                    } else if (herbivore.getHunger() < 25.0) {
+                        herbivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getPlantTerrains());
+                    } else {
+                        herbivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getGroundTerrains());
+                    }
+                    System.out.println(herbivore.getStart() + " " + herbivore.getTarget());
+                    ArrayList<Terrain> path = gameBoard.findPathDijkstra(herbivore.getStart(), herbivore.getTarget());
+                    herbivore.setPath(path);
+                    herbivore.transitionTo(MOVING);
+                    System.out.println(herbivore.getPath());
+                }
+            }
         }
     }
+
+
 
     //RANGER
     public void buyRanger(Ranger ranger){
@@ -258,23 +261,18 @@ public class GameEngine {
         //System.out.println("plant added to list");
     }
 
-    public void buyAnimal(Animal<? extends Pane> animal) {
-
+    //public void buyAnimal(Animal<? extends Pane> animal) {
+    public void buyAnimal(Animal animal) {
         if (animal instanceof Herbivore herbivore) {
-            herbivore.pickNewTarget(plants);
             this.herbivores.add(herbivore);
-            //this.herbivores.add((Herbivore) animal);
         } else if (animal instanceof Carnivore carnivore) {
-            if (!herbivores.isEmpty()) {
-                carnivore.pickNewTarget(herbivores);
-            }
             this.carnivores.add(carnivore);
-
         }
     }
 
 
-    public void sellAnimal(Animal<? extends Pane> animal) {
+    //public void sellAnimal(Animal<? extends Pane> animal) {
+    public void sellAnimal(Animal animal) {
         money += animal.getPrice();
 
         if (animal instanceof Herbivore) {

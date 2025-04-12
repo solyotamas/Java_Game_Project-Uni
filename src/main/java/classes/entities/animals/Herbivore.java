@@ -5,12 +5,14 @@ import classes.landforms.plants.Plant;
 import java.util.ArrayList;
 import java.util.Random;
 
-public abstract class Herbivore extends Animal<Plant> {
+//public abstract class Herbivore extends Animal<Plant> {
 
+public abstract class Herbivore extends Animal {
     public Herbivore(double x, double y, int frameWidth, int frameHeight, String imgURL, double speed, int price) {
         super(x, y, frameWidth, frameHeight, imgURL, speed, price);
     }
 
+    /*
     @Override
     public void rest(ArrayList<Plant> plants) {
         restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
@@ -20,8 +22,9 @@ public abstract class Herbivore extends Animal<Plant> {
             restingTimePassed = 0.0;
             pickNewTarget(plants);
         }
-    }
+    }*/
 
+    /*
     @Override
     public void pickNewTarget(ArrayList<Plant> plants) {
         Random random = new Random();
@@ -32,6 +35,6 @@ public abstract class Herbivore extends Animal<Plant> {
         // System.out.println("target picked: " + targetX +  " : " +targetY);
 
 
-    }
+    }*/
 
 }
