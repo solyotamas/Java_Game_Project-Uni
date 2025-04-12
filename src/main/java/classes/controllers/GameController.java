@@ -422,7 +422,7 @@ public class GameController {
         event.consume();
 
         Animal clickedAnimal = (Animal) event.getSource();
-        clickedAnimal.setPaused(true);
+        clickedAnimal.transitionTo(AnimalState.PAUSED);
 
         currentInfoWindowAnimal = new InfoWindowAnimal(
                 clickedAnimal,
@@ -446,7 +446,7 @@ public class GameController {
             uiLayer.getChildren().remove(currentInfoWindowAnimal);
             currentInfoWindowAnimal = null;
         }
-        animal.setPaused(false);
+        animal.resume();
     }
     private void handleRangerClicked(MouseEvent event) {
         if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)

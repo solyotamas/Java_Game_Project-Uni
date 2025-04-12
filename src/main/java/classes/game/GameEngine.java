@@ -187,7 +187,7 @@ public class GameEngine {
                 case RESTING -> herbivore.rest();
                 case EATING -> herbivore.eat();
                 case DRINKING -> herbivore.drink();
-                case PAUSED -> herbivore.pause();
+                case PAUSED -> {}
                 case IDLE -> {
                     if (herbivore.getThirst() < 25.0) {
                         herbivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getLakeTerrains());

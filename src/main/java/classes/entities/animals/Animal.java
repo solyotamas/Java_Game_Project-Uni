@@ -32,6 +32,7 @@ public abstract class Animal extends Pane {
 
     //ANIMAL MOVEMENT
     protected AnimalState state;
+    private AnimalState previousState;
     protected Terrain target;
     protected Terrain start;
     ArrayList<Terrain> path = new ArrayList<>();
@@ -254,7 +255,7 @@ public abstract class Animal extends Pane {
             state = AnimalState.IDLE;
         }
     }
-    public void pause(){
+    public void inspect(){
 
     }
     public double getThirst(){
@@ -313,7 +314,16 @@ public abstract class Animal extends Pane {
 
 
     public void transitionTo(AnimalState newState) {
+        if (newState == AnimalState.PAUSED) {
+            previousState = state;
+        }
         this.state = newState;
+    }
+
+    public void resume() {
+        if (state == AnimalState.PAUSED && previousState != null) {
+            transitionTo(previousState);
+        }
     }
 
 
