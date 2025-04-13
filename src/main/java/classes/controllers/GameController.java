@@ -5,13 +5,14 @@ import classes.entities.additions.InfoWindowAnimal;
 import classes.entities.additions.InfoWindowRanger;
 import classes.entities.animals.Animal;
 import classes.entities.animals.AnimalState;
+import classes.entities.human.HumanState;
+import classes.entities.human.Tourist;
 import classes.entities.animals.carnivores.Lion;
 import classes.entities.animals.carnivores.Panther;
 import classes.entities.animals.carnivores.Tiger;
 import classes.entities.animals.carnivores.Vulture;
 import classes.entities.animals.herbivores.*;
 import classes.entities.human.Ranger;
-import classes.entities.human.Tourist;
 import classes.game.GameEngine;
 
 import classes.landforms.Lake;
@@ -49,6 +50,8 @@ public class GameController {
     private InfoWindowAnimal currentInfoWindowAnimal = null;
     private InfoWindowRanger currentInfoWindowRanger = null;
 
+    //random
+    private final Random rand = new Random();
 
     //stats
     private final int TILE_SIZE = 30;
@@ -96,9 +99,8 @@ public class GameController {
             this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer);
             gameEngine.gameLoop();
 
-            Tourist t =  spawnTourist();
-            gameEngine.setTourist(t);
         });
+
     }
 
     public void setDifficulty(Difficulty difficulty) {
@@ -227,7 +229,7 @@ public class GameController {
         closeShopPane();
     }}
 
-    //Class<? extends Animal> animalClass mert ugy lehet atadni jol az x y -t
+
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
         closeShopPane();
         ghostLayer.setVisible(true);
@@ -286,7 +288,6 @@ public class GameController {
 
                     gameEngine.buyAnimal(animalInstance);
                     uiLayer.getChildren().add(animalInstance);
-                    animalInstance.transitionTo(AnimalState.IDLE);
                 }
 
                 //System.out.println("Added animal at " + placeX + ", " + placeY);
@@ -391,7 +392,10 @@ public class GameController {
 
                 Ranger rangerInstance = new Ranger(placeX, placeY);
 
-                rangerInstance.setOnMouseClicked(this::handleRangerClicked);
+                Platform.runLater(() -> {
+                    rangerInstance.setOnMouseClicked(this::handleRangerClicked);
+                });
+
                 uiLayer.getChildren().add(rangerInstance);
                 gameEngine.buyRanger(rangerInstance);
 
@@ -455,7 +459,7 @@ public class GameController {
         event.consume();
 
         Ranger clickedRanger = (Ranger) event.getSource();
-        clickedRanger.setPaused(true);
+        clickedRanger.transitionTo(HumanState.PAUSED);
 
         currentInfoWindowRanger = new InfoWindowRanger(
                 clickedRanger,
@@ -478,7 +482,7 @@ public class GameController {
             uiLayer.getChildren().remove(currentInfoWindowRanger);
             currentInfoWindowRanger = null;
         }
-        ranger.setPaused(false);
+        ranger.resume();
     }
 
     private void choosePrey() {
@@ -492,28 +496,36 @@ public class GameController {
     }
 
 
-
+    // ==== TOURISTS
     public Tourist spawnTourist(){
-        Tourist template = new Tourist(0,0);
+        Tourist template = new Tourist(0,0,0);
 
-        //melyik oldal
-        Random random = new Random();
-        int coinFlip = random.nextBoolean() ? 0 : 1;
+        //which side - 0 left, 1 right
 
-        double minX = template.getImageView().getFitWidth() / 2;
-        double maxX = TILE_SIZE * 3 + template.getImageView().getFitWidth() / 2;
-        double minY = template.getImageView().getFitHeight() / 2;
-        double maxY = TILE_SIZE * 64 - template.getImageView().getFitHeight() / 2;
+        int coinFlip = rand.nextBoolean() ? 0 : 1;
+        double x, y;
+        Tourist tourist;
+        if(coinFlip == 0){
+            x = template.getImageView().getFitWidth() / 2;
+            y = 31.0 * TILE_SIZE / 2. + template.getImageView().getFitHeight() / 2.;
+            tourist = new Tourist(x,y,0);
+        }
+        else{
+            x = 64 * TILE_SIZE - template.getImageView().getFitWidth() / 2;
+            y = 31.0 * TILE_SIZE / 2. + template.getImageView().getFitHeight() / 2.;
+            tourist = new Tourist(x,y,1);
+        }
 
-        double randomX = minX + Math.random() * (maxX - minX);
-        double randomY = minY + Math.random() * (maxY - minY);
-
-        Tourist tourist = new Tourist(50, 200);
         uiLayer.getChildren().add(tourist);
-
         return tourist;
 
     }
+    public void removeTourist(Tourist tourist){
+        Platform.runLater(() -> {
+            uiLayer.getChildren().remove(tourist);
+        });
+    }
+    // ======
 
 
     //UI handling

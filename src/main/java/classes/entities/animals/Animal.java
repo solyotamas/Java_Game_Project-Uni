@@ -16,19 +16,13 @@ import java.util.*;
 
 public abstract class Animal extends Pane {
 
-
-
     private int price;
-
     private double x;
     private double y;
     protected double speed;
 
 
     protected double restingTimePassed = 0.0;
-    protected double restDuration = 15.0;
-    protected boolean resting = false;
-    private boolean paused = false;
 
     //ANIMAL MOVEMENT
     protected AnimalState state;
@@ -74,13 +68,15 @@ public abstract class Animal extends Pane {
         imageView.setFitHeight(frameHeight * 0.6);
         getChildren().add(imageView);
 
-        //the picture will appear where the user clicked but the x and y coordinates are its feet for dynamic depth
+        //mouse click will be the middle
+        //x and y is feet
         setLayoutX(x - (frameWidth * 0.6 / 2.0));
         setLayoutY(y - (frameHeight * 0.6 / 2.0));
         this.x = x;
         this.y = y + (frameHeight * 0.6 / 2.0);
 
-
+        //state
+        this.state = AnimalState.IDLE;
 
 
 
@@ -101,52 +97,7 @@ public abstract class Animal extends Pane {
         }
     }
 
-    public void move(Direction dir, double dx, double dy) {
-        this.currentDirection = dir;
-        this.x += dx; this.y += dy;
 
-
-        //the UI element itself
-        setLayoutX(getLayoutX() + dx);
-        setLayoutY(getLayoutY() + dy);
-
-
-        switch (currentDirection) {
-            case UP -> {
-                imageDelay++;
-                if (imageDelay >= 10) {
-                    currentImage = (currentImage + 1) % walkUpImages.length;
-                    imageDelay = 0;
-                }
-                imageView.setImage(walkUpImages[currentImage]);
-            }
-            case DOWN -> {
-                imageDelay++;
-                if (imageDelay >= 10) {
-                    currentImage = (currentImage + 1) % walkDownImages.length;
-                    imageDelay = 0;
-                }
-                imageView.setImage(walkDownImages[currentImage]);
-            }
-            case RIGHT -> {
-                imageDelay++;
-                if (imageDelay >= 10) {
-                    currentImage = (currentImage + 1) % walkRightImages.length;
-                    imageDelay = 0;
-                }
-                imageView.setImage(walkRightImages[currentImage]);
-            }
-            case LEFT -> {
-                // cycle through left frames
-                imageDelay++;
-                if (imageDelay >= 10) {
-                    currentImage = (currentImage + 1) % walkLeftImages.length;
-                    imageDelay = 0;
-                }
-                imageView.setImage(walkLeftImages[currentImage]);
-            }
-        }
-    }
     /*
     public void moveTowardsTarget(boolean choose_x) {
         if (paused) {
@@ -196,6 +147,10 @@ public abstract class Animal extends Pane {
     }*/
     //eredeti moveTowards
 
+
+
+    //===== ANIMAL MOVEMENT & ACTIVITIES =====
+    //moving
     public void moveTowardsTarget() {
         // If we've reached the end of the path
         if (pathIndex >= path.size()) {
@@ -232,12 +187,57 @@ public abstract class Animal extends Pane {
         move(dir, stepX, stepY);
 
     }
+    public void move(Direction dir, double dx, double dy) {
+        this.currentDirection = dir;
+        this.x += dx; this.y += dy;
 
 
+        //the UI element itself
+        setLayoutX(getLayoutX() + dx);
+        setLayoutY(getLayoutY() + dy);
 
+
+        switch (currentDirection) {
+            case UP -> {
+                imageDelay++;
+                if (imageDelay >= 10) {
+                    currentImage = (currentImage + 1) % walkUpImages.length;
+                    imageDelay = 0;
+                }
+                imageView.setImage(walkUpImages[currentImage]);
+            }
+            case DOWN -> {
+                imageDelay++;
+                if (imageDelay >= 10) {
+                    currentImage = (currentImage + 1) % walkDownImages.length;
+                    imageDelay = 0;
+                }
+                imageView.setImage(walkDownImages[currentImage]);
+            }
+            case RIGHT -> {
+                imageDelay++;
+                if (imageDelay >= 10) {
+                    currentImage = (currentImage + 1) % walkRightImages.length;
+                    imageDelay = 0;
+                }
+                imageView.setImage(walkRightImages[currentImage]);
+            }
+            case LEFT -> {
+                // cycle through left frames
+                imageDelay++;
+                if (imageDelay >= 10) {
+                    currentImage = (currentImage + 1) % walkLeftImages.length;
+                    imageDelay = 0;
+                }
+                imageView.setImage(walkLeftImages[currentImage]);
+            }
+        }
+    }
+
+    //not moving states
     public void rest() {
         restingTimePassed += 0.05;
-        if (restingTimePassed >= restDuration) {
+        if (restingTimePassed >= 15) {
             restingTimePassed = 0.0;
             state = AnimalState.IDLE;
         }
@@ -255,18 +255,14 @@ public abstract class Animal extends Pane {
             state = AnimalState.IDLE;
         }
     }
-    public void inspect(){
-
+    public void changeThirst(double val){
+        this.thirst += val;
     }
-    public double getThirst(){
-        return thirst;
-    }
-    public double getHunger(){
-        return hunger;
+    public void changeHunger(double val){
+        this.hunger += val;
     }
 
-
-    //choosing the targetTerrain
+    //setting up for dijkstra,
     public void preparePath(Terrain[][] map, ArrayList<Terrain> desiredTerrains) {
         Terrain startingTerrain = pickStartingTerrain(map);
         this.start = startingTerrain;
@@ -298,7 +294,23 @@ public abstract class Animal extends Pane {
 
         return closest;
     }
+    public void setPath(ArrayList<Terrain> path){
+        this.path = path;
+        this.pathIndex = 0;
+    }
 
+    //managing states
+    public void transitionTo(AnimalState newState) {
+        if (newState == AnimalState.PAUSED) {
+            previousState = state;
+        }
+        this.state = newState;
+    }
+    public void resume() {
+        if (state == AnimalState.PAUSED && previousState != null) {
+            transitionTo(previousState);
+        }
+    }
     private AnimalState determineStateFromTarget(Terrain target) {
         if (target.hasLandform()) {
             if (target.getLandform() instanceof Lake) return AnimalState.DRINKING;
@@ -306,28 +318,7 @@ public abstract class Animal extends Pane {
         }
         return AnimalState.RESTING;
     }
-    public void setPath(ArrayList<Terrain> path){
-        this.path = path;
-        this.pathIndex = 0;
-    }
-
-
-
-    public void transitionTo(AnimalState newState) {
-        if (newState == AnimalState.PAUSED) {
-            previousState = state;
-        }
-        this.state = newState;
-    }
-
-    public void resume() {
-        if (state == AnimalState.PAUSED && previousState != null) {
-            transitionTo(previousState);
-        }
-    }
-
-
-
+    //=====================================
 
 
 
@@ -368,9 +359,6 @@ public abstract class Animal extends Pane {
     public double getSpeed(){
         return this.speed;
     }
-    public boolean getResting(){
-        return this.resting;
-    }
     public int getPrice() { return this.price; }
     public int getFrameWidth(){
         return this.frameWidth;
@@ -384,9 +372,6 @@ public abstract class Animal extends Pane {
     public double getY(){
         return this.y;
     }
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
     public ImageView getImageView(){
         return this.imageView;
     }
@@ -399,17 +384,16 @@ public abstract class Animal extends Pane {
     public Terrain getTarget(){
         return target;
     }
-
     public ArrayList<Terrain> getPath(){
         return this.path;
     }
     public double getDepth(){
         return this.y + (frameHeight * 0.6 / 2.0);
     }
-    public void changeThirst(double val){
-        this.thirst += val;
+    public double getThirst(){
+        return thirst;
     }
-    public void changeHunger(double val){
-        this.hunger += val;
+    public double getHunger(){
+        return hunger;
     }
 }

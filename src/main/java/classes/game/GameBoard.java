@@ -261,11 +261,10 @@ public class GameBoard{
     }
     public ArrayList<Terrain> findPathDijkstra(Terrain start, Terrain goal) {
         if (start == null || goal == null) {
-            System.out.println("⚠️ Dijkstra failed: start or goal is null");
             return new ArrayList<>();
         }
 
-        System.out.println("🔍 Starting Dijkstra from: " + start + " to: " + goal);
+        System.out.println("Starting Dijkstra from: " + start + " to " + goal);
 
         Map<Terrain, Terrain> cameFrom = new HashMap<>();
         Map<Terrain, Integer> costSoFar = new HashMap<>();
@@ -278,7 +277,6 @@ public class GameBoard{
             Terrain current = frontier.poll();
 
             if (current == goal) {
-                System.out.println("✅ Goal reached: " + goal);
                 break;
             }
 
@@ -306,14 +304,13 @@ public class GameBoard{
 
         // If the path doesn't start at 'start', we probably never reached goal
         if (!path.isEmpty() && path.get(0) != start) {
-            System.out.println("⚠️ Path does not start with start node! Forcing start in front.");
             path.add(0, start);
         }
 
         if (path.isEmpty()) {
-            System.out.println("❌ No path found from " + start + " to " + goal);
+            System.out.println("no path found from " + start + " to " + goal);
         } else {
-            System.out.println("🟢 Path found, length: " + path.size());
+            System.out.println("path found, length: " + path.size());
         }
 
         return path;

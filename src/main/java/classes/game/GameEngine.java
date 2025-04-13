@@ -46,12 +46,12 @@ public class GameEngine {
     private double spentTime;
     protected ArrayList<Carnivore> carnivores;
     protected ArrayList<Herbivore> herbivores;
-    protected ArrayList<Tourist> tourists = new ArrayList<>();
-    private int touristCount;
+    protected ArrayList<Tourist> tourists;
     private int jeepCount ;
     private int ticketPrice;
     private int money = 5000;
     private final Random rand = new Random();
+
 
 
     public GameEngine(GameController gameController, Difficulty difficulty, Pane terrainLayer, Pane uiLayer) {
@@ -66,6 +66,7 @@ public class GameEngine {
         money = 5000;
         carnivores = new ArrayList<Carnivore>();
         herbivores = new ArrayList<Herbivore>();
+        tourists = new ArrayList<Tourist>();
         herds = new ArrayList<Herd>();
         rangers = new ArrayList<Ranger>();
         poachers = new ArrayList<Poacher>();
@@ -107,17 +108,13 @@ public class GameEngine {
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(50), e -> {
 
-                updateAnimalPositions();
-
+                updateAnimalStates();
                 updateHumanPositions();
                 updateJeepPositions();
                 sortUiLayer();
 
-                // Update herds
-                //updateHerds();
 
-                // Possibly spawn tourists/poachers
-                //maybeSpawnTourist();
+                maybeSpawnTourist();
 
                 // Check win/lose conditions
                 if (gameOver()) {
@@ -128,7 +125,7 @@ public class GameEngine {
 
                 // UI sync, Display things
                 spentTime += 0.05;
-                gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice, money);
+                gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, tourists.size(), ticketPrice, money);
 
             })
         );
@@ -136,19 +133,25 @@ public class GameEngine {
         timeline.play();
     }
 
+    //===SPAWNING TOURISTS
     private void maybeSpawnTourist() {
-        double spawnChancePerTick = 0.1;
-        if (Math.random() < spawnChancePerTick){
-            touristCount++;
-            gameController.spawnTourist();
-            //tourists.add(tourist);
+        double chancePerSecond = 0.05 * (herbivores.size() + (carnivores.size()) * 2);
+        double spawnChancePerTick = chancePerSecond / 20.0;
+
+        //cap it, max is 1 visitor every 2 secs but then again its random so
+        spawnChancePerTick = Math.min(spawnChancePerTick, 0.025);
+
+        if (rand.nextDouble() < spawnChancePerTick) {
+            Platform.runLater(() -> {
+                Tourist tourist = gameController.spawnTourist();
+                tourists.add(tourist);
+            });
         }
 
     }
+    //==========
 
-    public void setTourist(Tourist tourist){
-        this.tourists.add(tourist);
-    }
+    //===VISUALS
     private void sortUiLayer() {
         Pane uiLayer = gameBoard.getUiLayer();
 
@@ -175,12 +178,13 @@ public class GameEngine {
         else
             return 0;
     }
+    //==========
 
-    private void updateAnimalPositions() {
+
+    private void updateAnimalStates() {
         for (Herbivore herbivore : herbivores) {
             herbivore.changeThirst(-0.01);
             herbivore.changeHunger(-0.03);
-
 
             switch(herbivore.getState()){
                 case MOVING -> herbivore.moveTowardsTarget();
@@ -196,11 +200,53 @@ public class GameEngine {
                     } else {
                         herbivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getGroundTerrains());
                     }
-                    System.out.println(herbivore.getStart() + " " + herbivore.getTarget());
                     ArrayList<Terrain> path = gameBoard.findPathDijkstra(herbivore.getStart(), herbivore.getTarget());
                     herbivore.setPath(path);
                     herbivore.transitionTo(MOVING);
+
                     System.out.println(herbivore.getPath());
+                }
+            }
+        }
+    }
+    private void updateHumanPositions() {
+
+
+        for (Ranger ranger : rangers) {
+            switch (ranger.getState()){
+                case MOVING -> ranger.moveTowardsTarget();
+                case RESTING -> ranger.rest();
+                case PAUSED -> {}
+                case IDLE -> {
+                    ranger.pickNewTarget();
+                    ranger.transitionTo(HumanState.MOVING);
+                }
+            }
+
+        }
+        for (Poacher poacher : poachers) {
+            switch (poacher.getState()){
+                case MOVING -> poacher.moveTowardsTarget();
+                case RESTING -> poacher.rest();
+                case PAUSED -> {}
+                case IDLE -> {
+                    poacher.pickNewTarget();
+                    poacher.transitionTo(HumanState.MOVING);
+                }
+            }
+        }
+        for (Tourist tourist : tourists){
+            tourist.changeVisitDuration(0.1);
+
+            switch (tourist.getState()){
+                case MOVING, EXITING -> tourist.moveTowardsTarget();
+                case RESTING -> tourist.rest();
+                case LEFT -> {
+                    gameController.removeTourist(tourist);
+                    tourists.remove(tourist);
+                }
+                case IDLE -> {
+                    tourist.pickNewTarget();
                 }
             }
         }
@@ -213,24 +259,7 @@ public class GameEngine {
         this.rangers.add(ranger);
     }
 
-    private void updateHumanPositions() {
-        for (Ranger ranger : rangers) {
-            //TODO if for when not following target
-            ranger.moveTowardsTarget(1920, 930);
 
-        }
-        for (Poacher poacher : poachers) {
-            //TODO if for when not following target
-            poacher.moveTowardsTarget(1920, 930);
-        }
-
-        for (Tourist tourist : tourists){
-            if(!tourist.getResting())
-                tourist.moveTowardsTarget(0,0);
-            else
-                tourist.rest(0,0);
-        }
-    }
 
     //JEEP
     public void buyJeep() {
@@ -248,7 +277,7 @@ public class GameEngine {
         // jeep = new Jeep(1770, 900);
         jeeps.add(jeep);
         gameBoard.getUiLayer().getChildren().add(jeep);
-        gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, touristCount, ticketPrice, money);
+        gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, tourists.size(), ticketPrice, money);
     }
     public void updateJeepPositions() {
         for (Jeep jeep : jeeps) {
@@ -327,6 +356,9 @@ public class GameEngine {
         return this.gameBoard;
     }
 
+    public void addTourist(Tourist t){
+        tourists.add(t);
+    }
 
     public void pays(Ranger ranger) {
         //rangers.indexOf(ranger).paid = true;

@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+import java.util.Random;
+
 public class Ranger extends Human {
 
     private static final int frameWidth = 40;//104;
@@ -15,6 +17,20 @@ public class Ranger extends Human {
 
     public Ranger(double x, double y){
         super(x, y, frameWidth, frameHeight, imgURL, speed);
+    }
+
+    @Override
+    public void pickNewTarget() {
+        Random random = new Random();
+        double minY = this.getImageView().getFitHeight();
+        double maxY = 31 * 30;
+        double minX = 5 * 30 + this.getImageView().getFitWidth() / 2;
+        double maxX = 59 * 30 - this.getImageView().getFitWidth() / 2;
+
+
+        this.targetX = minX + random.nextDouble() * (maxX - minX);
+        this.targetY = minY + random.nextDouble() * (maxY - minY);
+
     }
 
 
