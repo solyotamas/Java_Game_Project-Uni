@@ -109,7 +109,7 @@ public class GameEngine {
             new KeyFrame(Duration.millis(50), e -> {
 
                 updateAnimalStates();
-                updateHumanPositions();
+                updateHumanStates();
                 updateJeepPositions();
                 sortUiLayer();
 
@@ -208,9 +208,12 @@ public class GameEngine {
                 }
             }
         }
-    }
-    private void updateHumanPositions() {
 
+        for (Carnivore carnivore : carnivores){
+            //...
+        }
+    }
+    private void updateHumanStates() {
 
         for (Ranger ranger : rangers) {
             switch (ranger.getState()){
@@ -235,21 +238,28 @@ public class GameEngine {
                 }
             }
         }
+
+        List<Tourist> toRemove = new ArrayList<>();
         for (Tourist tourist : tourists){
-            tourist.changeVisitDuration(0.1);
+            tourist.changeVisitDuration(2);
 
             switch (tourist.getState()){
                 case MOVING, EXITING -> tourist.moveTowardsTarget();
                 case RESTING -> tourist.rest();
                 case LEFT -> {
-                    gameController.removeTourist(tourist);
-                    tourists.remove(tourist);
+                    toRemove.add(tourist);
+
                 }
                 case IDLE -> {
                     tourist.pickNewTarget();
                 }
             }
         }
+        for (Tourist t : toRemove) {
+            gameController.removeTourist(t);
+            tourists.remove(t);
+        }
+
     }
 
 

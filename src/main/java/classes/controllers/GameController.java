@@ -521,9 +521,7 @@ public class GameController {
 
     }
     public void removeTourist(Tourist tourist){
-        Platform.runLater(() -> {
-            uiLayer.getChildren().remove(tourist);
-        });
+        uiLayer.getChildren().remove(tourist);
     }
     // ======
 
