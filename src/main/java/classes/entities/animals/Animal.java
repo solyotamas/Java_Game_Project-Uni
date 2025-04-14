@@ -17,8 +17,8 @@ import java.util.*;
 public abstract class Animal extends Pane {
 
     private int price;
-    private double x;
-    private double y;
+    protected double x;
+    protected double y;
     protected double speed;
 
 
