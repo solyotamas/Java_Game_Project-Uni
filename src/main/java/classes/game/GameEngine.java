@@ -135,7 +135,7 @@ public class GameEngine {
 
     //===SPAWNING TOURISTS
     private void maybeSpawnTourist() {
-        double chancePerSecond = 0.05 * (herbivores.size() + (carnivores.size()) * 2);
+        double chancePerSecond = 0.01 * (herbivores.size() + (carnivores.size()) * 2);
         double spawnChancePerTick = chancePerSecond / 20.0;
 
         //cap it, max is 1 visitor every 2 secs but then again its random so
@@ -210,7 +210,48 @@ public class GameEngine {
         }
 
         for (Carnivore carnivore : carnivores){
-            //...
+            carnivore.changeThirst(-0.01);
+            carnivore.changeHunger(-0.02);
+            System.out.println(carnivore.getHunger());
+
+            switch (carnivore.getState()){
+                case MOVING -> carnivore.moveTowardsTarget();
+                case RESTING -> carnivore.rest();
+                case EATING -> {
+                    carnivore.changeHunger(0.5);
+                    if (carnivore.getHunger() > 99.0) {
+                        carnivore.transitionTo(RESTING);
+                        gameController.removeHerbivore(carnivore.getPrey());
+                        herbivores.remove(carnivore.getPrey());
+                    }
+                }
+                case DRINKING -> carnivore.drink();
+                case PAUSED -> {}
+                case HUNTING -> {
+                    carnivore.huntTarget();
+                }
+                case IDLE -> {
+                    ArrayList<Terrain> path;
+                    if (carnivore.getThirst() < 25.0) {
+                        carnivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getLakeTerrains());
+
+                        path = gameBoard.findPathDijkstra(carnivore.getStart(), carnivore.getTarget());
+                        carnivore.setPath(path);
+                        carnivore.transitionTo(MOVING);
+                        System.out.println(carnivore.getPath());
+                    } else if (carnivore.getHunger() < 25.0) {
+                        carnivore.choosePrey(herbivores);
+                        carnivore.transitionTo(HUNTING);
+                    } else {
+                        carnivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getGroundTerrains());
+
+                        path = gameBoard.findPathDijkstra(carnivore.getStart(), carnivore.getTarget());
+                        carnivore.setPath(path);
+                        carnivore.transitionTo(MOVING);
+                        System.out.println(carnivore.getPath());
+                    }
+                }
+            }
         }
     }
     private void updateHumanStates() {
@@ -319,9 +360,6 @@ public class GameEngine {
         } else {
             carnivores.remove(animal);
         }
-
-        Pane uiLayer = gameBoard.getUiLayer();
-        uiLayer.getChildren().remove(animal);
 
         System.out.println("Eladtál egy állatot " + animal.getPrice() + " pénzért.");
     }

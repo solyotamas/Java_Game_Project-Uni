@@ -6,5 +6,6 @@ public enum AnimalState {
     EATING,
     DRINKING,
     PAUSED,
-    IDLE
+    IDLE,
+    HUNTING
 }

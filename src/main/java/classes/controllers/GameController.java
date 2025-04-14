@@ -5,6 +5,7 @@ import classes.entities.additions.InfoWindowAnimal;
 import classes.entities.additions.InfoWindowRanger;
 import classes.entities.animals.Animal;
 import classes.entities.animals.AnimalState;
+import classes.entities.animals.Herbivore;
 import classes.entities.human.HumanState;
 import classes.entities.human.Tourist;
 import classes.entities.animals.carnivores.Lion;
@@ -230,6 +231,7 @@ public class GameController {
     }}
 
 
+    //ANIMALS
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
         closeShopPane();
         ghostLayer.setVisible(true);
@@ -304,7 +306,6 @@ public class GameController {
 
         });
     }
-
     private boolean canPlaceAnimal(Animal animalInstance, double placeX, double placeY) {
 
         double imgWidth = animalInstance.getImageView().getFitWidth();
@@ -323,7 +324,6 @@ public class GameController {
                 bottomY <= SCREEN_HEIGHT
         );
     }
-
     @FXML
     public void buyElephant(){
         buyAnimal(Elephant.class, "/images/elephant.png");
@@ -358,7 +358,11 @@ public class GameController {
     public void buyVulture(){
         buyAnimal(Vulture.class, "/images/vulture.png");
     }
+    public void removeHerbivore(Herbivore herbivore){
+        uiLayer.getChildren().remove(herbivore);
+    }
 
+    //RANGERS
     @FXML
     private void buyRanger() {
         closeShopPane();
@@ -484,7 +488,6 @@ public class GameController {
         }
         ranger.resume();
     }
-
     private void choosePrey() {
         System.out.println("choosing prey for " + this.getClass());
         //TODO choose prey
@@ -547,7 +550,6 @@ public class GameController {
     public void openShopPane() {
         shopPane.setVisible(true);
     }
-
     public void closeShopPane(){
         shopPane.setVisible(false);
     }
@@ -556,7 +558,6 @@ public class GameController {
     public void showSaveOverlay() {
         saveOverlay.setVisible(true);
     }
-
     public void hideSaveOverlay() {
         saveOverlay.setVisible(false);
     }
