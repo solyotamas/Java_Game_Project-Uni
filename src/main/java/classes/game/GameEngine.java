@@ -176,7 +176,7 @@ public class GameEngine {
         else if (node instanceof Jeep jeep)
             return jeep.getDepth();
         else
-            return 0;
+            return Double.MAX_VALUE;
     }
     //==========
 
@@ -185,6 +185,7 @@ public class GameEngine {
         for (Herbivore herbivore : herbivores) {
             herbivore.changeThirst(-0.01);
             herbivore.changeHunger(-0.03);
+
 
             switch(herbivore.getState()){
                 case MOVING -> herbivore.moveTowardsTarget();
@@ -212,7 +213,7 @@ public class GameEngine {
         for (Carnivore carnivore : carnivores){
             carnivore.changeThirst(-0.01);
             carnivore.changeHunger(-0.02);
-            System.out.println(carnivore.getHunger());
+
 
             switch (carnivore.getState()){
                 case MOVING -> carnivore.moveTowardsTarget();

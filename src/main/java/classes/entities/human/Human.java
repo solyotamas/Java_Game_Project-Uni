@@ -132,7 +132,7 @@ public abstract class Human extends Pane {
         double dx = targetX - x;
         double dy = targetY - y;
 
-        // Close enough? Switch to RESTING
+        // close enough -> Switch to rest
         if (Math.abs(dx) < 1 && Math.abs(dy) < 1 ) {
             if(state == HumanState.MOVING)
                 transitionTo(HumanState.RESTING);
@@ -144,7 +144,7 @@ public abstract class Human extends Pane {
         }
 
 
-        // Normalize direction for consistent speed
+        // normalize
         double dist = Math.hypot(dx, dy);
         double stepX = (dx / dist) * speed;
         double stepY = (dy / dist) * speed;

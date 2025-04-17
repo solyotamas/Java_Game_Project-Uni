@@ -3,6 +3,7 @@ package classes.entities.animals;
 import classes.entities.Direction;
 import classes.landforms.Lake;
 import classes.landforms.plants.Plant;
+import classes.terrains.River;
 import classes.terrains.Terrain;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -51,6 +52,11 @@ public abstract class Animal extends Pane {
     private int frameHeight;
     protected Direction currentDirection = Direction.RIGHT;
 
+    //State images
+    //private ImageView stateIconView;
+    //private static final Image dropletImage = new Image(Animal.class.getResource("/images/droplet.png").toExternalForm()); // Put in resources
+
+
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price)  {
         this.frameWidth = frameWidth;
@@ -78,6 +84,16 @@ public abstract class Animal extends Pane {
         //state
         this.state = AnimalState.IDLE;
 
+        //state images
+        /*
+        stateIconView = new ImageView(dropletImage);
+        stateIconView.setFitWidth(48); // Adjust size as needed
+        stateIconView.setFitHeight(48);
+        stateIconView.setVisible(false); // Hide by default
+        stateIconView.setLayoutX(imageView.getLayoutX() + imageView.getFitWidth() / 2 - stateIconView.getFitWidth() / 2);
+        stateIconView.setLayoutY(imageView.getLayoutY() - 15);
+        getChildren().add(stateIconView);
+        */
 
 
     }
@@ -249,10 +265,13 @@ public abstract class Animal extends Pane {
             state = AnimalState.IDLE;
         }
     }
+
     public void drink(){
         this.changeThirst(0.5); //+10 / mp
+        //stateIconView.setVisible(true);
         if (thirst > 99.0) {
             state = AnimalState.IDLE;
+            //stateIconView.setVisible(false);
         }
     }
     public void changeThirst(double val){
@@ -268,6 +287,8 @@ public abstract class Animal extends Pane {
         this.start = startingTerrain;
 
         Terrain targetTerrain = desiredTerrains.get(new Random().nextInt(desiredTerrains.size()));
+        System.out.println("Preparing path to " + targetTerrain.getClass().getSimpleName() +
+                " | Available targets: " + desiredTerrains.size());
         this.target = targetTerrain;
     }
     public Terrain pickStartingTerrain(Terrain[][] map){
@@ -312,7 +333,10 @@ public abstract class Animal extends Pane {
         }
     }
     private AnimalState determineStateFromTarget(Terrain target) {
-        if (target.hasLandform()) {
+        if(target instanceof River){
+            return AnimalState.DRINKING;
+        }
+        else if (target.hasLandform()) {
             if (target.getLandform() instanceof Lake) return AnimalState.DRINKING;
             if (target.getLandform() instanceof Plant) return AnimalState.EATING;
         }
