@@ -420,7 +420,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Bush 50$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Bush 500$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -469,7 +469,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Lake 200$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Lake 2500$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -518,7 +518,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Tree 70$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Tree 800$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -567,7 +567,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Grass 20$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Grass 300$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -613,7 +613,7 @@
                                     <Insets bottom="7.0" top="15.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Jeep 300$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Jeep 5000$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -657,7 +657,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Road 100$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Road 200$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>

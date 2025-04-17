@@ -39,7 +39,7 @@ public class Ranger extends Human {
     }
 
     public boolean isDueForPayment(double currentGameHour) {
-        return currentGameHour - lastPaidHour >= 24; // 30 days * 24 hours
+        return currentGameHour - lastPaidHour >= 720; // 30 days * 24 hours
     }
 
 }

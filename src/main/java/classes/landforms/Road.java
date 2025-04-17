@@ -1,7 +1,6 @@
 package classes.landforms;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 
 public class Road extends Landform {
@@ -11,16 +10,18 @@ public class Road extends Landform {
     public static final int WIDTH_IN_TILES = 1;
     public static final int HEIGHT_IN_TILES = 1;
 
+    private static final int price = 200;
+
     public Road(double x, double y) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES,roadImages[0], depth);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES,roadImages[0], depth, price);
     }
 
     public Road(double x, double y, double placeHolder) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES,roadImages[0], depth);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES,roadImages[0], depth, price);
     }
 
     public Road(double x, double y, double placeHolder1, Image placeHolder2) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, roadImages[0], depth);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, roadImages[0], depth, price);
     }
 
 

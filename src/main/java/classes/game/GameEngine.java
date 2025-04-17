@@ -44,16 +44,20 @@ public class GameEngine {
     private GameBoard gameBoard;
 
     private double spentTime;
+    private double firstConditionMetTime;
+    private double winningHours;
+    private double winningHoursNeeded;
+
     protected ArrayList<Carnivore> carnivores;
     protected ArrayList<Herbivore> herbivores;
     protected ArrayList<Tourist> tourists;
     private int jeepCount ;
     private int ticketPrice;
-    private int money = 100000;
+    private int money;
     private final Random rand = new Random();
 
     private boolean canCheckForLose = false;
-
+    private boolean canCheckForWin = false;
 
 
     public GameEngine(GameController gameController, Difficulty difficulty, Pane terrainLayer, Pane uiLayer) {
@@ -63,7 +67,6 @@ public class GameEngine {
         this.gameBoard = new GameBoard(terrainLayer, uiLayer);
         gameBoard.setupGroundBoard();
         gameBoard.generatePlants(rand.nextInt(10) + 10);
-
 
         carnivores = new ArrayList<Carnivore>();
         herbivores = new ArrayList<Herbivore>();
@@ -75,29 +78,38 @@ public class GameEngine {
         jeeps = new ArrayList<Jeep>();
         roads = new ArrayList<Road>();
         plants = new ArrayList<Plant>();
+        lakes = new ArrayList<Lake>();
 
         choose_x = Math.random() < 0.5;
         frameCounter = 0;
 
-        //todo: actual értékek
         entrance = new Pair<>(0, 0);
         exit = new Pair<>(0, 0);
         conditions = new ArrayList<Integer>();
         if (difficulty == EASY) {
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
+            conditions.add(10000); // minimum pénz
+            conditions.add(2);    // növényevők száma
+            conditions.add(2);     // ragadozók száma
+            conditions.add(1);    // turisták száma havonta
+            winningHoursNeeded = 24; // 3 hónapig tartani
+            money = 15000;
+            System.out.println("A nyeréshez szükséges legalább 10 000$-t, 2 növényevőt, 2 ragadozót és 1 turistát 1 napig megtartanod.");
         } else if (difficulty == MEDIUM) {
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
-        } else {
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
-            conditions.add(0);
+            conditions.add(20000);
+            conditions.add(3);
+            conditions.add(3);
+            conditions.add(2);
+            winningHoursNeeded = 48;
+            money = 10000;
+            System.out.println("A nyeréshez szükséges legalább 20 000$-t, 3 növényevőt, 3 ragadozót és 2 turistát 2 napig megtartanod.");
+        } else { // HARD
+            conditions.add(30000);
+            conditions.add(4);
+            conditions.add(4);
+            conditions.add(3);
+            winningHoursNeeded = 72;
+            money = 5000;
+            System.out.println("A nyeréshez szükséges legalább 30 000$-t, 4 növényevőt, 4 ragadozót és 3 turistát 3 napig megtartanod.");
         }
     }
 
@@ -109,6 +121,7 @@ public class GameEngine {
 
                 updateAnimalStates();
                 updateHumanStates();
+                startJeep();
                 updateJeepPositions();
                 sortUiLayer();
 
@@ -119,7 +132,9 @@ public class GameEngine {
                 if (gameOver()) {
                     gameController.openLosePane();
                 } else if (gameWon()) {
+                    System.out.println("Nyertél!");
                     //handleGameWin();
+                    //gameController.openWinPane();
                 }
 
                 // UI sync, Display things
@@ -204,7 +219,7 @@ public class GameEngine {
                     herbivore.setPath(path);
                     herbivore.transitionTo(MOVING);
 
-                    System.out.println(herbivore.getPath());
+                   //System.out.println(herbivore.getPath());
                 }
             }
         }
@@ -212,7 +227,7 @@ public class GameEngine {
         for (Carnivore carnivore : carnivores){
             carnivore.changeThirst(-0.01);
             carnivore.changeHunger(-0.02);
-            System.out.println(carnivore.getHunger());
+            //System.out.println(carnivore.getHunger());
 
             switch (carnivore.getState()){
                 case MOVING -> carnivore.moveTowardsTarget();
@@ -238,7 +253,7 @@ public class GameEngine {
                         path = gameBoard.findPathDijkstra(carnivore.getStart(), carnivore.getTarget());
                         carnivore.setPath(path);
                         carnivore.transitionTo(MOVING);
-                        System.out.println(carnivore.getPath());
+                        //System.out.println(carnivore.getPath());
                     } else if (carnivore.getHunger() < 25.0) {
                         carnivore.choosePrey(herbivores);
                         carnivore.transitionTo(HUNTING);
@@ -248,7 +263,7 @@ public class GameEngine {
                         path = gameBoard.findPathDijkstra(carnivore.getStart(), carnivore.getTarget());
                         carnivore.setPath(path);
                         carnivore.transitionTo(MOVING);
-                        System.out.println(carnivore.getPath());
+                        //System.out.println(carnivore.getPath());
                     }
                 }
             }
@@ -320,26 +335,33 @@ public class GameEngine {
         money -= 5000;
         ranger.setLastPaidHour(spentTime);
     }
+    public void unemployRanger(Ranger ranger) {
+        rangers.remove(ranger);
+    }
     // =====
 
 
     // ==== JEEPS
     public void buyJeep() {
-/*        if (touristCount >= 4) {
-            touristCount -= 4;
-            startJeep();
+        if (money >= 5000) {
+            jeepCount++;
+            money -= 5000; //TODO jeep.getPrice() valahogy használni?
         } else {
-            System.out.println("Not enough tourists");
-        }*/
-        startJeep();
+            System.out.println("Not enough money");
+        }
     }
     public void startJeep() {
-        jeepCount++;
-        Jeep jeep = new Jeep(150, 0);
-        // jeep = new Jeep(1770, 900);
-        jeeps.add(jeep);
-        gameBoard.getUiLayer().getChildren().add(jeep);
-        gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, tourists.size(), ticketPrice, money);
+        if (tourists.size() >= 4 && jeepCount >= 1) {
+            for (int i = 0; i < 4; i++) {
+                tourists.removeLast();
+            }
+            Jeep jeep = new Jeep(150, 0);
+            // jeep = new Jeep(1770, 900);
+            jeeps.add(jeep);
+            gameBoard.getUiLayer().getChildren().add(jeep);
+            gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, tourists.size(), ticketPrice, money);
+        }
+
     }
     public void updateJeepPositions() {
         for (Jeep jeep : jeeps) {
@@ -349,9 +371,21 @@ public class GameEngine {
     // =====
 
 
-    public void buyPlant(Landform placesPlant) {
-        plants.add((Plant) placesPlant); //konverzió elég funky
-        //System.out.println("plant added to list");
+
+    // ==== SELLING, BUYING
+    public void buyPlant(Plant plant) {
+        plants.add(plant);
+        money -= plant.getPrice();
+    }
+
+    public void buyLake(Lake lake) {
+        lakes.add(lake);
+        money -= lake.getPrice();
+    }
+
+    public void buyRoad(Road road) {
+        roads.add(road);
+        money -= road.getPrice();
     }
 
     //public void buyAnimal(Animal<? extends Pane> animal) {
@@ -361,9 +395,9 @@ public class GameEngine {
         } else if (animal instanceof Carnivore carnivore) {
             this.carnivores.add(carnivore);
         }
+        money -= animal.getPrice();
         canCheckForLose = true;
     }
-
 
     //public void sellAnimal(Animal<? extends Pane> animal) {
     public void sellAnimal(Animal animal) {
@@ -377,18 +411,13 @@ public class GameEngine {
 
         System.out.println("You sold an animal for " + animal.getPrice() + "$");
     }
+    // =====
 
-
-    public int winningDays;
-    public Difficulty difficulty;
-    public int animalCount;
 
     public Pair<Integer, Integer> entrance;
     public Pair<Integer, Integer> exit;
-    public ArrayList<Plant> plants;
-    //todo: nagyon random a típus
-    public ArrayList<Pair<Integer, Integer>> waterSources;
 
+    public Difficulty difficulty;
     private Speed speed;
     private ArrayList<Integer> conditions;
 
@@ -396,19 +425,53 @@ public class GameEngine {
     private ArrayList<Poacher> poachers;
     private ArrayList<Ranger> rangers;
     private ArrayList<Jeep> jeeps;
-    public ArrayList<Road> roads;
+    private ArrayList<Road> roads;
+    public ArrayList<Plant> plants;
+    public ArrayList<Lake> lakes;
 
     private boolean choose_x;
     private int frameCounter;
 
 
+    // ==== GAME WINNING, LOSING
     public boolean gameOver() {
         return (canCheckForLose && (herbivores.isEmpty() && carnivores.isEmpty())) || money <= 0;
     }
 
     public boolean gameWon() {
+        // First time reaching the required conditions
+        if (!canCheckForWin && checkConditions()) {
+            canCheckForWin = true;
+            firstConditionMetTime = spentTime;
+            //System.out.println("Conditions met! Start counting!");
+        }
+
+        // If any condition fails
+        if (canCheckForWin && !checkConditions()) {
+            winningHours = 0;
+            canCheckForWin = false;
+            //System.out.println("Conditions fail!");
+        }
+
+        if (canCheckForWin && checkConditions()) {
+            if ((spentTime - firstConditionMetTime) >= winningHoursNeeded) {
+                return true;
+            } else {
+                winningHours = spentTime - firstConditionMetTime;
+                //System.out.println("Conditions met! Winning hours: " + winningHours);
+            }
+        }
+
         return false;
     }
+
+    private boolean checkConditions() {
+        return money >= conditions.get(0)
+                && herbivores.size() >= conditions.get(1)
+                && carnivores.size() >= conditions.get(2)
+                && tourists.size() >= conditions.get(3);
+    }
+    // =====
 
     public GameBoard getGameBoard(){
         return this.gameBoard;

@@ -212,7 +212,7 @@ public class GameBoard{
         for (int x = 0; x < terrainGrid.length; x++) {
             for (int y = 0; y < terrainGrid[0].length; y++) {
                 Terrain terrain = terrainGrid[x][y];
-                if (terrain != null && terrain.hasLandform() && terrain.getLandform() instanceof Lake) {
+                if (terrain != null && ((terrain.hasLandform() && terrain.getLandform() instanceof Lake) || terrain instanceof River)) {
                     lakeTiles.add(terrain);
                 }
             }

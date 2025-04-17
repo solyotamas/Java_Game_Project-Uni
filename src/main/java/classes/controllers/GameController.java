@@ -121,8 +121,8 @@ public class GameController {
         closeShopPane();
 
 
-        boolean isRoad = Road.class.isAssignableFrom(landformClass);
-        int[] remainingRoads = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
+        boolean isRoad = Road.class.isAssignableFrom(landformClass); // If road, remainingPlacableTiles is 10, otherwise 1
+        int[] remainingPlacableTiles = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
 
         //For ghostImage pic to be equivalent of the image of the instance that will be placed
         Landform tempInstance = null;
@@ -180,13 +180,14 @@ public class GameController {
                     gameEngine.getGameBoard().placeLandform(placedLandform, tileX, tileY);
                     uiLayer.getChildren().add(placedLandform);
                     if (placedLandform instanceof Plant) {
-                        gameEngine.buyPlant(placedLandform);
-                        //System.out.println("buyPlant called");
+                        gameEngine.buyPlant((Plant) placedLandform);
+                    } else if (placedLandform instanceof Lake) {
+                        gameEngine.buyLake((Lake) placedLandform);
                     }
-                    remainingRoads[0]--;
+                    remainingPlacableTiles[0]--;
 
-                    if (isRoad && placedLandform instanceof Road road) {
-                        gameEngine.roads.add(road); // Itt add hozzá közvetlenül!
+                    if (isRoad) {
+                        gameEngine.buyRoad((Road) placedLandform);
                     }
                 }
             } catch (Exception ex) {
@@ -194,7 +195,7 @@ public class GameController {
             }
 
             //If road, place 10
-            if (!isRoad || remainingRoads[0] <= 0) {
+            if (!isRoad || remainingPlacableTiles[0] <= 0) {
 
                 ghostLayer.getChildren().remove(ghostImage);
                 ghostLayer.setOnMouseMoved(null);
@@ -306,6 +307,7 @@ public class GameController {
 
         });
     }
+
     private boolean canPlaceAnimal(Animal animalInstance, double placeX, double placeY) {
 
         double imgWidth = animalInstance.getImageView().getFitWidth();
@@ -469,7 +471,11 @@ public class GameController {
         currentInfoWindowRanger = new InfoWindowRanger(
                 clickedRanger,
                 () -> {
-                    //...
+                    // Unemploy action
+                    gameEngine.unemployRanger(clickedRanger);
+                    uiLayer.getChildren().remove(clickedRanger);
+
+                    closeRangerWindow(clickedRanger);
                 },
                 () -> {
                     //...
@@ -488,15 +494,6 @@ public class GameController {
             currentInfoWindowRanger = null;
         }
         ranger.resume();
-    }
-    private void choosePrey() {
-        System.out.println("choosing prey for " + this.getClass());
-        //TODO choose prey
-    }
-    private void unemploy() {
-        System.out.println(this.getClass() + " unemployed");
-
-        //TODO unemploy ranger
     }
     // =====
 
