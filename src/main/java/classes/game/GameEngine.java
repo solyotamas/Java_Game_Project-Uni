@@ -49,8 +49,10 @@ public class GameEngine {
     protected ArrayList<Tourist> tourists;
     private int jeepCount ;
     private int ticketPrice;
-    private int money = 5000;
+    private int money = 100000;
     private final Random rand = new Random();
+
+    private boolean canCheckForLose = false;
 
 
 
@@ -63,7 +65,6 @@ public class GameEngine {
         gameBoard.generatePlants(rand.nextInt(10) + 10);
 
 
-        money = 5000;
         carnivores = new ArrayList<Carnivore>();
         herbivores = new ArrayList<Herbivore>();
         tourists = new ArrayList<Tourist>();
@@ -101,8 +102,6 @@ public class GameEngine {
     }
 
     public void gameLoop() {
-        //System.out.println(difficulty);
-
         savePlants();
 
         Timeline timeline = new Timeline(
@@ -118,7 +117,7 @@ public class GameEngine {
 
                 // Check win/lose conditions
                 if (gameOver()) {
-                    //handleGameOver();
+                    gameController.openLosePane();
                 } else if (gameWon()) {
                     //handleGameWin();
                 }
@@ -133,7 +132,7 @@ public class GameEngine {
         timeline.play();
     }
 
-    //===SPAWNING TOURISTS
+    // ==== SPAWNING TOURISTS
     private void maybeSpawnTourist() {
         double chancePerSecond = 0.01 * (herbivores.size() + (carnivores.size()) * 2);
         double spawnChancePerTick = chancePerSecond / 20.0;
@@ -149,9 +148,9 @@ public class GameEngine {
         }
 
     }
-    //==========
+    // =====
 
-    //===VISUALS
+    // ==== VISUALS
     private void sortUiLayer() {
         Pane uiLayer = gameBoard.getUiLayer();
 
@@ -178,13 +177,14 @@ public class GameEngine {
         else
             return 0;
     }
-    //==========
+    // =====
 
 
+    // ==== UPDATE STATES
     private void updateAnimalStates() {
         for (Herbivore herbivore : herbivores) {
-            herbivore.changeThirst(-0.01);
-            herbivore.changeHunger(-0.03);
+            herbivore.changeThirst(-0.3);
+            herbivore.changeHunger(-0.5);
 
             switch(herbivore.getState()){
                 case MOVING -> herbivore.moveTowardsTarget();
@@ -267,6 +267,10 @@ public class GameEngine {
                 }
             }
 
+            if (ranger.isDueForPayment(spentTime)) {
+                payRanger(ranger);
+            }
+
         }
         for (Poacher poacher : poachers) {
             switch (poacher.getState()){
@@ -302,17 +306,24 @@ public class GameEngine {
         }
 
     }
+    // =====
 
 
-
-    //RANGER
+    // ==== RANGERS
     public void buyRanger(Ranger ranger){
+        ranger.setLastPaidHour(spentTime);
         this.rangers.add(ranger);
+        payRanger(ranger);
     }
 
+    public void payRanger(Ranger ranger) {
+        money -= 5000;
+        ranger.setLastPaidHour(spentTime);
+    }
+    // =====
 
 
-    //JEEP
+    // ==== JEEPS
     public void buyJeep() {
 /*        if (touristCount >= 4) {
             touristCount -= 4;
@@ -335,6 +346,8 @@ public class GameEngine {
             jeep.autoMove(roads);
         }
     }
+    // =====
+
 
     public void buyPlant(Landform placesPlant) {
         plants.add((Plant) placesPlant); //konverzió elég funky
@@ -348,6 +361,7 @@ public class GameEngine {
         } else if (animal instanceof Carnivore carnivore) {
             this.carnivores.add(carnivore);
         }
+        canCheckForLose = true;
     }
 
 
@@ -361,7 +375,7 @@ public class GameEngine {
             carnivores.remove(animal);
         }
 
-        System.out.println("Eladtál egy állatot " + animal.getPrice() + " pénzért.");
+        System.out.println("You sold an animal for " + animal.getPrice() + "$");
     }
 
 
@@ -388,12 +402,8 @@ public class GameEngine {
     private int frameCounter;
 
 
-
-
-
-
     public boolean gameOver() {
-        return false;
+        return (canCheckForLose && (herbivores.isEmpty() && carnivores.isEmpty())) || money <= 0;
     }
 
     public boolean gameWon() {
@@ -407,13 +417,6 @@ public class GameEngine {
     public void addTourist(Tourist t){
         tourists.add(t);
     }
-
-    public void pays(Ranger ranger) {
-        //rangers.indexOf(ranger).paid = true;
-        money = money - 100;
-
-    }
-
 
     public void savePlants() {
         for (Node node : gameBoard.getUiLayer().getChildren()) {

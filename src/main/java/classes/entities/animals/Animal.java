@@ -268,6 +268,7 @@ public abstract class Animal extends Pane {
         this.start = startingTerrain;
 
         Terrain targetTerrain = desiredTerrains.get(new Random().nextInt(desiredTerrains.size()));
+
         this.target = targetTerrain;
     }
     public Terrain pickStartingTerrain(Terrain[][] map){
@@ -318,7 +319,7 @@ public abstract class Animal extends Pane {
         }
         return AnimalState.RESTING;
     }
-    //=====================================
+    // =====
 
 
 
@@ -349,10 +350,6 @@ public abstract class Animal extends Pane {
     /*
     public abstract void pickNewTarget(ArrayList<T> panes);
     */
-    public void sellAnimal(){
-        System.out.println(this.getClass() + " sold");
-        //TODO sell animal
-    }
 
 
     //Getters, Setters

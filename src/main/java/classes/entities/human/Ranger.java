@@ -13,6 +13,7 @@ public class Ranger extends Human {
     private static final int frameHeight = 55;//106;
     private static double speed = 0.8;
     private static final String imgURL = "/images/animated/tourist.png";
+    private double lastPaidHour;
 
 
     public Ranger(double x, double y){
@@ -33,7 +34,12 @@ public class Ranger extends Human {
 
     }
 
+    public void setLastPaidHour(double lastPaidHour) {
+        this.lastPaidHour = lastPaidHour;
+    }
 
-
+    public boolean isDueForPayment(double currentGameHour) {
+        return currentGameHour - lastPaidHour >= 24; // 30 days * 24 hours
+    }
 
 }

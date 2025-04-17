@@ -24,7 +24,6 @@ import classes.landforms.plants.Grass;
 import classes.landforms.plants.Plant;
 import classes.landforms.plants.Tree;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -72,6 +71,8 @@ public class GameController {
     private Pane shopPane;
     @FXML
     private AnchorPane saveOverlay;
+    @FXML
+    private AnchorPane losePane;
 
     //Top and bottom bar UI
     @FXML
@@ -93,15 +94,11 @@ public class GameController {
     @FXML
     private Label moneyLabel;
 
-    @FXML
-    public void initialize() {
-        //TODO somehow remove runLater but still get the right difficulty and not null
-        Platform.runLater(() -> {
-            this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer);
-            gameEngine.gameLoop();
 
-        });
-
+    public void startGame() {
+        this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer);
+        System.out.println(difficulty);
+        gameEngine.gameLoop();
     }
 
     public void setDifficulty(Difficulty difficulty) {
@@ -118,6 +115,7 @@ public class GameController {
 
     }
 
+    // ==== LANDFORMS
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
         closeShopPane();
 
@@ -229,9 +227,10 @@ public class GameController {
         gameEngine.buyJeep();
         closeShopPane();
     }}
+    // =====
 
 
-    //ANIMALS
+    // ==== ANIMALS
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
         closeShopPane();
         ghostLayer.setVisible(true);
@@ -361,8 +360,10 @@ public class GameController {
     public void removeHerbivore(Herbivore herbivore){
         uiLayer.getChildren().remove(herbivore);
     }
+    // =====
 
-    //RANGERS
+
+    // ==== RANGERS
     @FXML
     private void buyRanger() {
         closeShopPane();
@@ -418,11 +419,10 @@ public class GameController {
             uiLayer.setMouseTransparent(false);
         });
     }
+    // =====
 
 
-
-
-    //infowindows
+    // ==== INFO WINDOWS
     private void handleAnimalClicked(MouseEvent event) {
         if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
             return;
@@ -497,7 +497,7 @@ public class GameController {
 
         //TODO unemploy ranger
     }
-
+    // =====
 
     // ==== TOURISTS
     public Tourist spawnTourist(){
@@ -526,10 +526,10 @@ public class GameController {
     public void removeTourist(Tourist tourist){
         uiLayer.getChildren().remove(tourist);
     }
-    // ======
+    // =====
 
 
-    //UI handling
+    // ==== UI HANDLING
     //Display
     public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int  money){
         //STATS
@@ -554,6 +554,11 @@ public class GameController {
         shopPane.setVisible(false);
     }
 
+    //Win appear
+    public void openLosePane() {
+        losePane.setVisible(true);
+    }
+
     //Save screen pane
     public void showSaveOverlay() {
         saveOverlay.setVisible(true);
@@ -563,14 +568,15 @@ public class GameController {
     }
 
     //SWITCHING BACK TO MAIN
-    public void switchToMain(ActionEvent event) throws IOException {
+    public void switchToMain() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/main_screen.fxml"));
         Parent root = loader.load();
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = (Stage) ((Node) uiLayer).getScene().getWindow();
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
         stage.show();
     }
+    // =====
 }

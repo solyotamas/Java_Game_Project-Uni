@@ -93,3 +93,27 @@
     -fx-border-radius: 9px;
     -fx-background-radius: 12px;
 }
+
+.losePane {
+    -fx-border-color: #7F4F27;
+    -fx-border-width: 4px;
+    -fx-background-color: radial-gradient(center 50% 50%, radius 80%, #F7BB5E, #EC9042);
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-pref-width: 600px;
+    -fx-pref-height: 400px;
+    -fx-alignment: center; /* Ha StackPane lenne, ez működne, de VBox esetén az elrendezőben kezeljük */
+}
+
+.gameOverText {
+    -fx-font-size: 58px;
+    -fx-fill: white;
+    -fx-font-family: "Franklin Gothic Demi";
+}
+
+.reasonOfDeathText {
+    -fx-font-size: 24px;
+    -fx-fill: #3E2415;
+    -fx-font-family: "Calibri";
+    -fx-font-weight: bold;
+}
