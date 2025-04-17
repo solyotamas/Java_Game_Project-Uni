@@ -24,6 +24,7 @@ import classes.landforms.plants.Grass;
 import classes.landforms.plants.Plant;
 import classes.landforms.plants.Tree;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -568,11 +569,11 @@ public class GameController {
     }
 
     //SWITCHING BACK TO MAIN
-    public void switchToMain() throws IOException {
+    public void switchToMain(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/main_screen.fxml"));
         Parent root = loader.load();
 
-        Stage stage = (Stage) ((Node) uiLayer).getScene().getWindow();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
 
         stage.setScene(scene);
