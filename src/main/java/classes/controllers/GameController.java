@@ -378,36 +378,37 @@ public class GameController {
         ImageView ghostImage = new ImageView(rangerImage);
         ghostImage.setOpacity(0.5);
         ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(50);
-        ghostImage.setFitHeight(50);
-
+        ghostImage.setFitWidth(28);
+        ghostImage.setPreserveRatio(true);
 
         ghostLayer.getChildren().add(ghostImage);
-
-        //Disable clicks on top layer
-        uiLayer.setMouseTransparent(true);
+        uiLayer.setMouseTransparent(true); // Disable clicks on uiLayer
 
         ghostLayer.setOnMouseMoved(e -> {
             ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
-            ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
+            ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2) - 18);
         });
 
         ghostLayer.setOnMouseClicked(e -> {
             e.consume();
+
             try {
                 double placeX = e.getX();
                 double placeY = e.getY();
 
                 Ranger rangerInstance = new Ranger(placeX, placeY);
 
-                Platform.runLater(() -> {
-                    rangerInstance.setOnMouseClicked(this::handleRangerClicked);
-                });
+                if (gameEngine.haveEnoughMoneyForRanger(rangerInstance) &&
+                        canPlaceRanger(rangerInstance, placeX, placeY)) {
 
-                uiLayer.getChildren().add(rangerInstance);
-                gameEngine.buyRanger(rangerInstance);
+                    Platform.runLater(() -> {
+                        rangerInstance.setOnMouseClicked(this::handleRangerClicked);
+                    });
 
-                //System.out.println("Added ranger at " + placeX + ", " + placeY);
+                    gameEngine.buyRanger(rangerInstance);
+                    uiLayer.getChildren().add(rangerInstance);
+                }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -416,12 +417,30 @@ public class GameController {
             ghostLayer.setOnMouseMoved(null);
             ghostLayer.setOnMouseClicked(null);
 
-            //Enable clicks on top layer
-            //ghostLayer.setVisible(false);
+            ghostLayer.setVisible(false);
             ghostLayer.setMouseTransparent(true);
             uiLayer.setMouseTransparent(false);
         });
     }
+
+    private boolean canPlaceRanger(Ranger rangerInstance, double placeX, double placeY) {
+
+        double imgWidth = rangerInstance.getImageView().getFitWidth();
+        double imgHeight = rangerInstance.getImageView().getFitHeight();
+
+        double leftX = placeX - imgWidth / 2.0;
+        double rightX = placeX + imgWidth / 2.0;
+        double topY = placeY - imgHeight / 2.0;
+        double bottomY = placeY + imgHeight / 2.0;
+
+        return (
+                leftX >= TOURIST_SECTION &&
+                        rightX <= SCREEN_WIDTH - TOURIST_SECTION &&
+                        topY >= 0 &&
+                        bottomY <= SCREEN_HEIGHT
+        );
+    }
+
     // =====
 
 

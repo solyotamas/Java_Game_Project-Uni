@@ -9,10 +9,10 @@ import java.util.Random;
 
 public class Ranger extends Human {
 
-    private static final int frameWidth = 40;//104;
-    private static final int frameHeight = 55;//106;
+    private static final int frameWidth = 36;//104;
+    private static final int frameHeight = 46;//106;
     private static double speed = 0.8;
-    private static final String imgURL = "/images/animated/tourist.png";
+    private static final String imgURL = "/images/animated/ranger.png";
     private double lastPaidHour;
 
 

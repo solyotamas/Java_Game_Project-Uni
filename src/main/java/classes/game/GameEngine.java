@@ -490,6 +490,10 @@ public class GameEngine {
     }
 
     public boolean haveEnoughMoneyForAnimal(Animal animalInstance) {
-        return true;
+        return money >= animalInstance.getPrice();
+    }
+
+    public boolean haveEnoughMoneyForRanger(Ranger rangerInstance) {
+        return money >= 5000;
     }
 }
