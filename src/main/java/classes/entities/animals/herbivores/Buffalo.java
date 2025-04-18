@@ -6,8 +6,8 @@ public class Buffalo extends Herbivore {
 
     //just so it looks clean
     private static final int price = 350;
-    private static final int frameWidth = 104;
-    private static final int frameHeight = 106;
+    private static final int frameWidth = 78;
+    private static final int frameHeight = 64;
     private static final double speed = 0.5;
     private static final String imgURL = "/images/animated/buffalo.png";
 

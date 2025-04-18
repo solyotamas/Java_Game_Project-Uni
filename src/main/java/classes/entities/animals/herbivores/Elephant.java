@@ -6,8 +6,8 @@ public class Elephant extends Herbivore {
 
     //just so it looks clean
     private static final int price = 500;
-    private static final int frameWidth = 104;
-    private static final int frameHeight = 106;
+    private static final int frameWidth = 90;
+    private static final int frameHeight = 86;
     private static final double speed = 0.4;
     private static final String imgURL = "/images/animated/elephant.png";
 

@@ -77,8 +77,7 @@ public class GameEngine {
         plants = new ArrayList<Plant>();
         lakes = new ArrayList<Lake>();
 
-        choose_x = Math.random() < 0.5;
-        frameCounter = 0;
+
 
         entrance = new Pair<>(0, 0);
         exit = new Pair<>(0, 0);
@@ -112,7 +111,6 @@ public class GameEngine {
 
     public void gameLoop() {
         savePlants();
-        gameController.openWinPane();
 
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(50), e -> {
@@ -326,7 +324,6 @@ public class GameEngine {
         this.rangers.add(ranger);
         payRanger(ranger);
     }
-
     public void payRanger(Ranger ranger) {
         money -= 5000;
         ranger.setLastPaidHour(spentTime);
@@ -426,8 +423,7 @@ public class GameEngine {
     public ArrayList<Plant> plants;
     public ArrayList<Lake> lakes;
 
-    private boolean choose_x;
-    private int frameCounter;
+
 
 
     // ==== GAME WINNING, LOSING
