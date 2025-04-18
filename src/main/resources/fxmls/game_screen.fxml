@@ -14,9 +14,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -1352,9 +1352,9 @@
    <AnchorPane fx:id="losePane" layoutX="660.0" layoutY="340.0" prefHeight="400.0" prefWidth="600.0" styleClass="losePane" stylesheets="@../css/game_screen.css" visible="false">
 
       <children>
-         <VBox fx:id="vbox" alignment="CENTER" layoutX="153.0" layoutY="41.0" spacing="15.0">
+         <VBox alignment="CENTER" layoutX="153.0" layoutY="41.0" spacing="15.0">
 
-            <Text fx:id="gameOverText" styleClass="gameOverText" text="Game Over!">
+            <Text styleClass="gameOverText" text="Game Over!">
                <effect>
                   <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                      <color>
@@ -1364,15 +1364,62 @@
                </effect>
             </Text>
 
-            <Text fx:id="reasonText" styleClass="reasonOfDeathText" text="All your animals have died!" />
+            <Text styleClass="reasonOfDeathText" text="All your animals have died!" />
 
-            <ImageView fx:id="imageView" fitHeight="130.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="130.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../images/loose.png" />
                </image>
             </ImageView>
 
-            <Button fx:id="backButton" onAction="#switchToMain" styleClass="fancyBtn">
+            <Button onAction="#switchToMain" styleClass="fancyBtn">
+               <graphic>
+                  <Text fill="WHITE" text="Back To Main Menu">
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
+                           <color>
+                              <Color red="0.2431" green="0.1411" blue="0.0823" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                     <font>
+                        <Font name="Franklin Gothic Demi" size="24.0" />
+                     </font>
+                  </Text>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+
+         </VBox>
+      </children>
+   </AnchorPane>
+
+   <AnchorPane fx:id="winPane" layoutX="660.0" layoutY="340.0" prefHeight="400.0" prefWidth="600.0" styleClass="losePane" stylesheets="@../css/game_screen.css" visible="true">
+
+      <children>
+         <VBox alignment="CENTER" layoutX="87.0" layoutY="41.0" spacing="15.0">
+
+            <Text styleClass="gameOverText" text="You won!">
+               <effect>
+                  <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
+                     <color>
+                        <Color red="0.2431" green="0.1411" blue="0.0823" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Text>
+
+            <Text styleClass="reasonOfDeathText" text="Congratulations, you completed the game!" />
+
+            <ImageView fitHeight="130.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/winelephant.png" />
+               </image>
+            </ImageView>
+
+            <Button onAction="#switchToMain" styleClass="fancyBtn">
                <graphic>
                   <Text fill="WHITE" text="Back To Main Menu">
                      <effect>

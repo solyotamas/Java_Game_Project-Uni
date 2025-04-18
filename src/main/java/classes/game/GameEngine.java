@@ -19,10 +19,7 @@ import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 import static classes.Difficulty.EASY;
 import static classes.Difficulty.MEDIUM;
@@ -115,6 +112,7 @@ public class GameEngine {
 
     public void gameLoop() {
         savePlants();
+        gameController.openWinPane();
 
         Timeline timeline = new Timeline(
             new KeyFrame(Duration.millis(50), e -> {
@@ -132,9 +130,7 @@ public class GameEngine {
                 if (gameOver()) {
                     gameController.openLosePane();
                 } else if (gameWon()) {
-                    System.out.println("Nyertél!");
-                    //handleGameWin();
-                    //gameController.openWinPane();
+                    gameController.openWinPane();
                 }
 
                 // UI sync, Display things
@@ -363,9 +359,10 @@ public class GameEngine {
         }
 
     }
+
     public void updateJeepPositions() {
         for (Jeep jeep : jeeps) {
-            jeep.autoMove(roads);
+            //
         }
     }
     // =====

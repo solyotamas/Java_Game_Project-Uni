@@ -74,6 +74,8 @@ public class GameController {
     private AnchorPane saveOverlay;
     @FXML
     private AnchorPane losePane;
+    @FXML
+    private AnchorPane winPane;
 
     //Top and bottom bar UI
     @FXML
@@ -571,9 +573,14 @@ public class GameController {
         shopPane.setVisible(false);
     }
 
-    //Win appear
+    //Lose appear
     public void openLosePane() {
         losePane.setVisible(true);
+    }
+
+    //Win appear
+    public void openWinPane() {
+        winPane.setVisible(true);
     }
 
     //Save screen pane

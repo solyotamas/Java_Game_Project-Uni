@@ -2,6 +2,8 @@ package classes.landforms;
 
 import javafx.scene.image.Image;
 
+import java.util.Objects;
+
 
 public class Road extends Landform {
     private static final double depth = Double.MIN_VALUE + 1;
@@ -31,6 +33,17 @@ public class Road extends Landform {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Road road = (Road) o;
+        return x == road.x && y == road.y;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
 
 }
