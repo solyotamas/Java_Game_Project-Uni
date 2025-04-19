@@ -191,6 +191,9 @@ public class GameEngine {
 
     // ==== UPDATE STATES
     private void updateAnimalStates() {
+        removeOldAnimals(herbivores, spentTime);
+        removeOldAnimals(carnivores, spentTime);
+
         for (Herbivore herbivore : herbivores) {
             herbivore.changeThirst(-0.3);
             herbivore.changeHunger(-0.5);
@@ -263,6 +266,24 @@ public class GameEngine {
             }
         }
     }
+
+    private void removeOldAnimals(List<? extends Animal> animals, double spentTime) {
+        Iterator<? extends Animal> it = animals.iterator();
+        List<Animal> animalsToRemove = new ArrayList<>();
+
+        while (it.hasNext()) {
+            Animal animal = it.next();
+            if (animal.oldEnoughToDie(spentTime)) {
+                animalsToRemove.add(animal);
+            }
+        }
+
+        for (Animal animal : animalsToRemove) {
+            animals.remove(animal);
+            gameBoard.getUiLayer().getChildren().remove(animal);
+        }
+    }
+
     private void updateHumanStates() {
 
         for (Ranger ranger : rangers) {
@@ -390,12 +411,13 @@ public class GameEngine {
             this.carnivores.add(carnivore);
         }
         money -= animal.getPrice();
+        animal.setBornAt(spentTime);
         canCheckForLose = true;
     }
 
     //public void sellAnimal(Animal<? extends Pane> animal) {
     public void sellAnimal(Animal animal) {
-        money += animal.getPrice();
+        money += animal.getSellPrice();
 
         if (animal instanceof Herbivore) {
             herbivores.remove(animal);

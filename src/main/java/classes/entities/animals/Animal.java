@@ -4,7 +4,6 @@ import classes.entities.Direction;
 import classes.landforms.Lake;
 import classes.landforms.plants.Plant;
 import classes.terrains.Terrain;
-import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -16,10 +15,11 @@ import java.util.*;
 
 public abstract class Animal extends Pane {
 
-    private int price;
+    protected int price;
     protected double x;
     protected double y;
     protected double speed;
+    protected int appetite;
 
 
     protected double restingTimePassed = 0.0;
@@ -33,7 +33,10 @@ public abstract class Animal extends Pane {
     int pathIndex = 0;
 
     //stats
-    private int age;
+    protected int age;
+    protected int startingAge = 5;
+    protected int lifeExpectancy;
+    protected double bornAt;
     protected double thirst = 100.0;
     protected double hunger = 100.0;
     //
@@ -52,11 +55,12 @@ public abstract class Animal extends Pane {
     protected Direction currentDirection = Direction.RIGHT;
 
 
-    public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price)  {
+    public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price, int lifeExpectancy)  {
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.speed = speed;
         this.price = price;
+        this.lifeExpectancy = lifeExpectancy;
 
         //Animation pictures
         this.spriteSheet = new Image(getClass().getResource(imgUrl).toExternalForm());
@@ -78,8 +82,6 @@ public abstract class Animal extends Pane {
         //state
         this.state = AnimalState.IDLE;
 
-
-
     }
 
     private void loadStaticDirectionImages() {
@@ -96,58 +98,6 @@ public abstract class Animal extends Pane {
             walkUpImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 3 * frameHeight, frameWidth, frameHeight);
         }
     }
-
-
-    /*
-    public void moveTowardsTarget(boolean choose_x) {
-        if (paused) {
-            return;
-        }
-
-        double dx = targetX - x;
-        double dy = targetY - y;
-
-        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
-            resting = true;
-            return;
-        }
-
-        if (choose_x) {
-            if ((Math.abs(dx) > 1)) {
-                if (dx > 0) {
-                    move(Direction.RIGHT, speed, 0);
-                } else {
-                    move(Direction.LEFT, -speed, 0);
-                }
-            }
-            else if (Math.abs(dy) > 1) {
-                if (dy > 0) {
-                    move(Direction.DOWN, 0, speed);
-                } else {
-                    move(Direction.UP, 0, -speed);
-                }
-            }
-        } else {
-            if (Math.abs(dy) > 1) {
-                if (dy > 0) {
-                    move(Direction.DOWN, 0, speed);
-                } else {
-                    move(Direction.UP, 0, -speed);
-                }
-            }
-            else if ((Math.abs(dx) > 1)) {
-                if (dx > 0) {
-                    move(Direction.RIGHT, speed, 0);
-                } else {
-                    move(Direction.LEFT, -speed, 0);
-                }
-            }
-        }
-
-    }*/
-    //eredeti moveTowards
-
-
 
     //===== ANIMAL MOVEMENT & ACTIVITIES =====
     //moving
@@ -321,42 +271,56 @@ public abstract class Animal extends Pane {
     }
     // =====
 
-
-
-
-//rest and pickNewTarget csak növényekre
-    /*public void rest(ArrayList<Plant> plants) {
-        restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
-
-        if (restingTimePassed >= restDuration) {
-            resting = false;
-            restingTimePassed = 0.0;
-            pickNewTarget(plants);
-        }
+    // ==== AGING, PRICE HANDLING
+    public void setBornAt(double currentGameHour) {
+        this.bornAt = currentGameHour;
+    }
+    public boolean oldEnoughToDie(double currentGameHour) {
+        agingAnimal(currentGameHour);
+        return this.age >= lifeExpectancy;
     }
 
-    public void pickNewTarget(ArrayList<Plant> plants) {
-        Random random = new Random();
-        Plant randomPlant = plants.get(random.nextInt(plants.size()));
+    public void agingAnimal(double currentGameHour) {
+        this.age = startingAge + (int) ((currentGameHour - bornAt) / 24.0);
 
-        this.targetX = randomPlant.getX() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getWidthInTiles(); //randomPlant.getLayoutX();
-        this.targetY = randomPlant.getY() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getHeightInTiles(); //randomPlant.getLayoutY();
-       // System.out.println("target picked: " + targetX +  " : " +targetY);
+        double ageRatio = (double) this.age / this.lifeExpectancy;
+        this.appetite = (int)(1 + ageRatio * 99);
+    }
 
-    }*/
+    public int getSellPrice() {
+        int ageSegment = lifeExpectancy / 5;
+        int base = this.price * 3 / 5;
 
-    /*
-    public abstract void rest(ArrayList<T> panes);*/
-    /*
-    public abstract void pickNewTarget(ArrayList<T> panes);
-    */
-
+        if (this.age <= ageSegment) {
+            return base * 5 / 5;
+        } else if (this.age <= 2 * ageSegment) {
+            return base * 4 / 5;
+        } else if (this.age <= 3 * ageSegment) {
+            return base * 3 / 5;
+        } else if (this.age <= 4 * ageSegment) {
+            return base * 2 / 5;
+        } else {
+            return base * 1 / 5;
+        }
+    }
+    // =====
 
     //Getters, Setters
+    public int getPrice() {
+        return this.price;
+    }
+    public int getAppetite() {
+        return this.appetite;
+    }
     public double getSpeed(){
         return this.speed;
     }
-    public int getPrice() { return this.price; }
+    public int getAge(){
+        return (int) this.age;
+    }
+    public int getLifeExpectancy(){
+        return this.lifeExpectancy;
+    }
     public int getFrameWidth(){
         return this.frameWidth;
     }
