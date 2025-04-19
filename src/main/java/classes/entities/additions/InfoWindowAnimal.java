@@ -16,7 +16,7 @@ public class InfoWindowAnimal extends VBox {
         this.getStyleClass().add("info-window");
         this.setPrefSize(180, 70);
         this.setLayoutX(animal.getLayoutX() - 85);
-        this.setLayoutY(animal.getLayoutY() - 120);
+        this.setLayoutY(animal.getLayoutY() - 130);
 
         //close
         Button closeButton = new Button("×");
