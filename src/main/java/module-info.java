@@ -12,4 +12,8 @@ module projekt.szafari {
     exports classes.terrains;
     opens classes.terrains to javafx.fxml;
     exports classes;
+
+    exports classes.entities.human;
+    opens classes.entities.human to javafx.fxml;
+
 }

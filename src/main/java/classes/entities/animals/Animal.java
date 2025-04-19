@@ -1,43 +1,45 @@
 package classes.entities.animals;
 
 import classes.entities.Direction;
-import classes.entities.human.Ranger;
+import classes.landforms.Lake;
 import classes.landforms.plants.Plant;
-import javafx.scene.control.Button;
+import classes.terrains.Terrain;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import java.util.*;
 
-import java.util.ArrayList;
-import java.util.Random;
+//public abstract class Animal<T extends Pane> extends Pane {
 
-public abstract class Animal<T extends Pane> extends Pane {
+public abstract class Animal extends Pane {
 
-//public abstract class Animal extends Pane {
-
-    /*
-    private Landform target;
-    private int appetite;
-    private boolean hungry;
-    private boolean thirsty;
-    private ArrayList<Landform> consumes;
-    private Herd herd;*/
-
-    private int price;
-    private int age;
-    private double x;
-    private double y;
+    protected int price;
+    protected double x;
+    protected double y;
     protected double speed;
-    protected double targetX;
-    protected double targetY;
+    protected int appetite;
+
+
     protected double restingTimePassed = 0.0;
-    protected double restDuration = 15.0;
-    protected boolean resting = false;
-    private boolean paused = false;
+
+    //ANIMAL MOVEMENT
+    protected AnimalState state;
+    private AnimalState previousState;
+    protected Terrain target;
+    protected Terrain start;
+    ArrayList<Terrain> path = new ArrayList<>();
+    int pathIndex = 0;
+
+    //stats
+    protected int age;
+    protected int startingAge = 5;
+    protected int lifeExpectancy;
+    protected double bornAt;
+    protected double thirst = 100.0;
+    protected double hunger = 100.0;
+    //
 
     //Images of the Animal, ui
     private Image spriteSheet;
@@ -53,11 +55,12 @@ public abstract class Animal<T extends Pane> extends Pane {
     protected Direction currentDirection = Direction.RIGHT;
 
 
-    public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price)  {
+    public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price, int lifeExpectancy)  {
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.speed = speed;
         this.price = price;
+        this.lifeExpectancy = lifeExpectancy;
 
         //Animation pictures
         this.spriteSheet = new Image(getClass().getResource(imgUrl).toExternalForm());
@@ -69,14 +72,15 @@ public abstract class Animal<T extends Pane> extends Pane {
         imageView.setFitHeight(frameHeight * 0.6);
         getChildren().add(imageView);
 
-        //the picture will appear where the user clicked but the x and y coordinates are its feet for dynamic depth
+        //mouse click will be the middle
+        //x and y is feet
         setLayoutX(x - (frameWidth * 0.6 / 2.0));
         setLayoutY(y - (frameHeight * 0.6 / 2.0));
         this.x = x;
         this.y = y + (frameHeight * 0.6 / 2.0);
 
-        //pickNewTarget(1920,930);
-
+        //state
+        this.state = AnimalState.IDLE;
 
     }
 
@@ -95,15 +99,54 @@ public abstract class Animal<T extends Pane> extends Pane {
         }
     }
 
+    //===== ANIMAL MOVEMENT & ACTIVITIES =====
+    //moving
+    public void moveTowardsTarget() {
+        // If we've reached the end of the path
+        if (pathIndex >= path.size()) {
+            state = determineStateFromTarget(target);
+            return;
+        }
+
+        Terrain nextTile = path.get(pathIndex);
+        double targetX = nextTile.getLayoutX() + nextTile.getSize() / 2.0;
+        double targetY = nextTile.getLayoutY() + nextTile.getSize() / 2.0;
+
+        double dx = targetX - this.x;
+        double dy = targetY - this.y;
+
+        // If we are close enough to this tile, move to next
+        if (Math.abs(dx) < 1 && Math.abs(dy) < 1) {
+            pathIndex++;
+            return;
+        }
+
+        // Normalize direction for consistent speed
+        double dist = Math.hypot(dx, dy);
+        double stepX = (dx / dist) * speed;
+        double stepY = (dy / dist) * speed;
+
+        // Determine direction for animation
+        Direction dir;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            dir = (dx > 0) ? Direction.RIGHT : Direction.LEFT;
+        } else {
+            dir = (dy > 0) ? Direction.DOWN : Direction.UP;
+        }
+
+        move(dir, stepX, stepY);
+
+    }
     public void move(Direction dir, double dx, double dy) {
         this.currentDirection = dir;
         this.x += dx; this.y += dy;
+
 
         //the UI element itself
         setLayoutX(getLayoutX() + dx);
         setLayoutY(getLayoutY() + dy);
 
-        //updateDirectionImage();
+
         switch (currentDirection) {
             case UP -> {
                 imageDelay++;
@@ -141,142 +184,143 @@ public abstract class Animal<T extends Pane> extends Pane {
         }
     }
 
-    public void moveTowardsTarget(boolean choose_x) {
-        if (paused) {
-            return;
+    //not moving states
+    public void rest() {
+        restingTimePassed += 0.05;
+        if (restingTimePassed >= 15) {
+            restingTimePassed = 0.0;
+            state = AnimalState.IDLE;
         }
 
-        double dx = targetX - x;
-        double dy = targetY - y;
+    }
+    public void eat(){
+        this.changeHunger(0.5); //+10 / mp
+        if (hunger > 99.0) {
+            state = AnimalState.IDLE;
+        }
+    }
+    public void drink(){
+        this.changeThirst(0.5); //+10 / mp
+        if (thirst > 99.0) {
+            state = AnimalState.IDLE;
+        }
+    }
+    public void changeThirst(double val){
+        this.thirst += val;
+    }
+    public void changeHunger(double val){
+        this.hunger += val;
+    }
 
-        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
-            resting = true;
-            return;
+    //setting up for dijkstra,
+    public void preparePath(Terrain[][] map, ArrayList<Terrain> desiredTerrains) {
+        Terrain startingTerrain = pickStartingTerrain(map);
+        this.start = startingTerrain;
+
+        Terrain targetTerrain = desiredTerrains.get(new Random().nextInt(desiredTerrains.size()));
+
+        this.target = targetTerrain;
+    }
+    public Terrain pickStartingTerrain(Terrain[][] map){
+        Terrain closest = null;
+        double minDistance = Double.MAX_VALUE;
+        int TILE_SIZE = 30;
+
+
+        for (int col = 0; col < map.length; col++) {
+            for (int row = 0; row < map[0].length; row++) {
+                Terrain tile = map[col][row];
+
+                double centerX = tile.getLayoutX() + TILE_SIZE / 2.0;
+                double centerY = tile.getLayoutY() + TILE_SIZE / 2.0;
+
+                // Compare distances
+                double distance = Math.hypot(this.x - centerX, this.y - centerY);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closest = tile;
+                }
+            }
         }
 
-        if (choose_x) {
-            if ((Math.abs(dx) > 1)) {
-                if (dx > 0) {
-                    move(Direction.RIGHT, speed, 0);
-                } else {
-                    move(Direction.LEFT, -speed, 0);
-                }
-            }
-            else if (Math.abs(dy) > 1) {
-                if (dy > 0) {
-                    move(Direction.DOWN, 0, speed);
-                } else {
-                    move(Direction.UP, 0, -speed);
-                }
-            }
+        return closest;
+    }
+    public void setPath(ArrayList<Terrain> path){
+        this.path = path;
+        this.pathIndex = 0;
+    }
+
+    //managing states
+    public void transitionTo(AnimalState newState) {
+        if (newState == AnimalState.PAUSED) {
+            previousState = state;
+        }
+        this.state = newState;
+    }
+    public void resume() {
+        if (state == AnimalState.PAUSED && previousState != null) {
+            transitionTo(previousState);
+        }
+    }
+    private AnimalState determineStateFromTarget(Terrain target) {
+        if (target.hasLandform()) {
+            if (target.getLandform() instanceof Lake) return AnimalState.DRINKING;
+            if (target.getLandform() instanceof Plant) return AnimalState.EATING;
+        }
+        return AnimalState.RESTING;
+    }
+    // =====
+
+    // ==== AGING, PRICE HANDLING
+    public void setBornAt(double currentGameHour) {
+        this.bornAt = currentGameHour;
+    }
+    public boolean oldEnoughToDie(double currentGameHour) {
+        agingAnimal(currentGameHour);
+        return this.age >= lifeExpectancy;
+    }
+
+    public void agingAnimal(double currentGameHour) {
+        this.age = startingAge + (int) ((currentGameHour - bornAt) / 24.0);
+
+        double ageRatio = (double) this.age / this.lifeExpectancy;
+        this.appetite = (int)(1 + ageRatio * 99);
+    }
+
+    public int getSellPrice() {
+        int ageSegment = lifeExpectancy / 5;
+        int base = this.price * 3 / 5;
+
+        if (this.age <= ageSegment) {
+            return base * 5 / 5;
+        } else if (this.age <= 2 * ageSegment) {
+            return base * 4 / 5;
+        } else if (this.age <= 3 * ageSegment) {
+            return base * 3 / 5;
+        } else if (this.age <= 4 * ageSegment) {
+            return base * 2 / 5;
         } else {
-            if (Math.abs(dy) > 1) {
-                if (dy > 0) {
-                    move(Direction.DOWN, 0, speed);
-                } else {
-                    move(Direction.UP, 0, -speed);
-                }
-            }
-            else if ((Math.abs(dx) > 1)) {
-                if (dx > 0) {
-                    move(Direction.RIGHT, speed, 0);
-                } else {
-                    move(Direction.LEFT, -speed, 0);
-                }
-            }
-        }
-
-    }
-//eredeti moveTowards
-/*
-
-public void moveTowardsTarget() {
-        if (paused) {
-            return;
-        }
-
-        double dx = targetX - x;
-        double dy = targetY - y;
-
-        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
-            resting = true;
-            return;
-        }
-
-        // Prioritize X-axis movement first
-        if ((Math.abs(dx) > 1)) {
-            if (dx > 0) {
-                move(Direction.RIGHT, speed, 0);
-            } else {
-                move(Direction.LEFT, -speed, 0);
-            }
-        }
-        // Only move on Y-axis once close enough in X
-        else if (Math.abs(dy) > 1) {
-            if (dy > 0) {
-                move(Direction.DOWN, 0, speed);
-            } else {
-                move(Direction.UP, 0, -speed);
-            }
+            return base * 1 / 5;
         }
     }
-
-    */
-//eredeti rest és pickNewTarget ooooold
-    /*public void rest(double mapWidth, double mapHeight) {
-        restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
-
-        if (restingTimePassed >= restDuration) {
-            resting = false;
-            restingTimePassed = 0.0;
-            pickNewTarget(mapWidth, mapHeight);
-        }
-    }
-
-    public void pickNewTarget(double mapWidth, double mapHeight) {
-        double marginX = 200;
-        double marginY = 50;
-        this.targetX = marginX + Math.random() * (mapWidth - 2 * marginX);
-        this.targetY = marginY + Math.random() * (mapHeight - 2 * marginY);
-    }*/
-//rest and pickNewTarget csak növényekre
-    /*public void rest(ArrayList<Plant> plants) {
-        restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
-
-        if (restingTimePassed >= restDuration) {
-            resting = false;
-            restingTimePassed = 0.0;
-            pickNewTarget(plants);
-        }
-    }
-
-    public void pickNewTarget(ArrayList<Plant> plants) {
-        Random random = new Random();
-        Plant randomPlant = plants.get(random.nextInt(plants.size()));
-
-        this.targetX = randomPlant.getX() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getWidthInTiles(); //randomPlant.getLayoutX();
-        this.targetY = randomPlant.getY() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getHeightInTiles(); //randomPlant.getLayoutY();
-       // System.out.println("target picked: " + targetX +  " : " +targetY);
-
-    }*/
-    public abstract void rest(ArrayList<T> panes);
-
-    public abstract void pickNewTarget(ArrayList<T> panes);
-
-    public void sellAnimal(){
-        System.out.println(this.getClass() + " sold");
-        //TODO sell animal
-    }
-
+    // =====
 
     //Getters, Setters
+    public int getPrice() {
+        return this.price;
+    }
+    public int getAppetite() {
+        return this.appetite;
+    }
     public double getSpeed(){
         return this.speed;
     }
-    public boolean getResting(){
-        return this.resting;
+    public int getAge(){
+        return (int) this.age;
     }
-    public int getPrice() { return this.price; }
+    public int getLifeExpectancy(){
+        return this.lifeExpectancy;
+    }
     public int getFrameWidth(){
         return this.frameWidth;
     }
@@ -289,10 +333,28 @@ public void moveTowardsTarget() {
     public double getY(){
         return this.y;
     }
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
     public ImageView getImageView(){
         return this.imageView;
+    }
+    public AnimalState getState(){
+        return this.state;
+    }
+    public Terrain getStart(){
+        return start;
+    }
+    public Terrain getTarget(){
+        return target;
+    }
+    public ArrayList<Terrain> getPath(){
+        return this.path;
+    }
+    public double getDepth(){
+        return this.y + (frameHeight * 0.6 / 2.0);
+    }
+    public double getThirst(){
+        return thirst;
+    }
+    public double getHunger(){
+        return hunger;
     }
 }

@@ -7,13 +7,15 @@ import javafx.scene.layout.Pane;
 public abstract class Landform extends Pane{
     protected static final int TILE_SIZE = 30;
 
+    private int price;
     protected double x, y;
     protected double depth;
     protected final int widthInTiles;
     protected final int heightInTiles;
     protected ImageView picture;
 
-    public Landform(double x, double y, int widthInTiles, int heightInTiles, Image img, double depth) {
+    public Landform(double x, double y, int widthInTiles, int heightInTiles, Image img, double depth, int price) {
+        this.price = price;
         this.x = x;
         this.y = y;
         this.depth = depth;
@@ -56,6 +58,8 @@ public abstract class Landform extends Pane{
     public double getX() { return this.x; }
     public double getY() { return this.y; }
 
-    public int getTileSize() { return this.TILE_SIZE; }
+    public int getPrice() {
+        return this.price;
+    }
 
 }

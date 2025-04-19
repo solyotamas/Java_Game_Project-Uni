@@ -9,15 +9,17 @@ public class Lake extends Landform {
     public static final int WIDTH_IN_TILES = 4;
     public static final int HEIGHT_IN_TILES = 2;
 
+    private static final int price = 2500;
+
     public Lake(double x, double y) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, lakePicture, depth);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, lakePicture, depth, price);
     }
 
     public Lake(double x, double y, double placeHolder) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, lakePicture, depth);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, lakePicture, depth, price);
     }
     public Lake(double x, double y, double placeHolder, Image img) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, img, depth);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, img, depth, price);
     }
 
 

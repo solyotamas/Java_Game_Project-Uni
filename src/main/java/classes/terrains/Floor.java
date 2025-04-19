@@ -10,7 +10,7 @@ public class Floor extends Terrain{
     private static final Random rand = new Random();
 
     public Floor(int row, int col) {
-        super(row, col, getRandomFloorImage(), 0);
+        super(row, col, getRandomFloorImage(), 0, false);
     }
 
     private static Image getRandomFloorImage() {

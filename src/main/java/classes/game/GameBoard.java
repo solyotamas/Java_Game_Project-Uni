@@ -1,5 +1,6 @@
 package classes.game;
 
+import classes.landforms.Lake;
 import classes.landforms.Landform;
 import classes.landforms.Road;
 import classes.landforms.plants.Bush;
@@ -13,8 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 public class GameBoard{
     //stats
@@ -25,17 +25,16 @@ public class GameBoard{
     //representation
     private final Pane terrainLayer;
     private final Pane uiLayer;
-    private final Pane ghostLayer;
+
 
     private final Terrain[][] terrainGrid = new Terrain[COLUMNS][ROWS];
 
     //conf
     private final Random rand = new Random();
 
-    public GameBoard( Pane terrainLayer, Pane uiLayer, Pane ghostLayer) {
+    public GameBoard( Pane terrainLayer, Pane uiLayer) {
         this.terrainLayer = terrainLayer;
         this.uiLayer = uiLayer;
-        this.ghostLayer = ghostLayer;
 
 
 
@@ -76,14 +75,12 @@ public class GameBoard{
         terrainLayer.getChildren().add(fence);
         terrainGrid[x][y] = fence;
     }
-
     private void makeFloorTerrain(int x, int y){
         Terrain floor = new Floor(x,y);
 
         terrainLayer.getChildren().add(floor);
         terrainGrid[x][y] = floor;
     }
-
     private void makeRandomMapTerrain(int x, int y) {
         int terrainType = rand.nextInt(500);
 
@@ -101,7 +98,6 @@ public class GameBoard{
         terrainLayer.getChildren().add(terrain);
         terrainGrid[x][y] = terrain;
     }
-
     private void generateRiver(int startX, int startY) {
         int x = startX;
         int y = startY;
@@ -135,7 +131,6 @@ public class GameBoard{
             }
         }
     }
-
     private void addHillCluster(int startX, int startY) {
         int clusterSize = rand.nextInt(20) + 5;
         ArrayList<int[]> positions = new ArrayList<>();
@@ -162,13 +157,13 @@ public class GameBoard{
         }
     }
 
+
     public Terrain getTerrainAt(int x, int y) {
         if (x >= 0 && y >= 0 && x < COLUMNS && y < ROWS) {
             return terrainGrid[x][y];
         }else
             return null;
     }
-
     //Placing landforms
     public boolean canPlaceLandform(Landform landform, int startX, int startY) {
         for (int x = startX; x < startX + landform.getWidthInTiles(); x++) {
@@ -182,7 +177,6 @@ public class GameBoard{
         }
         return true;
     }
-
     public void placeLandform(Landform landform, int x, int y) {
         for (int i = x; i < x + landform.getWidthInTiles(); i++) {
             for (int j = y; j < y + landform.getHeightInTiles(); j++) {
@@ -196,6 +190,136 @@ public class GameBoard{
             }
         }
     }
+
+
+    public ArrayList<Terrain> getPlantTerrains() {
+        ArrayList<Terrain> plantTiles = new ArrayList<>();
+
+        for (int x = 0; x < terrainGrid.length; x++) {
+            for (int y = 0; y < terrainGrid[0].length; y++) {
+                Terrain terrain = terrainGrid[x][y];
+                if (terrain != null && terrain.hasLandform() && terrain.getLandform() instanceof Plant) {
+                    plantTiles.add(terrain);
+                }
+            }
+        }
+
+        return plantTiles;
+    }
+    public ArrayList<Terrain> getLakeTerrains() {
+        ArrayList<Terrain> lakeTiles = new ArrayList<>();
+
+        for (int x = 0; x < terrainGrid.length; x++) {
+            for (int y = 0; y < terrainGrid[0].length; y++) {
+                Terrain terrain = terrainGrid[x][y];
+                if (terrain != null && ((terrain.hasLandform() && terrain.getLandform() instanceof Lake) || terrain instanceof River)) {
+                    lakeTiles.add(terrain);
+                }
+            }
+        }
+
+        return lakeTiles;
+    }
+    public ArrayList<Terrain> getGroundTerrains() {
+        ArrayList<Terrain> groundTiles = new ArrayList<>();
+
+        for (int x = 0; x < terrainGrid.length; x++) {
+            for (int y = 0; y < terrainGrid[0].length; y++) {
+                Terrain terrain = terrainGrid[x][y];
+                if (terrain != null && !terrain.hasLandform() && terrain instanceof Ground) {
+                    groundTiles.add(terrain);
+                }
+            }
+        }
+
+        return groundTiles;
+    }
+    public ArrayList<Terrain> getNeighbors(Terrain tile) {
+        ArrayList<Terrain> neighbors = new ArrayList<>();
+
+        int x = tile.getRow();
+        int y = tile.getCol();
+
+        int[][] directions = {
+                {0, -1},  // Up
+                {0, 1},   // Down
+                {-1, 0},  // Left
+                {1, 0}    // Right
+        };
+
+        for (int[] dir : directions) {
+            int nx = x + dir[0];
+            int ny = y + dir[1];
+
+            Terrain neighbor = getTerrainAt(nx, ny);
+            if (neighbor != null && neighbor.isWalkable()) {
+                neighbors.add(neighbor);
+            }
+        }
+
+        return neighbors;
+    }
+    public ArrayList<Terrain> findPathDijkstra(Terrain start, Terrain goal) {
+        if (start == null || goal == null) {
+            return new ArrayList<>();
+        }
+
+        System.out.println("Starting Dijkstra from: " + start + " to " + goal);
+
+        Map<Terrain, Terrain> cameFrom = new HashMap<>();
+        Map<Terrain, Integer> costSoFar = new HashMap<>();
+        PriorityQueue<Terrain> frontier = new PriorityQueue<>(Comparator.comparingInt(costSoFar::get));
+
+        costSoFar.put(start, 0);
+        frontier.add(start);
+
+        while (!frontier.isEmpty()) {
+            Terrain current = frontier.poll();
+
+            if (current == goal) {
+                break;
+            }
+
+            for (Terrain neighbor : getNeighbors(current)) {
+                int newCost = costSoFar.get(current) +
+                        current.getCrossingDifficulty() +
+                        neighbor.getCrossingDifficulty();
+
+                if (!costSoFar.containsKey(neighbor) || newCost < costSoFar.get(neighbor)) {
+                    costSoFar.put(neighbor, newCost);
+                    cameFrom.put(neighbor, current);
+                    frontier.add(neighbor);
+                }
+            }
+        }
+
+        // Reconstruct the path
+        ArrayList<Terrain> path = new ArrayList<>();
+        Terrain current = goal;
+
+        while (current != null && cameFrom.containsKey(current)) {
+            path.add(0, current); // insert at beginning
+            current = cameFrom.get(current);
+        }
+
+        // If the path doesn't start at 'start', we probably never reached goal
+        if (!path.isEmpty() && path.get(0) != start) {
+            path.add(0, start);
+        }
+
+        if (path.isEmpty()) {
+            System.out.println("no path found from " + start + " to " + goal);
+        } else {
+            System.out.println("path found, length: " + path.size());
+        }
+
+        return path;
+    }
+
+
+
+
+
 
     //TODO simplify createPlant and generatePlants into one, idk how tho
     private void createPlant(Class<? extends Plant> plantClass, int x, int y) {
@@ -265,6 +389,11 @@ public class GameBoard{
         }
     }
 
+
+
+
+
+
     //road updates
     private void updateRoadAndNeighbors(int x, int y) {
         updateRoadTextureAt(x, y);
@@ -307,5 +436,10 @@ public class GameBoard{
 
     //getters, setters
     public Pane getUiLayer() { return this.uiLayer; }
-    public Pane getGhostLayer(){return this.ghostLayer;}
+
+    public Terrain[][] getTerrainGrid() {
+        return terrainGrid;
+    }
+
+
 }
