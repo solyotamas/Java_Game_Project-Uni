@@ -326,6 +326,10 @@ public class GameEngine {
                     ranger.transitionTo(HumanState.MOVING);
                 }
                 case CAPTURING -> {
+                    for (Carnivore carnivore : carnivores) {
+                        carnivore.setStyle("");
+                    }
+
                     // Checking if animal hasn't been sold or hasn't died while capturing
                     if (selectedCarnivore != null && carnivores.contains(selectedCarnivore)) {
                         ranger.choosePrey(selectedCarnivore);
@@ -423,6 +427,11 @@ public class GameEngine {
 
     public void choosePreyForRanger() {
         Pane root = gameBoard.getUiLayer();
+
+        for (Carnivore carnivore : carnivores) {
+            carnivore.setStyle("-fx-border-color: red; -fx-border-width: 2;");
+        }
+
         root.setOnMouseClicked(event -> {
             double clickX = event.getX();
             double clickY = event.getY();

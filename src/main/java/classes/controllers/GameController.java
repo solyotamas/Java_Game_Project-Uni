@@ -506,6 +506,7 @@ public class GameController {
                 () -> {
                     // Choose prey action
                     gameEngine.choosePreyForRanger();
+                    //TODO záródjon be
                 },
                 () -> {
                     // Close action
