@@ -2,6 +2,8 @@ image: maven:3.9.6-eclipse-temurin-21
 
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  JAVAFX_PLATFORM: linux
+  _JAVA_OPTIONS: "-Djava.awt.headless=true"
 
 # Cache and keep downloaded dependencies between CI pipelines
 cache:

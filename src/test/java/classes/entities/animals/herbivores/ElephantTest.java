@@ -16,8 +16,11 @@ class ElephantTest {
 
     @BeforeAll
     public static void initJavaFX() {
-        // Csak egyszer indítjuk el a JavaFX platformot
-        Platform.startup(() -> {});
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException e) {
+            // JavaFX már elindult
+        }
     }
 
     @BeforeEach
