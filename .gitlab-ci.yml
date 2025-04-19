@@ -20,6 +20,8 @@ test:
   stage: test
   script:
     - mvn test
+    - apt-get install -y xvfb
+    - xvfb-run mvn test
     - mvn jacoco:report
     #ezt lehet mellékelni kell majd
     - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
