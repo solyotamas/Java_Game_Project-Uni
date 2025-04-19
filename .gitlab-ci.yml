@@ -19,6 +19,7 @@ test:
   script:
     - mvn test
     - mvn jacoco:report
+    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
   coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
   artifacts:
     when: always
