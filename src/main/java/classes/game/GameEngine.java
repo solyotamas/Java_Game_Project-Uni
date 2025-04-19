@@ -328,7 +328,6 @@ public class GameEngine {
                 case CAPTURING -> {
                     // Checking if animal hasn't been sold or hasn't died while capturing
                     if (selectedCarnivore != null && carnivores.contains(selectedCarnivore)) {
-                        System.out.println("Kiválasztott carnivore: " + selectedCarnivore);
                         ranger.choosePrey(selectedCarnivore);
                         ranger.huntTarget();
                     } else {

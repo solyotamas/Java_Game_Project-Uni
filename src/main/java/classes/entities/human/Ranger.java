@@ -9,7 +9,7 @@ public class Ranger extends Human {
 
     private static final int frameWidth = 36;//104;
     private static final int frameHeight = 46;//106;
-    private static double speed = 3;
+    private static double speed = 1.5;
     private static final String imgURL = "/images/animated/ranger.png";
     private double lastPaidHour;
 
