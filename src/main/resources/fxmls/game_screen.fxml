@@ -14,16 +14,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/game_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.GameController">
    <children>
-      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="1920.0" spacing="50.0" style="-fx-background-color: #EC9043;">
+      <HBox fx:id="navbar" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="1920.0" spacing="50.0" style="-fx-background-color: #EC9043;">
          <padding>
             <Insets bottom="10.0" left="50.0" right="10.0" top="10.0" />
          </padding>
@@ -1352,7 +1352,7 @@
    <AnchorPane fx:id="losePane" layoutX="660.0" layoutY="340.0" prefHeight="400.0" prefWidth="600.0" styleClass="losePane" stylesheets="@../css/game_screen.css" visible="false">
 
       <children>
-         <VBox alignment="CENTER" layoutX="153.0" layoutY="41.0" spacing="15.0">
+         <VBox alignment="CENTER" layoutX="65.0" layoutY="41.0" prefHeight="319.0" prefWidth="471.0" spacing="15.0">
 
             <Text styleClass="gameOverText" text="Game Over!">
                <effect>
@@ -1364,7 +1364,7 @@
                </effect>
             </Text>
 
-            <Text styleClass="reasonOfDeathText" text="All your animals have died!" />
+            <Text fx:id="reasonOfDeathText" styleClass="reasonOfDeathText" text="" />
 
             <ImageView fitHeight="130.0" pickOnBounds="true" preserveRatio="true">
                <image>
