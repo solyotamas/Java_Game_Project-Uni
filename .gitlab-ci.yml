@@ -22,8 +22,6 @@ test:
     # Telepítsd fel az xvfb-t a konténerbe
     - apt-get update && apt-get install -y xvfb
   script:
-    - mvn test
-    - apt-get install -y xvfb
     - xvfb-run mvn jacoco:report
     #ezt lehet mellékelni kell majd
     - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
