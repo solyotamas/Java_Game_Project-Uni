@@ -15,7 +15,7 @@ public class River extends Terrain {
     private int flowDelay = 0;*/
 
     public River(int row, int col) {
-        super(row, col, riverImage, 2);
+        super(row, col, riverImage, 2, true);
 
         /*
         loadAnimationImages();

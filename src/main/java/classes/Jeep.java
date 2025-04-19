@@ -82,60 +82,6 @@ public class Jeep extends Pane {
         }
     }
 
-    public void autoMove(ArrayList<Road> roads) {
-        double step = 1;
-
-        if (tryMove(step, 0, roads)) return;      // right
-        if (tryMove(0, step, roads)) return;      // down
-        if (tryMove(-step, 0, roads)) return;     // left
-        if (tryMove(0, -step, roads)) return;     // up
-    }
-
-    public boolean tryMove(double dx, double dy, ArrayList<Road> roads) {
-        double newX = x + dx;
-        double newY = y + dy;
-
-        if (isOnRoad(newX, newY, roads)) {
-            x = newX;
-            y = newY;
-            setLayoutX(x);
-            setLayoutY(y);
-
-            if (dx > 0) currentDirection = Direction.RIGHT;
-            else if (dx < 0) currentDirection = Direction.LEFT;
-            else if (dy > 0) currentDirection = Direction.DOWN;
-            else if (dy < 0) currentDirection = Direction.UP;
-
-            updateImage(currentDirection);
-            return true;
-        }
-
-        return false;
-    }
-
-
-    private boolean isOnRoad(double newX, double newY, ArrayList<Road> roads) {
-        double[][] corners = {
-                { newX, newY },                     // top-left
-                { newX + frameWidth, newY },             // top-right
-                { newX, newY + frameHeight },            // bottom-left
-                { newX + frameWidth, newY + frameHeight }     // bottom-right
-        };
-
-        for (double[] corner : corners) {
-            boolean onAnyRoad = false;
-            for (Road road : roads) {
-                if (road.getBoundsInParent().contains(corner[0], corner[1])) {
-                    onAnyRoad = true;
-                    break;
-                }
-            }
-            if (!onAnyRoad) return false;
-        }
-
-        return true;
-    }
-
     private void updateImage(Direction direction) {
         if (this.currentDirection != direction) {
             this.currentDirection = direction;

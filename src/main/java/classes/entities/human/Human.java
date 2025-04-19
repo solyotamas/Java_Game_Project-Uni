@@ -1,10 +1,13 @@
 package classes.entities.human;
 
 import classes.entities.Direction;
+import classes.entities.animals.AnimalState;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public abstract class Human extends Pane {
 
@@ -13,11 +16,11 @@ public abstract class Human extends Pane {
     protected double speed;
     protected double targetX;
     protected double targetY;
-    protected boolean paused = false;
 
     protected double restingTimePassed = 0.0;
-    protected double restDuration = 10.0;
-    protected boolean resting = false;
+
+    private HumanState state;
+    private HumanState previousState;
 
     //Images of the Animal, ui
     private Image spriteSheet;
@@ -48,7 +51,8 @@ public abstract class Human extends Pane {
         imageView.setFitHeight(frameHeight * 0.8);
         getChildren().add(imageView);
 
-        //the picture will appear where the user clicked but the x and y coordinates are its feet for dynamic depth
+
+
         //x and y value is the feet
         //mouseclick is the middle
         setLayoutX(x - (frameWidth * 0.8 / 2.0));
@@ -56,24 +60,28 @@ public abstract class Human extends Pane {
         this.x = x;
         this.y = y + (frameHeight * 0.8 / 2.0);
 
-        pickNewTarget(1920,930);
+        state = HumanState.IDLE;
+
     }
 
+    //=== UI
     private void loadStaticDirectionImages() {
         for (int i = 0; i < 4; i++) {
             walkDownImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 0 * frameHeight, frameWidth, frameHeight);
         }
         for (int i = 0; i < 4; i++) {
-            walkRightImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 1 * frameHeight, frameWidth, frameHeight);
+            walkLeftImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 1 * frameHeight, frameWidth, frameHeight);
         }
         for (int i = 0; i < 4; i++) {
-            walkLeftImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 2 * frameHeight, frameWidth, frameHeight);
+            walkRightImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 2 * frameHeight, frameWidth, frameHeight);
         }
         for (int i = 0; i < 4; i++) {
             walkUpImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 3 * frameHeight, frameWidth, frameHeight);
         }
     }
+    //=====
 
+    //=== MOVEMENT
     public void move(Direction dir, double dx, double dy) {
         this.currentDirection = dir;
         this.x += dx; this.y += dy;
@@ -119,55 +127,66 @@ public abstract class Human extends Pane {
             }
         }
     }
-    public void moveTowardsTarget(double mapx, double mapy) {
-        if (paused) return;
+    public void moveTowardsTarget() {
 
         double dx = targetX - x;
         double dy = targetY - y;
 
-        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
-            resting = true;
+        // Close enough? Switch to RESTING
+        if (Math.abs(dx) < 1 && Math.abs(dy) < 1 ) {
+            if(state == HumanState.MOVING)
+                transitionTo(HumanState.RESTING);
+            if(state == HumanState.EXITING){
+                System.out.println("Tourist reached exit: " + this);
+                transitionTo(HumanState.LEFT);
+            }
             return;
         }
 
-        // Prioritize X-axis movement first
-        if ((Math.abs(dx) > 1)) {
-            if (dx > 0) {
-                move(Direction.RIGHT, speed, 0);
-            } else {
-                move(Direction.LEFT, -speed, 0);
-            }
-        }
-        // Only move on Y-axis once close enough in X
-        else if (Math.abs(dy) > 1) {
-            if (dy > 0) {
-                move(Direction.DOWN, 0, speed);
-            } else {
-                move(Direction.UP, 0, -speed);
-            }
+
+        // Normalize direction for consistent speed
+        double dist = Math.hypot(dx, dy);
+        double stepX = (dx / dist) * speed;
+        double stepY = (dy / dist) * speed;
+
+        // Determine direction for animation (dominant axis only)
+        Direction dir;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            dir = (dx > 0) ? Direction.RIGHT : Direction.LEFT;
+        } else {
+            dir = (dy > 0) ? Direction.DOWN : Direction.UP;
         }
 
-        if (Math.abs(dx) <= 1 && Math.abs(dy) <= 1) {
-            pickNewTarget(mapx, mapy);  // Generate a new target once reached
-        }
+        move(dir, stepX, stepY);  // ← move on both axes at once
+
+
     }
-
-    public void pickNewTarget(double mapWidth, double mapHeight) {
-        double marginX = 200;
-        double marginY = 50;
-        this.targetX = marginX + Math.random() * (mapWidth - 2 * marginX);
-        this.targetY = marginY + Math.random() * (mapHeight - 2 * marginY);
-    }
-
-    public void rest(double mapWidth, double mapHeight) {
-        restingTimePassed += 0.05; // 50ms
-
-        if (restingTimePassed >= restDuration) {
-            resting = false;
+    public abstract void pickNewTarget();
+    public void rest() {
+        restingTimePassed += 0.05;
+        if (restingTimePassed >= 10) {
             restingTimePassed = 0.0;
-            pickNewTarget(mapWidth, mapHeight);
+            state = HumanState.IDLE;
         }
     }
+    //======
+
+    //=== managing states
+    public void transitionTo(HumanState newState) {
+        if (newState == HumanState.PAUSED) {
+            previousState = state;
+        }
+        this.state = newState;
+
+    }
+    public void resume() {
+        if (state == HumanState.PAUSED && previousState != null) {
+            transitionTo(previousState);
+        }
+    }
+    //===
+
+
 
     //Getters, Setters
     public double getSpeed(){
@@ -182,16 +201,17 @@ public abstract class Human extends Pane {
     public double getY(){
         return this.y;
     }
-    public void setPaused(boolean paused) {
-        this.paused = paused;
-    }
     public ImageView getImageView(){
         return this.imageView;
     }
-
-    public boolean getResting(){
-        return this.resting;
+    public void setImageView(ImageView image){
+        this.imageView = image;
     }
-
+    public ImageView getWalkLeftImage(){
+        return new ImageView(walkLeftImages[0]);
+    }
+    public HumanState getState(){
+        return state;
+    }
 
 }

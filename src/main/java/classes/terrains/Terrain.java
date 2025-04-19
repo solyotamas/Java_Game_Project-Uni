@@ -13,15 +13,17 @@ public class Terrain extends Pane{
 
     protected ImageView background;
     protected int crossingDifficulty;
+    protected boolean walkable;
 
     private Landform landform;
 
-    public Terrain(int row, int col, Image img, int crossingDifficulty) {
+    public Terrain(int row, int col, Image img, int crossingDifficulty, boolean walkable) {
         //properties
         this.row = row;
         this.col = col;
         this.crossingDifficulty = crossingDifficulty;
         this.setPrefSize(SIZE, SIZE);
+        this.walkable = walkable;
 
         //background
         this.background = new ImageView(img);
@@ -48,6 +50,26 @@ public class Terrain extends Pane{
         return this.landform;
     }
 
+    public int getSize(){
+        return SIZE;
+    }
+    public int getRow() {
+        return row;
+    }
+    public int getCol() {
+        return col;
+    }
+    public boolean isWalkable(){
+        return walkable;
+    }
 
+    public int getCrossingDifficulty() {
+        return crossingDifficulty;
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "(" + col + ", " + row + ")";
+    }
 
 }

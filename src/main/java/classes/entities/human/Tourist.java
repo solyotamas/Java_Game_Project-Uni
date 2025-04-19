@@ -1,7 +1,5 @@
 package classes.entities.human;
 
-import classes.entities.Direction;
-
 import java.util.Random;
 
 public class Tourist extends Human{
@@ -10,8 +8,15 @@ public class Tourist extends Human{
     private static double speed = 0.8;
     private static final String imgURL = "/images/animated/tourist.png";
 
-    public Tourist(double x, double y){
+    //left 0, right 1
+    private int side;
+    private double visitDuration = 0.0;
+
+    private final Random rand = new Random();
+
+    public Tourist(double x, double y, int side){
         super(x, y, frameWidth, frameHeight, imgURL, speed);
+        this.side = side;
     }
 
 
@@ -19,21 +24,47 @@ public class Tourist extends Human{
 
 
     @Override
-    public void pickNewTarget(double x, double y) {
-        Random random = new Random();
-        int coinFlip = random.nextBoolean() ? 0 : 1;
+    public void pickNewTarget() {
+        if(visitDuration > 100.0){
+            this.transitionTo(HumanState.EXITING);
+            exitSafari();
+        }else{
+            this.transitionTo(HumanState.MOVING);
+            visitSafari();
+        }
 
-        double minX = this.getImageView().getFitWidth();
-        double maxX = 30 * 3 + this.getImageView().getFitWidth() / 2;
-        double minY = this.getImageView().getFitHeight() / 2;
-        double maxY = 30 * 31 - this.getImageView().getFitHeight() / 2;
+    }
+    public void exitSafari(){
+        if(this.side == 0){
+            targetX = this.getImageView().getFitWidth() / 2;
+            targetY = 31.0 * 30 / 2. + this.getImageView().getFitHeight() / 2.;
+        } else{
+            targetX = 64 * 30 - this.getImageView().getFitWidth() / 2;
+            targetY = 31.0 * 30 / 2. + this.getImageView().getFitHeight() / 2.;
+        }
+    }
+    public void visitSafari(){
 
-        double randomX = minX + Math.random() * (maxX - minX);
-        double randomY = minY + Math.random() * (maxY - minY);
+        double minY, maxY;
+        double minX, maxX;
 
-        this.targetX = randomX;
-        this.targetY = randomY;
-        System.out.println(targetX + " " + targetY);
+        if(this.side == 0){
+            minX = this.getImageView().getFitWidth() / 2;
+            maxX = 30 * 3.5 + this.getImageView().getFitWidth() / 2;
+            minY = this.getImageView().getFitHeight();
+            maxY = 30 * 31;
+        }else{
+            minX = 30 * 60.5 - this.getImageView().getFitWidth() / 2;
+            maxX = 30 * 64 - this.getImageView().getFitWidth() / 2;
+            minY = 4 * 30 + this.getImageView().getFitHeight();
+            maxY = 30 * 31;
+        }
+
+        this.targetX = minX + rand.nextDouble() * (maxX - minX);
+        this.targetY = minY + rand.nextDouble() * (maxY - minY);
+    }
+    public void changeVisitDuration(double val){
+        this.visitDuration += val;
     }
 
 
