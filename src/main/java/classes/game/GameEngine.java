@@ -233,7 +233,7 @@ public class GameEngine {
                     carnivore.changeHunger(0.5);
                     if (carnivore.getHunger() > 99.0) {
                         carnivore.transitionTo(RESTING);
-                        gameController.removeHerbivore(carnivore.getPrey());
+                        gameController.removeAnimal(carnivore.getPrey());
                         herbivores.remove(carnivore.getPrey());
                     }
                 }
@@ -284,16 +284,48 @@ public class GameEngine {
         }
     }
 
+    private Carnivore selectedCarnivore = null;
     private void updateHumanStates() {
-
         for (Ranger ranger : rangers) {
             switch (ranger.getState()){
-                case MOVING -> ranger.moveTowardsTarget();
-                case RESTING -> ranger.rest();
+                case MOVING -> {
+                    // Choosing new prey while moving
+                    if (selectedCarnivore != null) {
+                        ranger.transitionTo(HumanState.CAPTURING);
+                    } else {
+                        ranger.moveTowardsTarget(); // Moving towards prey
+                    }
+                }
+                case RESTING -> {
+                    // Choosing new prey while resting
+                    if (selectedCarnivore != null) {
+                        ranger.transitionTo(HumanState.CAPTURING);
+                    } else {
+                        ranger.rest(); // Resting
+                    }
+                }
                 case PAUSED -> {}
                 case IDLE -> {
                     ranger.pickNewTarget();
                     ranger.transitionTo(HumanState.MOVING);
+                }
+                case CAPTURING -> {
+                    // Checking if animal hasn't been sold or hasn't died while capturing
+                    if (selectedCarnivore != null && carnivores.contains(selectedCarnivore)) {
+                        System.out.println("Kiválasztott carnivore: " + selectedCarnivore);
+                        ranger.choosePrey(selectedCarnivore);
+                        ranger.huntTarget();
+                    } else {
+                        selectedCarnivore = null;
+                        ranger.transitionTo(HumanState.RESTING);
+                    }
+
+                }
+                case CAPTURED -> {
+                    ranger.transitionTo(HumanState.RESTING);
+                    selectedCarnivore = null;
+                    gameController.removeAnimal(ranger.getPrey());
+                    carnivores.remove(ranger.getPrey());
                 }
             }
 
@@ -336,8 +368,36 @@ public class GameEngine {
         }
 
     }
-    // =====
 
+    public void enableCarnivoreClick() {
+        Pane root = gameBoard.getUiLayer();
+        root.setOnMouseClicked(event -> {
+            double clickX = event.getX();
+            double clickY = event.getY();
+
+            for (Carnivore carnivore : carnivores) {
+                Pane pane = carnivore;
+                double layoutX = pane.getLayoutX();
+                double layoutY = pane.getLayoutY();
+                double width = pane.getWidth();
+                double height = pane.getHeight();
+
+                if (clickX >= layoutX && clickX <= layoutX + width &&
+                        clickY >= layoutY && clickY <= layoutY + height) {
+
+                    System.out.println("Kiválasztott új célpont: " + carnivore);
+                    selectedCarnivore = carnivore;
+                    root.setOnMouseClicked(null);
+                    return;
+                }
+            }
+
+            System.out.println("Nem érvényes célpont.");
+            selectedCarnivore = null;
+            root.setOnMouseClicked(null);
+        });
+    }
+    // =====
 
     // ==== RANGERS
     public void buyRanger(Ranger ranger){

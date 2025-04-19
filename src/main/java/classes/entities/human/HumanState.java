@@ -6,5 +6,7 @@ public enum HumanState {
     PAUSED,
     EXITING,
     LEFT,
-    IDLE
+    IDLE,
+    CAPTURING,
+    CAPTURED
 }

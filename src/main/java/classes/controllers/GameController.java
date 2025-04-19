@@ -362,8 +362,8 @@ public class GameController {
     public void buyVulture(){
         buyAnimal(Vulture.class, "/images/vulture.png");
     }
-    public void removeHerbivore(Herbivore herbivore){
-        uiLayer.getChildren().remove(herbivore);
+    public void removeAnimal(Animal animal){
+        uiLayer.getChildren().remove(animal);
     }
     // =====
 
@@ -499,7 +499,8 @@ public class GameController {
                     closeRangerWindow(clickedRanger);
                 },
                 () -> {
-                    //...
+                    // Choose prey action
+                    gameEngine.enableCarnivoreClick();
                 },
                 () -> {
                     // Close action
