@@ -22,6 +22,9 @@ class ElephantTest {
             // JavaFX már elindult
         }
     }
+//    public static void initJavaFX() {
+//        new JFXPanel(); // Ezzel elindul a JavaFX környezet
+//    }
 
     @BeforeEach
     void setUp() {
