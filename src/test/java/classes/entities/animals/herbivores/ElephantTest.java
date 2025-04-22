@@ -28,15 +28,15 @@ class ElephantTest {
 //        new JFXPanel(); // Ezzel elindul a JavaFX környezet
 //    }
 
-    @BeforeAll
-    static void initToolkit() throws InterruptedException {
-        final CountDownLatch latch = new CountDownLatch(1);
-        Platform.startup(() -> {
-            // semmi dolgunk, csak elindítjuk
-            latch.countDown();
-        });
-        latch.await();
-    }
+//    @BeforeAll
+//    static void initToolkit() throws InterruptedException {
+//        final CountDownLatch latch = new CountDownLatch(1);
+//        Platform.startup(() -> {
+//            // semmi dolgunk, csak elindítjuk
+//            latch.countDown();
+//        });
+//        latch.await();
+//    }
 
     @BeforeEach
     void setUp() {
