@@ -16,14 +16,14 @@ class ElephantTest {
 
     private Elephant elephant;
 
-//    @BeforeAll
-//    public static void initJavaFX() {
-//        try {
-//            Platform.startup(() -> {});
-//        } catch (IllegalStateException e) {
-//            // JavaFX már elindult
-//        }
-//    }
+    @BeforeAll
+    public static void initJavaFX() {
+        try {
+            Platform.startup(() -> {});
+        } catch (IllegalStateException e) {
+            // JavaFX már elindult
+        }
+    }
 //    public static void initJavaFX() {
 //        new JFXPanel(); // Ezzel elindul a JavaFX környezet
 //    }
