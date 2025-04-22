@@ -8,5 +8,4 @@ public enum AnimalState {
     PAUSED,
     IDLE,
     HUNTING,
-    FOLLOWING
 }

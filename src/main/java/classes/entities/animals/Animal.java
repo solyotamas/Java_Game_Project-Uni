@@ -35,7 +35,7 @@ public abstract class Animal extends Pane {
     //stats
     private int age;
     protected double thirst = 100.0;
-    protected double hunger = 100.0;
+    protected double hunger = 20.0;
     //
 
     //Images of the Animal, ui
@@ -60,6 +60,9 @@ public abstract class Animal extends Pane {
     //herd
     protected boolean isInAHerd;
     protected Herd herd = null;
+
+    private boolean isManuallyPaused = false;
+    private boolean isBeingEaten = false;
 
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price)  {
@@ -259,7 +262,6 @@ public abstract class Animal extends Pane {
 
         if (hunger > 99.0) {
             state = AnimalState.IDLE;
-
             stateIcon.setVisible(false);
         }
     }
@@ -287,8 +289,6 @@ public abstract class Animal extends Pane {
         this.start = startingTerrain;
 
         Terrain targetTerrain = desiredTerrains.get(new Random().nextInt(desiredTerrains.size()));
-        System.out.println("Preparing path to " + targetTerrain.getClass().getSimpleName() +
-                " | Available targets: " + desiredTerrains.size());
         this.target = targetTerrain;
     }
     public Terrain pickStartingTerrain(Terrain[][] map){
@@ -322,16 +322,9 @@ public abstract class Animal extends Pane {
 
     //managing states
     public void transitionTo(AnimalState newState) {
-        if (newState == AnimalState.PAUSED) {
-            previousState = state;
-        }
         this.state = newState;
     }
-    public void resume() {
-        if (state == AnimalState.PAUSED && previousState != null) {
-            transitionTo(previousState);
-        }
-    }
+
     private AnimalState determineStateFromTarget(Terrain target) {
         if(target instanceof River){
             return AnimalState.DRINKING;
@@ -412,5 +405,24 @@ public abstract class Animal extends Pane {
     }
     public void setHerd(Herd herd){
         this.herd = herd;
+    }
+
+    public void pauseManually() {
+        isManuallyPaused = true;
+    }
+
+    public void resumeManually() {
+        isManuallyPaused = false;
+    }
+
+    public boolean isManuallyPaused() {
+        return isManuallyPaused;
+    }
+    public void setBeingEaten(boolean val) {
+        this.isBeingEaten = val;
+    }
+
+    public boolean isBeingEaten() {
+        return isBeingEaten;
     }
 }

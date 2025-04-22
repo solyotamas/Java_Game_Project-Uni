@@ -264,7 +264,7 @@ public class GameBoard{
             return new ArrayList<>();
         }
 
-        System.out.println("Starting Dijkstra from: " + start + " to " + goal);
+        //System.out.println("Starting Dijkstra from: " + start + " to " + goal);
 
         Map<Terrain, Terrain> cameFrom = new HashMap<>();
         Map<Terrain, Integer> costSoFar = new HashMap<>();
@@ -308,9 +308,9 @@ public class GameBoard{
         }
 
         if (path.isEmpty()) {
-            System.out.println("no path found from " + start + " to " + goal);
+            //System.out.println("no path found from " + start + " to " + goal);
         } else {
-            System.out.println("path found, length: " + path.size());
+            //System.out.println("path found, length: " + path.size());
         }
 
         return path;

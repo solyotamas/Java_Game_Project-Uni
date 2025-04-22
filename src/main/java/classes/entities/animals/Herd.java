@@ -33,14 +33,34 @@ public class Herd {
     public void removeMember(Animal animal) {
         members.remove(animal);
 
+        animal.setIsInAHerd(false);
+        animal.setHerd(null);
+        animal.transitionTo(AnimalState.IDLE);
+
         if (animal == leader) {
-            if (members.size() >= 1) {
+            if (!members.isEmpty()) {
                 leader = members.get(0);
-                leader.transitionTo(AnimalState.IDLE);
             } else {
                 leader = null;
             }
         }
+
+
+        if (members.size() < 2) {
+            for (Animal leftover : members) {
+                leftover.setIsInAHerd(false);
+                leftover.setHerd(null);
+                leftover.transitionTo(AnimalState.IDLE);
+            }
+            members.clear();
+            leader = null;
+        }
+    }
+
+
+
+    public void setLeader(Animal newLeader) {
+        this.leader = newLeader;
     }
 
 
@@ -78,19 +98,10 @@ public class Herd {
         return this.leader;
     }
 
-    public void pauseAll() {
-        for (Animal animal : members) {
-            animal.transitionTo(AnimalState.PAUSED);
-        }
+    public void assignNewLeader() {
+        if (members.size() < 2) return;
+        leader = members.get(0);
     }
 
-    public void resumeAll() {
-        Animal leader = getLeader();
-        for (Animal animal : members) {
-            animal.resume();
-            if (animal != leader) {
-                animal.transitionTo(leader.getState());
-            }
-        }
-    }
+
 }

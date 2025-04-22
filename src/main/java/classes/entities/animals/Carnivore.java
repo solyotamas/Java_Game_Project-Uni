@@ -30,7 +30,7 @@ public abstract class Carnivore extends Animal {
         double distance = Math.hypot(dx, dy);
         if (distance < 2) {
             this.state = AnimalState.EATING;
-            prey.transitionTo(AnimalState.PAUSED);
+            prey.setBeingEaten(true);
             return;
         }
 

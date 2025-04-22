@@ -431,22 +431,39 @@ public class GameController {
 
         Animal clickedAnimal = (Animal) event.getSource();
         if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
-            clickedAnimal.getHerd().pauseAll(); // or toggle pause
+            for (Animal a : clickedAnimal.getHerd().getMembers()) {
+                a.pauseManually();
+            }
         } else {
-            clickedAnimal.transitionTo(AnimalState.PAUSED);
+            clickedAnimal.pauseManually();
         }
 
         currentInfoWindowAnimal = new InfoWindowAnimal(
                 clickedAnimal,
                 () -> {
                     // Sell action
+                    if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
+                        for (Animal a : clickedAnimal.getHerd().getMembers()) {
+                            a.resumeManually();
+                        }
+                    }else
+                        clickedAnimal.resumeManually();
+
                     gameEngine.sellAnimal(clickedAnimal);
                     uiLayer.getChildren().remove(clickedAnimal);
-
                     closeAnimalWindow(clickedAnimal);
+
                 },
                 () -> {
                     // Close action
+                    if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
+                        for (Animal a : clickedAnimal.getHerd().getMembers()) {
+                            a.resumeManually();
+                        }
+                    }
+                    else
+                        clickedAnimal.resumeManually();
+
                     closeAnimalWindow(clickedAnimal);
                 }
         );
@@ -458,13 +475,8 @@ public class GameController {
             uiLayer.getChildren().remove(currentInfoWindowAnimal);
             currentInfoWindowAnimal = null;
         }
-
-        if (animal.getIsInAHerd() && animal.getHerd() != null) {
-            animal.getHerd().resumeAll();
-        } else {
-            animal.resume();
-        }
     }
+
     private void handleRangerClicked(MouseEvent event) {
         if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
             return;

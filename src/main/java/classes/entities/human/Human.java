@@ -137,7 +137,7 @@ public abstract class Human extends Pane {
             if(state == HumanState.MOVING)
                 transitionTo(HumanState.RESTING);
             if(state == HumanState.EXITING){
-                System.out.println("Tourist reached exit: " + this);
+                //System.out.println("Tourist reached exit: " + this);
                 transitionTo(HumanState.LEFT);
             }
             return;
