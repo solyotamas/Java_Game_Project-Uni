@@ -4,8 +4,10 @@ import classes.entities.animals.AnimalState;
 import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 //import javafx.embed.swing.JFXPanel;
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,17 +16,27 @@ class ElephantTest {
 
     private Elephant elephant;
 
-    @BeforeAll
-    public static void initJavaFX() {
-        try {
-            Platform.startup(() -> {});
-        } catch (IllegalStateException e) {
-            // JavaFX már elindult
-        }
-    }
+//    @BeforeAll
+//    public static void initJavaFX() {
+//        try {
+//            Platform.startup(() -> {});
+//        } catch (IllegalStateException e) {
+//            // JavaFX már elindult
+//        }
+//    }
 //    public static void initJavaFX() {
 //        new JFXPanel(); // Ezzel elindul a JavaFX környezet
 //    }
+
+    @BeforeAll
+    static void initToolkit() throws InterruptedException {
+        final CountDownLatch latch = new CountDownLatch(1);
+        Platform.startup(() -> {
+            // semmi dolgunk, csak elindítjuk
+            latch.countDown();
+        });
+        latch.await();
+    }
 
     @BeforeEach
     void setUp() {
@@ -44,13 +56,6 @@ class ElephantTest {
     }
 
     @Test
-    void testInitialUIState() {
-        ImageView view = elephant.getImageView();
-        assertNotNull(view);
-        assertEquals(elephant.getDepth(), elephant.getY() + (88 * 0.6 / 2.0), 0.001);
-    }
-
-    @Test
     void testInitialAnimalStats() {
         assertEquals(AnimalState.IDLE, elephant.getState());
         assertEquals(100.0, elephant.getThirst(), 0.001);
@@ -59,4 +64,21 @@ class ElephantTest {
         assertNull(elephant.getStart());
         assertNull(elephant.getTarget());
     }
+
+//    @Test
+//    void testInitialUIState() {
+//        ImageView view = elephant.getImageView();
+//        assertNotNull(view);
+//        assertEquals(elephant.getDepth(), elephant.getY() + (88 * 0.6 / 2.0), 0.001);
+//    }
+    @Test
+    @Tag("gui")
+    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+    void testInitialUIState() {
+        ImageView view = elephant.getImageView();
+        assertNotNull(view);
+        assertEquals(elephant.getDepth(), elephant.getY() + (88 * 0.6 / 2.0), 0.001);
+    }
+
+
 }
