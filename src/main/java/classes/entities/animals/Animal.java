@@ -5,7 +5,6 @@ import classes.landforms.Lake;
 import classes.landforms.plants.Plant;
 import classes.terrains.River;
 import classes.terrains.Terrain;
-import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -53,9 +52,14 @@ public abstract class Animal extends Pane {
     protected Direction currentDirection = Direction.RIGHT;
 
     //State images
-    //private ImageView stateIconView;
-    //private static final Image dropletImage = new Image(Animal.class.getResource("/images/droplet.png").toExternalForm()); // Put in resources
+    private ImageView stateIcon;
+    private Image thirstImage;
+    private Image hungerImage;
+    private Image sleepImage;
 
+    //herd
+    protected boolean isInAHerd;
+    protected Herd herd = null;
 
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price)  {
@@ -85,19 +89,23 @@ public abstract class Animal extends Pane {
         this.state = AnimalState.IDLE;
 
         //state images
-        /*
-        stateIconView = new ImageView(dropletImage);
-        stateIconView.setFitWidth(48); // Adjust size as needed
-        stateIconView.setFitHeight(48);
-        stateIconView.setVisible(false); // Hide by default
-        stateIconView.setLayoutX(imageView.getLayoutX() + imageView.getFitWidth() / 2 - stateIconView.getFitWidth() / 2);
-        stateIconView.setLayoutY(imageView.getLayoutY() - 15);
-        getChildren().add(stateIconView);
-        */
+        loadStateImages();
+        this.stateIcon = new ImageView();
+        stateIcon.setVisible(false);
+        stateIcon.setLayoutX(imageView.getLayoutX() + imageView.getFitWidth() / 2 - stateIcon.getFitWidth() / 2);
+        stateIcon.setLayoutY(imageView.getLayoutY() - 5);
+        getChildren().add(stateIcon);
+
 
 
     }
 
+    //Image loaders
+    private void loadStateImages(){
+        this.thirstImage = new Image(Animal.class.getResource("/images/thirst.png").toExternalForm());
+        this.hungerImage = new Image(Animal.class.getResource("/images/hunger.png").toExternalForm());
+        this.sleepImage = new Image(Animal.class.getResource("/images/sleep.png").toExternalForm());
+    }
     private void loadStaticDirectionImages() {
         for (int i = 0; i < 3; i++) {
             walkDownImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 0 * frameHeight, frameWidth, frameHeight);
@@ -113,55 +121,6 @@ public abstract class Animal extends Pane {
         }
     }
 
-
-    /*
-    public void moveTowardsTarget(boolean choose_x) {
-        if (paused) {
-            return;
-        }
-
-        double dx = targetX - x;
-        double dy = targetY - y;
-
-        if (Math.abs(dx) < 5 && Math.abs(dy) < 5) {
-            resting = true;
-            return;
-        }
-
-        if (choose_x) {
-            if ((Math.abs(dx) > 1)) {
-                if (dx > 0) {
-                    move(Direction.RIGHT, speed, 0);
-                } else {
-                    move(Direction.LEFT, -speed, 0);
-                }
-            }
-            else if (Math.abs(dy) > 1) {
-                if (dy > 0) {
-                    move(Direction.DOWN, 0, speed);
-                } else {
-                    move(Direction.UP, 0, -speed);
-                }
-            }
-        } else {
-            if (Math.abs(dy) > 1) {
-                if (dy > 0) {
-                    move(Direction.DOWN, 0, speed);
-                } else {
-                    move(Direction.UP, 0, -speed);
-                }
-            }
-            else if ((Math.abs(dx) > 1)) {
-                if (dx > 0) {
-                    move(Direction.RIGHT, speed, 0);
-                } else {
-                    move(Direction.LEFT, -speed, 0);
-                }
-            }
-        }
-
-    }*/
-    //eredeti moveTowards
 
 
 
@@ -250,28 +209,69 @@ public abstract class Animal extends Pane {
         }
     }
 
+    //in a herd movements
+    public void moveTowardsLeader(Animal leader) {
+        double targetX = leader.getX();
+        double targetY = leader.getY();
+
+        double dx = targetX - this.x;
+        double dy = targetY - this.y;
+
+        double distance = Math.hypot(dx, dy);
+        if (distance < 15) {
+            this.transitionTo(leader.getState());
+            return;
+        }
+
+        double stepX = (dx / distance) * speed;
+        double stepY = (dy / distance) * speed;
+
+        Direction dir;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            dir = dx > 0 ? Direction.RIGHT : Direction.LEFT;
+        } else {
+            dir = dy > 0 ? Direction.DOWN : Direction.UP;
+        }
+
+        move(dir, stepX, stepY);
+    }
+
     //not moving states
     public void rest() {
         restingTimePassed += 0.05;
+
+        stateIcon.setImage(sleepImage);
+        stateIcon.setVisible(true);
+
         if (restingTimePassed >= 15) {
             restingTimePassed = 0.0;
             state = AnimalState.IDLE;
+
+            stateIcon.setVisible(false);
         }
 
     }
     public void eat(){
         this.changeHunger(0.5); //+10 / mp
+
+        stateIcon.setImage(hungerImage);
+        stateIcon.setVisible(true);
+
         if (hunger > 99.0) {
             state = AnimalState.IDLE;
+
+            stateIcon.setVisible(false);
         }
     }
-
     public void drink(){
         this.changeThirst(0.5); //+10 / mp
-        //stateIconView.setVisible(true);
+
+        stateIcon.setImage(thirstImage);
+        stateIcon.setVisible(true);
+
         if (thirst > 99.0) {
             state = AnimalState.IDLE;
-            //stateIconView.setVisible(false);
+            stateIcon.setVisible(false);
         }
     }
     public void changeThirst(double val){
@@ -347,38 +347,6 @@ public abstract class Animal extends Pane {
 
 
 
-//rest and pickNewTarget csak növényekre
-    /*public void rest(ArrayList<Plant> plants) {
-        restingTimePassed += 0.05; // updateAnimalPositions() is 50ms
-
-        if (restingTimePassed >= restDuration) {
-            resting = false;
-            restingTimePassed = 0.0;
-            pickNewTarget(plants);
-        }
-    }
-
-    public void pickNewTarget(ArrayList<Plant> plants) {
-        Random random = new Random();
-        Plant randomPlant = plants.get(random.nextInt(plants.size()));
-
-        this.targetX = randomPlant.getX() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getWidthInTiles(); //randomPlant.getLayoutX();
-        this.targetY = randomPlant.getY() + (double )(randomPlant.getTileSize() / 2);  //* randomPlant.getTileSize(); //* randomPlant.getHeightInTiles(); //randomPlant.getLayoutY();
-       // System.out.println("target picked: " + targetX +  " : " +targetY);
-
-    }*/
-
-    /*
-    public abstract void rest(ArrayList<T> panes);*/
-    /*
-    public abstract void pickNewTarget(ArrayList<T> panes);
-    */
-    public void sellAnimal(){
-        System.out.println(this.getClass() + " sold");
-        //TODO sell animal
-    }
-
-
     //Getters, Setters
     public double getSpeed(){
         return this.speed;
@@ -419,5 +387,30 @@ public abstract class Animal extends Pane {
     }
     public double getHunger(){
         return hunger;
+    }
+    public void setStateIcon(Image stateIcon){
+        this.stateIcon.setImage(stateIcon);
+    }
+    public void setStateIconVisibility(boolean val){
+        this.stateIcon.setVisible(val);
+    }
+    public void setThirst(double thirst){
+        this.thirst = thirst;
+    }
+    public void setHunger(double hunger){
+        this.hunger = hunger;
+    }
+    public void setIsInAHerd(boolean val){
+        this.isInAHerd = val;
+    }
+    public boolean getIsInAHerd(){
+        return isInAHerd;
+    }
+
+    public Herd getHerd() {
+        return this.herd;
+    }
+    public void setHerd(Herd herd){
+        this.herd = herd;
     }
 }

@@ -430,7 +430,11 @@ public class GameController {
         event.consume();
 
         Animal clickedAnimal = (Animal) event.getSource();
-        clickedAnimal.transitionTo(AnimalState.PAUSED);
+        if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
+            clickedAnimal.getHerd().pauseAll(); // or toggle pause
+        } else {
+            clickedAnimal.transitionTo(AnimalState.PAUSED);
+        }
 
         currentInfoWindowAnimal = new InfoWindowAnimal(
                 clickedAnimal,
@@ -454,7 +458,12 @@ public class GameController {
             uiLayer.getChildren().remove(currentInfoWindowAnimal);
             currentInfoWindowAnimal = null;
         }
-        animal.resume();
+
+        if (animal.getIsInAHerd() && animal.getHerd() != null) {
+            animal.getHerd().resumeAll();
+        } else {
+            animal.resume();
+        }
     }
     private void handleRangerClicked(MouseEvent event) {
         if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
