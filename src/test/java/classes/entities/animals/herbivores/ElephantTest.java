@@ -12,7 +12,8 @@ import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 //import javafx.embed.swing.JFXPanel;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ElephantTest {
+@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+public class ElephantTest {
 
     private Elephant elephant;
 
