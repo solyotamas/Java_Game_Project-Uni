@@ -138,6 +138,7 @@ public abstract class Animal extends Pane {
 
     }
     public void move(Direction dir, double dx, double dy) {
+        //todo ELEGÁNSABB LENNE A DIRECTION-BŐL KISZEDNI AZ IRÁNY ÉRTÉKEIT
         this.currentDirection = dir;
         this.x += dx; this.y += dy;
 
@@ -357,4 +358,5 @@ public abstract class Animal extends Pane {
     public double getHunger(){
         return hunger;
     }
+    public Direction getCurrentDirection() { return currentDirection; }
 }

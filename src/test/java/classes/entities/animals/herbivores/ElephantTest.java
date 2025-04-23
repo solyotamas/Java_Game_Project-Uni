@@ -10,9 +10,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 
 //import javafx.embed.swing.JFXPanel;
+import static classes.entities.Direction.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+//@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 public class ElephantTest {
 
     private Elephant elephant;
@@ -80,6 +81,58 @@ public class ElephantTest {
         assertNotNull(view);
         assertEquals(elephant.getDepth(), elephant.getY() + (88 * 0.6 / 2.0), 0.001);
     }
+
+    @Test
+    void testDrinks() {
+        elephant.changeThirst(-50);
+        elephant.drink();
+        assertTrue(elephant.getThirst() > 50); //mert alapból ugye 100 a kontrusktorban
+    }
+
+    @Test
+    void testEats() {
+        elephant.changeHunger(-60);
+        elephant.eat();
+        assertTrue(elephant.getHunger() > 40); //ez is 100
+    }
+
+    @Test
+    void testRestAndSTransitionTo() {
+        elephant.transitionTo(AnimalState.RESTING);
+        for (int i = 0; i < 400; i++) {
+            elephant.rest();
+        }
+        assertEquals(AnimalState.IDLE, elephant.getState());
+
+        //egyik sem nyúl az éhséghez vagy szomjúsághoz
+        assertEquals(100.0, elephant.getThirst());
+        assertEquals(100.0, elephant.getHunger());
+    }
+
+    @Test
+    void testMove() {
+        double initialX = elephant.getLayoutX();
+        elephant.move(RIGHT, 1, 0);
+        assertEquals(initialX + 1, elephant.getLayoutX());
+        assertEquals(RIGHT, elephant.getCurrentDirection());
+
+        initialX = elephant.getLayoutX();
+        elephant.move(LEFT, -1, 0);
+        assertEquals(initialX - 1, elephant.getLayoutX());
+        assertEquals(LEFT, elephant.getCurrentDirection());
+
+        double initialY = elephant.getLayoutY();
+        elephant.move(UP, 0, -1);
+        assertEquals(initialY - 1 , elephant.getLayoutY());
+        assertEquals(UP, elephant.getCurrentDirection());
+
+        initialY = elephant.getLayoutY();
+        elephant.move(DOWN, 0, 1);
+        assertEquals(initialY + 1, elephant.getLayoutY());
+        assertEquals(DOWN, elephant.getCurrentDirection());
+    }
+
+
 
 
 }
