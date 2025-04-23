@@ -298,7 +298,6 @@ public class GameEngine {
         updateHerbivoreHerdStates();
         updateCarnivoreHerdStates();
     }
-
     private void updateHerbivoreHerdStates() {
         for (Herd herd : herbivoreherds) {
             herd.assignNewLeader();
@@ -342,7 +341,6 @@ public class GameEngine {
             }
         }
     }
-
     private void updateCarnivoreHerdStates() {
         for (Herd herd : carnivoreherds) {
             herd.assignNewLeader();
@@ -597,25 +595,31 @@ public class GameEngine {
 
     //JEEP
     public void buyJeep() {
-/*        if (touristCount >= 4) {
-            touristCount -= 4;
-            startJeep();
-        } else {
-            System.out.println("Not enough tourists");
-        }*/
         startJeep();
     }
     public void startJeep() {
+        Terrain start = gameBoard.getTerrainAt(5, 14);
+        Terrain goal = gameBoard.getTerrainAt(15, 14);
+
+        ArrayList<Terrain> roadPath = gameBoard.findRoadPathDijkstra(start, goal);
+
+        if (roadPath == null || roadPath.size() < 2) {
+            System.out.println(" No valid road path found between (5,14) and (15,14)");
+            return;
+        }
+
         jeepCount++;
-        Jeep jeep = new Jeep(150, 0);
-        // jeep = new Jeep(1770, 900);
+        Jeep jeep = new Jeep(5 * 30 + 15, 14 * 30 + 15);
+        jeep.setPath(roadPath);
+
         jeeps.add(jeep);
         gameBoard.getUiLayer().getChildren().add(jeep);
-        gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, tourists.size(), ticketPrice, money);
     }
+
+
     public void updateJeepPositions() {
         for (Jeep jeep : jeeps) {
-            jeep.autoMove(roads);
+            jeep.moveAlongPath();
         }
     }
 
@@ -640,23 +644,6 @@ public class GameEngine {
 
         if (animal.getHerd() != null) {
             animal.getHerd().removeMember(animal);
-        }
-    }
-    private void cleanupAnimalFromHerd(Animal animal, List<Herd> herds) {
-        for (Herd herd : new ArrayList<>(herds)) {
-            if (herd.getMembers().contains(animal)) {
-                herd.removeMember(animal);
-
-                if (herd.getMemberCount() < 2) {
-                    for (Animal m : herd.getMembers()) {
-                        m.setIsInAHerd(false);
-                        m.setHerd(null);
-                        m.transitionTo(IDLE);
-                    }
-                    herds.remove(herd);
-                }
-                break;
-            }
         }
     }
 

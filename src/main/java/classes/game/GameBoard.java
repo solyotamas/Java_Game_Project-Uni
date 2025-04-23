@@ -164,6 +164,7 @@ public class GameBoard{
         }else
             return null;
     }
+
     //Placing landforms
     public boolean canPlaceLandform(Landform landform, int startX, int startY) {
         for (int x = startX; x < startX + landform.getWidthInTiles(); x++) {
@@ -192,6 +193,7 @@ public class GameBoard{
     }
 
 
+    //Movement for animals
     public ArrayList<Terrain> getPlantTerrains() {
         ArrayList<Terrain> plantTiles = new ArrayList<>();
 
@@ -318,6 +320,81 @@ public class GameBoard{
 
 
 
+
+    //Movement for jeeps
+    public ArrayList<Terrain> findRoadPathDijkstra(Terrain start, Terrain goal) {
+        if (start == null || goal == null) return new ArrayList<>();
+
+        Map<Terrain, Terrain> cameFrom = new HashMap<>();
+        Map<Terrain, Integer> costSoFar = new HashMap<>();
+        PriorityQueue<Terrain> frontier = new PriorityQueue<>(Comparator.comparingInt(costSoFar::get));
+
+        costSoFar.put(start, 0);
+        frontier.add(start);
+
+        while (!frontier.isEmpty()) {
+            Terrain current = frontier.poll();
+
+            if (current == goal) break;
+
+            for (Terrain neighbor : getRoadNeighbors(current)) {
+                int newCost = costSoFar.get(current) + 1; // road cost = 1
+
+                if (!costSoFar.containsKey(neighbor) || newCost < costSoFar.get(neighbor)) {
+                    costSoFar.put(neighbor, newCost);
+                    cameFrom.put(neighbor, current);
+                    frontier.add(neighbor);
+                }
+            }
+        }
+
+        // Reconstruct path
+        ArrayList<Terrain> path = new ArrayList<>();
+        Terrain current = goal;
+
+        while (current != null && cameFrom.containsKey(current)) {
+            path.add(0, current);
+            current = cameFrom.get(current);
+        }
+
+        if (!path.isEmpty() && path.get(0) != start)
+            path.add(0, start);
+
+        return path;
+    }
+    public ArrayList<Terrain> getRoadNeighbors(Terrain tile) {
+        ArrayList<Terrain> neighbors = new ArrayList<>();
+
+        int x = tile.getRow();
+        int y = tile.getCol();
+
+        int[][] directions = {
+                {0, -1}, {0, 1}, {-1, 0}, {1, 0}
+        };
+
+        for (int[] dir : directions) {
+            int nx = x + dir[0];
+            int ny = y + dir[1];
+            Terrain neighbor = getTerrainAt(nx, ny);
+            if (neighbor != null && neighbor.hasLandform() && neighbor.getLandform() instanceof Road) {
+                neighbors.add(neighbor);
+            }
+        }
+
+        return neighbors;
+    }
+    public ArrayList<Terrain> getRoadTerrains() {
+        ArrayList<Terrain> roadTiles = new ArrayList<>();
+        for (int x = 0; x < terrainGrid.length; x++) {
+            for (int y = 0; y < terrainGrid[0].length; y++) {
+                Terrain terrain = terrainGrid[x][y];
+                if (terrain != null && terrain.hasLandform() && terrain.getLandform() instanceof Road) {
+                    roadTiles.add(terrain);
+                }
+            }
+        }
+        return roadTiles;
+    }
 
 
 
