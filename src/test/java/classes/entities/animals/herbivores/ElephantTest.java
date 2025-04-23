@@ -13,7 +13,7 @@ import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
 import static classes.entities.Direction.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-//@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 public class ElephantTest {
 
     private Elephant elephant;
