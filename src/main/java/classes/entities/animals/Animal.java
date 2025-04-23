@@ -35,7 +35,7 @@ public abstract class Animal extends Pane {
     //stats
     private int age;
     protected double thirst = 100.0;
-    protected double hunger = 20.0;
+    protected double hunger = 100.0;
     //
 
     //Images of the Animal, ui
@@ -271,7 +271,8 @@ public abstract class Animal extends Pane {
         stateIcon.setImage(thirstImage);
         stateIcon.setVisible(true);
 
-        if (thirst > 99.0) {
+        if (thirst >= 100.0) {
+            thirst = 100.0;
             state = AnimalState.IDLE;
             stateIcon.setVisible(false);
         }
@@ -424,5 +425,8 @@ public abstract class Animal extends Pane {
 
     public boolean isBeingEaten() {
         return isBeingEaten;
+    }
+    public void setRestingTimePassed(double val){
+        this.restingTimePassed = val;
     }
 }

@@ -51,6 +51,9 @@ public class Herd {
                 leftover.setIsInAHerd(false);
                 leftover.setHerd(null);
                 leftover.transitionTo(AnimalState.IDLE);
+
+                leftover.setStateIconVisibility(false);
+                leftover.setRestingTimePassed(0.0);
             }
             members.clear();
             leader = null;
