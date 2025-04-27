@@ -58,6 +58,7 @@ public class ScreenController {
 
         stage.setScene(scene);
         stage.show();
+        stage.show();
     }
 
     public void switchToDifficulty(ActionEvent event) throws IOException {
