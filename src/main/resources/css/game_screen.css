@@ -1,6 +1,119 @@
 .fancyBtn {
-    -fx-border-radius: 10px;
     -fx-background-radius: 10px;
-    -fx-border-width: 2px;
+    -fx-border-radius: 10px;
+    -fx-padding: 10px;
+    -fx-cursor: hand;
+    -fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39);
     -fx-border-color: #83301B;
+    -fx-border-width: 3px;
+}
+
+#market {
+    -fx-background-image:  url("../images/market.png");
+    -fx-background-color: transparent;
+    -fx-background-position: center;
+    -fx-background-size: 100%;
+    -fx-cursor: hand;
+}
+
+.buyItem {
+    -fx-background-image: url("../images/buyItem.png");
+    -fx-background-color: transparent;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-cursor: hand;
+}
+
+.buyItem:hover {
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+#shopPane {
+    -fx-border-color: #7F4F27;
+    -fx-border-width: 4px;
+    -fx-background-color: radial-gradient(center 50% 50%, radius 80%, #F7BB5E, #EC9042);
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+}
+
+#itemsPane {
+    -fx-background-color: transparent;
+    -fx-font-size: 24px;
+    -fx-background-color: #FFD884;
+    -fx-background-radius: 20px;
+    -fx-border-color: #7F4F27;
+    -fx-border-width: 4px;
+    -fx-border-radius: 20px;
+}
+
+.info-window {
+    -fx-background-color: #FFEB9D;
+    -fx-background-radius: 12px;
+    -fx-border-color: #7F4F27;
+    -fx-border-width: 3px;
+    -fx-border-radius: 12px;
+    -fx-spacing: 8px;
+    -fx-alignment: center;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 63px;
+    -fx-padding: 8px;
+}
+
+.info-button {
+    -fx-background-color: linear-gradient(to bottom, #A29E09, #C0BA0E);
+    -fx-text-fill: white;
+    -fx-font-family: "Calibri";
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-border-color: #887101;
+    -fx-border-width: 3px;
+    -fx-border-radius: 9px;
+    -fx-background-radius: 12px;
+    -fx-pref-height: 40px;
+    -fx-pref-width: 150px;
+}
+
+.info-button:hover {
+    -fx-background-color: #A29E09;
+}
+
+.close-button {
+    -fx-font-family: "Calibri";
+    -fx-pref-width: 42.5px;
+    -fx-pref-height: 42.5px;
+    -fx-font-size: 25px;
+    -fx-padding: 2px 2px;
+    -fx-background-color: linear-gradient(to bottom, #EF6735, #B5421F);
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-border-color: #A64320;
+    -fx-border-width: 3px;
+    -fx-border-radius: 9px;
+    -fx-background-radius: 12px;
+}
+
+.losePane {
+    -fx-border-color: #7F4F27;
+    -fx-border-width: 4px;
+    -fx-background-color: radial-gradient(center 50% 50%, radius 80%, #F7BB5E, #EC9042);
+    -fx-border-radius: 20px;
+    -fx-background-radius: 20px;
+    -fx-pref-width: 600px;
+    -fx-pref-height: 400px;
+    -fx-alignment: center; /* Ha StackPane lenne, ez működne, de VBox esetén az elrendezőben kezeljük */
+}
+
+.gameOverText {
+    -fx-font-size: 58px;
+    -fx-fill: white;
+    -fx-font-family: "Franklin Gothic Demi";
+}
+
+.reasonOfDeathText {
+    -fx-font-size: 24px;
+    -fx-fill: #3E2415;
+    -fx-font-family: "Calibri";
+    -fx-font-weight: bold;
 }

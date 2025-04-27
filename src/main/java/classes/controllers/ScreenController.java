@@ -1,5 +1,6 @@
 package classes.controllers;
 
+import classes.Difficulty;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +10,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
@@ -23,6 +26,22 @@ public class ScreenController {
     @FXML
     private ListView<String> saveListView;
 
+    @FXML
+    private ToggleButton easyToggle;
+    @FXML
+    private ToggleButton mediumToggle;
+    @FXML
+    private ToggleButton hardToggle;
+
+    @FXML
+    public void initialize() {
+        if (easyToggle != null && mediumToggle != null && hardToggle != null) {
+            ToggleGroup difficultyGroup = new ToggleGroup();
+            easyToggle.setToggleGroup(difficultyGroup);
+            mediumToggle.setToggleGroup(difficultyGroup);
+            hardToggle.setToggleGroup(difficultyGroup);
+        }
+    }
 
     public void addItemsToList() {
         ObservableList<String> items = FXCollections.observableArrayList("Save Slot 1", "Save Slot 2", "Save Slot 3",
@@ -54,12 +73,26 @@ public class ScreenController {
     }
 
     public void switchToGame(ActionEvent event) throws IOException {
+        Difficulty selectedDifficulty = Difficulty.EASY;
+
+        if (easyToggle.isSelected()) {
+            selectedDifficulty = Difficulty.EASY;
+        } else if (mediumToggle.isSelected()) {
+            selectedDifficulty = Difficulty.MEDIUM;
+        } else if (hardToggle.isSelected()) {
+            selectedDifficulty = Difficulty.HARD;
+        }
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/game_screen.fxml"));
         Parent root = loader.load();
 
-        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        GameController controller = loader.getController();
+        controller.setDifficulty(selectedDifficulty);
 
-        scene = new Scene(root);
+        controller.startGame();
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }

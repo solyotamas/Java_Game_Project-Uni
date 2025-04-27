@@ -1,18 +1,26 @@
 package classes.terrains;
 
+import java.util.ArrayList;
+import java.util.Random;
 import javafx.scene.image.Image;
-
 
 public class Hill extends Terrain {
 
-    private static Image hillImage;
+    private static final ArrayList<Image> hillImages = new ArrayList<>();
+    private static final Random rand = new Random();
 
-    public Hill(int x, int y) {
-        super(x, y, hillImage, 2);
+    public Hill(int row, int col) {
+        super(row, col, getRandomHillImage(), 2, true);
     }
 
-    //preload
-    public static void preloadHillImage() {
-        hillImage = new Image(Hill.class.getResource("/images/hill.png").toExternalForm());
+    private static Image getRandomHillImage() {
+        return hillImages.get(rand.nextInt(hillImages.size()));
+    }
+
+    static {
+        for (int i = 1; i <= 7; i++) {
+            String path = "/images/hill" + i + ".png";
+            hillImages.add(new Image(Hill.class.getResource(path).toExternalForm()));
+        }
     }
 }
