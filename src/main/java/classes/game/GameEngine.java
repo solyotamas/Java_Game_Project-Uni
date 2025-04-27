@@ -39,6 +39,7 @@ notes:
 public class GameEngine {
     private GameController gameController;
     private GameBoard gameBoard;
+    private Timeline timeline;
 
     private double spentTime;
     private double firstConditionMetTime;
@@ -112,7 +113,7 @@ public class GameEngine {
     public void gameLoop() {
         savePlants();
 
-        Timeline timeline = new Timeline(
+        timeline = new Timeline(
             new KeyFrame(Duration.millis(50), e -> {
 
                 updateAnimalStates();
@@ -126,9 +127,17 @@ public class GameEngine {
 
                 // Check win/lose conditions
                 if (gameOver()) {
+                    if (money == 0) {
+                        gameController.setReasonOfDeathText("Your safari park has gone bankrupt.");
+
+                    } else {
+                        gameController.setReasonOfDeathText("All of your animals have died.");
+                    }
                     gameController.openLosePane();
+                    timeline.stop();
                 } else if (gameWon()) {
                     gameController.openWinPane();
+                    timeline.stop();
                 }
 
                 // UI sync, Display things
@@ -190,6 +199,7 @@ public class GameEngine {
 
 
     // ==== UPDATE STATES
+    // Animal
     private void updateAnimalStates() {
         removeOldAnimals(herbivores, spentTime);
         removeOldAnimals(carnivores, spentTime);
@@ -233,7 +243,7 @@ public class GameEngine {
                     carnivore.changeHunger(0.5);
                     if (carnivore.getHunger() > 99.0) {
                         carnivore.transitionTo(RESTING);
-                        gameController.removeHerbivore(carnivore.getPrey());
+                        gameController.removeAnimal(carnivore.getPrey());
                         herbivores.remove(carnivore.getPrey());
                     }
                 }
@@ -283,25 +293,77 @@ public class GameEngine {
             gameBoard.getUiLayer().getChildren().remove(animal);
         }
     }
+    // --- Animal
 
+    // Human
+    private Carnivore selectedCarnivore = null;
     private void updateHumanStates() {
+
+        // Ranger
+        List<Ranger> toRemoveRangers = new ArrayList<>();
 
         for (Ranger ranger : rangers) {
             switch (ranger.getState()){
-                case MOVING -> ranger.moveTowardsTarget();
-                case RESTING -> ranger.rest();
+                case MOVING -> {
+                    // Choosing new prey while moving
+                    if (selectedCarnivore != null) {
+                        ranger.transitionTo(HumanState.CAPTURING);
+                    } else {
+                        ranger.moveTowardsTarget(); // Moving towards prey
+                    }
+                }
+                case RESTING -> {
+                    // Choosing new prey while resting
+                    if (selectedCarnivore != null) {
+                        ranger.transitionTo(HumanState.CAPTURING);
+                    } else {
+                        ranger.rest(); // Resting
+                    }
+                }
                 case PAUSED -> {}
                 case IDLE -> {
                     ranger.pickNewTarget();
                     ranger.transitionTo(HumanState.MOVING);
                 }
+                case CAPTURING -> {
+                    for (Carnivore carnivore : carnivores) {
+                        carnivore.setStyle("");
+                    }
+
+                    // Checking if animal hasn't been sold or hasn't died while capturing
+                    if (selectedCarnivore != null && carnivores.contains(selectedCarnivore)) {
+                        ranger.choosePrey(selectedCarnivore);
+                        ranger.huntTarget();
+                    } else {
+                        selectedCarnivore = null;
+                        ranger.transitionTo(HumanState.RESTING);
+                    }
+
+                }
+                case CAPTURED -> {
+                    ranger.transitionTo(HumanState.RESTING);
+                    selectedCarnivore = null;
+                    gameController.removeAnimal(ranger.getPrey());
+                    carnivores.remove(ranger.getPrey());
+                }
             }
 
             if (ranger.isDueForPayment(spentTime)) {
-                payRanger(ranger);
+                if (money >= 5000) {
+                    payRanger(ranger);
+                } else {
+                    toRemoveRangers.add(ranger);
+                }
             }
 
         }
+
+        for (Ranger ranger : toRemoveRangers) {
+            unemployRanger(ranger);
+        }
+        // --- Ranger
+
+        // Poacher
         for (Poacher poacher : poachers) {
             switch (poacher.getState()){
                 case MOVING -> poacher.moveTowardsTarget();
@@ -313,7 +375,9 @@ public class GameEngine {
                 }
             }
         }
+        // --- Poacher
 
+        // Tourist
         List<Tourist> toRemove = new ArrayList<>();
         for (Tourist tourist : tourists){
             tourist.changeVisitDuration(2);
@@ -334,36 +398,75 @@ public class GameEngine {
             gameController.removeTourist(t);
             tourists.remove(t);
         }
-
+        // --- Tourist
     }
+    // --- Human
     // =====
-
 
     // ==== RANGERS
     public void buyRanger(Ranger ranger){
         ranger.setLastPaidHour(spentTime);
         this.rangers.add(ranger);
-        payRanger(ranger);
+        money = Math.max(0, money - 5000);
     }
+
     public void payRanger(Ranger ranger) {
-        money -= 5000;
-        ranger.setLastPaidHour(spentTime);
+        if (money >= 5000) {
+            money -= 5000;
+            ranger.setLastPaidHour(spentTime);
+        } else {
+            unemployRanger(ranger);
+        }
     }
+
     public void unemployRanger(Ranger ranger) {
         rangers.remove(ranger);
+        gameBoard.getUiLayer().getChildren().remove(ranger);
+        System.out.println(rangers.size());
+    }
+
+    public void choosePreyForRanger() {
+        Pane root = gameBoard.getUiLayer();
+
+        for (Carnivore carnivore : carnivores) {
+            carnivore.setStyle("-fx-border-color: red; -fx-border-width: 2;");
+        }
+
+        root.setOnMouseClicked(event -> {
+            double clickX = event.getX();
+            double clickY = event.getY();
+
+            for (Carnivore carnivore : carnivores) {
+                Pane pane = carnivore;
+                double layoutX = pane.getLayoutX();
+                double layoutY = pane.getLayoutY();
+                double width = pane.getWidth();
+                double height = pane.getHeight();
+
+                if (clickX >= layoutX && clickX <= layoutX + width &&
+                        clickY >= layoutY && clickY <= layoutY + height) {
+
+                    System.out.println("Kiválasztott új célpont: " + carnivore);
+                    selectedCarnivore = carnivore;
+                    root.setOnMouseClicked(null);
+                    return;
+                }
+            }
+
+            System.out.println("Nem érvényes célpont.");
+            selectedCarnivore = null;
+            root.setOnMouseClicked(null);
+        });
     }
     // =====
 
 
     // ==== JEEPS
     public void buyJeep() {
-        if (money >= 5000) {
-            jeepCount++;
-            money -= 5000; //TODO jeep.getPrice() valahogy használni?
-        } else {
-            System.out.println("Not enough money");
-        }
+        money = Math.max(0, money - 5000);
+        jeepCount++;
     }
+
     public void startJeep() {
         if (tourists.size() >= 4 && jeepCount >= 1) {
             for (int i = 0; i < 4; i++) {
@@ -390,17 +493,17 @@ public class GameEngine {
     // ==== SELLING, BUYING
     public void buyPlant(Plant plant) {
         plants.add(plant);
-        money -= plant.getPrice();
+        money = Math.max(0, money - plant.getPrice());
     }
 
     public void buyLake(Lake lake) {
         lakes.add(lake);
-        money -= lake.getPrice();
+        money = Math.max(0, money - lake.getPrice());
     }
 
     public void buyRoad(Road road) {
         roads.add(road);
-        money -= road.getPrice();
+        money = Math.max(0, money - road.getPrice());
     }
 
     //public void buyAnimal(Animal<? extends Pane> animal) {
@@ -410,7 +513,7 @@ public class GameEngine {
         } else if (animal instanceof Carnivore carnivore) {
             this.carnivores.add(carnivore);
         }
-        money -= animal.getPrice();
+        money = Math.max(0, money - animal.getPrice());
         animal.setBornAt(spentTime);
         canCheckForLose = true;
     }
@@ -444,8 +547,6 @@ public class GameEngine {
     private ArrayList<Road> roads;
     public ArrayList<Plant> plants;
     public ArrayList<Lake> lakes;
-
-
 
 
     // ==== GAME WINNING, LOSING
@@ -504,11 +605,11 @@ public class GameEngine {
         }
     }
 
-    public boolean haveEnoughMoneyForAnimal(Animal animalInstance) {
+/*    public boolean haveEnoughMoneyForAnimal(Animal animalInstance) {
         return money >= animalInstance.getPrice();
     }
 
     public boolean haveEnoughMoneyForRanger(Ranger rangerInstance) {
         return money >= 5000;
-    }
+    }*/
 }

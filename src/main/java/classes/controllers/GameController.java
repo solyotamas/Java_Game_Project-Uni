@@ -5,7 +5,6 @@ import classes.entities.additions.InfoWindowAnimal;
 import classes.entities.additions.InfoWindowRanger;
 import classes.entities.animals.Animal;
 import classes.entities.animals.AnimalState;
-import classes.entities.animals.Herbivore;
 import classes.entities.human.HumanState;
 import classes.entities.human.Tourist;
 import classes.entities.animals.carnivores.Lion;
@@ -35,7 +34,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Random;
@@ -76,6 +77,10 @@ public class GameController {
     private AnchorPane losePane;
     @FXML
     private AnchorPane winPane;
+    @FXML
+    private HBox navbar;
+    @FXML
+    private Text reasonOfDeathText;
 
     //Top and bottom bar UI
     @FXML
@@ -108,6 +113,9 @@ public class GameController {
         this.difficulty = difficulty;
     }
 
+    public void setReasonOfDeathText(String text) {
+        this.reasonOfDeathText.setText(text);
+    }
 
     @FXML
     public void speedGameToDay(){
@@ -285,7 +293,7 @@ public class GameController {
                         .newInstance(placeX, placeY);
 
                 //click
-                if(gameEngine.haveEnoughMoneyForAnimal(animalInstance) && canPlaceAnimal(animalInstance, placeX, placeY)){
+                if(canPlaceAnimal(animalInstance, placeX, placeY)){
 
                     Platform.runLater(() -> {
                         animalInstance.setOnMouseClicked(this::handleAnimalClicked);
@@ -362,8 +370,8 @@ public class GameController {
     public void buyVulture(){
         buyAnimal(Vulture.class, "/images/vulture.png");
     }
-    public void removeHerbivore(Herbivore herbivore){
-        uiLayer.getChildren().remove(herbivore);
+    public void removeAnimal(Animal animal){
+        uiLayer.getChildren().remove(animal);
     }
     // =====
 
@@ -400,8 +408,7 @@ public class GameController {
 
                 Ranger rangerInstance = new Ranger(placeX, placeY);
 
-                if (gameEngine.haveEnoughMoneyForRanger(rangerInstance) &&
-                        canPlaceRanger(rangerInstance, placeX, placeY)) {
+                if (canPlaceRanger(rangerInstance, placeX, placeY)) {
 
                     Platform.runLater(() -> {
                         rangerInstance.setOnMouseClicked(this::handleRangerClicked);
@@ -494,12 +501,12 @@ public class GameController {
                 () -> {
                     // Unemploy action
                     gameEngine.unemployRanger(clickedRanger);
-                    uiLayer.getChildren().remove(clickedRanger);
-
                     closeRangerWindow(clickedRanger);
                 },
                 () -> {
-                    //...
+                    // Choose prey action
+                    gameEngine.choosePreyForRanger();
+                    //TODO záródjon be
                 },
                 () -> {
                     // Close action
@@ -575,11 +582,15 @@ public class GameController {
 
     //Lose appear
     public void openLosePane() {
+        navbar.setMouseTransparent(true);
+        uiLayer.setMouseTransparent(true);
         losePane.setVisible(true);
     }
 
     //Win appear
     public void openWinPane() {
+        navbar.setMouseTransparent(true);
+        uiLayer.setMouseTransparent(true);
         winPane.setVisible(true);
     }
 

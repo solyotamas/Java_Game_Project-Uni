@@ -19,8 +19,8 @@ public abstract class Human extends Pane {
 
     protected double restingTimePassed = 0.0;
 
-    private HumanState state;
-    private HumanState previousState;
+    protected HumanState state;
+    protected HumanState previousState;
 
     //Images of the Animal, ui
     private Image spriteSheet;
