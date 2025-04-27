@@ -5,7 +5,6 @@ import classes.entities.additions.InfoWindowAnimal;
 import classes.entities.additions.InfoWindowRanger;
 import classes.entities.animals.Animal;
 import classes.entities.animals.AnimalState;
-import classes.entities.animals.Herbivore;
 import classes.entities.human.HumanState;
 import classes.entities.human.Tourist;
 import classes.entities.animals.carnivores.Lion;
@@ -35,7 +34,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Random;
@@ -72,6 +73,14 @@ public class GameController {
     private Pane shopPane;
     @FXML
     private AnchorPane saveOverlay;
+    @FXML
+    private AnchorPane losePane;
+    @FXML
+    private AnchorPane winPane;
+    @FXML
+    private HBox navbar;
+    @FXML
+    private Text reasonOfDeathText;
 
     //Top and bottom bar UI
     @FXML
@@ -93,21 +102,20 @@ public class GameController {
     @FXML
     private Label moneyLabel;
 
-    @FXML
-    public void initialize() {
-        //TODO somehow remove runLater but still get the right difficulty and not null
-        Platform.runLater(() -> {
-            this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer);
-            gameEngine.gameLoop();
 
-        });
-
+    public void startGame() {
+        this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer);
+        System.out.println(difficulty);
+        gameEngine.gameLoop();
     }
 
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
     }
 
+    public void setReasonOfDeathText(String text) {
+        this.reasonOfDeathText.setText(text);
+    }
 
     @FXML
     public void speedGameToDay(){
@@ -118,12 +126,13 @@ public class GameController {
 
     }
 
+    // ==== LANDFORMS
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
         closeShopPane();
 
 
-        boolean isRoad = Road.class.isAssignableFrom(landformClass);
-        int[] remainingRoads = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
+        boolean isRoad = Road.class.isAssignableFrom(landformClass); // If road, remainingPlacableTiles is 10, otherwise 1
+        int[] remainingPlacableTiles = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
 
         //For ghostImage pic to be equivalent of the image of the instance that will be placed
         Landform tempInstance = null;
@@ -181,13 +190,14 @@ public class GameController {
                     gameEngine.getGameBoard().placeLandform(placedLandform, tileX, tileY);
                     uiLayer.getChildren().add(placedLandform);
                     if (placedLandform instanceof Plant) {
-                        gameEngine.buyPlant(placedLandform);
-                        //System.out.println("buyPlant called");
+                        gameEngine.buyPlant((Plant) placedLandform);
+                    } else if (placedLandform instanceof Lake) {
+                        gameEngine.buyLake((Lake) placedLandform);
                     }
-                    remainingRoads[0]--;
+                    remainingPlacableTiles[0]--;
 
-                    if (isRoad && placedLandform instanceof Road road) {
-                        gameEngine.roads.add(road); // Itt add hozzá közvetlenül!
+                    if (isRoad) {
+                        gameEngine.buyRoad((Road) placedLandform);
                     }
                 }
             } catch (Exception ex) {
@@ -195,7 +205,7 @@ public class GameController {
             }
 
             //If road, place 10
-            if (!isRoad || remainingRoads[0] <= 0) {
+            if (!isRoad || remainingPlacableTiles[0] <= 0) {
 
                 ghostLayer.getChildren().remove(ghostImage);
                 ghostLayer.setOnMouseMoved(null);
@@ -229,9 +239,10 @@ public class GameController {
         gameEngine.buyJeep();
         closeShopPane();
     }}
+    // =====
 
 
-    //ANIMALS
+    // ==== ANIMALS
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
         closeShopPane();
         ghostLayer.setVisible(true);
@@ -282,7 +293,7 @@ public class GameController {
                         .newInstance(placeX, placeY);
 
                 //click
-                if(gameEngine.haveEnoughMoneyForAnimal(animalInstance) && canPlaceAnimal(animalInstance, placeX, placeY)){
+                if(canPlaceAnimal(animalInstance, placeX, placeY)){
 
                     Platform.runLater(() -> {
                         animalInstance.setOnMouseClicked(this::handleAnimalClicked);
@@ -306,6 +317,7 @@ public class GameController {
 
         });
     }
+
     private boolean canPlaceAnimal(Animal animalInstance, double placeX, double placeY) {
 
         double imgWidth = animalInstance.getImageView().getFitWidth();
@@ -358,11 +370,13 @@ public class GameController {
     public void buyVulture(){
         buyAnimal(Vulture.class, "/images/vulture.png");
     }
-    public void removeHerbivore(Herbivore herbivore){
-        uiLayer.getChildren().remove(herbivore);
+    public void removeAnimal(Animal animal){
+        uiLayer.getChildren().remove(animal);
     }
+    // =====
 
-    //RANGERS
+
+    // ==== RANGERS
     @FXML
     private void buyRanger() {
         closeShopPane();
@@ -374,36 +388,36 @@ public class GameController {
         ImageView ghostImage = new ImageView(rangerImage);
         ghostImage.setOpacity(0.5);
         ghostImage.setMouseTransparent(true);
-        ghostImage.setFitWidth(50);
-        ghostImage.setFitHeight(50);
-
+        ghostImage.setFitWidth(28);
+        ghostImage.setPreserveRatio(true);
 
         ghostLayer.getChildren().add(ghostImage);
-
-        //Disable clicks on top layer
-        uiLayer.setMouseTransparent(true);
+        uiLayer.setMouseTransparent(true); // Disable clicks on uiLayer
 
         ghostLayer.setOnMouseMoved(e -> {
             ghostImage.setLayoutX(e.getX() - (ghostImage.getFitWidth() / 2));
-            ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2));
+            ghostImage.setLayoutY(e.getY() - (ghostImage.getFitHeight() / 2) - 18);
         });
 
         ghostLayer.setOnMouseClicked(e -> {
             e.consume();
+
             try {
                 double placeX = e.getX();
                 double placeY = e.getY();
 
                 Ranger rangerInstance = new Ranger(placeX, placeY);
 
-                Platform.runLater(() -> {
-                    rangerInstance.setOnMouseClicked(this::handleRangerClicked);
-                });
+                if (canPlaceRanger(rangerInstance, placeX, placeY)) {
 
-                uiLayer.getChildren().add(rangerInstance);
-                gameEngine.buyRanger(rangerInstance);
+                    Platform.runLater(() -> {
+                        rangerInstance.setOnMouseClicked(this::handleRangerClicked);
+                    });
 
-                //System.out.println("Added ranger at " + placeX + ", " + placeY);
+                    gameEngine.buyRanger(rangerInstance);
+                    uiLayer.getChildren().add(rangerInstance);
+                }
+
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -412,17 +426,34 @@ public class GameController {
             ghostLayer.setOnMouseMoved(null);
             ghostLayer.setOnMouseClicked(null);
 
-            //Enable clicks on top layer
-            //ghostLayer.setVisible(false);
+            ghostLayer.setVisible(false);
             ghostLayer.setMouseTransparent(true);
             uiLayer.setMouseTransparent(false);
         });
     }
 
+    private boolean canPlaceRanger(Ranger rangerInstance, double placeX, double placeY) {
+
+        double imgWidth = rangerInstance.getImageView().getFitWidth();
+        double imgHeight = rangerInstance.getImageView().getFitHeight();
+
+        double leftX = placeX - imgWidth / 2.0;
+        double rightX = placeX + imgWidth / 2.0;
+        double topY = placeY - imgHeight / 2.0;
+        double bottomY = placeY + imgHeight / 2.0;
+
+        return (
+                leftX >= TOURIST_SECTION &&
+                        rightX <= SCREEN_WIDTH - TOURIST_SECTION &&
+                        topY >= 0 &&
+                        bottomY <= SCREEN_HEIGHT
+        );
+    }
+
+    // =====
 
 
-
-    //infowindows
+    // ==== INFO WINDOWS
     private void handleAnimalClicked(MouseEvent event) {
         if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
             return;
@@ -489,10 +520,14 @@ public class GameController {
         currentInfoWindowRanger = new InfoWindowRanger(
                 clickedRanger,
                 () -> {
-                    //...
+                    // Unemploy action
+                    gameEngine.unemployRanger(clickedRanger);
+                    closeRangerWindow(clickedRanger);
                 },
                 () -> {
-                    //...
+                    // Choose prey action
+                    gameEngine.choosePreyForRanger();
+                    //TODO záródjon be
                 },
                 () -> {
                     // Close action
@@ -509,16 +544,7 @@ public class GameController {
         }
         ranger.resume();
     }
-    private void choosePrey() {
-        System.out.println("choosing prey for " + this.getClass());
-        //TODO choose prey
-    }
-    private void unemploy() {
-        System.out.println(this.getClass() + " unemployed");
-
-        //TODO unemploy ranger
-    }
-
+    // =====
 
     // ==== TOURISTS
     public Tourist spawnTourist(){
@@ -547,10 +573,10 @@ public class GameController {
     public void removeTourist(Tourist tourist){
         uiLayer.getChildren().remove(tourist);
     }
-    // ======
+    // =====
 
 
-    //UI handling
+    // ==== UI HANDLING
     //Display
     public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int  money){
         //STATS
@@ -575,6 +601,20 @@ public class GameController {
         shopPane.setVisible(false);
     }
 
+    //Lose appear
+    public void openLosePane() {
+        navbar.setMouseTransparent(true);
+        uiLayer.setMouseTransparent(true);
+        losePane.setVisible(true);
+    }
+
+    //Win appear
+    public void openWinPane() {
+        navbar.setMouseTransparent(true);
+        uiLayer.setMouseTransparent(true);
+        winPane.setVisible(true);
+    }
+
     //Save screen pane
     public void showSaveOverlay() {
         saveOverlay.setVisible(true);
@@ -594,4 +634,5 @@ public class GameController {
         stage.setScene(scene);
         stage.show();
     }
+    // =====
 }

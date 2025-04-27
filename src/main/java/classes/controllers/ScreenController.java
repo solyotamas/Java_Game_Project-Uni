@@ -58,6 +58,7 @@ public class ScreenController {
 
         stage.setScene(scene);
         stage.show();
+        stage.show();
     }
 
     public void switchToDifficulty(ActionEvent event) throws IOException {
@@ -88,6 +89,8 @@ public class ScreenController {
 
         GameController controller = loader.getController();
         controller.setDifficulty(selectedDifficulty);
+
+        controller.startGame();
 
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);

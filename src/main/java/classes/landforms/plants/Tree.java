@@ -11,12 +11,14 @@ public class Tree extends Plant {
     public static final int WIDTH_IN_TILES = 2;
     public static final int HEIGHT_IN_TILES = 2;
 
+    private static final int price = 800;
+
     public Tree(double x, double y, double depth) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, getRandomTreeImage(), depth);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, getRandomTreeImage(), depth, price);
     }
 
     public Tree(double x, double y, double depth, Image img) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, img, depth);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, img, depth, price);
     }
 
     public static Image getRandomTreeImage() {

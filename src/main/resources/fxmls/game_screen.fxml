@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
-<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.RowConstraints?>
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/game_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.GameController">
    <children>
-      <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="1920.0" spacing="50.0" style="-fx-background-color: #EC9043;">
+      <HBox fx:id="navbar" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="1920.0" spacing="50.0" style="-fx-background-color: #EC9043;">
          <padding>
             <Insets bottom="10.0" left="50.0" right="10.0" top="10.0" />
          </padding>
@@ -360,13 +360,13 @@
             <Pane fx:id="terrainLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" />
             <Pane fx:id="uiLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0">
                <children>
-      
+
                                     <Button id="market" fx:id="marketButton" layoutX="1800.0" mnemonicParsing="false" onMouseClicked="#openShopPane" prefHeight="120.0" prefWidth="120.0" />
                </children></Pane>
             <Pane fx:id="ghostLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" visible="false" />
             <Pane fx:id="shopPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1150.0" stylesheets="@../css/game_screen.css" visible="false">
                <children>
-                  <Label styleClass="diffLabel" layoutX="486.0" layoutY="24.0" text="Market" textFill="WHITE">
+                  <Label layoutX="486.0" layoutY="24.0" styleClass="diffLabel" text="Market" textFill="WHITE">
                      <effect>
                         <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                            <color>
@@ -420,7 +420,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Bush 50$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Bush 500$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -469,7 +469,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Lake 200$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Lake 2500$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -518,7 +518,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Tree 70$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Tree 800$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -567,7 +567,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Grass 20$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Grass 300$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -613,7 +613,7 @@
                                     <Insets bottom="7.0" top="15.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Jeep 300$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Jeep 5000$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -657,7 +657,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Road 100$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Road 200$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1248,10 +1248,10 @@
          </children>
       </StackPane>
    </children>
-   <AnchorPane fx:id="saveOverlay" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/load_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" visible="false">
+   <AnchorPane fx:id="saveOverlay" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/load_screen.css" visible="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
       <children>
          <!-- Load Game Label -->
-         <Label styleClass="diffLabel" layoutX="725.0" layoutY="115.0" text="Save Game" textFill="WHITE">
+         <Label layoutX="725.0" layoutY="115.0" styleClass="diffLabel" text="Save Game" textFill="WHITE">
             <effect>
                <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                   <color>
@@ -1347,6 +1347,99 @@
                </Button>
             </children>
          </Pane>
+      </children>
+   </AnchorPane>
+   <AnchorPane fx:id="losePane" layoutX="660.0" layoutY="340.0" prefHeight="400.0" prefWidth="600.0" styleClass="losePane" stylesheets="@../css/game_screen.css" visible="false">
+
+      <children>
+         <VBox alignment="CENTER" layoutX="65.0" layoutY="41.0" prefHeight="319.0" prefWidth="471.0" spacing="15.0">
+
+            <Text styleClass="gameOverText" text="Game Over!">
+               <effect>
+                  <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
+                     <color>
+                        <Color red="0.2431" green="0.1411" blue="0.0823" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Text>
+
+            <Text fx:id="reasonOfDeathText" styleClass="reasonOfDeathText" text="" />
+
+            <ImageView fitHeight="130.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/loose.png" />
+               </image>
+            </ImageView>
+
+            <Button onAction="#switchToMain" styleClass="fancyBtn">
+               <graphic>
+                  <Text fill="WHITE" text="Back To Main Menu">
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
+                           <color>
+                              <Color red="0.2431" green="0.1411" blue="0.0823" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                     <font>
+                        <Font name="Franklin Gothic Demi" size="24.0" />
+                     </font>
+                  </Text>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+
+         </VBox>
+      </children>
+   </AnchorPane>
+
+   <AnchorPane fx:id="winPane" layoutX="660.0" layoutY="340.0" prefHeight="400.0" prefWidth="600.0" styleClass="losePane" stylesheets="@../css/game_screen.css" visible="false">
+
+      <children>
+         <VBox alignment="CENTER" layoutX="87.0" layoutY="41.0" spacing="15.0">
+
+            <Text styleClass="gameOverText" text="You won!">
+               <effect>
+                  <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
+                     <color>
+                        <Color red="0.2431" green="0.1411" blue="0.0823" />
+                     </color>
+                  </DropShadow>
+               </effect>
+            </Text>
+
+            <Text styleClass="reasonOfDeathText" text="Congratulations, you completed the game!" />
+
+            <ImageView fitHeight="130.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/winelephant.png" />
+               </image>
+            </ImageView>
+
+            <Button onAction="#switchToMain" styleClass="fancyBtn">
+               <graphic>
+                  <Text fill="WHITE" text="Back To Main Menu">
+                     <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
+                           <color>
+                              <Color red="0.2431" green="0.1411" blue="0.0823" />
+                           </color>
+                        </DropShadow>
+                     </effect>
+                     <font>
+                        <Font name="Franklin Gothic Demi" size="24.0" />
+                     </font>
+                  </Text>
+               </graphic>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+
+         </VBox>
       </children>
    </AnchorPane>
 </AnchorPane>

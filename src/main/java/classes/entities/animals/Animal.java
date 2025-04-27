@@ -16,10 +16,11 @@ import java.util.*;
 
 public abstract class Animal extends Pane {
 
-    private int price;
+    protected int price;
     protected double x;
     protected double y;
     protected double speed;
+    protected int appetite;
 
 
     protected double restingTimePassed = 0.0;
@@ -33,7 +34,10 @@ public abstract class Animal extends Pane {
     int pathIndex = 0;
 
     //stats
-    private int age;
+    protected int age;
+    protected int startingAge = 5;
+    protected int lifeExpectancy;
+    protected double bornAt;
     protected double thirst = 100.0;
     protected double hunger = 100.0;
     //
@@ -65,11 +69,12 @@ public abstract class Animal extends Pane {
     private boolean isBeingEaten = false;
 
 
-    public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price)  {
+    public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price, int lifeExpectancy)  {
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.speed = speed;
         this.price = price;
+        this.lifeExpectancy = lifeExpectancy;
 
         //Animation pictures
         this.spriteSheet = new Image(getClass().getResource(imgUrl).toExternalForm());
@@ -166,6 +171,7 @@ public abstract class Animal extends Pane {
 
     }
     public void move(Direction dir, double dx, double dy) {
+        //todo ELEGÁNSABB LENNE A DIRECTION-BŐL KISZEDNI AZ IRÁNY ÉRTÉKEIT
         this.currentDirection = dir;
         this.x += dx; this.y += dy;
 
@@ -290,6 +296,7 @@ public abstract class Animal extends Pane {
         this.start = startingTerrain;
 
         Terrain targetTerrain = desiredTerrains.get(new Random().nextInt(desiredTerrains.size()));
+
         this.target = targetTerrain;
     }
     public Terrain pickStartingTerrain(Terrain[][] map){
@@ -336,16 +343,58 @@ public abstract class Animal extends Pane {
         }
         return AnimalState.RESTING;
     }
-    //=====================================
+    // =====
 
+    // ==== AGING, PRICE HANDLING
+    public void setBornAt(double currentGameHour) {
+        this.bornAt = currentGameHour;
+    }
+    public boolean oldEnoughToDie(double currentGameHour) {
+        agingAnimal(currentGameHour);
+        return this.age >= lifeExpectancy;
+    }
 
+    public void agingAnimal(double currentGameHour) {
+        this.age = startingAge + (int) ((currentGameHour - bornAt) / 24.0);
 
+        double ageRatio = (double) this.age / this.lifeExpectancy;
+        this.appetite = (int)(1 + ageRatio * 99);
+    }
+
+    public int getSellPrice() {
+        int ageSegment = lifeExpectancy / 5;
+        int base = this.price * 3 / 5;
+
+        if (this.age <= ageSegment) {
+            return base * 5 / 5;
+        } else if (this.age <= 2 * ageSegment) {
+            return base * 4 / 5;
+        } else if (this.age <= 3 * ageSegment) {
+            return base * 3 / 5;
+        } else if (this.age <= 4 * ageSegment) {
+            return base * 2 / 5;
+        } else {
+            return base * 1 / 5;
+        }
+    }
+    // =====
 
     //Getters, Setters
+    public int getPrice() {
+        return this.price;
+    }
+    public int getAppetite() {
+        return this.appetite;
+    }
     public double getSpeed(){
         return this.speed;
     }
-    public int getPrice() { return this.price; }
+    public int getAge(){
+        return (int) this.age;
+    }
+    public int getLifeExpectancy(){
+        return this.lifeExpectancy;
+    }
     public int getFrameWidth(){
         return this.frameWidth;
     }
