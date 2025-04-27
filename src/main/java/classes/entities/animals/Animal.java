@@ -478,4 +478,6 @@ public abstract class Animal extends Pane {
     public void setRestingTimePassed(double val){
         this.restingTimePassed = val;
     }
+
+    public Direction getCurrentDirection() { return currentDirection; }
 }
