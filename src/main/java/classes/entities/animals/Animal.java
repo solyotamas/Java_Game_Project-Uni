@@ -38,8 +38,8 @@ public abstract class Animal extends Pane {
     protected int startingAge = 5;
     protected int lifeExpectancy;
     protected double bornAt;
-    protected double thirst = 100.0;
-    protected double hunger = 100.0;
+    protected double thirst = 20.0;
+    protected double hunger = 20.0;
     //
 
     //Images of the Animal, ui

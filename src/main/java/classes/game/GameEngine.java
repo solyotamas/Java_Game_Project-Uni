@@ -59,7 +59,6 @@ public class GameEngine {
     private boolean canCheckForLose = false;
     private boolean canCheckForWin = false;
 
-    protected ArrayList<Tourist> tourists;
     private ArrayList<Herd> carnivoreherds;
     private ArrayList<Herd> herbivoreherds;
 
@@ -67,6 +66,16 @@ public class GameEngine {
     private ArrayList<Ranger> rangers;
     private ArrayList<Jeep> jeeps;
     public ArrayList<Road> roads;
+
+    public Pair<Integer, Integer> entrance;
+    public Pair<Integer, Integer> exit;
+
+    public Difficulty difficulty;
+    private Speed speed;
+    private ArrayList<Integer> conditions;
+
+    public ArrayList<Plant> plants;
+    public ArrayList<Lake> lakes;
 
 
     //need
@@ -93,7 +102,6 @@ public class GameEngine {
         roads = new ArrayList<Road>();
         plants = new ArrayList<Plant>();
         lakes = new ArrayList<Lake>();
-
 
 
         entrance = new Pair<>(0, 0);
@@ -201,7 +209,7 @@ public class GameEngine {
         System.out.println(herbivoreherds.size());
     }
 
-    //===HERDS
+    // ==== HERDS
     private void formNewHerds(){
         for (Herbivore h1 : herbivores) {
             if (h1.getIsInAHerd()) continue;
@@ -402,7 +410,7 @@ public class GameEngine {
                             if (prey.getIsInAHerd() && prey.getHerd() != null)
                                 prey.getHerd().removeMember(prey);
 
-                            gameController.removeHerbivore(prey);
+                            gameController.removeAnimal(prey);
                             herbivores.remove(prey);
 
                             leaderCarnivore.clearPrey();
@@ -442,9 +450,9 @@ public class GameEngine {
         System.out.println("Carnivore path size: " + leaderCarnivore.getPath().size());
     }
 
-    //=========
+    // ======
 
-    //===VISUALS
+    // ==== VISUALS
     private void sortUiLayer() {
         Pane uiLayer = gameBoard.getUiLayer();
 
@@ -540,7 +548,7 @@ public class GameEngine {
                             }
 
                             // UI + game list
-                            gameController.removeHerbivore(prey);
+                            gameController.removeAnimal(prey);
                             herbivores.remove(prey);
 
                             carnivore.clearPrey();
@@ -702,12 +710,37 @@ public class GameEngine {
         money = Math.max(0, money - 5000);
     }
 
-
+    public void payRanger(Ranger ranger) {
+        if (money >= 5000) {
+            money -= 5000;
+            ranger.setLastPaidHour(spentTime);
+        } else {
+            unemployRanger(ranger);
+        }
+    }
+    // =====
 
     //JEEP
+/*    public void buyJeep() {
+        money = Math.max(0, money - 5000);
+        jeepCount++;
+    }*/
     public void buyJeep() {
         startJeep();
     }
+
+    /*    public void startJeep() {
+        if (tourists.size() >= 4 && jeepCount >= 1) {
+            for (int i = 0; i < 4; i++) {
+                tourists.removeLast();
+            }
+            Jeep jeep = new Jeep(150, 0);
+            // jeep = new Jeep(1770, 900);
+            jeeps.add(jeep);
+            gameBoard.getUiLayer().getChildren().add(jeep);
+            gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, tourists.size(), ticketPrice, money);
+        }
+    }*/
     public void startJeep() {
         Terrain start = gameBoard.getTerrainAt(5, 14);
         Terrain goal = gameBoard.getTerrainAt(15, 14);
@@ -735,6 +768,7 @@ public class GameEngine {
     }
 
     public void unemployRanger(Ranger ranger) {
+
         rangers.remove(ranger);
         gameBoard.getUiLayer().getChildren().remove(ranger);
         System.out.println(rangers.size());
@@ -776,35 +810,6 @@ public class GameEngine {
     // =====
 
 
-    // ==== JEEPS
-    public void buyJeep() {
-        money = Math.max(0, money - 5000);
-        jeepCount++;
-    }
-
-    public void startJeep() {
-        if (tourists.size() >= 4 && jeepCount >= 1) {
-            for (int i = 0; i < 4; i++) {
-                tourists.removeLast();
-            }
-            Jeep jeep = new Jeep(150, 0);
-            // jeep = new Jeep(1770, 900);
-            jeeps.add(jeep);
-            gameBoard.getUiLayer().getChildren().add(jeep);
-            gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, tourists.size(), ticketPrice, money);
-        }
-
-    }
-
-    public void updateJeepPositions() {
-        for (Jeep jeep : jeeps) {
-            //
-        }
-    }
-    // =====
-
-
-
     // ==== SELLING, BUYING
     public void buyPlant(Plant plant) {
         plants.add(plant);
@@ -833,8 +838,6 @@ public class GameEngine {
         canCheckForLose = true;
     }
 
-
-
     public void sellAnimal(Animal animal) {
         money += animal.getSellPrice();
 
@@ -849,23 +852,6 @@ public class GameEngine {
         }
     }
     // =====
-
-
-    public Pair<Integer, Integer> entrance;
-    public Pair<Integer, Integer> exit;
-
-    public Difficulty difficulty;
-    private Speed speed;
-    private ArrayList<Integer> conditions;
-
-    private ArrayList<Herd> herds;
-    private ArrayList<Poacher> poachers;
-    private ArrayList<Ranger> rangers;
-    private ArrayList<Jeep> jeeps;
-    private ArrayList<Road> roads;
-    public ArrayList<Plant> plants;
-    public ArrayList<Lake> lakes;
-
 
     // ==== GAME WINNING, LOSING
     public boolean gameOver() {
@@ -922,12 +908,4 @@ public class GameEngine {
             }
         }
     }
-
-/*    public boolean haveEnoughMoneyForAnimal(Animal animalInstance) {
-        return money >= animalInstance.getPrice();
-    }
-
-    public boolean haveEnoughMoneyForRanger(Ranger rangerInstance) {
-        return money >= 5000;
-    }*/
 }
