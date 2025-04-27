@@ -15,6 +15,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -41,6 +42,7 @@ public class GameEngine {
     private GameBoard gameBoard;
     private Timeline timeline;
 
+
     private double spentTime;
     private double firstConditionMetTime;
     private double winningHours;
@@ -57,6 +59,18 @@ public class GameEngine {
     private boolean canCheckForLose = false;
     private boolean canCheckForWin = false;
 
+    protected ArrayList<Tourist> tourists;
+    private ArrayList<Herd> carnivoreherds;
+    private ArrayList<Herd> herbivoreherds;
+
+    private ArrayList<Poacher> poachers;
+    private ArrayList<Ranger> rangers;
+    private ArrayList<Jeep> jeeps;
+    public ArrayList<Road> roads;
+
+
+    //need
+    private final Image hungerForCarnivore = new Image(GameEngine.class.getResource("/images/hunger.png").toExternalForm());
 
     public GameEngine(GameController gameController, Difficulty difficulty, Pane terrainLayer, Pane uiLayer) {
         this.gameController = gameController;
@@ -69,10 +83,12 @@ public class GameEngine {
         carnivores = new ArrayList<Carnivore>();
         herbivores = new ArrayList<Herbivore>();
         tourists = new ArrayList<Tourist>();
-        herds = new ArrayList<Herd>();
+
+        carnivoreherds = new ArrayList<>();
+        herbivoreherds = new ArrayList<>();
+
         rangers = new ArrayList<Ranger>();
         poachers = new ArrayList<Poacher>();
-        herds = new ArrayList<Herd>();
         jeeps = new ArrayList<Jeep>();
         roads = new ArrayList<Road>();
         plants = new ArrayList<Plant>();
@@ -115,17 +131,30 @@ public class GameEngine {
 
         timeline = new Timeline(
             new KeyFrame(Duration.millis(50), e -> {
-
+                //== ANIMALS
                 updateAnimalStates();
+
+                //Herds
+                formNewHerds();
+                checkToJoinHerds();
+                cleanupSmallHerds(carnivoreherds);
+                updateHerdStates();
+
+                //== HUMANS
                 updateHumanStates();
-                startJeep();
+
+                //== JEEP
                 updateJeepPositions();
+
+                //== VISUALS
                 sortUiLayer();
 
+                //LOG
+                //logWhatever();
 
+                //== TOURISTS
                 maybeSpawnTourist();
 
-                // Check win/lose conditions
                 if (gameOver()) {
                     if (money == 0) {
                         gameController.setReasonOfDeathText("Your safari park has gone bankrupt.");
@@ -168,7 +197,254 @@ public class GameEngine {
     }
     // =====
 
-    // ==== VISUALS
+    public void logWhatever(){
+        System.out.println(herbivoreherds.size());
+    }
+
+    //===HERDS
+    private void formNewHerds(){
+        for (Herbivore h1 : herbivores) {
+            if (h1.getIsInAHerd()) continue;
+            if (h1.getState() != AnimalState.MOVING) continue;
+
+
+            for (Herbivore h2 : herbivores) {
+                if (h1 == h2 || h2.getIsInAHerd()) continue;
+                if (!h1.getClass().equals(h2.getClass())) continue;
+                if (h2.getState() != AnimalState.MOVING) continue;
+
+                double dx = h1.getX() - h2.getX();
+                double dy = (h1.getY() + h1.getImageView().getFitHeight() / 2.) -
+                        (h2.getY() + h2.getImageView().getFitHeight() / 2.);
+
+                if (Math.hypot(dx, dy) <= 150) {
+                    Herd herd = new Herd(new ArrayList<>(List.of(h1, h2)));
+                    herbivoreherds.add(herd);
+                    break;
+                }
+            }
+        }
+
+        for (Carnivore c1 : carnivores) {
+            if (c1.getIsInAHerd()) continue;
+            if (c1.getState() != AnimalState.MOVING) continue;
+
+
+            for (Carnivore c2 : carnivores) {
+                if (c1 == c2 || c2.getIsInAHerd()) continue;
+                if (!c1.getClass().equals(c2.getClass())) continue;
+                if (c2.getState() != AnimalState.MOVING) continue;
+
+                double dx = c1.getX() - c2.getX();
+                double dy = (c1.getY() + c1.getImageView().getFitHeight() / 2.) -
+                        (c2.getY() + c2.getImageView().getFitHeight() / 2.);
+
+                if (Math.hypot(dx, dy) <= 150) {
+                    Herd herd = new Herd(new ArrayList<>(List.of(c1, c2)));
+                    carnivoreherds.add(herd);
+                    break;
+                }
+            }
+        }
+    }
+    private void checkToJoinHerds() {
+        // --- Herbivores ---
+        for (Herbivore herbivore : herbivores) {
+            if (herbivore.getIsInAHerd()) continue;
+            if (herbivore.getState() != AnimalState.MOVING) continue;
+
+            for (Herd herd : herbivoreherds) {
+                Animal leader = herd.getLeader();
+                if (leader == null) continue;
+
+                if (!herbivore.getClass().equals(leader.getClass())) continue;
+                if (leader.getState() != AnimalState.MOVING) continue;
+
+                double dx = herbivore.getX() - leader.getX();
+                double dy = (herbivore.getY() + herbivore.getImageView().getFitHeight() / 2.) -
+                        (leader.getY() + leader.getImageView().getFitHeight() / 2.);
+
+                if (Math.hypot(dx, dy) <= 150) {
+                    herd.addMember(herbivore);
+                    break;
+                }
+            }
+        }
+
+        // --- Carnivores ---
+        for (Carnivore carnivore : carnivores) {
+            if (carnivore.getIsInAHerd()) continue;
+            if (carnivore.getState() != AnimalState.MOVING) continue;
+
+            for (Herd herd : carnivoreherds) {
+                Animal leader = herd.getLeader();
+                if (leader == null) continue;
+
+                if (!carnivore.getClass().equals(leader.getClass())) continue;
+                if (leader.getState() != AnimalState.MOVING) continue;
+
+                double dx = carnivore.getX() - leader.getX();
+                double dy = (carnivore.getY() + carnivore.getImageView().getFitHeight() / 2.) -
+                        (leader.getY() + leader.getImageView().getFitHeight() / 2.);
+
+                if (Math.hypot(dx, dy) <= 150) {
+                    herd.addMember(carnivore);
+                    break;
+                }
+            }
+        }
+    }
+    private void cleanupSmallHerds(List<Herd> herds) {
+        List<Herd> toRemove = new ArrayList<>();
+
+        for (Herd herd : herds) {
+            if (herd.getMemberCount() < 2) {
+                for (Animal member : herd.getMembers()) {
+                    member.setIsInAHerd(false);
+                    member.setHerd(null);
+                    member.transitionTo(IDLE);
+                    member.setStateIconVisibility(false);
+                    member.setRestingTimePassed(0.0);
+                }
+                toRemove.add(herd);
+            }
+        }
+
+        herds.removeAll(toRemove);
+    }
+
+
+    private void updateHerdStates() {
+        updateHerbivoreHerdStates();
+        updateCarnivoreHerdStates();
+    }
+    private void updateHerbivoreHerdStates() {
+        for (Herd herd : herbivoreherds) {
+            herd.assignNewLeader();
+            Animal leader = herd.getLeader();
+
+            boolean isAnyManuallyPaused = herd.getMembers().stream().anyMatch(Animal::isManuallyPaused);
+            if (isAnyManuallyPaused) continue;
+
+            for (Animal animal : herd.getMembers()) {
+                if(animal.isBeingEaten()) continue;
+                handleHerbivoreInHerd(animal, leader);
+            }
+        }
+        cleanupSmallHerds(herbivoreherds);
+    }
+    private void handleHerbivoreInHerd(Animal animal, Animal leader) {
+        switch (animal.getState()) {
+            case MOVING -> {
+                if (animal == leader)
+                    animal.moveTowardsTarget();
+                else
+                    animal.moveTowardsLeader(leader);
+            }
+            case RESTING -> animal.rest();
+            case EATING -> animal.eat();
+            case DRINKING -> animal.drink();
+            case IDLE -> {
+                if (animal == leader) {
+                    ArrayList<Terrain> path;
+                    if (animal.getThirst() < 25.0)
+                        animal.preparePath(gameBoard.getTerrainGrid(), gameBoard.getLakeTerrains());
+                    else if (animal.getHunger() < 25.0)
+                        animal.preparePath(gameBoard.getTerrainGrid(), gameBoard.getPlantTerrains());
+                    else
+                        animal.preparePath(gameBoard.getTerrainGrid(), gameBoard.getGroundTerrains());
+
+                    path = gameBoard.findPathDijkstra(animal.getStart(), animal.getTarget());
+                    animal.setPath(path);
+                }
+                animal.transitionTo(MOVING);
+            }
+        }
+    }
+    private void updateCarnivoreHerdStates() {
+        for (Herd herd : carnivoreherds) {
+            herd.assignNewLeader();
+            Animal leader = herd.getLeader();
+
+            boolean isAnyManuallyPaused = herd.getMembers().stream().anyMatch(Animal::isManuallyPaused);
+            if (isAnyManuallyPaused) continue;
+
+            for (Animal animal : herd.getMembers()) {
+                handleCarnivoreInHerd(animal, leader);
+            }
+        }
+        cleanupSmallHerds(carnivoreherds);
+    }
+    private void handleCarnivoreInHerd(Animal animal, Animal leader) {
+        Carnivore leaderCarnivore = (Carnivore) leader;
+        System.out.println("Leader state: " + leader.getState());
+
+
+        if (animal == leader) {
+            // clearer naming
+
+            switch (leaderCarnivore.getState()) {
+                case MOVING -> leaderCarnivore.moveTowardsTarget();
+                case RESTING -> leaderCarnivore.rest();
+                case EATING -> {
+                    leaderCarnivore.changeHunger(0.5);
+                    leaderCarnivore.setStateIcon(hungerForCarnivore);
+                    leaderCarnivore.setStateIconVisibility(true);
+
+                    if (leaderCarnivore.getHunger() > 99.0) {
+                        leaderCarnivore.setStateIconVisibility(false);
+                        leaderCarnivore.transitionTo(IDLE);
+
+                        Herbivore prey = leaderCarnivore.getPrey();
+                        if (prey != null) {
+                            prey.setBeingEaten(false);
+
+                            if (prey.getIsInAHerd() && prey.getHerd() != null)
+                                prey.getHerd().removeMember(prey);
+
+                            gameController.removeHerbivore(prey);
+                            herbivores.remove(prey);
+
+                            leaderCarnivore.clearPrey();
+                        }
+                    }
+                }
+                case HUNTING -> leaderCarnivore.huntTarget();
+                case DRINKING -> leaderCarnivore.drink();
+                case IDLE -> {
+                    if (leaderCarnivore.getThirst() < 25.0) {
+                        leaderCarnivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getLakeTerrains());
+                    } else if (leaderCarnivore.getHunger() < 25.0) {
+                        leaderCarnivore.choosePrey(herbivores);
+                        leaderCarnivore.transitionTo(HUNTING);
+                        return;
+                    } else {
+                        leaderCarnivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getGroundTerrains());
+                    }
+
+                    ArrayList<Terrain> path = gameBoard.findPathDijkstra(leaderCarnivore.getStart(), leaderCarnivore.getTarget());
+                    leaderCarnivore.setPath(path);
+                    leaderCarnivore.transitionTo(MOVING);
+                    System.out.println(path);
+                }
+            }
+        }
+        else {
+            switch (animal.getState()) {
+                case MOVING, HUNTING -> animal.moveTowardsLeader(leaderCarnivore);
+                case RESTING -> animal.rest();
+                case EATING -> animal.eat();
+                case DRINKING -> animal.drink();
+                case IDLE -> animal.transitionTo(MOVING);
+            }
+        }
+        System.out.println("Carnivore thirst: " + animal.getThirst());
+        System.out.println("Carnivore path size: " + leaderCarnivore.getPath().size());
+    }
+
+    //=========
+
+    //===VISUALS
     private void sortUiLayer() {
         Pane uiLayer = gameBoard.getUiLayer();
 
@@ -193,7 +469,7 @@ public class GameEngine {
         else if (node instanceof Jeep jeep)
             return jeep.getDepth();
         else
-            return 0;
+            return Double.MAX_VALUE;
     }
     // =====
 
@@ -205,15 +481,19 @@ public class GameEngine {
         removeOldAnimals(carnivores, spentTime);
 
         for (Herbivore herbivore : herbivores) {
-            herbivore.changeThirst(-0.3);
-            herbivore.changeHunger(-0.5);
+            herbivore.changeThirst(-0.03);
+            herbivore.changeHunger(-0.05);
+
+            if(herbivore.getIsInAHerd()) continue;
+            if(herbivore.isManuallyPaused()) continue;
+            if(herbivore.isBeingEaten()) continue;
+
 
             switch(herbivore.getState()){
                 case MOVING -> herbivore.moveTowardsTarget();
                 case RESTING -> herbivore.rest();
                 case EATING -> herbivore.eat();
                 case DRINKING -> herbivore.drink();
-                case PAUSED -> {}
                 case IDLE -> {
                     if (herbivore.getThirst() < 25.0) {
                         herbivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getLakeTerrains());
@@ -226,52 +506,64 @@ public class GameEngine {
                     herbivore.setPath(path);
                     herbivore.transitionTo(MOVING);
 
-                   //System.out.println(herbivore.getPath());
+                    //System.out.println(herbivore.getPath());
                 }
             }
         }
 
         for (Carnivore carnivore : carnivores){
-            carnivore.changeThirst(-0.01);
-            carnivore.changeHunger(-0.02);
-            //System.out.println(carnivore.getHunger());
+            carnivore.changeThirst(-0.03);
+            carnivore.changeHunger(-0.05);
+
+            if(carnivore.getIsInAHerd()) continue;
+            if(carnivore.isManuallyPaused()) continue;
 
             switch (carnivore.getState()){
                 case MOVING -> carnivore.moveTowardsTarget();
                 case RESTING -> carnivore.rest();
                 case EATING -> {
                     carnivore.changeHunger(0.5);
+                    carnivore.setStateIcon(hungerForCarnivore);
+                    carnivore.setStateIconVisibility(true);
+
                     if (carnivore.getHunger() > 99.0) {
-                        carnivore.transitionTo(RESTING);
-                        gameController.removeAnimal(carnivore.getPrey());
-                        herbivores.remove(carnivore.getPrey());
+                        carnivore.setStateIconVisibility(false);
+                        carnivore.transitionTo(IDLE);
+
+                        Herbivore prey = carnivore.getPrey();
+                        if (prey != null) {
+                            prey.setBeingEaten(false);
+
+                            // Remove from herd if needed
+                            if (prey.getIsInAHerd() && prey.getHerd() != null) {
+                                prey.getHerd().removeMember(prey);
+                            }
+
+                            // UI + game list
+                            gameController.removeHerbivore(prey);
+                            herbivores.remove(prey);
+
+                            carnivore.clearPrey();
+                        }
                     }
+
                 }
                 case DRINKING -> carnivore.drink();
-                case PAUSED -> {}
-                case HUNTING -> {
-                    carnivore.huntTarget();
-                }
+                case HUNTING -> carnivore.huntTarget();
                 case IDLE -> {
-                    ArrayList<Terrain> path;
                     if (carnivore.getThirst() < 25.0) {
                         carnivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getLakeTerrains());
-
-                        path = gameBoard.findPathDijkstra(carnivore.getStart(), carnivore.getTarget());
-                        carnivore.setPath(path);
-                        carnivore.transitionTo(MOVING);
-                        //System.out.println(carnivore.getPath());
                     } else if (carnivore.getHunger() < 25.0) {
                         carnivore.choosePrey(herbivores);
                         carnivore.transitionTo(HUNTING);
+                        return;
                     } else {
                         carnivore.preparePath(gameBoard.getTerrainGrid(), gameBoard.getGroundTerrains());
-
-                        path = gameBoard.findPathDijkstra(carnivore.getStart(), carnivore.getTarget());
-                        carnivore.setPath(path);
-                        carnivore.transitionTo(MOVING);
-                        //System.out.println(carnivore.getPath());
                     }
+
+                    ArrayList<Terrain> path = gameBoard.findPathDijkstra(carnivore.getStart(), carnivore.getTarget());
+                    carnivore.setPath(path);
+                    carnivore.transitionTo(MOVING);
                 }
             }
         }
@@ -410,12 +702,35 @@ public class GameEngine {
         money = Math.max(0, money - 5000);
     }
 
-    public void payRanger(Ranger ranger) {
-        if (money >= 5000) {
-            money -= 5000;
-            ranger.setLastPaidHour(spentTime);
-        } else {
-            unemployRanger(ranger);
+
+
+    //JEEP
+    public void buyJeep() {
+        startJeep();
+    }
+    public void startJeep() {
+        Terrain start = gameBoard.getTerrainAt(5, 14);
+        Terrain goal = gameBoard.getTerrainAt(15, 14);
+
+        ArrayList<Terrain> roadPath = gameBoard.findRoadPathDijkstra(start, goal);
+
+        if (roadPath == null || roadPath.size() < 2) {
+            System.out.println(" No valid road path found between (5,14) and (15,14)");
+            return;
+        }
+
+        jeepCount++;
+        Jeep jeep = new Jeep(5 * 30 + 15, 14 * 30 + 15);
+        jeep.setPath(roadPath);
+
+        jeeps.add(jeep);
+        gameBoard.getUiLayer().getChildren().add(jeep);
+    }
+
+
+    public void updateJeepPositions() {
+        for (Jeep jeep : jeeps) {
+            jeep.moveAlongPath();
         }
     }
 
@@ -506,7 +821,7 @@ public class GameEngine {
         money = Math.max(0, money - road.getPrice());
     }
 
-    //public void buyAnimal(Animal<? extends Pane> animal) {
+
     public void buyAnimal(Animal animal) {
         if (animal instanceof Herbivore herbivore) {
             this.herbivores.add(herbivore);
@@ -518,17 +833,20 @@ public class GameEngine {
         canCheckForLose = true;
     }
 
-    //public void sellAnimal(Animal<? extends Pane> animal) {
+
+
     public void sellAnimal(Animal animal) {
         money += animal.getSellPrice();
 
-        if (animal instanceof Herbivore) {
-            herbivores.remove(animal);
-        } else {
-            carnivores.remove(animal);
+        if (animal.getHerd() != null) {
+            animal.getHerd().removeMember(animal);
         }
 
-        System.out.println("You sold an animal for " + animal.getPrice() + "$");
+        if (animal instanceof Herbivore herbivore) {
+            herbivores.remove(herbivore);
+        } else if (animal instanceof Carnivore carnivore) {
+            carnivores.remove(carnivore);
+        }
     }
     // =====
 

@@ -3,6 +3,7 @@ package classes.entities.animals;
 import classes.entities.Direction;
 import classes.landforms.Lake;
 import classes.landforms.plants.Plant;
+import classes.terrains.River;
 import classes.terrains.Terrain;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -54,6 +55,19 @@ public abstract class Animal extends Pane {
     private int frameHeight;
     protected Direction currentDirection = Direction.RIGHT;
 
+    //State images
+    private ImageView stateIcon;
+    private Image thirstImage;
+    private Image hungerImage;
+    private Image sleepImage;
+
+    //herd
+    protected boolean isInAHerd;
+    protected Herd herd = null;
+
+    private boolean isManuallyPaused = false;
+    private boolean isBeingEaten = false;
+
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price, int lifeExpectancy)  {
         this.frameWidth = frameWidth;
@@ -82,8 +96,24 @@ public abstract class Animal extends Pane {
         //state
         this.state = AnimalState.IDLE;
 
+        //state images
+        loadStateImages();
+        this.stateIcon = new ImageView();
+        stateIcon.setVisible(false);
+        stateIcon.setLayoutX(imageView.getLayoutX() + imageView.getFitWidth() / 2 - stateIcon.getFitWidth() / 2);
+        stateIcon.setLayoutY(imageView.getLayoutY() - 5);
+        getChildren().add(stateIcon);
+
+
+
     }
 
+    //Image loaders
+    private void loadStateImages(){
+        this.thirstImage = new Image(Animal.class.getResource("/images/thirst.png").toExternalForm());
+        this.hungerImage = new Image(Animal.class.getResource("/images/hunger.png").toExternalForm());
+        this.sleepImage = new Image(Animal.class.getResource("/images/sleep.png").toExternalForm());
+    }
     private void loadStaticDirectionImages() {
         for (int i = 0; i < 3; i++) {
             walkDownImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 0 * frameHeight, frameWidth, frameHeight);
@@ -98,6 +128,9 @@ public abstract class Animal extends Pane {
             walkUpImages[i] = new WritableImage(spriteSheet.getPixelReader(), i * frameWidth, 3 * frameHeight, frameWidth, frameHeight);
         }
     }
+
+
+
 
     //===== ANIMAL MOVEMENT & ACTIVITIES =====
     //moving
@@ -185,25 +218,69 @@ public abstract class Animal extends Pane {
         }
     }
 
+    //in a herd movements
+    public void moveTowardsLeader(Animal leader) {
+        double targetX = leader.getX();
+        double targetY = leader.getY();
+
+        double dx = targetX - this.x;
+        double dy = targetY - this.y;
+
+        double distance = Math.hypot(dx, dy);
+        if (distance < 15) {
+            this.transitionTo(leader.getState());
+            return;
+        }
+
+        double stepX = (dx / distance) * speed;
+        double stepY = (dy / distance) * speed;
+
+        Direction dir;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            dir = dx > 0 ? Direction.RIGHT : Direction.LEFT;
+        } else {
+            dir = dy > 0 ? Direction.DOWN : Direction.UP;
+        }
+
+        move(dir, stepX, stepY);
+    }
+
     //not moving states
     public void rest() {
         restingTimePassed += 0.05;
+
+        stateIcon.setImage(sleepImage);
+        stateIcon.setVisible(true);
+
         if (restingTimePassed >= 15) {
             restingTimePassed = 0.0;
             state = AnimalState.IDLE;
+
+            stateIcon.setVisible(false);
         }
 
     }
     public void eat(){
         this.changeHunger(0.5); //+10 / mp
+
+        stateIcon.setImage(hungerImage);
+        stateIcon.setVisible(true);
+
         if (hunger > 99.0) {
             state = AnimalState.IDLE;
+            stateIcon.setVisible(false);
         }
     }
     public void drink(){
         this.changeThirst(0.5); //+10 / mp
-        if (thirst > 99.0) {
+
+        stateIcon.setImage(thirstImage);
+        stateIcon.setVisible(true);
+
+        if (thirst >= 100.0) {
+            thirst = 100.0;
             state = AnimalState.IDLE;
+            stateIcon.setVisible(false);
         }
     }
     public void changeThirst(double val){
@@ -253,18 +330,14 @@ public abstract class Animal extends Pane {
 
     //managing states
     public void transitionTo(AnimalState newState) {
-        if (newState == AnimalState.PAUSED) {
-            previousState = state;
-        }
         this.state = newState;
     }
-    public void resume() {
-        if (state == AnimalState.PAUSED && previousState != null) {
-            transitionTo(previousState);
-        }
-    }
+
     private AnimalState determineStateFromTarget(Terrain target) {
-        if (target.hasLandform()) {
+        if(target instanceof River){
+            return AnimalState.DRINKING;
+        }
+        else if (target.hasLandform()) {
             if (target.getLandform() instanceof Lake) return AnimalState.DRINKING;
             if (target.getLandform() instanceof Plant) return AnimalState.EATING;
         }
@@ -358,5 +431,51 @@ public abstract class Animal extends Pane {
     public double getHunger(){
         return hunger;
     }
-    public Direction getCurrentDirection() { return currentDirection; }
+    public void setStateIcon(Image stateIcon){
+        this.stateIcon.setImage(stateIcon);
+    }
+    public void setStateIconVisibility(boolean val){
+        this.stateIcon.setVisible(val);
+    }
+    public void setThirst(double thirst){
+        this.thirst = thirst;
+    }
+    public void setHunger(double hunger){
+        this.hunger = hunger;
+    }
+    public void setIsInAHerd(boolean val){
+        this.isInAHerd = val;
+    }
+    public boolean getIsInAHerd(){
+        return isInAHerd;
+    }
+
+    public Herd getHerd() {
+        return this.herd;
+    }
+    public void setHerd(Herd herd){
+        this.herd = herd;
+    }
+
+    public void pauseManually() {
+        isManuallyPaused = true;
+    }
+
+    public void resumeManually() {
+        isManuallyPaused = false;
+    }
+
+    public boolean isManuallyPaused() {
+        return isManuallyPaused;
+    }
+    public void setBeingEaten(boolean val) {
+        this.isBeingEaten = val;
+    }
+
+    public boolean isBeingEaten() {
+        return isBeingEaten;
+    }
+    public void setRestingTimePassed(double val){
+        this.restingTimePassed = val;
+    }
 }

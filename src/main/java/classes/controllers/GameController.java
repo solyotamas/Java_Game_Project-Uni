@@ -461,19 +461,40 @@ public class GameController {
         event.consume();
 
         Animal clickedAnimal = (Animal) event.getSource();
-        clickedAnimal.transitionTo(AnimalState.PAUSED);
+        if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
+            for (Animal a : clickedAnimal.getHerd().getMembers()) {
+                a.pauseManually();
+            }
+        } else {
+            clickedAnimal.pauseManually();
+        }
 
         currentInfoWindowAnimal = new InfoWindowAnimal(
                 clickedAnimal,
                 () -> {
                     // Sell action
+                    if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
+                        for (Animal a : clickedAnimal.getHerd().getMembers()) {
+                            a.resumeManually();
+                        }
+                    }else
+                        clickedAnimal.resumeManually();
+
                     gameEngine.sellAnimal(clickedAnimal);
                     uiLayer.getChildren().remove(clickedAnimal);
-
                     closeAnimalWindow(clickedAnimal);
+
                 },
                 () -> {
                     // Close action
+                    if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
+                        for (Animal a : clickedAnimal.getHerd().getMembers()) {
+                            a.resumeManually();
+                        }
+                    }
+                    else
+                        clickedAnimal.resumeManually();
+
                     closeAnimalWindow(clickedAnimal);
                 }
         );
@@ -485,8 +506,8 @@ public class GameController {
             uiLayer.getChildren().remove(currentInfoWindowAnimal);
             currentInfoWindowAnimal = null;
         }
-        animal.resume();
     }
+
     private void handleRangerClicked(MouseEvent event) {
         if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
             return;
