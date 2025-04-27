@@ -43,14 +43,14 @@ code_quality:
       - target/checkstyle-result.xml
 
 # Documentation
-pages:
-  stage: deploy
-  script:
-    - mvn javadoc:javadoc
-    - cp -r target/site/apidocs/. public/
-  artifacts:
-    paths:
-      - public
-    expire_in: 1 day
-  only:
-    - master
+#pages:
+#  stage: deploy
+ # script:
+  #  - mvn javadoc:javadoc
+   # - cp -r target/site/apidocs/. public/
+  #artifacts:
+   # paths:
+    #  - public
+   # expire_in: 1 day
+  #only:
+   # - master
