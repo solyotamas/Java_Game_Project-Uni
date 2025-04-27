@@ -1,0 +1,56 @@
+image: maven:3.9.6-eclipse-temurin-21
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+  CI: "true"
+
+# Cache and keep downloaded dependencies between CI pipelines
+cache:
+  key: maven-build
+  paths:
+    - .m2/repository
+
+build:
+  stage: build
+  script:
+    - mvn compile
+
+test:
+  stage: test
+  script:
+    - mvn test
+    - mvn jacoco:report
+    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
+  coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
+  artifacts:
+    when: always
+    reports:
+      junit: target/surefire-reports/*.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: target/site/jacoco/jacoco.xml
+    paths:
+      - target/surefire-reports/
+      - target/site/jacoco/
+
+code_quality:
+  stage: test
+  script:
+    - mvn checkstyle:checkstyle
+  artifacts:
+    when: always
+    paths:
+      - target/checkstyle-result.xml
+
+# Documentation
+pages:
+  stage: deploy
+  script:
+    - mvn javadoc:javadoc
+    - cp -r target/site/apidocs/. public/
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 day
+  only:
+    - master
