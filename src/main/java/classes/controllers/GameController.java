@@ -109,6 +109,7 @@ public class GameController {
     public void startGame() {
         this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer);
         System.out.println(difficulty);
+        gameSpeedRelaxedButton.getStyleClass().add("active");
         gameEngine.gameLoop();
     }
 

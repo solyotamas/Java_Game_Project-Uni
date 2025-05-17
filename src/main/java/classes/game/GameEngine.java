@@ -418,6 +418,7 @@ public class GameEngine {
                             gameController.removeAnimal(prey);
                             herbivores.remove(prey);
 
+                            updateTicketPrice();
                             leaderCarnivore.clearPrey();
                         }
                     }
@@ -577,6 +578,7 @@ public class GameEngine {
                             gameController.removeAnimal(prey);
                             herbivores.remove(prey);
 
+                            updateTicketPrice();
                             carnivore.clearPrey();
                         }
                     }
