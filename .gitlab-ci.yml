@@ -46,17 +46,17 @@ test:
     #- mvn jacoco:report
 
     #cserép code.coverage
-    #- apt-get update -yqq && apt-get install -yqq libxml2-utils
-    #- |
-    #  COVERAGE=$(xmllint --xpath "string(//report/counter[@type='LINE']/@covered)" target/site/jacoco/jacoco.xml)
-    #  MISSED=$(xmllint --xpath "string(//report/counter[@type='LINE']/@missed)" target/site/jacoco/jacoco.xml)
-    #  TOTAL=$((COVERAGE + MISSED))
-    #  PERCENT=$((100 * COVERAGE / TOTAL))
-    #  echo "TOTAL_COVERAGE=$PERCENT%"
-  #coverage: '/TOTAL_COVERAGE=(\d+)%/'
+    - apt-get update -yqq && apt-get install -yqq libxml2-utils
+    - |
+      COVERAGE=$(xmllint --xpath "string(//report/counter[@type='LINE']/@covered)" target/site/jacoco/jacoco.xml)
+      MISSED=$(xmllint --xpath "string(//report/counter[@type='LINE']/@missed)" target/site/jacoco/jacoco.xml)
+      TOTAL=$((COVERAGE + MISSED))
+      PERCENT=$((100 * COVERAGE / TOTAL))
+      echo "TOTAL_COVERAGE=$PERCENT%"
+  coverage: '/TOTAL_COVERAGE=(\d+)%/'
 
-    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml | head -n 1
-  coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
+  #  - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml # | head -n 1
+  #coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
   artifacts:
     when: always
     reports:
