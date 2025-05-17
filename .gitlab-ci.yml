@@ -1,5 +1,6 @@
 #image: maven:3.9.6-eclipse-temurin-21
-image: ghcr.io/openjfx/javafx-docker:21
+#image: ghcr.io/openjfx/javafx-docker:21 #ez nem volt nyilvános
+image: docker.io/frolvlad/alpine-glibc:alpine-3.12_glibc-2.31
 
 
 variables:
