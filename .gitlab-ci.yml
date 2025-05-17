@@ -40,10 +40,10 @@ test:
   script:
     #javafx shit
     - apt-get update && apt-get install -y xvfb libgtk-3-0 libxrender1 libxtst6
-    - xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" #mvn test jacoco:report
+    - xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" mvn test jacoco:report
 
-    - mvn test
-    - mvn jacoco:report
+    #- mvn test
+    #- mvn jacoco:report
 
     #cserép code.coverage
     #- apt-get update -yqq && apt-get install -yqq libxml2-utils
