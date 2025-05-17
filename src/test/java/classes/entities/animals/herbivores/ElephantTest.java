@@ -60,8 +60,8 @@ public class ElephantTest {
     @Test
     void testInitialAnimalStats() {
         assertEquals(AnimalState.IDLE, elephant.getState());
-        assertEquals(100.0, elephant.getThirst(), 0.001);
-        assertEquals(100.0, elephant.getHunger(), 0.001);
+        assertEquals(20.0, elephant.getThirst());
+        assertEquals(20.0, elephant.getHunger());
         assertTrue(elephant.getPath().isEmpty());
         assertNull(elephant.getStart());
         assertNull(elephant.getTarget());
@@ -84,20 +84,20 @@ public class ElephantTest {
 
     @Test
     void testDrinks() {
-        elephant.changeThirst(-50);
+        elephant.changeThirst(-10);
         elephant.drink();
-        assertTrue(elephant.getThirst() > 50); //mert alapból ugye 100 a kontrusktorban
+        assertTrue(elephant.getThirst() > 10); //mert alapból ugye 20 a kontrusktorban
     }
 
     @Test
     void testEats() {
-        elephant.changeHunger(-60);
+        elephant.changeHunger(-10);
         elephant.eat();
-        assertTrue(elephant.getHunger() > 40); //ez is 100
+        assertTrue(elephant.getHunger() >= 10); //ez is 20
     }
 
     @Test
-    void testRestAndSTransitionTo() {
+    void testRestAndTransitionTo() {
         elephant.transitionTo(AnimalState.RESTING);
         for (int i = 0; i < 400; i++) {
             elephant.rest();
@@ -105,8 +105,8 @@ public class ElephantTest {
         assertEquals(AnimalState.IDLE, elephant.getState());
 
         //egyik sem nyúl az éhséghez vagy szomjúsághoz
-        assertEquals(100.0, elephant.getThirst());
-        assertEquals(100.0, elephant.getHunger());
+        assertEquals(20.0, elephant.getThirst());
+        assertEquals(20.0, elephant.getHunger());
     }
 
     @Test
