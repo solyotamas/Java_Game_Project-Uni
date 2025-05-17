@@ -10,7 +10,7 @@ public class Grass extends Plant {
     public static final int HEIGHT_IN_TILES = 1;
 
     private static final int price = 300;
-    private static final int nutrition = 50;
+    private static final int nutrition = 30;
 
     public Grass(double x, double y, double depth) {
         super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, grassPicture, depth, price, nutrition);

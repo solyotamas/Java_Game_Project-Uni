@@ -78,7 +78,7 @@ public class GameEngine {
 
         this.gameBoard = new GameBoard(terrainLayer, uiLayer);
         gameBoard.setupGroundBoard();
-        gameBoard.generatePlants(rand.nextInt(5));
+        gameBoard.generatePlants(rand.nextInt(5) + 5);
 
         carnivores = new ArrayList<Carnivore>();
         herbivores = new ArrayList<Herbivore>();
@@ -344,7 +344,7 @@ public class GameEngine {
                 if (target != null) {
                     Landform landform = target.getLandform();
                     if (landform != null && landform instanceof Plant plant && plant.isDepleted()) {
-                        plants.remove(plant);
+                        plants.remove(plant); // TODO BUGFIX still in desired plants ???
                         target.setLandform(null);
                         gameBoard.getUiLayer().getChildren().remove(plant);
                     }
@@ -418,6 +418,7 @@ public class GameEngine {
                             gameController.removeAnimal(prey);
                             herbivores.remove(prey);
 
+                            updateTicketPrice();
                             leaderCarnivore.clearPrey();
                         }
                     }
@@ -577,6 +578,7 @@ public class GameEngine {
                             gameController.removeAnimal(prey);
                             herbivores.remove(prey);
 
+                            updateTicketPrice();
                             carnivore.clearPrey();
                         }
                     }
