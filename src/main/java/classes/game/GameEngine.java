@@ -78,7 +78,7 @@ public class GameEngine {
 
         this.gameBoard = new GameBoard(terrainLayer, uiLayer);
         gameBoard.setupGroundBoard();
-        gameBoard.generatePlants(rand.nextInt(5) + 5);
+        gameBoard.generatePlants(rand.nextInt(1) + 1);
 
         carnivores = new ArrayList<Carnivore>();
         herbivores = new ArrayList<Herbivore>();
@@ -980,6 +980,7 @@ public class GameEngine {
         rangers.clear();
         tourists.clear();
         jeeps.clear();
+        plants.clear();
 
         if (gameBoard != null && gameBoard.getUiLayer() != null) {
             gameBoard.getUiLayer().getChildren().clear();
