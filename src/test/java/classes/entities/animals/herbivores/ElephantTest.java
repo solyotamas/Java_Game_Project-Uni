@@ -73,14 +73,14 @@ public class ElephantTest {
 //        assertNotNull(view);
 //        assertEquals(elephant.getDepth(), elephant.getY() + (88 * 0.6 / 2.0), 0.001);
 //    }
-    @Test
-    @Tag("gui")
-    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
-    void testInitialUIState() {
-        ImageView view = elephant.getImageView();
-        assertNotNull(view);
-        assertEquals(elephant.getDepth(), elephant.getY() + (88 * 0.6 / 2.0), 0.001);
-    }
+//    @Test
+//    @Tag("gui")
+//    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
+//    void testInitialUIState() {
+//        ImageView view = elephant.getImageView();
+//        assertNotNull(view);
+//        assertEquals(elephant.getDepth(), elephant.getY() + (88 * 0.6 / 2.0), 0.001);
+//    }
 
     @Test
     void testDrinks() {

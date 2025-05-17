@@ -15,7 +15,7 @@ cache:
     - .m2/repository
 
 #cserép cuccok
-include:
+#include:
   # NuGet Dependency Scanning
   # https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
   #- template: Jobs/Dependency-Scanning.gitlab-ci.yml
@@ -27,7 +27,7 @@ include:
   #- template: Jobs/SAST.gitlab-ci.yml
   # Static analysis-based Code Quality evaluation for Java
   # https://szofttech.inf.elte.hu/components/code-quality-java
-  - component: szofttech.inf.elte.hu/components/code-quality-java/maven@1
+  #- component: szofttech.inf.elte.hu/components/code-quality-java/maven@1 #ez mind szép és jó lett volna, de attól hogy ez újra buildel és testel, ebben nincs javafx és failel a dolog
 
 
 build:
