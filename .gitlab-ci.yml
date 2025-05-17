@@ -43,8 +43,6 @@ test:
       PERCENT=$((100 * COVERAGE / TOTAL))
       echo "TOTAL_COVERAGE=$PERCENT%"
   #coverage: '/TOTAL_COVERAGE=(\d+)%/'
-#    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
-#  coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
   artifacts:
     when: always
     reports:
@@ -77,3 +75,6 @@ code_quality:
    # expire_in: 1 day
   #only:
    # - master
+
+#    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
+#  coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
