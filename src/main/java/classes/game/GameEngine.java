@@ -153,6 +153,10 @@ public class GameEngine {
                 //== TOURISTS
                 maybeSpawnTourist();
 
+                // UI sync, Display things
+                spentTime += 0.05;
+                gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, tourists.size(), ticketPrice, money);
+
                 if (gameOver()) {
                     if (money == 0) {
                         gameController.setReasonOfDeathText("Your safari park has gone bankrupt.");
@@ -166,10 +170,6 @@ public class GameEngine {
                     gameController.openWinPane();
                     stop();
                 }
-
-                // UI sync, Display things
-                spentTime += 0.05;
-                gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, tourists.size(), ticketPrice, money);
 
             })
         );
@@ -975,13 +975,13 @@ public class GameEngine {
 
         carnivores.clear();
         herbivores.clear();
+        rangers.clear();
         tourists.clear();
+        jeeps.clear();
 
         if (gameBoard != null && gameBoard.getUiLayer() != null) {
             gameBoard.getUiLayer().getChildren().clear();
         }
-
-        spentTime = 0.0;
     }
 
     // =====
