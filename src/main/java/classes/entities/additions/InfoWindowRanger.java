@@ -2,6 +2,7 @@ package classes.entities.additions;
 
 import classes.entities.human.Ranger;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -16,17 +17,20 @@ public class InfoWindowRanger extends VBox {
 
         //Close
         Button closeButton = new Button("×");
+        closeButton.setCursor(Cursor.HAND);
         closeButton.getStyleClass().add("close-button");
         closeButton.setOnAction(e -> onCloseClick.run());
 
         //Choose prey
         Button choosePreyButton = new Button("Choose Prey");
+        choosePreyButton.setCursor(Cursor.HAND);
         choosePreyButton.getStyleClass().add("info-button");
         choosePreyButton.setPrefWidth(140);
         choosePreyButton.setOnAction(e -> onChoosePreyClick.run());
 
         //Unemploy
         Button unemployButton = new Button("Unemploy");
+        unemployButton.setCursor(Cursor.HAND);
         unemployButton.getStyleClass().add("info-button");
         unemployButton.setPrefWidth(140);
         unemployButton.setOnAction(e -> onUnemployClick.run());

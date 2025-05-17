@@ -47,6 +47,7 @@ import javafx.scene.image.ImageView;
 public class GameController {
     private GameEngine gameEngine;
     private Difficulty difficulty;
+    private int speed = 1;
 
     //info panel
     private InfoWindowAnimal currentInfoWindowAnimal = null;
@@ -98,6 +99,8 @@ public class GameController {
     @FXML
     private Button gameSpeedDayButton;
     @FXML
+    private Button gameSpeedWeekButton;
+    @FXML
     private Label ticketPriceLabel;
     @FXML
     private Label moneyLabel;
@@ -118,12 +121,21 @@ public class GameController {
     }
 
     @FXML
-    public void speedGameToDay(){
-
-    }
-    @FXML
     public void speedGameToHour(){
+        gameEngine.setGameSpeed(1);
+        speed = 1;
+    }
 
+    @FXML
+    public void speedGameToDay(){
+        gameEngine.setGameSpeed(6);
+        speed = 6;
+    }
+
+    @FXML
+    public void speedGameToWeek(){
+        gameEngine.setGameSpeed(12);
+        speed = 12;
     }
 
     // ==== LANDFORMS
@@ -455,7 +467,7 @@ public class GameController {
 
     // ==== INFO WINDOWS
     private void handleAnimalClicked(MouseEvent event) {
-        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
+        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null || speed != 1)
             return;
 
         event.consume();
@@ -509,7 +521,7 @@ public class GameController {
     }
 
     private void handleRangerClicked(MouseEvent event) {
-        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
+        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null || speed != 1)
             return;
 
         event.consume();
@@ -526,8 +538,7 @@ public class GameController {
                 },
                 () -> {
                     // Choose prey action
-                    gameEngine.choosePreyForRanger();
-                    //TODO záródjon be
+                    gameEngine.choosePreyForRanger(clickedRanger);
                 },
                 () -> {
                     // Close action
@@ -537,11 +548,12 @@ public class GameController {
 
         uiLayer.getChildren().add(currentInfoWindowRanger);
     }
-    private void closeRangerWindow(Ranger ranger) {
+    public void closeRangerWindow(Ranger ranger) {
         if (currentInfoWindowRanger != null) {
             uiLayer.getChildren().remove(currentInfoWindowRanger);
             currentInfoWindowRanger = null;
         }
+        gameEngine.clearAllCarnivoreHighlights();
         ranger.resume();
     }
     // =====
@@ -595,6 +607,7 @@ public class GameController {
 
     //Market appear, disappear
     public void openShopPane() {
+        if (speed != 1) return;
         shopPane.setVisible(true);
     }
     public void closeShopPane(){

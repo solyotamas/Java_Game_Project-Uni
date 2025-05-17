@@ -83,6 +83,7 @@ public class Ranger extends Human {
     public Carnivore getPrey() {
         return prey;
     }
+    public void setPrey(Carnivore prey) { this.prey = prey;}
     // =====
 
 }

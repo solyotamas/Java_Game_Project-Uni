@@ -1,6 +1,7 @@
 package classes.entities.animals;
 
 import classes.entities.Direction;
+import classes.terrains.Terrain;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,7 +15,7 @@ public abstract class Carnivore extends Animal {
     }
 
 
-    public void huntTarget() {
+    public void huntTarget(Terrain terrain) {
         if (prey == null) {
             this.state = AnimalState.IDLE;
             return;
@@ -43,7 +44,7 @@ public abstract class Carnivore extends Animal {
             dir = dy > 0 ? Direction.DOWN : Direction.UP;
         }
 
-        move(dir, stepX, stepY);
+        move(terrain, dir, stepX, stepY);
     }
     public void choosePrey(ArrayList<Herbivore> herbivores) {
         if (herbivores.isEmpty()) return;

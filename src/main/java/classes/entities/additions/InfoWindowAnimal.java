@@ -2,6 +2,7 @@ package classes.entities.additions;
 
 import classes.entities.animals.Animal;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -20,11 +21,13 @@ public class InfoWindowAnimal extends VBox {
 
         //close
         Button closeButton = new Button("×");
+        closeButton.setCursor(Cursor.HAND);
         closeButton.getStyleClass().add("close-button");
         closeButton.setOnAction(e -> onCloseClick.run());
 
         //sell
         Button sellAnimalBtn = new Button("Sell animal");
+        sellAnimalBtn.setCursor(Cursor.HAND);
         sellAnimalBtn.getStyleClass().add("info-button");
         sellAnimalBtn.setOnAction(e -> onSellClick.run());
 

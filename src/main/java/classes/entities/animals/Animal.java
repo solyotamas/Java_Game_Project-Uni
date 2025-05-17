@@ -5,6 +5,7 @@ import classes.landforms.Lake;
 import classes.landforms.plants.Plant;
 import classes.terrains.River;
 import classes.terrains.Terrain;
+import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
@@ -75,6 +76,7 @@ public abstract class Animal extends Pane {
         this.speed = speed;
         this.price = price;
         this.lifeExpectancy = lifeExpectancy;
+        this.setCursor(Cursor.HAND);
 
         //Animation pictures
         this.spriteSheet = new Image(getClass().getResource(imgUrl).toExternalForm());
@@ -134,7 +136,7 @@ public abstract class Animal extends Pane {
 
     //===== ANIMAL MOVEMENT & ACTIVITIES =====
     //moving
-    public void moveTowardsTarget() {
+    public void moveTowardsTarget(Terrain terrain) {
         // If we've reached the end of the path
         if (pathIndex >= path.size()) {
             state = determineStateFromTarget(target);
@@ -167,19 +169,21 @@ public abstract class Animal extends Pane {
             dir = (dy > 0) ? Direction.DOWN : Direction.UP;
         }
 
-        move(dir, stepX, stepY);
+        move(terrain, dir, stepX, stepY);
 
     }
-    public void move(Direction dir, double dx, double dy) {
+    public void move(Terrain terrain, Direction dir, double dx, double dy) {
         //todo ELEGÁNSABB LENNE A DIRECTION-BŐL KISZEDNI AZ IRÁNY ÉRTÉKEIT
         this.currentDirection = dir;
-        this.x += dx; this.y += dy;
 
+        //moving slower on terrains with crossingDifficulty (river, hill)
+        dx *= crossingDifficulty(terrain);
+        dy *= crossingDifficulty(terrain);
+        this.x += dx; this.y += dy;
 
         //the UI element itself
         setLayoutX(getLayoutX() + dx);
         setLayoutY(getLayoutY() + dy);
-
 
         switch (currentDirection) {
             case UP -> {
@@ -219,7 +223,7 @@ public abstract class Animal extends Pane {
     }
 
     //in a herd movements
-    public void moveTowardsLeader(Animal leader) {
+    public void moveTowardsLeader(Animal leader, Terrain terrain) {
         double targetX = leader.getX();
         double targetY = leader.getY();
 
@@ -242,7 +246,11 @@ public abstract class Animal extends Pane {
             dir = dy > 0 ? Direction.DOWN : Direction.UP;
         }
 
-        move(dir, stepX, stepY);
+        move(terrain, dir, stepX, stepY);
+    }
+    public double crossingDifficulty(Terrain terrain) {
+        int difficulty = terrain.getCrossingDifficulty(); // 0–3
+        return 1.0 / difficulty;
     }
 
     //not moving states
@@ -355,7 +363,7 @@ public abstract class Animal extends Pane {
     }
 
     public void agingAnimal(double currentGameHour) {
-        this.age = startingAge + (int) ((currentGameHour - bornAt) / 24.0);
+        this.age = startingAge + (int) ((currentGameHour - bornAt) / 8760.0);
 
         double ageRatio = (double) this.age / this.lifeExpectancy;
         this.appetite = (int)(1 + ageRatio * 99);

@@ -117,3 +117,7 @@
     -fx-font-family: "Calibri";
     -fx-font-weight: bold;
 }
+
+#gameSpeedHourButton, #gameSpeedDayButton, #gameSpeedWeekButton {
+    -fx-cursor: hand;
+}

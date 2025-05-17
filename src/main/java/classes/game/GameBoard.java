@@ -8,6 +8,7 @@ import classes.landforms.plants.Grass;
 import classes.landforms.plants.Plant;
 import classes.landforms.plants.Tree;
 import classes.terrains.*;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -49,7 +50,11 @@ public class GameBoard{
                         makeFloorTerrain(x,y);
                         break;
                     case 4, COLUMNS-5:
-                        makeFenceTerrain(x,y);
+                        if (y == 0 && x == 4|| y == ROWS-1 && x == COLUMNS-5) {
+                            makeEntranceTerrain(x,y);
+                        } else {
+                            makeFenceTerrain(x,y);
+                        }
                         break;
                     default:
                         makeRandomMapTerrain(x,y);
@@ -75,6 +80,16 @@ public class GameBoard{
         terrainLayer.getChildren().add(fence);
         terrainGrid[x][y] = fence;
     }
+    private void makeEntranceTerrain(int x, int y){
+        Terrain entrance = new Entrance(x, y);
+
+        if (x == COLUMNS - 5) {
+            entrance.setScaleX(-1);
+        }
+
+        terrainLayer.getChildren().add(entrance);
+        terrainGrid[x][y] = entrance;
+    }
     private void makeFloorTerrain(int x, int y){
         Terrain floor = new Floor(x,y);
 
@@ -84,15 +99,19 @@ public class GameBoard{
     private void makeRandomMapTerrain(int x, int y) {
         int terrainType = rand.nextInt(500);
 
-
         Terrain terrain;
 
         if (terrainType < 5){
-            terrain = new Hill(x, y);
-            addHillCluster(x, y);
+            if ((x < 11 && y < 5) || (x > COLUMNS - 12 && y > ROWS - 6)) {
+                terrain = new Ground(x, y);
+            } else {
+                terrain = new Hill(x, y);
+                addHillCluster(x, y);
+            }
         }
-        else
+        else {
             terrain = new Ground(x, y);
+        }
 
         //Placing inside gamePane and keeping track inside the matrix
         terrainLayer.getChildren().add(terrain);
@@ -126,7 +145,7 @@ public class GameBoard{
             if (y >= ROWS) break;
 
             terrain = getTerrainAt(x, y);
-            if (terrain instanceof Hill || terrain instanceof Fence) {
+            if (terrain instanceof Hill || terrain instanceof Fence || terrain instanceof Entrance) {
                 x -= direction;
             }
         }
@@ -157,7 +176,6 @@ public class GameBoard{
         }
     }
 
-
     public Terrain getTerrainAt(int x, int y) {
         if (x >= 0 && y >= 0 && x < COLUMNS && y < ROWS) {
             return terrainGrid[x][y];
@@ -165,13 +183,23 @@ public class GameBoard{
             return null;
     }
 
+    public Terrain getTerrainAtDouble(double x, double y) {
+        int tileX = (int)(x / TILE_SIZE);
+        int tileY = (int)(y / TILE_SIZE);
+        Terrain terrain = getTerrainAt(tileX, tileY);
+
+        return terrain;
+    }
+
+
     //Placing landforms
     public boolean canPlaceLandform(Landform landform, int startX, int startY) {
         for (int x = startX; x < startX + landform.getWidthInTiles(); x++) {
             for (int y = startY; y < startY + landform.getHeightInTiles(); y++) {
                 Terrain terrain = getTerrainAt(x, y);
                 if (terrain == null || terrain.hasLandform() || terrain instanceof Hill ||
-                        terrain instanceof River || terrain instanceof Fence || terrain instanceof Floor) {
+                        terrain instanceof Fence || terrain instanceof Floor || terrain instanceof Entrance ||
+                        (!(landform instanceof Road) && terrain instanceof River)) {
                     return false;
                 }
             }
@@ -184,6 +212,11 @@ public class GameBoard{
                 Terrain terrain = getTerrainAt(i, j);
                 if (terrain != null) {
                     terrain.placeLandform(landform);
+
+                    if (terrain instanceof River && landform instanceof Road) {
+                        ((Road) landform).setAsBridge();
+                    }
+
                     if(landform instanceof Road){
                         updateRoadAndNeighbors(i, j);
                     }
@@ -400,6 +433,8 @@ public class GameBoard{
 
     //TODO simplify createPlant and generatePlants into one, idk how tho
     private void createPlant(Class<? extends Plant> plantClass, int x, int y) {
+        if ((x < 11 && y < 5) || (x > COLUMNS - 12 && y > ROWS - 6)) return;
+
         Image plantImage = switch (plantClass.getSimpleName()) {
             case "Tree" -> Tree.getRandomTreeImage();
             case "Bush" -> Bush.getRandomBushImage();
@@ -423,7 +458,6 @@ public class GameBoard{
             if (canPlaceLandform(placedLandform, x, y)) {
                 placeLandform(placedLandform, x, y);
                 uiLayer.getChildren().add(placedLandform);
-                //TODO add to gameEngine plant list
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -482,7 +516,7 @@ public class GameBoard{
 
     private void updateRoadTextureAt(int x, int y) {
         Terrain terrain = getTerrainAt(x, y);
-        if (terrain != null && terrain.hasLandform() && terrain.getLandform() instanceof Road road) {
+        if (terrain != null && terrain.hasLandform() && terrain.getLandform() instanceof Road road && !road.isBridge()) {
             int bitmask = calculateBitmask(x, y);
             road.setPicture(Road.roadImages[bitmask]);
         }
