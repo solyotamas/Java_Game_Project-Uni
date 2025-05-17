@@ -1,4 +1,6 @@
-image: maven:3.9.6-eclipse-temurin-21
+#image: maven:3.9.6-eclipse-temurin-21
+image: ghcr.io/openjfx/javafx-docker:21
+
 
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
@@ -10,6 +12,7 @@ cache:
   paths:
     - .m2/repository
 
+#cserép cuccok
 include:
   # NuGet Dependency Scanning
   # https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
@@ -33,8 +36,14 @@ build:
 test:
   stage: test
   script:
+    #javafx shit
+    - apt-get update && apt-get install -y xvfb libgtk-3-0 libxrender1 libxtst6
+    - xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" #mvn test jacoco:report
+
     - mvn test
     - mvn jacoco:report
+
+    #cserép code.coverage
     #- apt-get update -yqq && apt-get install -yqq libxml2-utils
     #- |
     #  COVERAGE=$(xmllint --xpath "string(//report/counter[@type='LINE']/@covered)" target/site/jacoco/jacoco.xml)
@@ -43,6 +52,7 @@ test:
     #  PERCENT=$((100 * COVERAGE / TOTAL))
     #  echo "TOTAL_COVERAGE=$PERCENT%"
   #coverage: '/TOTAL_COVERAGE=(\d+)%/'
+
     - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
   coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
   artifacts:
