@@ -55,7 +55,7 @@ test:
     #  echo "TOTAL_COVERAGE=$PERCENT%"
   #coverage: '/TOTAL_COVERAGE=(\d+)%/'
 
-    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
+    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml | head -n 1
   coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
   artifacts:
     when: always
