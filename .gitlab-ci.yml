@@ -22,7 +22,7 @@ include:
   #- template: Jobs/SAST.gitlab-ci.yml
   # Static analysis-based Code Quality evaluation for Java
   # https://szofttech.inf.elte.hu/components/code-quality-java
-  - component: szofttech.inf.elte.hu/components/code-quality-java/maven@<VERSION>
+  - component: szofttech.inf.elte.hu/components/code-quality-java/maven@3.9.9
 
 
 build:
