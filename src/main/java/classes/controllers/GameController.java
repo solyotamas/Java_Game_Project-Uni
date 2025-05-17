@@ -95,11 +95,11 @@ public class GameController {
     @FXML
     private Label touristCountLabel;
     @FXML
-    private Button gameSpeedHourButton;
+    private Button gameSpeedRelaxedButton;
     @FXML
-    private Button gameSpeedDayButton;
+    private Button gameSpeedSteadyButton;
     @FXML
-    private Button gameSpeedWeekButton;
+    private Button gameSpeedRapidButton;
     @FXML
     private Label ticketPriceLabel;
     @FXML
@@ -116,26 +116,39 @@ public class GameController {
         this.difficulty = difficulty;
     }
 
+    private void setActiveSpeedButton(Button activeButton) {
+        gameSpeedRelaxedButton.getStyleClass().remove("active");
+        gameSpeedSteadyButton.getStyleClass().remove("active");
+        gameSpeedRapidButton.getStyleClass().remove("active");
+
+        if (!activeButton.getStyleClass().contains("active")) {
+            activeButton.getStyleClass().add("active");
+        }
+    }
+
     public void setReasonOfDeathText(String text) {
         this.reasonOfDeathText.setText(text);
     }
 
     @FXML
-    public void speedGameToHour(){
+    public void speedGameToRelaxed(){
         gameEngine.setGameSpeed(1);
         speed = 1;
+        setActiveSpeedButton(gameSpeedRelaxedButton);
     }
 
     @FXML
-    public void speedGameToDay(){
+    public void speedGameToSteady(){
         gameEngine.setGameSpeed(6);
         speed = 6;
+        setActiveSpeedButton(gameSpeedSteadyButton);
     }
 
     @FXML
-    public void speedGameToWeek(){
+    public void speedGameToRapid(){
         gameEngine.setGameSpeed(12);
         speed = 12;
+        setActiveSpeedButton(gameSpeedRapidButton);
     }
 
     // ==== LANDFORMS

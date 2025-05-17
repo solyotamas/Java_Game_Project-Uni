@@ -118,6 +118,11 @@
     -fx-font-weight: bold;
 }
 
-#gameSpeedHourButton, #gameSpeedDayButton, #gameSpeedWeekButton {
+#gameSpeedRelaxedButton, #gameSpeedSteadyButton, #gameSpeedRapidButton {
     -fx-cursor: hand;
+    -fx-background-color: #f9c771;
+}
+
+#gameSpeedRelaxedButton.active, #gameSpeedSteadyButton.active, #gameSpeedRapidButton.active {
+    -fx-background-color: #FFE389;
 }
