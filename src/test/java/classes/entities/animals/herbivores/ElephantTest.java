@@ -132,7 +132,31 @@ public class ElephantTest {
         assertEquals(DOWN, elephant.getCurrentDirection());
     }
 
+    /*
+    void testMove() {
+        Ground ground = new Ground(10,4);
+        double initialX = elephant.getLayoutX();
 
+        elephant.move(ground, RIGHT, 1, 0);
+        assertEquals(initialX + 1, elephant.getLayoutX());
+        assertEquals(RIGHT, elephant.getCurrentDirection());
+
+        initialX = elephant.getLayoutX();
+        elephant.move(ground, LEFT, -1, 0);
+        assertEquals(initialX - 1, elephant.getLayoutX());
+        assertEquals(LEFT, elephant.getCurrentDirection());
+
+        double initialY = elephant.getLayoutY();
+        elephant.move(ground, UP, 0, -1);
+        assertEquals(initialY - 1 , elephant.getLayoutY());
+        assertEquals(UP, elephant.getCurrentDirection());
+
+        initialY = elephant.getLayoutY();
+        elephant.move(ground, DOWN, 0, 1);
+        assertEquals(initialY + 1, elephant.getLayoutY());
+        assertEquals(DOWN, elephant.getCurrentDirection());
+    }
+     */
 
 
 }
