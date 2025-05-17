@@ -638,6 +638,7 @@ public class GameController {
 
     //SWITCHING BACK TO MAIN
     public void switchToMain(ActionEvent event) throws IOException {
+        gameEngine.stop();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/main_screen.fxml"));
         Parent root = loader.load();
 

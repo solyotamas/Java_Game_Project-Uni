@@ -69,6 +69,9 @@ public abstract class Animal extends Pane {
     private boolean isManuallyPaused = false;
     private boolean isBeingEaten = false;
 
+    private boolean isStarving = false;
+    private double starvingTime = 0.0;
+
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price, int lifeExpectancy)  {
         this.frameWidth = frameWidth;
@@ -137,6 +140,10 @@ public abstract class Animal extends Pane {
     //===== ANIMAL MOVEMENT & ACTIVITIES =====
     //moving
     public void moveTowardsTarget(Terrain terrain) {
+        if (isStarving) {
+            transitionTo(AnimalState.IDLE);
+        }
+
         // If we've reached the end of the path
         if (pathIndex >= path.size()) {
             state = determineStateFromTarget(target);
@@ -270,9 +277,19 @@ public abstract class Animal extends Pane {
     }
     public void eat(){
         this.changeHunger(0.5); //+10 / mp
-
         stateIcon.setImage(hungerImage);
         stateIcon.setVisible(true);
+
+        // when eating plants, they lose nutrition, if nutrition is 0 the plant disappears
+        if (this.target != null && this.target.getLandform() instanceof Plant) {
+            Plant plant = (Plant) this.target.getLandform();
+            plant.reduceNutrition(this.appetite * 0.005);
+
+            if (plant.isDepleted()) {
+                state = AnimalState.IDLE;
+                stateIcon.setVisible(false);
+            }
+        }
 
         if (hunger > 99.0) {
             state = AnimalState.IDLE;
@@ -353,7 +370,7 @@ public abstract class Animal extends Pane {
     }
     // =====
 
-    // ==== AGING, PRICE HANDLING
+    // ==== AGING, PRICE HANDLING, STARVING
     public void setBornAt(double currentGameHour) {
         this.bornAt = currentGameHour;
     }
@@ -363,7 +380,7 @@ public abstract class Animal extends Pane {
     }
 
     public void agingAnimal(double currentGameHour) {
-        this.age = startingAge + (int) ((currentGameHour - bornAt) / 8760.0);
+        this.age = startingAge + (int) ((currentGameHour - bornAt) / 186.0); // 24 * 7, one year is one week in game
 
         double ageRatio = (double) this.age / this.lifeExpectancy;
         this.appetite = (int)(1 + ageRatio * 99);
@@ -384,6 +401,21 @@ public abstract class Animal extends Pane {
         } else {
             return base * 1 / 5;
         }
+    }
+
+    public void setStarving(boolean starving) {
+        this.isStarving = starving;
+        if (!starving) {
+            this.starvingTime = 0.0;
+        }
+    }
+    public void incrementStarvingTime(double amount) {
+        if (isStarving) {
+            this.starvingTime += amount;
+        }
+    }
+    public boolean diedOfStarvation() {
+        return starvingTime > 24.0; // one day
     }
     // =====
 

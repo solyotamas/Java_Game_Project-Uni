@@ -46,9 +46,13 @@ public abstract class Carnivore extends Animal {
 
         move(terrain, dir, stepX, stepY);
     }
-    public void choosePrey(ArrayList<Herbivore> herbivores) {
-        if (herbivores.isEmpty()) return;
-        this.prey = herbivores.get(new Random().nextInt(herbivores.size()));
+    public void choosePrey(Carnivore carnivore, ArrayList<Herbivore> herbivores) {
+        if (herbivores.isEmpty()) {
+            carnivore.setStarving(true);
+        } else {
+            this.prey = herbivores.get(new Random().nextInt(herbivores.size()));
+            carnivore.setStarving(false);
+        }
     }
     public Herbivore getPrey(){
         return prey;
@@ -56,6 +60,4 @@ public abstract class Carnivore extends Animal {
     public void clearPrey(){
         this.prey = null;
     }
-
-
 }

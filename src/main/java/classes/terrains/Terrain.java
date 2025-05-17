@@ -49,6 +49,7 @@ public class Terrain extends Pane{
     public Landform getLandform(){
         return this.landform;
     }
+    public void setLandform(Landform landform) { this.landform = landform;}
 
     public int getSize(){
         return SIZE;
