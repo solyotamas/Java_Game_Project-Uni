@@ -10,6 +10,21 @@ cache:
   paths:
     - .m2/repository
 
+include:
+  # NuGet Dependency Scanning
+  # https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
+  #- template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  # Secret Detection
+  # https://docs.gitlab.com/user/application_security/secret_detection/
+  #- template: Jobs/Secret-Detection.gitlab-ci.yml
+  # Static Application Security Testing (SAST)
+  # https://docs.gitlab.com/user/application_security/sast/
+  #- template: Jobs/SAST.gitlab-ci.yml
+  # Static analysis-based Code Quality evaluation for Java
+  # https://szofttech.inf.elte.hu/components/code-quality-java
+  - component: szofttech.inf.elte.hu/components/code-quality-java/maven@1
+
+
 build:
   stage: build
   script:
@@ -20,8 +35,16 @@ test:
   script:
     - mvn test
     - mvn jacoco:report
-    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
-  coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
+    - apt-get update -yqq && apt-get install -yqq libxml2-utils
+    - |
+      COVERAGE=$(xmllint --xpath "string(//report/counter[@type='LINE']/@covered)" target/site/jacoco/jacoco.xml)
+      MISSED=$(xmllint --xpath "string(//report/counter[@type='LINE']/@missed)" target/site/jacoco/jacoco.xml)
+      TOTAL=$((COVERAGE + MISSED))
+      PERCENT=$((100 * COVERAGE / TOTAL))
+      echo "TOTAL_COVERAGE=$PERCENT%"
+  #coverage: '/TOTAL_COVERAGE=(\d+)%/'
+#    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
+#  coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
   artifacts:
     when: always
     reports:
