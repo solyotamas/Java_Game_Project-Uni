@@ -482,7 +482,7 @@ public class GameEngine {
         else if (node instanceof InfoWindowAnimal || node instanceof InfoWindowRanger)
             return Double.MAX_VALUE;
         else if (node instanceof Jeep jeep)
-            return jeep.getDepth();
+            return jeep.getY();
         else
             return Double.MAX_VALUE;
     }
