@@ -1,12 +1,12 @@
 package classes.game;
 
 import classes.Difficulty;
+import classes.JeepState;
 import classes.entities.additions.InfoWindowAnimal;
 import classes.entities.additions.InfoWindowRanger;
 import classes.entities.human.*;
 import classes.entities.animals.*;
 import classes.Jeep;
-import classes.Speed;
 import classes.landforms.*;
 import classes.controllers.GameController;
 import classes.landforms.plants.Plant;
@@ -142,7 +142,9 @@ public class GameEngine {
                 updateHumanStates();
 
                 //== JEEP
+                checkIfJeepCanStart();
                 updateJeepPositions();
+
 
                 //== VISUALS
                 sortUiLayer();
@@ -177,9 +179,10 @@ public class GameEngine {
         timeline.play();
     }
 
+
     // ==== SPAWNING TOURISTS
     private void maybeSpawnTourist() {
-        double chancePerSecond = 0.01 * (herbivores.size() + (carnivores.size()) * 2);
+        double chancePerSecond = 0.03 * (herbivores.size() + (carnivores.size()) * 2) + getTotalUniqueAnimalsSeenByJeeps() / 100.;
         double spawnChancePerTick = chancePerSecond / 20.0;
 
         //cap it, max is 1 visitor every 2 secs but then again its random so
@@ -712,7 +715,7 @@ public class GameEngine {
         // Tourist
         List<Tourist> toRemove = new ArrayList<>();
         for (Tourist tourist : tourists){
-            tourist.changeVisitDuration(2);
+            tourist.changeVisitDuration(1);
 
             switch (tourist.getState()){
                 case MOVING, EXITING -> tourist.moveTowardsTarget();
@@ -753,51 +756,130 @@ public class GameEngine {
     // =====
 
     //JEEP
-/*    public void buyJeep() {
-        money = Math.max(0, money - 5000);
-        jeepCount++;
-    }*/
     public void buyJeep() {
-        startJeep();
-    }
+        int side = rand.nextInt(2);
+        Jeep jeep = null;
 
-    /*    public void startJeep() {
-        if (tourists.size() >= 4 && jeepCount >= 1) {
-            for (int i = 0; i < 4; i++) {
-                tourists.removeLast();
+        if(side == 0){
+            if(gameBoard.getTerrainAt(5,0).getLandform() instanceof Road)
+                jeep = new Jeep(5 * 30 + 15, 15);
+        }else{
+            if(gameBoard.getTerrainAt(58,30).getLandform() instanceof Road){
+                jeep = new Jeep(58 * 30 + 15, 30 * 30 + 15);
+                jeep.setImageView(jeep.getJeepLeft()[0]);
             }
-            Jeep jeep = new Jeep(150, 0);
-            // jeep = new Jeep(1770, 900);
+        }
+
+        if(jeep != null){
+            jeep.transitionTo(JeepState.IDLE);
+            jeepCount++;
             jeeps.add(jeep);
             gameBoard.getUiLayer().getChildren().add(jeep);
-            gameController.updateDisplay(spentTime, carnivores.size(), herbivores.size(), jeepCount, tourists.size(), ticketPrice, money);
         }
-    }*/
-    public void startJeep() {
-        Terrain start = gameBoard.getTerrainAt(5, 14);
-        Terrain goal = gameBoard.getTerrainAt(15, 14);
+
+
+    }
+
+    public void checkIfJeepCanStart(){
+
+        int movingJeeps = 0;
+        for (Jeep jeep : jeeps) {
+            if (jeep.getStatus() == JeepState.MOVING) {
+                movingJeeps += 1;
+            }
+        }
+
+        if(movingJeeps == 0)
+            movingJeeps = 1;
+
+        if (tourists.size() >= 4 * movingJeeps && !jeeps.isEmpty()){
+            List<Jeep> idleJeeps = new ArrayList<>();
+
+            for (Jeep jeep : jeeps) {
+                if (jeep.getStatus() == JeepState.IDLE) {
+                    idleJeeps.add(jeep);
+                }
+            }
+
+            if(idleJeeps.size() > 0){
+                Jeep selectedJeep = idleJeeps.get(rand.nextInt(idleJeeps.size()));
+                start(selectedJeep);
+            }
+
+        }
+    }
+
+    public void start(Jeep jeep) {
+        jeep.transitionTo(JeepState.MOVING);
+        int tileY = (int)(jeep.getY()) / 30;
+
+        if(tileY == 0){
+            startJeep(jeep, 5, 0, 58, 30);
+        }else
+            startJeep(jeep, 58, 30, 5, 0);
+
+    }
+
+    public void startJeep(Jeep jeep, int startX, int startY, int endX, int endY){
+        Terrain start = gameBoard.getTerrainAt(startX, startY);
+        Terrain goal = gameBoard.getTerrainAt(endX, endY);
 
         ArrayList<Terrain> roadPath = gameBoard.findRoadPathDijkstra(start, goal);
 
+
         if (roadPath == null || roadPath.size() < 2) {
-            System.out.println(" No valid road path found between (5,14) and (15,14)");
+            //System.out.println("No valid road path found between (" + startX + "," + startY + ") and (" + endX + "," + endY + ")");
             return;
         }
 
-        jeepCount++;
-        Jeep jeep = new Jeep(5 * 30 + 15, 14 * 30 + 15);
         jeep.setPath(roadPath);
+        money += 4 * ticketPrice;
+    }
 
-        jeeps.add(jeep);
-        gameBoard.getUiLayer().getChildren().add(jeep);
+    public int getTotalUniqueAnimalsSeenByJeeps() {
+        Set<Class<? extends Animal>> uniqueSpecies = new HashSet<>();
+
+        for (Jeep jeep : jeeps) {
+            uniqueSpecies.addAll(jeep.getSpeciesSeen());
+        }
+
+        return uniqueSpecies.size();
     }
 
 
     public void updateJeepPositions() {
         for (Jeep jeep : jeeps) {
-            jeep.moveAlongPath();
+            if (jeep.getStatus() == JeepState.MOVING) {
+                checkJeepProximityToAnimals(jeep);
+                jeep.moveAlongPath();
+            }
         }
     }
+
+    private void checkJeepProximityToAnimals(Jeep jeep) {
+        double radius = 150.0; //5x5 circle radius
+        double jeepX = jeep.getX();
+        double jeepY = jeep.getY();
+
+        for (Animal animal : herbivores) {
+            if (isWithinRadius(jeepX, jeepY, animal.getX(), animal.getY(), radius)) {
+                jeep.getSpeciesSeen().add(animal.getClass());
+            }
+        }
+
+        for (Animal animal : carnivores) {
+            if (isWithinRadius(jeepX, jeepY, animal.getX(), animal.getY(), radius)) {
+                jeep.getSpeciesSeen().add(animal.getClass());
+            }
+        }
+    }
+
+    private boolean isWithinRadius(double x1, double y1, double x2, double y2, double radius) {
+        double dx = x1 - x2;
+        double dy = y1 - y2;
+        return (dx * dx + dy * dy) <= (radius * radius);
+    }
+
 
     public void unemployRanger(Ranger ranger) {
 

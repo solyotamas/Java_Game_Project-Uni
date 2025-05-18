@@ -39,6 +39,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import javafx.scene.image.ImageView;
@@ -223,7 +225,7 @@ public class GameController {
                     remainingPlacableTiles[0]--;
 
                     if (isRoad) {
-                        gameEngine.buyRoad((Road) placedLandform);
+                        //gameEngine.buyRoad((Road) placedLandform);
                     }
                 }
             } catch (Exception ex) {
@@ -599,6 +601,8 @@ public class GameController {
     public void removeTourist(Tourist tourist){
         uiLayer.getChildren().remove(tourist);
     }
+
+
     // =====
 
 

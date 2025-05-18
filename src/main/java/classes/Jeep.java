@@ -1,6 +1,9 @@
 package classes;
 
 import classes.entities.Direction;
+import classes.entities.animals.Animal;
+import classes.entities.human.HumanState;
+import classes.entities.human.Tourist;
 import classes.terrains.Terrain;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -8,6 +11,9 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 //todo:
 //  - a kép útvonal még lehet rossz
@@ -22,11 +28,13 @@ public class Jeep extends Pane {
     protected ImageView imageView;
 
 
-    private final double speed = 1.0;
+    private final double speed = 2.0;
 
     public int happyBonus;
-    public int speciesSeen;
+    //public int speciesSeen;
+    private Set<Class<? extends Animal>> speciesSeen = new HashSet<>();
     private Direction currentDirection;
+    private JeepState state;
 
     //Animation
     private final Image spriteSheet = new Image(getClass().getResource("/images/jeep-spritesheet.png").toExternalForm());
@@ -43,6 +51,8 @@ public class Jeep extends Pane {
     private ArrayList<Terrain> path = new ArrayList<>();
     private int pathIndex = 0;
 
+    ArrayList<Tourist> passengers = new ArrayList<>();
+
     public Jeep(double x, double y) {
         this.x = x;
         this.y = y;
@@ -54,6 +64,7 @@ public class Jeep extends Pane {
         imageView.setFitHeight(30);
         imageView.setFitWidth(30);
         getChildren().add(imageView);
+
 
         setLayoutX(x - 30 / 2.);
         setLayoutY(y - 30);
@@ -75,6 +86,14 @@ public class Jeep extends Pane {
 
     public void moveAlongPath() {
         if (pathIndex >= path.size()) {
+            state = JeepState.IDLE;
+
+            System.out.println("Jeep saw these species:");
+            for (Class<? extends Animal> species : speciesSeen) {
+                System.out.println("- " + species.getSimpleName());
+            }
+            speciesSeen.clear();
+
             return;
         }
 
@@ -160,80 +179,6 @@ public class Jeep extends Pane {
 
 
 
-
-    /*
-    public void autoMove(ArrayList<Road> roads) {
-        double step = 1;
-
-        if (tryMove(step, 0, roads)) return;      // right
-        if (tryMove(0, step, roads)) return;      // down
-        if (tryMove(-step, 0, roads)) return;     // left
-        if (tryMove(0, -step, roads)) return;     // up
-    }
-    public boolean tryMove(double dx, double dy, ArrayList<Road> roads) {
-        double newX = x + dx;
-        double newY = y + dy;
-
-        if (isOnRoad(newX, newY, roads)) {
-            x = newX;
-            y = newY;
-            setLayoutX(x);
-            setLayoutY(y);
-
-            if (dx > 0) currentDirection = Direction.RIGHT;
-            else if (dx < 0) currentDirection = Direction.LEFT;
-            else if (dy > 0) currentDirection = Direction.DOWN;
-            else if (dy < 0) currentDirection = Direction.UP;
-
-            updateImage(currentDirection);
-            return true;
-        }
-
-        return false;
-    }
-    private boolean isOnRoad(double newX, double newY, ArrayList<Road> roads) {
-        double[][] corners = {
-                { newX, newY },                     // top-left
-                { newX + frameWidth, newY },             // top-right
-                { newX, newY + frameHeight },            // bottom-left
-                { newX + frameWidth, newY + frameHeight }     // bottom-right
-        };
-
-        for (double[] corner : corners) {
-            boolean onAnyRoad = false;
-            for (Road road : roads) {
-                if (road.getBoundsInParent().contains(corner[0], corner[1])) {
-                    onAnyRoad = true;
-                    break;
-                }
-            }
-            if (!onAnyRoad) return false;
-        }
-
-        return true;
-    }
-    private void updateImage(Direction direction) {
-        if (this.currentDirection != direction) {
-            this.currentDirection = direction;
-            currentFrame = 0;
-            frameDelay = 0;
-        }
-
-        frameDelay++;
-        if (frameDelay >= 10) {
-            currentFrame = (currentFrame + 1) % 2;
-            frameDelay = 0;
-        }
-
-        switch (currentDirection) {
-            case RIGHT -> picture.setImage(jeepRight[currentFrame]);
-            case LEFT -> picture.setImage(jeepLeft[currentFrame]);
-            case UP -> picture.setImage(jeepUp[currentFrame]);
-            case DOWN -> picture.setImage(jeepDown[currentFrame]);
-        }
-    }
-    */
-
     public double getDepth() {
         return this.depth;
     }
@@ -242,4 +187,31 @@ public class Jeep extends Pane {
         this.pathIndex = 0;
     }
 
+    public Image[] getJeepLeft(){
+        return this.jeepLeft;
+    }
+    public void setImageView(Image img){
+        this.imageView.setImage(img);
+    }
+    public void transitionTo(JeepState newState){
+        this.state = newState;
+    }
+
+    public JeepState getStatus() {
+        return this.state;
+    }
+
+    public double getX(){
+        return this.x;
+    }
+    public double getY(){
+        return this.y;
+    }
+    public void setPassengers(ArrayList<Tourist> passengers){
+        this.passengers = passengers;
+    }
+
+    public Set<Class<? extends Animal>> getSpeciesSeen() {
+        return speciesSeen;
+    }
 }

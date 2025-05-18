@@ -68,5 +68,8 @@ public class Tourist extends Human{
     }
 
 
+    public void changeSide(int val) {
+        this.side = val;
+    }
 }
 
