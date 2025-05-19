@@ -21,7 +21,7 @@ public class Tourist extends Human{
 
     @Override
     public void pickNewTarget() {
-        if(visitDuration > 100.0){
+        if(visitDuration > 30.0){
             this.transitionTo(HumanState.EXITING);
             exitSafari();
         }else{

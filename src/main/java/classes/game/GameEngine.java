@@ -101,26 +101,26 @@ public class GameEngine {
             conditions.add(300000); // money
             conditions.add(5);    // herbivores
             conditions.add(5);     // carnivores
-            conditions.add(3);    // tourists
+            conditions.add(15);    // tourists
             winningHoursNeeded = 720; // one month
             money = 25000;
-            System.out.println("To win, you need to keep at least $300,000, 5 herbivores, 5 carnivores, and 3 tourists for 30 days.");
+            System.out.println("To win, you need to keep at least $300,000, 5 herbivores, 5 carnivores, and 15 tourists for 30 days.");
         } else if (difficulty == MEDIUM) {
             conditions.add(500000);
             conditions.add(8);
             conditions.add(8);
-            conditions.add(6);
+            conditions.add(25);
             winningHoursNeeded = 1440;
             money = 20000;
-            System.out.println("To win, you need to keep at least $500,000, 8 herbivores, 8 carnivores, and 6 tourists for 60 days.");
+            System.out.println("To win, you need to keep at least $500,000, 8 herbivores, 8 carnivores, and 25 tourists for 60 days.");
         } else { // HARD
             conditions.add(1000000);
             conditions.add(10);
             conditions.add(10);
-            conditions.add(8);
+            conditions.add(40);
             winningHoursNeeded = 2160;
             money = 15000;
-            System.out.println("To win, you need to keep at least $1,000,000, 10 herbivores, 10 carnivores, and 8 tourists for 90 days.");
+            System.out.println("To win, you need to keep at least $1,000,000, 10 herbivores, 10 carnivores, and 40 tourists for 90 days.");
         }
     }
 
@@ -715,7 +715,7 @@ public class GameEngine {
         // Tourist
         List<Tourist> toRemove = new ArrayList<>();
         for (Tourist tourist : tourists){
-            tourist.changeVisitDuration(1);
+            tourist.changeVisitDuration(0.05);
 
             switch (tourist.getState()){
                 case MOVING, EXITING -> tourist.moveTowardsTarget();
@@ -800,10 +800,7 @@ public class GameEngine {
             }
         }
 
-        if(movingJeeps == 0)
-            movingJeeps = 1;
-
-        if (tourists.size() >= 4 * movingJeeps && !jeeps.isEmpty()){
+        if (tourists.size() >= 4 * (movingJeeps + 1) && !jeeps.isEmpty()){
             List<Jeep> idleJeeps = new ArrayList<>();
 
             for (Jeep jeep : jeeps) {
@@ -929,7 +926,6 @@ public class GameEngine {
             }
 
             System.out.println("Not a valid target.");
-            ranger.setPrey(null);
             root.setOnMouseClicked(null);
         });
     }
