@@ -61,12 +61,6 @@ public class Herd {
     }
 
 
-
-    public void setLeader(Animal newLeader) {
-        this.leader = newLeader;
-    }
-
-
     public void addMember(Animal animal) {
         if (members.size() >= MAX_SIZE) return;
 
