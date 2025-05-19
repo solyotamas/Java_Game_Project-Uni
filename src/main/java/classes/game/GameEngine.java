@@ -98,7 +98,7 @@ public class GameEngine {
         exit = new Pair<>(0, 0);
         conditions = new ArrayList<Integer>();
         if (difficulty == EASY) {
-            conditions.add(300000); // money
+            conditions.add(50000); // money
             conditions.add(5);    // herbivores
             conditions.add(5);     // carnivores
             conditions.add(15);    // tourists
@@ -106,7 +106,7 @@ public class GameEngine {
             money = 25000;
             System.out.println("To win, you need to keep at least $300,000, 5 herbivores, 5 carnivores, and 15 tourists for 30 days.");
         } else if (difficulty == MEDIUM) {
-            conditions.add(500000);
+            conditions.add(100000);
             conditions.add(8);
             conditions.add(8);
             conditions.add(25);
@@ -114,7 +114,7 @@ public class GameEngine {
             money = 20000;
             System.out.println("To win, you need to keep at least $500,000, 8 herbivores, 8 carnivores, and 25 tourists for 60 days.");
         } else { // HARD
-            conditions.add(1000000);
+            conditions.add(300000);
             conditions.add(10);
             conditions.add(10);
             conditions.add(40);
