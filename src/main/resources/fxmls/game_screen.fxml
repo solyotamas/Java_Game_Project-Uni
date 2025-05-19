@@ -1112,7 +1112,7 @@
                                     <Insets top="14.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Panther 1200" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Panther 1200$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1150,7 +1150,7 @@
                         </VBox>
                         <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="6">
                            <children>
-                              <ImageView fitHeight="62.0" fitWidth="51.0" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@../images/ranger.png" />
                                  </image>
@@ -1158,7 +1158,7 @@
                                     <Insets top="5.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Ranger 700$" textFill="#3e2415">
+                              <Label wrapText="true" alignment="CENTER" textAlignment="CENTER" prefHeight="43.0" prefWidth="113.0" text="Ranger 5000$/month" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
