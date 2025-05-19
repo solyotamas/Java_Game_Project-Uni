@@ -45,7 +45,7 @@ public class GameEngine {
     protected ArrayList<Herbivore> herbivores;
     protected ArrayList<Tourist> tourists;
     private int jeepCount ;
-    private int ticketPrice = 500;
+    private int ticketPrice = 100;
     private int money;
     private final Random rand = new Random();
 
@@ -98,29 +98,29 @@ public class GameEngine {
         exit = new Pair<>(0, 0);
         conditions = new ArrayList<Integer>();
         if (difficulty == EASY) {
-            conditions.add(10000); // money
-            conditions.add(2);    // herbivores
-            conditions.add(2);     // carnivores
-            conditions.add(1);    // tourists
+            conditions.add(300000); // money
+            conditions.add(5);    // herbivores
+            conditions.add(5);     // carnivores
+            conditions.add(3);    // tourists
             winningHoursNeeded = 720; // one month
-            money = 5000;
-            System.out.println("To win, you need to keep at least $10,000, 2 herbivores, 2 carnivores, and 1 tourists for 30 days.");
+            money = 25000;
+            System.out.println("To win, you need to keep at least $300,000, 5 herbivores, 5 carnivores, and 3 tourists for 30 days.");
         } else if (difficulty == MEDIUM) {
-            conditions.add(20000);
-            conditions.add(3);
-            conditions.add(3);
-            conditions.add(2);
+            conditions.add(500000);
+            conditions.add(8);
+            conditions.add(8);
+            conditions.add(6);
             winningHoursNeeded = 1440;
-            money = 3000;
-            System.out.println("To win, you need to keep at least $20,000, 3 herbivores, 3 carnivores, and 2 tourists for 60 days.");
+            money = 20000;
+            System.out.println("To win, you need to keep at least $500,000, 8 herbivores, 8 carnivores, and 6 tourists for 60 days.");
         } else { // HARD
-            conditions.add(30000);
-            conditions.add(4);
-            conditions.add(4);
-            conditions.add(3);
+            conditions.add(1000000);
+            conditions.add(10);
+            conditions.add(10);
+            conditions.add(8);
             winningHoursNeeded = 2160;
-            money = 1000;
-            System.out.println("To win, you need to keep at least $30,000, 4 herbivores, 4 carnivores, and 3 tourists for 90 days.");
+            money = 15000;
+            System.out.println("To win, you need to keep at least $1,000,000, 10 herbivores, 10 carnivores, and 8 tourists for 90 days.");
         }
     }
 
@@ -698,7 +698,7 @@ public class GameEngine {
             }
 
             if (ranger.isDueForPayment(spentTime)) {
-                if (money >= 5000) {
+                if (money >= ranger.getPrice()) {
                     payRanger(ranger);
                 } else {
                     toRemoveRangers.add(ranger);
@@ -722,7 +722,6 @@ public class GameEngine {
                 case RESTING -> tourist.rest();
                 case LEFT -> {
                     toRemove.add(tourist);
-
                 }
                 case IDLE -> {
                     tourist.pickNewTarget();
@@ -742,12 +741,12 @@ public class GameEngine {
     public void buyRanger(Ranger ranger){
         ranger.setLastPaidHour(spentTime);
         this.rangers.add(ranger);
-        money = Math.max(0, money - 5000);
+        money = Math.max(0, money - ranger.getPrice());
     }
 
     public void payRanger(Ranger ranger) {
-        if (money >= 5000) {
-            money -= 5000;
+        if (money >= ranger.getPrice()) {
+            money -= ranger.getPrice();
             ranger.setLastPaidHour(spentTime);
         } else {
             unemployRanger(ranger);
@@ -757,27 +756,39 @@ public class GameEngine {
 
     //JEEP
     public void buyJeep() {
-        int side = rand.nextInt(2);
         Jeep jeep = null;
 
-        if(side == 0){
-            if(gameBoard.getTerrainAt(5,0).getLandform() instanceof Road)
-                jeep = new Jeep(5 * 30 + 15, 15);
-        }else{
-            if(gameBoard.getTerrainAt(58,30).getLandform() instanceof Road){
-                jeep = new Jeep(58 * 30 + 15, 30 * 30 + 15);
-                jeep.setImageView(jeep.getJeepLeft()[0]);
+        int firstTry = rand.nextInt(2);
+        int secondTry = 1 - firstTry;
+
+        int[][] positions = {
+                {5, 0},       // entrance
+                {58, 30}      // exit
+        };
+
+        for (int i = 0; i < 2; i++) {
+            int side = (i == 0) ? firstTry : secondTry;
+            int x = positions[side][0];
+            int y = positions[side][1];
+
+            if (gameBoard.getTerrainAt(x, y).getLandform() instanceof Road) {
+                jeep = new Jeep(x * 30 + 15, y * 30 + 15);
+
+                if (side == 1) {
+                    jeep.setImageView(jeep.getJeepLeft());
+                }
+
+                money = Math.max(0, money - 4500);
+                break;
             }
         }
 
-        if(jeep != null){
+        if (jeep != null) {
             jeep.transitionTo(JeepState.IDLE);
             jeepCount++;
             jeeps.add(jeep);
             gameBoard.getUiLayer().getChildren().add(jeep);
         }
-
-
     }
 
     public void checkIfJeepCanStart(){
@@ -833,7 +844,7 @@ public class GameEngine {
         }
 
         jeep.setPath(roadPath);
-        money += 4 * ticketPrice;
+        money += ticketPrice;
     }
 
     public int getTotalUniqueAnimalsSeenByJeeps() {
@@ -989,7 +1000,7 @@ public class GameEngine {
     }
 
     public void updateTicketPrice() {
-        int ticketPrice = 500;
+        int ticketPrice = 100;
         for (Carnivore carnivore : carnivores) {
             ticketPrice += carnivore.getPrice() / 10;
         }
@@ -1068,7 +1079,6 @@ public class GameEngine {
             gameBoard.getUiLayer().getChildren().clear();
         }
     }
-
     // =====
 
     // ==== GAME SPEED

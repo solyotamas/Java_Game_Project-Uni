@@ -8,11 +8,8 @@ import classes.landforms.plants.Grass;
 import classes.landforms.plants.Plant;
 import classes.landforms.plants.Tree;
 import classes.terrains.*;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Rectangle;
 
 
 import java.util.*;
@@ -80,6 +77,7 @@ public class GameBoard{
         terrainLayer.getChildren().add(fence);
         terrainGrid[x][y] = fence;
     }
+
     private void makeEntranceTerrain(int x, int y){
         Terrain entrance = new Entrance(x, y);
 
@@ -90,12 +88,14 @@ public class GameBoard{
         terrainLayer.getChildren().add(entrance);
         terrainGrid[x][y] = entrance;
     }
+
     private void makeFloorTerrain(int x, int y){
         Terrain floor = new Floor(x,y);
 
         terrainLayer.getChildren().add(floor);
         terrainGrid[x][y] = floor;
     }
+
     private void makeRandomMapTerrain(int x, int y) {
         int terrainType = rand.nextInt(500);
 
@@ -117,6 +117,7 @@ public class GameBoard{
         terrainLayer.getChildren().add(terrain);
         terrainGrid[x][y] = terrain;
     }
+
     private void generateRiver(int startX, int startY) {
         int x = startX;
         int y = startY;
@@ -150,6 +151,7 @@ public class GameBoard{
             }
         }
     }
+
     private void addHillCluster(int startX, int startY) {
         int clusterSize = rand.nextInt(20) + 5;
         ArrayList<int[]> positions = new ArrayList<>();
@@ -191,7 +193,6 @@ public class GameBoard{
         return terrain;
     }
 
-
     //Placing landforms
     public boolean canPlaceLandform(Landform landform, int startX, int startY) {
         for (int x = startX; x < startX + landform.getWidthInTiles(); x++) {
@@ -206,6 +207,7 @@ public class GameBoard{
         }
         return true;
     }
+
     public void placeLandform(Landform landform, int x, int y) {
         for (int i = x; i < x + landform.getWidthInTiles(); i++) {
             for (int j = y; j < y + landform.getHeightInTiles(); j++) {
@@ -225,7 +227,6 @@ public class GameBoard{
         }
     }
 
-
     //Movement for animals
     public ArrayList<Terrain> getPlantTerrains() {
         ArrayList<Terrain> plantTiles = new ArrayList<>();
@@ -241,6 +242,7 @@ public class GameBoard{
 
         return plantTiles;
     }
+
     public ArrayList<Terrain> getLakeTerrains() {
         ArrayList<Terrain> lakeTiles = new ArrayList<>();
 
@@ -255,6 +257,7 @@ public class GameBoard{
 
         return lakeTiles;
     }
+
     public ArrayList<Terrain> getGroundTerrains() {
         ArrayList<Terrain> groundTiles = new ArrayList<>();
 
@@ -269,6 +272,7 @@ public class GameBoard{
 
         return groundTiles;
     }
+
     public ArrayList<Terrain> getNeighbors(Terrain tile) {
         ArrayList<Terrain> neighbors = new ArrayList<>();
 
@@ -500,11 +504,6 @@ public class GameBoard{
         }
     }
 
-
-
-
-
-
     //road updates
     private void updateRoadAndNeighbors(int x, int y) {
         updateRoadTextureAt(x, y);
@@ -547,10 +546,7 @@ public class GameBoard{
 
     //getters, setters
     public Pane getUiLayer() { return this.uiLayer; }
-
     public Terrain[][] getTerrainGrid() {
         return terrainGrid;
     }
-
-
 }

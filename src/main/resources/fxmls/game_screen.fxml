@@ -61,7 +61,7 @@
             </StackPane>
             <StackPane prefHeight="0.0" prefWidth="0.0">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="209.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="250.0" />
                   <HBox alignment="CENTER" prefHeight="55.0" prefWidth="192.0" spacing="10.0">
                      <children>
                         <Label fx:id="gameTimeLabel" prefHeight="33.0" prefWidth="300.0" style="-fx-alignment: center;" text="0 days 0 hours" textFill="#3e2415">
@@ -613,7 +613,7 @@
                                     <Insets bottom="7.0" top="15.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Jeep 5000$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Jeep 4500$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -657,7 +657,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Road 200$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Road 50$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -698,7 +698,7 @@
                                     <Insets top="6.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Elephant 500$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Elephant 3000$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -744,7 +744,7 @@
                                     <Insets top="17.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Rhino 400$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Rhino 2500$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -790,7 +790,7 @@
                                     <Insets top="20.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" graphicTextGap="0.0" prefHeight="23.0" prefWidth="113.0" text="Hippo 400$" textFill="#3e2415">
+                              <Label alignment="CENTER" graphicTextGap="0.0" prefHeight="23.0" prefWidth="113.0" text="Hippo 1600$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -836,7 +836,7 @@
                                     <Insets top="7.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Zebra 300$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Zebra 2400$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -882,7 +882,7 @@
                                     <Insets top="9.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Kangaroo 300$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Kangaroo 2000$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -928,7 +928,7 @@
                                     <Insets bottom="10.0" top="25.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Turtle 100$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Turtle 1300$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -974,7 +974,7 @@
                                     <Insets top="15.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Buffalo 350$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Buffalo 2500$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1020,7 +1020,7 @@
                                     <Insets top="13.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Lion 450$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Lion 1500$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1066,7 +1066,7 @@
                                     <Insets top="14.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Tiger 450$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Tiger 1300$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1112,7 +1112,7 @@
                                     <Insets top="14.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Panther 400$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Panther 1200" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
@@ -1199,7 +1199,7 @@
                                     <Insets bottom="8.0" top="22.0" />
                                  </VBox.margin>
                               </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Vulture 250$" textFill="#3e2415">
+                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Vulture 800$" textFill="#3e2415">
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>

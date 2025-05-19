@@ -39,8 +39,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 import javafx.scene.image.ImageView;
@@ -63,7 +61,6 @@ public class GameController {
     private final int SCREEN_WIDTH = 1920;
     private final int SCREEN_HEIGHT = 930;
     private final int TOURIST_SECTION = 150;
-    private final int HEADER_FOOTER = 75;
 
     //For Gameboard
     @FXML
@@ -115,10 +112,6 @@ public class GameController {
         gameEngine.gameLoop();
     }
 
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
-    }
-
     private void setActiveSpeedButton(Button activeButton) {
         gameSpeedRelaxedButton.getStyleClass().remove("active");
         gameSpeedSteadyButton.getStyleClass().remove("active");
@@ -127,10 +120,6 @@ public class GameController {
         if (!activeButton.getStyleClass().contains("active")) {
             activeButton.getStyleClass().add("active");
         }
-    }
-
-    public void setReasonOfDeathText(String text) {
-        this.reasonOfDeathText.setText(text);
     }
 
     @FXML
@@ -158,7 +147,6 @@ public class GameController {
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
         closeShopPane();
 
-
         boolean isRoad = Road.class.isAssignableFrom(landformClass); // If road, remainingPlacableTiles is 10, otherwise 1
         int[] remainingPlacableTiles = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
 
@@ -171,6 +159,7 @@ public class GameController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         ImageView ghostImage = new ImageView(chosen);
         ghostImage.setOpacity(0.5);
         ghostImage.setFitWidth(TILE_SIZE * tempInstance.getWidthInTiles());
@@ -225,7 +214,7 @@ public class GameController {
                     remainingPlacableTiles[0]--;
 
                     if (isRoad) {
-                        //gameEngine.buyRoad((Road) placedLandform);
+                        gameEngine.buyRoad((Road) placedLandform);
                     }
                 }
             } catch (Exception ex) {
@@ -244,9 +233,8 @@ public class GameController {
                 ghostLayer.setMouseTransparent(true);
             }
         });
-
-
     }
+
     @FXML
     public void buyBush() {
         buyLandform(Bush.class, Bush.getRandomBushImage());
@@ -268,7 +256,6 @@ public class GameController {
         closeShopPane();
     }}
     // =====
-
 
     // ==== ANIMALS
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
@@ -364,6 +351,7 @@ public class GameController {
                 bottomY <= SCREEN_HEIGHT
         );
     }
+
     @FXML
     public void buyElephant(){
         buyAnimal(Elephant.class, "/images/elephant.png");
@@ -477,7 +465,6 @@ public class GameController {
                         bottomY <= SCREEN_HEIGHT
         );
     }
-
     // =====
 
 
@@ -601,8 +588,6 @@ public class GameController {
     public void removeTourist(Tourist tourist){
         uiLayer.getChildren().remove(tourist);
     }
-
-
     // =====
 
 
@@ -667,4 +652,12 @@ public class GameController {
         stage.show();
     }
     // =====
+
+    // Getters, setters
+    public void setReasonOfDeathText(String text) {
+        this.reasonOfDeathText.setText(text);
+    }
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
 }

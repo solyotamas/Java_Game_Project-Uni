@@ -204,12 +204,6 @@ public abstract class Human extends Pane {
     public ImageView getImageView(){
         return this.imageView;
     }
-    public void setImageView(ImageView image){
-        this.imageView = image;
-    }
-    public ImageView getWalkLeftImage(){
-        return new ImageView(walkLeftImages[0]);
-    }
     public HumanState getState(){
         return state;
     }

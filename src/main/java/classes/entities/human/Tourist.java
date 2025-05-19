@@ -19,10 +19,6 @@ public class Tourist extends Human{
         this.side = side;
     }
 
-
-
-
-
     @Override
     public void pickNewTarget() {
         if(visitDuration > 100.0){
@@ -34,6 +30,7 @@ public class Tourist extends Human{
         }
 
     }
+
     public void exitSafari(){
         if(this.side == 0){
             targetX = this.getImageView().getFitWidth() / 2;
@@ -43,6 +40,7 @@ public class Tourist extends Human{
             targetY = 31.0 * 30 / 2. + this.getImageView().getFitHeight() / 2.;
         }
     }
+
     public void visitSafari(){
 
         double minY, maxY;
@@ -67,9 +65,5 @@ public class Tourist extends Human{
         this.visitDuration += val;
     }
 
-
-    public void changeSide(int val) {
-        this.side = val;
-    }
 }
 

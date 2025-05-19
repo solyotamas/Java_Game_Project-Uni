@@ -1,10 +1,6 @@
 package classes.entities.animals;
 
-import classes.entities.Direction;
-import classes.terrains.Terrain;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Herd {
@@ -60,13 +56,6 @@ public class Herd {
         }
     }
 
-
-
-    public void setLeader(Animal newLeader) {
-        this.leader = newLeader;
-    }
-
-
     public void addMember(Animal animal) {
         if (members.size() >= MAX_SIZE) return;
 
@@ -105,6 +94,4 @@ public class Herd {
         if (members.size() < 2) return;
         leader = members.get(0);
     }
-
-
 }

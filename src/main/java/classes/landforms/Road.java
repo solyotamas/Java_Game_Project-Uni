@@ -14,7 +14,7 @@ public class Road extends Landform {
     public static final int HEIGHT_IN_TILES = 1;
     private boolean isBridge = false;
 
-    private static final int price = 200;
+    private static final int price = 50;
 
     public Road(double x, double y) {
         super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES,roadImages[0], depth, price);

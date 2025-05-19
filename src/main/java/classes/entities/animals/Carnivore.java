@@ -6,7 +6,6 @@ import classes.terrains.Terrain;
 import java.util.ArrayList;
 import java.util.Random;
 
-//public abstract class Carnivore extends Animal<Herbivore> {
 public abstract class Carnivore extends Animal {
     private Herbivore prey;
 

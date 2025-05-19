@@ -5,7 +5,7 @@ import classes.entities.animals.Herbivore;
 public class Zebra extends Herbivore {
 
     //just so it looks clean
-    private static final int price = 300;
+    private static final int price = 2400;
     private static final int lifeExpectancy = 20;
 
     private static final int frameWidth = 98;
