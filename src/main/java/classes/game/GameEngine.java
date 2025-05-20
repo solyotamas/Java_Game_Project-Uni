@@ -177,6 +177,7 @@ public class GameEngine {
     private final Image hungerForCarnivore = new Image(GameEngine.class.getResource("/images/hunger.png").toExternalForm());
 
     public GameEngine(GameController gameController, Difficulty difficulty, Pane terrainLayer, Pane uiLayer) {
+        this.gameController = gameController;
         this.difficulty = difficulty;
         int minPlants, maxPlants;
         switch (difficulty) {

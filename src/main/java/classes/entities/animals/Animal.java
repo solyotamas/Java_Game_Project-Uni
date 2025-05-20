@@ -214,6 +214,8 @@ public abstract class Animal extends Pane {
     public void move(Terrain terrain, Direction dir, double dx, double dy) {
         this.currentDirection = dir;
 
+        if (terrain == null) return;
+
         //moving slower on terrains with crossingDifficulty (river, hill)
         dx *= crossingDifficulty(terrain);
         dy *= crossingDifficulty(terrain);
