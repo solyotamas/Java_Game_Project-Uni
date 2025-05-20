@@ -530,6 +530,10 @@ public abstract class Animal extends Pane {
         return isInAHerd;
     }
 
+    public double getBornAt() {
+        return bornAt;
+    }
+
     public Herd getHerd() {
         return this.herd;
     }

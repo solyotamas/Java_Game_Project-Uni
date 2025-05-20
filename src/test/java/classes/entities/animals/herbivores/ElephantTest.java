@@ -2,20 +2,14 @@ package classes.entities.animals.herbivores;
 
 import classes.entities.animals.AnimalState;
 import classes.terrains.Ground;
-import classes.terrains.Terrain;
+
 import javafx.application.Platform;
-import javafx.scene.image.ImageView;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.condition.DisabledIfEnvironmentVariable;
-
-//import javafx.embed.swing.JFXPanel;
 import static classes.entities.Direction.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-//@DisabledIfEnvironmentVariable(named = "CI", matches = "true")
 public class ElephantTest {
 
     private Elephant elephant;
@@ -56,21 +50,6 @@ public class ElephantTest {
         assertNull(elephant.getTarget());
     }
 
-//    @Test
-//    void testInitialUIState() {
-//        ImageView view = elephant.getImageView();
-//        assertNotNull(view);
-//        assertEquals(elephant.getDepth(), elephant.getY() + (88 * 0.6 / 2.0), 0.001);
-//    }
-//    @Test
-//    @Tag("gui")
-//    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
-//    void testInitialUIState() {
-//        ImageView view = elephant.getImageView();
-//        assertNotNull(view);
-//        assertEquals(elephant.getDepth(), elephant.getY() + (88 * 0.6 / 2.0), 0.001);
-//    }
-
     @Test
     void testDrinks() {
         elephant.changeThirst(-50);
@@ -99,29 +78,6 @@ public class ElephantTest {
     }
 
     @Test
-    /*void testMove() {
-        double initialX = elephant.getLayoutX();
-        elephant.move(RIGHT, 1, 0);
-        assertEquals(initialX + 1, elephant.getLayoutX());
-        assertEquals(RIGHT, elephant.getCurrentDirection());
-
-        initialX = elephant.getLayoutX();
-        elephant.move(LEFT, -1, 0);
-        assertEquals(initialX - 1, elephant.getLayoutX());
-        assertEquals(LEFT, elephant.getCurrentDirection());
-
-        double initialY = elephant.getLayoutY();
-        elephant.move(UP, 0, -1);
-        assertEquals(initialY - 1 , elephant.getLayoutY());
-        assertEquals(UP, elephant.getCurrentDirection());
-
-        initialY = elephant.getLayoutY();
-        elephant.move(DOWN, 0, 1);
-        assertEquals(initialY + 1, elephant.getLayoutY());
-        assertEquals(DOWN, elephant.getCurrentDirection());
-    }*/
-
-
     void testMove() {
         Ground ground = new Ground(10,4);
         double initialX = elephant.getLayoutX();
@@ -156,21 +112,17 @@ public class ElephantTest {
         Ground ground = new Ground(10,4);
         follower.moveTowardsLeader(leader, ground);
 
-        assertTrue(follower.getX() != 50 || follower.getY() != 50); // Pozíció változott
-        // Ha elég közel van, akkor az állapot öröklődik
+        assertTrue(follower.getX() != 50 || follower.getY() != 50);
         for (int i = 0; i < 200; i++) {
             follower.moveTowardsLeader(leader, ground);
         }
 
         follower.moveTowardsLeader(leader, ground);
-        //System.out.println("leader: " + leader.getX() + ", " + leader.getY());
-        //System.out.println("follower: " + follower.getX() + ", " + follower.getY());
         assertEquals(AnimalState.RESTING, follower.getState());
     }
 
     @Test
     public void testSetBornAtAndAgingAnimal() {
-        //Elephant elephant = new Elephant(100, 100);
         elephant.setBornAt(0.0);
         elephant.agingAnimal(168.0 * 10); // 10 nap múlva
 
@@ -180,7 +132,6 @@ public class ElephantTest {
 
     @Test
     public void testOldEnoughToDie() {
-        //Elephant elephant = new Elephant(100, 100);
         elephant.setBornAt(0.0);
 
         // idő még nem telt el (nem hal meg)
@@ -193,7 +144,6 @@ public class ElephantTest {
 
     @Test
     public void testGetSellPrice() {
-        //Elephant elephant = new Elephant(100, 100);
         int base = elephant.getPrice() * 3 / 5;
         int ageSegment = elephant.getLifeExpectancy() / 5;
 
