@@ -16,9 +16,4 @@ public class Elephant extends Herbivore {
   public Elephant(double x, double y, boolean isChild) {
       super(x, y, frameWidth, frameHeight, childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
   }
-
-
-    public Elephant(double x, double y) {
-        super(x, y, frameWidth, frameHeight, imgURL, speed, price, lifeExpectancy);
-    }
 }

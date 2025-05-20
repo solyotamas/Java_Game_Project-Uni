@@ -564,12 +564,6 @@ public abstract class Animal extends Pane {
     public void setRestingTimePassed(double val){
         this.restingTimePassed = val;
     }
-
-    public Direction getCurrentDirection() { return currentDirection; }
-
-    public void setAge(int age){
-        this.age = age;
-    }
     public boolean isGrownUp() {
         return isGrownUp;
     }

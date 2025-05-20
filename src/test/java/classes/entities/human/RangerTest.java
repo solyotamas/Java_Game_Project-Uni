@@ -80,7 +80,7 @@ class RangerTest {
 
     @Test
     void testChooseAndHuntPrey_AndMove() {
-        Lion lion = new Lion(100.0, 200.0);
+        Lion lion = new Lion(100.0, 200.0, false);
 
         ranger.choosePrey(lion);
         assertEquals(lion, ranger.getPrey());

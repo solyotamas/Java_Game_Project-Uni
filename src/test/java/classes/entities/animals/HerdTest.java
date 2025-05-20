@@ -26,9 +26,9 @@ public class HerdTest {
 
     @BeforeEach
     void setUp() {
-        eli1 = new Elephant(100.0, 200.0);
-        eli2 = new Elephant(150.0, 200.0);
-        eli3 = new Elephant(200.0, 200.0);
+        eli1 = new Elephant(100.0, 200.0, false);
+        eli2 = new Elephant(150.0, 200.0, false);
+        eli3 = new Elephant(200.0, 200.0, false);
         ArrayList<Animal> animals = new ArrayList<>();
         animals.add(eli1);
         animals.add(eli2);
@@ -48,7 +48,7 @@ public class HerdTest {
 
     @Test
     void testAddMember() {
-        Elephant eli4 = new Elephant(250.0, 200.0);
+        Elephant eli4 = new Elephant(250.0, 200.0, false);
         herd.addMember(eli4);
 
         assertEquals(4, herd.getMemberCount());
@@ -58,9 +58,9 @@ public class HerdTest {
 
     @Test
     void testMaxSizeLimit() {
-        herd.addMember(new Elephant(300.0, 200.0)); // 5. tag
-        herd.addMember(new Elephant(350.0, 200.0)); // 6. tag
-        Elephant eli7 = new Elephant(400.0, 200.0);
+        herd.addMember(new Elephant(300.0, 200.0, false)); // 5. tag
+        herd.addMember(new Elephant(350.0, 200.0, false)); // 6. tag
+        Elephant eli7 = new Elephant(400.0, 200.0, false);
         herd.addMember(eli7); // már nem fér be
 
         assertFalse(herd.getMembers().contains(eli7));

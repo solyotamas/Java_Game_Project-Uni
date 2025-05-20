@@ -25,7 +25,7 @@ public class ElephantTest {
 
     @BeforeEach
     void setUp() {
-        elephant = new Elephant(100.0, 200.0);
+        elephant = new Elephant(100.0, 200.0, false);
     }
 
     @Test
@@ -105,8 +105,8 @@ public class ElephantTest {
 
     @Test
     public void testMoveTowardsLeader() {
-        Elephant leader = new Elephant(100, 100);
-        Elephant follower = new Elephant(50, 50);
+        Elephant leader = new Elephant(100, 100, false);
+        Elephant follower = new Elephant(50, 50, false);
         leader.transitionTo(AnimalState.RESTING);
 
         Ground ground = new Ground(10,4);
