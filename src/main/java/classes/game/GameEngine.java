@@ -55,8 +55,8 @@ public class GameEngine {
     private ArrayList<Herd> carnivoreherds;
     private ArrayList<Herd> herbivoreherds;
 
-    private ArrayList<Ranger> rangers;
-    private ArrayList<Jeep> jeeps;
+    protected ArrayList<Ranger> rangers;
+    protected ArrayList<Jeep> jeeps;
     public ArrayList<Road> roads;
 
     public Pair<Integer, Integer> entrance;
@@ -162,6 +162,11 @@ public class GameEngine {
 
     public double getFirstConditionMetTime() {
         return firstConditionMetTime;
+    }
+
+
+    public void setTimeline(Timeline timeline) {
+        this.timeline = timeline;
     }
 
     // ==========
@@ -1220,4 +1225,5 @@ public class GameEngine {
             }
         }
     }
+
 }

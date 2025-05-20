@@ -1,12 +1,17 @@
 package classes.game;
 
 import classes.Difficulty;
+import classes.Jeep;
 import classes.controllers.GameController;
 import classes.entities.animals.carnivores.Lion;
 import classes.entities.animals.herbivores.Elephant;
 import classes.entities.human.Ranger;
 //import classes.map.GameMap;
 import classes.entities.human.Tourist;
+import classes.landforms.Lake;
+import classes.landforms.Road;
+import classes.landforms.plants.Tree;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import org.junit.jupiter.api.BeforeAll;
@@ -163,6 +168,108 @@ public class GameEngineTest {
 
         gameEngineE.setSpentTime(1000);
         assertTrue(gameEngineE.gameWon());
+    }
+
+    @Test
+    void testStopMethodClearsGameState() {
+        Timeline timeline = new Timeline();
+        gameEngineE.setTimeline(timeline);
+
+        gameEngineE.carnivores.add(new Lion(0, 0));
+        gameEngineE.herbivores.add(new Elephant(1, 1));
+        gameEngineE.rangers.add(new Ranger(2, 2));
+        gameEngineE.tourists.add(new Tourist(3, 3, 0));
+        gameEngineE.jeeps.add(new Jeep(4, 4));
+        gameEngineE.plants.add(new Tree(5, 5, 3));
+
+        gameEngineE.stop();
+        assertTrue(gameEngineE.carnivores.isEmpty());
+        assertTrue(gameEngineE.herbivores.isEmpty());
+        assertTrue(gameEngineE.rangers.isEmpty());
+        assertTrue(gameEngineE.tourists.isEmpty());
+        assertTrue(gameEngineE.jeeps.isEmpty());
+        assertTrue(gameEngineE.plants.isEmpty());
+
+    }
+
+    @Test
+    void testBuyPlantDecreasesMoneyAndAddsToList() {
+        Tree tree = new Tree(5, 5, 3);
+        //plant.setPrice(500);
+
+        gameEngineE.setMoney(10000);
+        gameEngineE.buyPlant(tree);
+
+        assertTrue(gameEngineE.plants.contains(tree));
+        assertEquals(9200, gameEngineE.getMoney());
+    }
+
+    @Test
+    void testBuyLakeDecreasesMoneyAndAddsToList() {
+        Lake lake = new Lake(2, 2);
+        //lake.setPrice(300);
+
+        gameEngineE.setMoney(10000);
+        gameEngineE.buyLake(lake);
+
+        assertTrue(gameEngineE.lakes.contains(lake));
+        assertEquals(7500, gameEngineE.getMoney());
+    }
+
+    @Test
+    void testBuyRoadDecreasesMoneyAndAddsToList() {
+        Road road = new Road(3, 3);
+        //road.setPrice(200);
+
+        gameEngineE.setMoney(10000);
+        gameEngineE.buyRoad(road);
+
+        assertTrue(gameEngineE.roads.contains(road));
+        assertEquals(9950, gameEngineE.getMoney());
+    }
+
+    @Test
+    void testBuyAnimalAddsAnimalDecreasesMoneySetsBornAtAndUpdatesTicketPrice() {
+        Elephant elephant = new Elephant(4, 4);
+        //elephant.setPrice(1000);
+
+        gameEngineE.setMoney(10000);
+        gameEngineE.setSpentTime(123.0);
+        gameEngineE.buyAnimal(elephant);
+
+        assertTrue(gameEngineE.herbivores.contains(elephant));
+        assertEquals(7000, gameEngineE.getMoney());
+        assertEquals(123.0, elephant.getBornAt());
+        assertTrue(gameEngineE.getTicketPrice() > 100); // növekszik
+        assertTrue(gameEngineE.getCanCheckForLose());
+    }
+
+    @Test
+    void testSellAnimalRemovesFromListIncreasesMoneyAndUpdatesTicketPrice() {
+        Elephant elephant = new Elephant(4, 4);
+        //elephant.setPrice(1000);
+        //elephant.setSellPrice(800);
+
+        gameEngineE.setMoney(10000);
+        gameEngineE.buyAnimal(elephant); // money: 7000
+
+        gameEngineE.sellAnimal(elephant); //3000 * 3/5 = 1800 -at kapok érte
+
+        assertFalse(gameEngineE.herbivores.contains(elephant));
+        assertEquals(8800, gameEngineE.getMoney());
+        assertTrue(gameEngineE.getTicketPrice() <= 100); // visszaesik az ár
+    }
+
+    @Test
+    void testUpdateTicketPriceCorrectlyCalculatesTotal() {
+        Elephant elephant = new Elephant(4, 4);
+        Lion lion = new Lion(5, 5);
+
+        gameEngineE.buyAnimal(elephant);
+        gameEngineE.buyAnimal(lion);
+
+        // ticketPrice = 100 + 300 (elephant/10) + 150 (lion/10)
+        assertEquals(550, gameEngineE.getTicketPrice());
     }
 
 
