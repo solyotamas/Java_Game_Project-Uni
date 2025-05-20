@@ -78,7 +78,29 @@ public class GameEngine {
 
         this.gameBoard = new GameBoard(terrainLayer, uiLayer);
         gameBoard.setupGroundBoard();
-        gameBoard.generatePlants(rand.nextInt(1) + 1);
+
+        int minPlants, maxPlants;
+        switch (difficulty) {
+            case HARD -> {
+                minPlants = 0;
+                maxPlants = 3;
+            }
+            case MEDIUM -> {
+                minPlants = 3;
+                maxPlants = 6;
+            }
+            case EASY -> {
+                minPlants = 6;
+                maxPlants = 9;
+            }
+            default -> {
+                minPlants = 3;
+                maxPlants = 6;
+            }
+        }
+
+        int plantCount = rand.nextInt(maxPlants - minPlants + 1) + minPlants;
+        gameBoard.generatePlants(plantCount);
 
         carnivores = new ArrayList<Carnivore>();
         herbivores = new ArrayList<Herbivore>();
