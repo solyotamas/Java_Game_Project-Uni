@@ -127,6 +127,16 @@
                   <Insets />
                </opaqueInsets>
                <children>
+                  <Button styleClass="volumeButton" onAction="#toggleVolume"
+                          style="-fx-background-color: transparent; -fx-padding: 0;">
+                     <graphic>
+                        <ImageView fx:id="volumeIcon" fitHeight="40.0" fitWidth="40.0" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/medium.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                   <Button mnemonicParsing="false" onAction="#showSaveOverlay" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;" styleClass="fancyBtn" textFill="#3e2415">
                      <font>
                         <Font name="Calibri" size="24.0" />

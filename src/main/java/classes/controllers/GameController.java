@@ -3,6 +3,7 @@ package classes.controllers;
 import classes.Difficulty;
 import classes.entities.additions.InfoWindowAnimal;
 import classes.entities.additions.InfoWindowRanger;
+import classes.entities.additions.MusicPlayer;
 import classes.entities.animals.Animal;
 import classes.entities.animals.AnimalState;
 import classes.entities.human.HumanState;
@@ -142,6 +143,35 @@ public class GameController {
         speed = 12;
         setActiveSpeedButton(gameSpeedRapidButton);
     }
+
+    // ==== Music
+    @FXML
+    private ImageView volumeIcon;
+
+    @FXML
+    private void toggleVolume() {
+        double current = MusicPlayer.getVolume();
+        double next;
+        String iconPath;
+
+        if (current == 0.0) {
+            next = 0.1;
+            iconPath = "/images/low.png";
+        } else if (current <= 0.1) {
+            next = 0.3;
+            iconPath = "/images/medium.png";
+        } else if (current <= 0.3) {
+            next = 0.6;
+            iconPath = "/images/high.png";
+        } else {
+            next = 0.0;
+            iconPath = "/images/off.png";
+        }
+
+        MusicPlayer.setVolume(next);
+        volumeIcon.setImage(new Image(getClass().getResource(iconPath).toExternalForm()));
+    }
+    // =====
 
     // ==== LANDFORMS
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {

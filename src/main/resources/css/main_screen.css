@@ -34,3 +34,7 @@
 #diffLabel {
     -fx-cursor: default;
 }
+
+.volumeButton {
+    -fx-border-width: 0;
+}

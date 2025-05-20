@@ -1,6 +1,7 @@
 package classes.controllers;
 
 import classes.Difficulty;
+import classes.entities.additions.MusicPlayer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,6 +13,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import java.io.IOException;
@@ -39,6 +42,35 @@ public class ScreenController {
             hardToggle.setToggleGroup(difficultyGroup);
         }
     }
+
+    // ==== Music
+    @FXML
+    private ImageView volumeIcon;
+
+    @FXML
+    private void toggleVolume() {
+        double current = MusicPlayer.getVolume();
+        double next;
+        String iconPath;
+
+        if (current == 0.0) {
+            next = 0.1;
+            iconPath = "/images/low.png";
+        } else if (current <= 0.1) {
+            next = 0.3;
+            iconPath = "/images/medium.png";
+        } else if (current <= 0.3) {
+            next = 0.6;
+            iconPath = "/images/high.png";
+        } else {
+            next = 0.0;
+            iconPath = "/images/off.png";
+        }
+
+        MusicPlayer.setVolume(next);
+        volumeIcon.setImage(new Image(getClass().getResource(iconPath).toExternalForm()));
+    }
+    // =====
 
     public void addItemsToList() {
         ObservableList<String> items = FXCollections.observableArrayList("Save Slot 1", "Save Slot 2", "Save Slot 3",
