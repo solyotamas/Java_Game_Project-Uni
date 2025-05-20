@@ -201,6 +201,9 @@ public abstract class Human extends Pane {
     public double getY(){
         return this.y;
     }
+    public double getX(){
+        return this.x;
+    }
     public ImageView getImageView(){
         return this.imageView;
     }

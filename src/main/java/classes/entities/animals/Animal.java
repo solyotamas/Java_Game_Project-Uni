@@ -405,7 +405,7 @@ public abstract class Animal extends Pane {
         } else if (this.age <= 4 * ageSegment) {
             return base * 2 / 5;
         } else {
-            return base * 1 / 5;
+            return base / 5;
         }
     }
 
@@ -426,6 +426,9 @@ public abstract class Animal extends Pane {
     // =====
 
     //Getters, Setters
+    public int getStartingAge() {
+        return startingAge;
+    }
     public int getPrice() {
         return this.price;
     }

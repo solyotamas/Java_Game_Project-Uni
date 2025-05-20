@@ -57,6 +57,7 @@ public class Herd {
         }
     }
 
+
     public void addMember(Animal animal) {
         if (members.size() >= MAX_SIZE) return;
 
