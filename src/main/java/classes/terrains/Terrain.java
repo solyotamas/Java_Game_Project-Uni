@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public class Terrain extends Pane{
+public class Terrain extends Pane {
 
     private static final int SIZE = 30;
     protected int row;
@@ -46,21 +46,27 @@ public class Terrain extends Pane{
         return landform != null;
     }
 
-    public Landform getLandform(){
+    public Landform getLandform() {
         return this.landform;
     }
-    public void setLandform(Landform landform) { this.landform = landform;}
 
-    public int getSize(){
+    public void setLandform(Landform landform) {
+        this.landform = landform;
+    }
+
+    public int getSize() {
         return SIZE;
     }
+
     public int getRow() {
         return row;
     }
+
     public int getCol() {
         return col;
     }
-    public boolean isWalkable(){
+
+    public boolean isWalkable() {
         return walkable;
     }
 

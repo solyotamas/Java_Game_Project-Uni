@@ -14,7 +14,6 @@ public abstract class Carnivore extends Animal {
         super(x,y,frameWidth, frameHeight, childImgUrl,imgURL, speed, price, life_expectancy, isChild);
     }
 
-
     public void huntTarget(Terrain terrain) {
         if (prey == null) {
             this.state = AnimalState.IDLE;
@@ -46,6 +45,7 @@ public abstract class Carnivore extends Animal {
 
         move(terrain, dir, stepX, stepY);
     }
+
     public void choosePrey(Carnivore carnivore, ArrayList<Herbivore> herbivores) {
         if (herbivores.isEmpty()) {
             carnivore.setStarving(true);
@@ -54,10 +54,12 @@ public abstract class Carnivore extends Animal {
             carnivore.setStarving(false);
         }
     }
-    public Herbivore getPrey(){
+
+    public Herbivore getPrey() {
         return prey;
     }
-    public void clearPrey(){
+
+    public void clearPrey() {
         this.prey = null;
     }
 }

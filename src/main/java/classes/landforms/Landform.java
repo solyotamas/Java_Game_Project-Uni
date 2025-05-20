@@ -4,7 +4,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public abstract class Landform extends Pane{
+public abstract class Landform extends Pane {
     protected static final int TILE_SIZE = 30;
 
     private int price;
@@ -37,20 +37,31 @@ public abstract class Landform extends Pane{
     public int getWidthInTiles() {
         return widthInTiles;
     }
+
     public int getHeightInTiles() {
         return heightInTiles;
     }
-    public double getDepth(){
+
+    public double getDepth() {
         return this.depth;
     }
-    public void setDepth(double depth){
+
+    public void setDepth(double depth) {
         this.depth = depth;
     }
-    public void setPicture(Image img){
+
+    public void setPicture(Image img) {
         picture.setImage(img);
     }
-    public double getX() { return this.x; }
-    public double getY() { return this.y; }
+
+    public double getX() {
+        return this.x;
+    }
+
+    public double getY() {
+        return this.y;
+    }
+
     public int getPrice() {
         return this.price;
     }

@@ -3,6 +3,7 @@ package classes.entities.human;
 import classes.entities.Direction;
 import classes.entities.animals.AnimalState;
 import classes.entities.animals.Carnivore;
+
 import java.util.Random;
 
 public class Ranger extends Human {
@@ -16,7 +17,7 @@ public class Ranger extends Human {
 
     private Carnivore prey;
 
-    public Ranger(double x, double y){
+    public Ranger(double x, double y) {
         super(x, y, frameWidth, frameHeight, imgURL, speed);
     }
 
@@ -85,7 +86,11 @@ public class Ranger extends Human {
     public Carnivore getPrey() {
         return prey;
     }
-    public void setPrey(Carnivore prey) { this.prey = prey;}
+
+    public void setPrey(Carnivore prey) {
+        this.prey = prey;
+    }
+
     public int getPrice() {
         return price;
     }

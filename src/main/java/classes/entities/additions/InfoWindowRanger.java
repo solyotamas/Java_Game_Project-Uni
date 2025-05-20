@@ -9,7 +9,7 @@ import javafx.scene.layout.VBox;
 
 public class InfoWindowRanger extends VBox {
 
-    public InfoWindowRanger(Ranger ranger, Runnable onUnemployClick,  Runnable onChoosePreyClick, Runnable onCloseClick) {
+    public InfoWindowRanger(Ranger ranger, Runnable onUnemployClick, Runnable onChoosePreyClick, Runnable onCloseClick) {
         this.getStyleClass().add("info-window");
         this.setPrefSize(180, 70);
         this.setLayoutX(ranger.getLayoutX() - 85);
@@ -42,6 +42,5 @@ public class InfoWindowRanger extends VBox {
         closeButton.setAlignment(Pos.CENTER);
 
         this.getChildren().add(row);
-
     }
 }

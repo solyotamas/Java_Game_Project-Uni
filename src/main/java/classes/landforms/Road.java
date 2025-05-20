@@ -17,11 +17,11 @@ public class Road extends Landform {
     private static final int price = 50;
 
     public Road(double x, double y) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES,roadImages[0], depth, price);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, roadImages[0], depth, price);
     }
 
     public Road(double x, double y, double placeHolder) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES,roadImages[0], depth, price);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, roadImages[0], depth, price);
     }
 
     public Road(double x, double y, double placeHolder1, Image placeHolder2) {

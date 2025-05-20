@@ -14,8 +14,6 @@ import javafx.scene.layout.Pane;
 import java.util.*;
 import java.util.Random;
 
-//public abstract class Animal<T extends Pane> extends Pane {
-
 public abstract class Animal extends Pane {
 
     protected int price;
@@ -214,7 +212,6 @@ public abstract class Animal extends Pane {
 
     }
     public void move(Terrain terrain, Direction dir, double dx, double dy) {
-        //todo ELEGÁNSABB LENNE A DIRECTION-BŐL KISZEDNI AZ IRÁNY ÉRTÉKEIT
         this.currentDirection = dir;
 
         //moving slower on terrains with crossingDifficulty (river, hill)
@@ -312,7 +309,7 @@ public abstract class Animal extends Pane {
 
     }
     public void eat(){
-        this.changeHunger(0.5); //+10 / mp
+        this.changeHunger(0.5); // +10 / mp
         stateIcon.setImage(hungerImage);
         stateIcon.setVisible(true);
 
@@ -389,7 +386,7 @@ public abstract class Animal extends Pane {
         this.pathIndex = 0;
     }
 
-    //managing states
+    // managing states
     public void transitionTo(AnimalState newState) {
         this.state = newState;
     }
@@ -475,6 +472,20 @@ public abstract class Animal extends Pane {
     public int getLifeExpectancy(){
         return this.lifeExpectancy;
     }
+
+    public double getThirst(){
+        return thirst;
+    }
+    public double getHunger(){
+        return hunger;
+    }
+    public void setThirst(double thirst){
+        this.thirst = thirst;
+    }
+    public void setHunger(double hunger){
+        this.hunger = hunger;
+    }
+
     public int getFrameWidth(){
         return this.frameWidth;
     }
@@ -487,6 +498,11 @@ public abstract class Animal extends Pane {
     public double getY(){
         return this.y;
     }
+    public double getDepth(){
+        return this.y + (frameHeight * 0.6 / 2.0);
+    }
+    public Direction getCurrentDirection() { return currentDirection; }
+
     public ImageView getImageView(){
         return this.imageView;
     }
@@ -502,27 +518,14 @@ public abstract class Animal extends Pane {
     public ArrayList<Terrain> getPath(){
         return this.path;
     }
-    public double getDepth(){
-        return this.y + (frameHeight * 0.6 / 2.0);
-    }
-    public double getThirst(){
-        return thirst;
-    }
-    public double getHunger(){
-        return hunger;
-    }
+
     public void setStateIcon(Image stateIcon){
         this.stateIcon.setImage(stateIcon);
     }
     public void setStateIconVisibility(boolean val){
         this.stateIcon.setVisible(val);
     }
-    public void setThirst(double thirst){
-        this.thirst = thirst;
-    }
-    public void setHunger(double hunger){
-        this.hunger = hunger;
-    }
+
     public void setIsInAHerd(boolean val){
         this.isInAHerd = val;
     }
@@ -544,21 +547,20 @@ public abstract class Animal extends Pane {
     public void pauseManually() {
         isManuallyPaused = true;
     }
-
     public void resumeManually() {
         isManuallyPaused = false;
     }
-
     public boolean isManuallyPaused() {
         return isManuallyPaused;
     }
+
     public void setBeingEaten(boolean val) {
         this.isBeingEaten = val;
     }
-
     public boolean isBeingEaten() {
         return isBeingEaten;
     }
+
     public void setRestingTimePassed(double val){
         this.restingTimePassed = val;
     }

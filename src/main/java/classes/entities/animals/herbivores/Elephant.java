@@ -2,13 +2,8 @@ package classes.entities.animals.herbivores;
 
 import classes.entities.animals.Herbivore;
 
-/**
- * Represents an elephant in the game.
- */
-
 public class Elephant extends Herbivore {
 
-    //just so it looks clean
     private static final int price = 3000;
     private static final int lifeExpectancy = 60;
 
@@ -23,4 +18,7 @@ public class Elephant extends Herbivore {
   }
 
 
+    public Elephant(double x, double y) {
+        super(x, y, frameWidth, frameHeight, imgURL, speed, price, lifeExpectancy);
+    }
 }

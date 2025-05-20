@@ -3,7 +3,7 @@ package classes.entities.animals.carnivores;
 import classes.entities.animals.Carnivore;
 
 public class Vulture extends Carnivore {
-    //just so it looks clean
+
     private static final int price = 800;
     private static final int lifeExpectancy = 30;
 

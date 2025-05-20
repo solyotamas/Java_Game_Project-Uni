@@ -36,7 +36,7 @@ public abstract class Human extends Pane {
     protected Direction currentDirection = Direction.RIGHT;
 
 
-    public Human(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed)  {
+    public Human(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed) {
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.speed = speed;
@@ -50,7 +50,6 @@ public abstract class Human extends Pane {
         imageView.setFitWidth(frameWidth * 0.8);
         imageView.setFitHeight(frameHeight * 0.8);
         getChildren().add(imageView);
-
 
 
         //x and y value is the feet
@@ -84,7 +83,8 @@ public abstract class Human extends Pane {
     //=== MOVEMENT
     public void move(Direction dir, double dx, double dy) {
         this.currentDirection = dir;
-        this.x += dx; this.y += dy;
+        this.x += dx;
+        this.y += dy;
 
         //the UI element itself
         setLayoutX(getLayoutX() + dx);
@@ -127,22 +127,22 @@ public abstract class Human extends Pane {
             }
         }
     }
+
     public void moveTowardsTarget() {
 
         double dx = targetX - x;
         double dy = targetY - y;
 
         // close enough -> Switch to rest
-        if (Math.abs(dx) < 1 && Math.abs(dy) < 1 ) {
-            if(state == HumanState.MOVING)
+        if (Math.abs(dx) < 1 && Math.abs(dy) < 1) {
+            if (state == HumanState.MOVING)
                 transitionTo(HumanState.RESTING);
-            if(state == HumanState.EXITING){
+            if (state == HumanState.EXITING) {
                 //System.out.println("Tourist reached exit: " + this);
                 transitionTo(HumanState.LEFT);
             }
             return;
         }
-
 
         // normalize
         double dist = Math.hypot(dx, dy);
@@ -161,7 +161,9 @@ public abstract class Human extends Pane {
 
 
     }
+
     public abstract void pickNewTarget();
+
     public void rest() {
         restingTimePassed += 0.05;
         if (restingTimePassed >= 10) {
@@ -179,6 +181,7 @@ public abstract class Human extends Pane {
         this.state = newState;
 
     }
+
     public void resume() {
         if (state == HumanState.PAUSED && previousState != null) {
             transitionTo(previousState);
@@ -187,27 +190,32 @@ public abstract class Human extends Pane {
     //===
 
 
-
     //Getters, Setters
-    public double getSpeed(){
+    public double getSpeed() {
         return this.speed;
     }
-    public int getFrameWidth(){
+
+    public int getFrameWidth() {
         return this.frameWidth;
     }
-    public int getFrameHeight(){
+
+    public int getFrameHeight() {
         return this.frameHeight;
     }
-    public double getY(){
+
+    public double getY() {
         return this.y;
     }
-    public double getX(){
+
+    public double getX() {
         return this.x;
     }
-    public ImageView getImageView(){
+
+    public ImageView getImageView() {
         return this.imageView;
     }
-    public HumanState getState(){
+
+    public HumanState getState() {
         return state;
     }
 

@@ -3,7 +3,7 @@ package classes.entities.animals.herbivores;
 import classes.entities.animals.Herbivore;
 
 public class Hippo extends Herbivore {
-    //just so it looks clean
+
     private static final int price = 1600;
     private static final int lifeExpectancy = 50;
 

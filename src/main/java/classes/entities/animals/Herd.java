@@ -13,7 +13,7 @@ public class Herd {
     private double timeSinceLastBreedAttempt = 0;
 
 
-    public Herd(ArrayList<Animal> animals){
+    public Herd(ArrayList<Animal> animals) {
         members = animals;
         setThirstAndHungerLevels();
         setProperties();
@@ -21,9 +21,8 @@ public class Herd {
         leader = animals.get(rand.nextInt(animals.size()));
     }
 
-
-    public void setProperties(){
-        for(Animal animal : members){
+    public void setProperties() {
+        for (Animal animal : members) {
             animal.setIsInAHerd(true);
             animal.setHerd(this);
         }
@@ -70,28 +69,30 @@ public class Herd {
         animal.setHerd(this);
     }
 
-    public void setThirstAndHungerLevels(){
+    public void setThirstAndHungerLevels() {
         double thirst = 0.0;
         double hunger = 0.0;
-        for (Animal animal : members){
+        for (Animal animal : members) {
             thirst += animal.getThirst();
             hunger += animal.getHunger();
         }
         thirst = thirst / members.size();
         hunger = hunger / members.size();
 
-        for(Animal animal : members){
+        for (Animal animal : members) {
             animal.setThirst(thirst);
             animal.setHunger(hunger);
         }
     }
 
-    public ArrayList<Animal> getMembers(){
+    public ArrayList<Animal> getMembers() {
         return this.members;
     }
-    public int getMemberCount(){
+
+    public int getMemberCount() {
         return this.members.size();
     }
+
     public Animal getLeader() {
         return this.leader;
     }

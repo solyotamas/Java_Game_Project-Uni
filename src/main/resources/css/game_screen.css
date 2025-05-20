@@ -126,3 +126,7 @@
 #gameSpeedRelaxedButton.active, #gameSpeedSteadyButton.active, #gameSpeedRapidButton.active {
     -fx-background-color: #FFE389;
 }
+
+.volumeButton {
+    -fx-cursor: hand;
+}

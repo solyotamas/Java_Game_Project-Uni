@@ -4,7 +4,6 @@ import classes.entities.animals.Herbivore;
 
 public class Buffalo extends Herbivore {
 
-    //just so it looks clean
     private static final int price = 2500;
     private static final int lifeExpectancy = 35;
 

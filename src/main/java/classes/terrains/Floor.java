@@ -5,7 +5,7 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class Floor extends Terrain{
+public class Floor extends Terrain {
     private static final ArrayList<Image> floorImages = new ArrayList<>();
     private static final Random rand = new Random();
 

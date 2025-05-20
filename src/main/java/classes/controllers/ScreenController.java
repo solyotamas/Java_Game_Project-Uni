@@ -1,6 +1,7 @@
 package classes.controllers;
 
 import classes.Difficulty;
+import classes.entities.additions.MusicPlayer;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,8 +13,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
+
 import java.io.IOException;
 
 public class ScreenController {
@@ -38,11 +42,22 @@ public class ScreenController {
             mediumToggle.setToggleGroup(difficultyGroup);
             hardToggle.setToggleGroup(difficultyGroup);
         }
+        volumeIcon.setImage(new Image(getClass().getResource(MusicPlayer.getCurrentIconPath()).toExternalForm()));
     }
 
+    // ==== Music
+    @FXML
+    private ImageView volumeIcon;
+
+    @FXML
+    private void toggleVolume() {
+        MusicPlayer.toggleVolume();
+        volumeIcon.setImage(new Image(getClass().getResource(MusicPlayer.getCurrentIconPath()).toExternalForm()));
+    }
+    // =====
+
     public void addItemsToList() {
-        ObservableList<String> items = FXCollections.observableArrayList("Save Slot 1", "Save Slot 2", "Save Slot 3",
-                "Save Slot 4", "Save Slot 5");
+        ObservableList<String> items = FXCollections.observableArrayList("Save Slot 1", "Save Slot 2", "Save Slot 3", "Save Slot 4", "Save Slot 5");
         saveListView.setItems(items);
     }
 
