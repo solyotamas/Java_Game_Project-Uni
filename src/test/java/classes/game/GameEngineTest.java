@@ -253,7 +253,7 @@ public class GameEngineTest {
         gameEngineE.setMoney(10000);
         gameEngineE.buyAnimal(elephant); // money: 7000
 
-        gameEngineE.sellAnimal(elephant); //3000 * 3/5 = 1800 -at kapok érte
+        gameEngineE.sellAnimalTest(elephant); //3000 * 3/5 = 1800 -at kapok érte
 
         assertFalse(gameEngineE.herbivores.contains(elephant));
         assertEquals(8800, gameEngineE.getMoney());

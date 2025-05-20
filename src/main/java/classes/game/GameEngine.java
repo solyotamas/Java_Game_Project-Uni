@@ -177,12 +177,7 @@ public class GameEngine {
     private final Image hungerForCarnivore = new Image(GameEngine.class.getResource("/images/hunger.png").toExternalForm());
 
     public GameEngine(GameController gameController, Difficulty difficulty, Pane terrainLayer, Pane uiLayer) {
-        this.gameController = gameController;
         this.difficulty = difficulty;
-
-        this.gameBoard = new GameBoard(terrainLayer, uiLayer);
-        gameBoard.setupGroundBoard();
-
         int minPlants, maxPlants;
         switch (difficulty) {
             case HARD -> {
@@ -199,8 +194,12 @@ public class GameEngine {
             }
         }
 
-        int plantCount = rand.nextInt(maxPlants - minPlants + 1) + minPlants;
-        gameBoard.generatePlants(plantCount);
+        if (terrainLayer != null && uiLayer != null && gameController != null) {
+            this.gameBoard = new GameBoard(terrainLayer, uiLayer);
+            gameBoard.setupGroundBoard();
+            int plantCount = rand.nextInt(maxPlants - minPlants + 1) + minPlants;
+            gameBoard.generatePlants(plantCount);
+        }
 
         carnivores = new ArrayList<Carnivore>();
         herbivores = new ArrayList<Herbivore>();
@@ -1201,10 +1200,40 @@ public class GameEngine {
                 carnivores.remove(carnivore);
             }
 
-            gameBoard.getUiLayer().getChildren().remove(animal);
-            updateTicketPrice();
-            money += animal.getSellPrice();
+            if (gameBoard != null) {
+                gameBoard.getUiLayer().getChildren().remove(animal);
+            }
         });
+        updateTicketPrice();
+        money += animal.getSellPrice();
+    }
+
+    public void sellAnimalTest(Animal animal) {
+        if (animal.getHerd() != null) {
+            animal.getHerd().removeMember(animal);
+        }
+
+        // Prevent further updates this tick
+        animal.pauseManually();              // So game loop skips it
+        animal.transitionTo(IDLE);          // Prevent move logic
+
+        // Optionally clear targets to avoid null issues
+        animal.setPath(new ArrayList<>());
+        animal.setTarget(null);
+
+        // Schedule UI and list removal in the next frame
+        if (animal instanceof Herbivore herbivore) {
+            herbivores.remove(herbivore);
+        } else if (animal instanceof Carnivore carnivore) {
+            carnivores.remove(carnivore);
+        }
+
+        if (gameBoard != null) {
+            gameBoard.getUiLayer().getChildren().remove(animal);
+        }
+
+        updateTicketPrice();
+        money += animal.getSellPrice();
     }
     // =====
 
