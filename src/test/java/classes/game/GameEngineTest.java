@@ -105,8 +105,8 @@ public class GameEngineTest {
     void testGameNotOver() {
         gameEngineE.setMoney(10000);
         gameEngineE.setCanCheckForLose(true);
-        gameEngineE.getHerbivores().add(new Elephant(0, 0));
-        gameEngineE.getCarnivores().add(new Lion(1, 1));
+        gameEngineE.getHerbivores().add(new Elephant(0, 0, false));
+        gameEngineE.getCarnivores().add(new Lion(1, 1, false));
 
         assertFalse(gameEngineE.gameOver());
     }
@@ -123,8 +123,8 @@ public class GameEngineTest {
         gameEngineE.setWinningHours(721);
         gameEngineE.setMoney(40001);
         for (int i = 0; i < 15; i++) {
-            gameEngineE.herbivores.add(new Elephant(0, 0));
-            gameEngineE.carnivores.add(new Lion(1, 1));
+            gameEngineE.herbivores.add(new Elephant(0, 0, false));
+            gameEngineE.carnivores.add(new Lion(1, 1, false));
             gameEngineE.tourists.add(new Tourist(2,2, 0));
         }
         gameEngineE.setCanCheckForWin(true);
@@ -145,8 +145,8 @@ public class GameEngineTest {
 
         gameEngineE.setMoney(40001);
         for (int i = 0; i < 15; i++) {
-            gameEngineE.herbivores.add(new Elephant(0, 0));
-            gameEngineE.carnivores.add(new Lion(1, 1));
+            gameEngineE.herbivores.add(new Elephant(0, 0, false));
+            gameEngineE.carnivores.add(new Lion(1, 1,false));
             gameEngineE.tourists.add(new Tourist(2, 2, 0));
         }
 
@@ -160,7 +160,7 @@ public class GameEngineTest {
         assertFalse(gameEngineE.gameWon()); // canCheckForWin ugrik
 
         for (int i = 0; i < 15; i++) {
-            gameEngineE.herbivores.add(new Elephant(0, 0));
+            gameEngineE.herbivores.add(new Elephant(0, 0, false));
         }
         //teszteli hogy a canCheckFroWin átáll e
         gameEngineE.setSpentTime(20);
@@ -175,8 +175,8 @@ public class GameEngineTest {
         Timeline timeline = new Timeline();
         gameEngineE.setTimeline(timeline);
 
-        gameEngineE.carnivores.add(new Lion(0, 0));
-        gameEngineE.herbivores.add(new Elephant(1, 1));
+        gameEngineE.carnivores.add(new Lion(0, 0, false));
+        gameEngineE.herbivores.add(new Elephant(1, 1, false));
         gameEngineE.rangers.add(new Ranger(2, 2));
         gameEngineE.tourists.add(new Tourist(3, 3, 0));
         gameEngineE.jeeps.add(new Jeep(4, 4));
@@ -230,7 +230,7 @@ public class GameEngineTest {
 
     @Test
     void testBuyAnimalAddsAnimalDecreasesMoneySetsBornAtAndUpdatesTicketPrice() {
-        Elephant elephant = new Elephant(4, 4);
+        Elephant elephant = new Elephant(4, 4, false);
         //elephant.setPrice(1000);
 
         gameEngineE.setMoney(10000);
@@ -246,7 +246,7 @@ public class GameEngineTest {
 
     @Test
     void testSellAnimalRemovesFromListIncreasesMoneyAndUpdatesTicketPrice() {
-        Elephant elephant = new Elephant(4, 4);
+        Elephant elephant = new Elephant(4, 4, false);
         //elephant.setPrice(1000);
         //elephant.setSellPrice(800);
 
@@ -262,8 +262,8 @@ public class GameEngineTest {
 
     @Test
     void testUpdateTicketPriceCorrectlyCalculatesTotal() {
-        Elephant elephant = new Elephant(4, 4);
-        Lion lion = new Lion(5, 5);
+        Elephant elephant = new Elephant(4, 4, false);
+        Lion lion = new Lion(5, 5, false);
 
         gameEngineE.buyAnimal(elephant);
         gameEngineE.buyAnimal(lion);
