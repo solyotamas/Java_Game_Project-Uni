@@ -12,6 +12,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 
 import java.util.*;
+import java.util.Random;
 
 //public abstract class Animal<T extends Pane> extends Pane {
 
@@ -39,8 +40,8 @@ public abstract class Animal extends Pane {
     protected int startingAge = 5;
     protected int lifeExpectancy;
     protected double bornAt;
-    protected double thirst = 20.0;
-    protected double hunger = 20.0;
+    protected double thirst = 100.0;
+    protected double hunger = 100.0;
     //
 
     //Images of the Animal, ui
@@ -72,6 +73,8 @@ public abstract class Animal extends Pane {
     private boolean isStarving = false;
     private double starvingTime = 0.0;
 
+    private int behindHerdLeader;
+    private final Random rand = new Random();
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price, int lifeExpectancy)  {
         this.frameWidth = frameWidth;
@@ -109,7 +112,8 @@ public abstract class Animal extends Pane {
         stateIcon.setLayoutY(imageView.getLayoutY() - 5);
         getChildren().add(stateIcon);
 
-
+        //herd
+        this.behindHerdLeader = rand.nextInt(15) + 15;
 
     }
 
@@ -238,7 +242,7 @@ public abstract class Animal extends Pane {
         double dy = targetY - this.y;
 
         double distance = Math.hypot(dx, dy);
-        if (distance < 15) {
+        if (distance < this.behindHerdLeader) {
             this.transitionTo(leader.getState());
             return;
         }
@@ -266,6 +270,8 @@ public abstract class Animal extends Pane {
 
         stateIcon.setImage(sleepImage);
         stateIcon.setVisible(true);
+
+
 
         if (restingTimePassed >= 15) {
             restingTimePassed = 0.0;

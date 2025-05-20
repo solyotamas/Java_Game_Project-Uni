@@ -391,6 +391,31 @@ public class GameController {
     }
     // =====
 
+    public Animal spawnBaby(Animal parent){
+
+        try {
+            Animal baby = parent.getClass()
+                    .getConstructor(double.class, double.class)
+                    .newInstance(
+                            parent.getX() + rand.nextInt(10) - 5,
+                            parent.getY() + rand.nextInt(10) - 5
+                    );
+
+            Platform.runLater(() -> {
+                baby.setOnMouseClicked(this::handleAnimalClicked);
+            });
+
+            gameEngine.buyAnimal(baby);
+            uiLayer.getChildren().add(baby);
+
+            return baby;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
 
     // ==== RANGERS
     @FXML

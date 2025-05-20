@@ -136,6 +136,7 @@ public class GameEngine {
                 formNewHerds();
                 checkToJoinHerds();
                 cleanupSmallHerds(carnivoreherds);
+                cleanupSmallHerds(herbivoreherds);
                 updateHerdStates();
 
                 //== HUMANS
@@ -318,7 +319,13 @@ public class GameEngine {
     private void updateHerbivoreHerdStates() {
         for (Herd herd : herbivoreherds) {
             herd.assignNewLeader();
+
             Animal leader = herd.getLeader();
+            /*
+            if(leader.getTarget() == null){
+                leader.transitionTo(IDLE);
+                return;
+            }*/
 
             boolean isAnyManuallyPaused = herd.getMembers().stream().anyMatch(Animal::isManuallyPaused);
             if (isAnyManuallyPaused) continue;
@@ -339,7 +346,17 @@ public class GameEngine {
                 else
                     animal.moveTowardsLeader(leader, terrainUnder);
             }
-            case RESTING -> animal.rest();
+            case RESTING -> {
+                animal.rest();
+                Herd herd = leader.getHerd();
+                if (!herd.getHasBredThisRest()) {
+                    Animal baby = gameController.spawnBaby(herd.getLeader());
+                    herd.addMember(baby);
+                    baby.setBornAt(spentTime);
+
+                    herd.setHasBredThisRest(true);
+                }
+            }
             case EATING -> {
                 animal.eat();
 
@@ -356,6 +373,7 @@ public class GameEngine {
             case DRINKING -> animal.drink();
             case IDLE -> {
                 if (animal == leader) {
+
                     ArrayList<Terrain> path;
                     if (animal.getThirst() < 25.0)
                         animal.preparePath(gameBoard.getTerrainGrid(), gameBoard.getLakeTerrains());
@@ -456,6 +474,8 @@ public class GameEngine {
             }
         }
     }
+
+
 
     // ======
 
