@@ -284,7 +284,8 @@ public class GameController {
         // Create a temporary instance just to get size info
         Animal tempAnimal = null;
         try {
-            tempAnimal = animalClass.getDeclaredConstructor(double.class, double.class).newInstance(0.0, 0.0);
+            tempAnimal = animalClass.getDeclaredConstructor(double.class, double.class, boolean.class)
+                    .newInstance(0.0, 0.0, false);
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -319,7 +320,9 @@ public class GameController {
             try {
                 double placeX = e.getX();
                 double placeY = e.getY();
-                Animal animalInstance = animalClass.getDeclaredConstructor(double.class, double.class).newInstance(placeX, placeY);
+                Animal animalInstance = animalClass
+                        .getDeclaredConstructor(double.class, double.class, boolean.class)
+                        .newInstance(placeX, placeY, false);
 
                 //click
                 if (canPlaceAnimal(animalInstance, placeX, placeY)) {
@@ -414,14 +417,22 @@ public class GameController {
     public Animal spawnBaby(Animal parent) {
 
         try {
-            Animal baby = parent.getClass().getConstructor(double.class, double.class).newInstance(parent.getX() + rand.nextInt(10) - 5, parent.getY() + rand.nextInt(10) - 5);
+            Animal baby = parent.getClass()
+                    .getConstructor(double.class, double.class, boolean.class)
+                    .newInstance(
+                            parent.getX() + rand.nextInt(10) - 5,
+                            parent.getY() + rand.nextInt(10) - 5, true
+                    );
+            baby.childSpawn();
 
             Platform.runLater(() -> {
                 baby.setOnMouseClicked(this::handleAnimalClicked);
             });
 
-            gameEngine.buyAnimal(baby);
+            gameEngine.addAnimal(baby);
+
             uiLayer.getChildren().add(baby);
+
 
             return baby;
         } catch (Exception e) {

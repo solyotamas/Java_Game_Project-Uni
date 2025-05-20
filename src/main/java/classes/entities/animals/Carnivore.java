@@ -2,6 +2,7 @@ package classes.entities.animals;
 
 import classes.entities.Direction;
 import classes.terrains.Terrain;
+import javafx.collections.ListChangeListener;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -9,8 +10,8 @@ import java.util.Random;
 public abstract class Carnivore extends Animal {
     private Herbivore prey;
 
-    public Carnivore(double x, double y, int frameWidth, int frameHeight, String imgURL, double speed, int price, int life_expectancy) {
-        super(x, y, frameWidth, frameHeight, imgURL, speed, price, life_expectancy);
+    public Carnivore(double x, double y, int frameWidth, int frameHeight,String childImgUrl,String imgURL, double speed, int price, int life_expectancy, boolean isChild){
+        super(x,y,frameWidth, frameHeight, childImgUrl,imgURL, speed, price, life_expectancy, isChild);
     }
 
     public void huntTarget(Terrain terrain) {

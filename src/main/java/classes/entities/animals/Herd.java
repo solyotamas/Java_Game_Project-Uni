@@ -9,7 +9,9 @@ public class Herd {
 
     private static final Random rand = new Random();
     private final int MAX_SIZE = 5;
-    private boolean hasBredThisRest = false;
+
+    private double timeSinceLastBreedAttempt = 0;
+
 
     public Herd(ArrayList<Animal> animals) {
         members = animals;
@@ -100,11 +102,16 @@ public class Herd {
         leader = members.get(0);
     }
 
-    public void setHasBredThisRest(boolean hasBred) {
-        this.hasBredThisRest = hasBred;
+    public void incrementBreedTimer(double dt) {
+        timeSinceLastBreedAttempt += dt;
     }
 
-    public boolean getHasBredThisRest() {
-        return hasBredThisRest;
+    public boolean canTryBreeding() {
+        return timeSinceLastBreedAttempt >= 1.0; // one second cooldown
     }
+
+    public void resetBreedTimer() {
+        timeSinceLastBreedAttempt = 0;
+    }
+
 }

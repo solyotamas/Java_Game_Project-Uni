@@ -11,8 +11,9 @@ public class Rhino extends Herbivore {
     private static final int frameHeight = 66;
     private static final double speed = 0.5;
     private static final String imgURL = "/images/animated/rhino.png";
+    private static final String childImgURL = "/images/animated/rhino_baby.png";
 
-    public Rhino(double x, double y) {
-        super(x, y, frameWidth, frameHeight, imgURL, speed, price, lifeExpectancy);
+    public Rhino(double x, double y, boolean isChild){
+        super(x,y,frameWidth, frameHeight, childImgURL,imgURL, speed, price, lifeExpectancy, isChild);
     }
 }

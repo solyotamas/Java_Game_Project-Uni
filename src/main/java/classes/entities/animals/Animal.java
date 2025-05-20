@@ -20,6 +20,7 @@ public abstract class Animal extends Pane {
     protected double x;
     protected double y;
     protected double speed;
+    protected double baseSpeed;
     protected int appetite;
 
 
@@ -35,7 +36,7 @@ public abstract class Animal extends Pane {
 
     //stats
     protected int age;
-    protected int startingAge = 5;
+    protected int startingAge;
     protected int lifeExpectancy;
     protected double bornAt;
     protected double thirst = 100.0;
@@ -74,16 +75,26 @@ public abstract class Animal extends Pane {
     private int behindHerdLeader;
     private final Random rand = new Random();
 
-    public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price, int lifeExpectancy)  {
+    //child
+    private Image adultSpriteSheet;
+    private Image childSpriteSheet;
+    private boolean isGrownUp;
+
+    public Animal(double x, double y, int frameWidth, int frameHeight, String childImgUrl, String imgURL,double speed, int price, int lifeExpectancy, boolean isChild)  {
         this.frameWidth = frameWidth;
         this.frameHeight = frameHeight;
         this.speed = speed;
+        this.baseSpeed = speed;
         this.price = price;
         this.lifeExpectancy = lifeExpectancy;
         this.setCursor(Cursor.HAND);
 
+        this.startingAge = isChild ? 1 : 5;
+
         //Animation pictures
-        this.spriteSheet = new Image(getClass().getResource(imgUrl).toExternalForm());
+        this.adultSpriteSheet = new Image(getClass().getResource(imgURL).toExternalForm());
+        this.childSpriteSheet = new Image(getClass().getResource(childImgUrl).toExternalForm());
+        this.spriteSheet = isChild ? childSpriteSheet : adultSpriteSheet;
         loadStaticDirectionImages();
 
         //UI
@@ -112,6 +123,7 @@ public abstract class Animal extends Pane {
 
         //herd
         this.behindHerdLeader = rand.nextInt(15) + 15;
+        isGrownUp = !isChild;
 
     }
 
@@ -136,9 +148,30 @@ public abstract class Animal extends Pane {
         }
     }
 
+
+    //Child to adult
+    public void growUp(){
+        isGrownUp = true;
+        this.spriteSheet = adultSpriteSheet;
+        loadStaticDirectionImages();
+
+        this.speed = baseSpeed;
+    }
+
+    public void childSpawn(){
+        this.speed = baseSpeed * 1.2;
+    }
+
+
+
     //===== ANIMAL MOVEMENT & ACTIVITIES =====
     //moving
     public void moveTowardsTarget(Terrain terrain) {
+        if (target == null) {
+            transitionTo(AnimalState.IDLE);
+            return;
+        }
+
         if (isStarving) {
             transitionTo(AnimalState.IDLE);
         }
@@ -359,10 +392,11 @@ public abstract class Animal extends Pane {
     }
 
     private AnimalState determineStateFromTarget(Terrain target) {
-        if(target instanceof River){
+        if (target == null) return AnimalState.IDLE;
+
+        if (target instanceof River) {
             return AnimalState.DRINKING;
-        }
-        else if (target.hasLandform()) {
+        } else if (target.hasLandform()) {
             if (target.getLandform() instanceof Lake) return AnimalState.DRINKING;
             if (target.getLandform() instanceof Plant) return AnimalState.EATING;
         }
@@ -498,6 +532,11 @@ public abstract class Animal extends Pane {
     public boolean getIsInAHerd(){
         return isInAHerd;
     }
+
+    public double getBornAt() {
+        return bornAt;
+    }
+
     public Herd getHerd() {
         return this.herd;
     }
@@ -524,5 +563,18 @@ public abstract class Animal extends Pane {
 
     public void setRestingTimePassed(double val){
         this.restingTimePassed = val;
+    }
+
+    public Direction getCurrentDirection() { return currentDirection; }
+
+    public void setAge(int age){
+        this.age = age;
+    }
+    public boolean isGrownUp() {
+        return isGrownUp;
+    }
+
+    public void setTarget(Terrain o) {
+        target = o;
     }
 }

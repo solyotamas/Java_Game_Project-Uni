@@ -54,9 +54,9 @@ public class GameEngine {
     private ArrayList<Herd> carnivoreherds;
     private ArrayList<Herd> herbivoreherds;
 
-    private ArrayList<Ranger> rangers;
-    private ArrayList<Jeep> jeeps;
-    private ArrayList<Road> roads;
+    protected ArrayList<Ranger> rangers;
+    protected ArrayList<Jeep> jeeps;
+    public ArrayList<Road> roads;
 
     private Pair<Integer, Integer> entrance;
     private Pair<Integer, Integer> exit;
@@ -64,8 +64,114 @@ public class GameEngine {
     private Difficulty difficulty;
     private ArrayList<Integer> conditions;
 
-    private ArrayList<Plant> plants;
-    private ArrayList<Lake> lakes;
+    public ArrayList<Plant> plants;
+    public ArrayList<Lake> lakes;
+
+    //breeding
+    private double breedingChancePerTick = 0.003;
+
+
+
+
+    // GETTERS / SETTERS
+    public ArrayList<Integer> getConditions() {
+        return this.conditions;
+    }
+
+    public Difficulty getDifficulty() {
+        return this.difficulty;
+    }
+
+    public double getWinningHoursNeeded() {
+        return this.winningHoursNeeded;
+    }
+
+    public int getMoney() {
+        return this.money;
+    }
+
+    public void setMoney(int money_p) {
+        this.money = money_p;
+    }
+
+    public ArrayList<Carnivore> getCarnivores() {
+        return this.carnivores;
+    }
+
+    public ArrayList<Herbivore> getHerbivores() {
+        return this.herbivores;
+    }
+
+    public int getJeepCount() {
+        return this.jeepCount;
+    }
+
+    public int getTicketPrice() {
+        return this.ticketPrice;
+    }
+
+    public ArrayList<Plant> getPlants() {
+        return this.plants;
+    }
+
+    public ArrayList<Lake> getLakes() {
+        return this.lakes;
+    }
+
+    public ArrayList<Tourist> getTourists() {
+        return tourists;
+    }
+
+    public ArrayList<Ranger> getRangers() {
+        return rangers;
+    }
+
+    public boolean getCanCheckForLose() {
+        return canCheckForLose;
+    }
+
+    public boolean getCanCheckForWin() {
+        return canCheckForWin;
+    }
+
+    public void setCanCheckForLose(boolean can) {
+        this.canCheckForLose = can;
+    }
+
+    public void setCanCheckForWin(boolean can) {
+        this.canCheckForWin = can;
+    }
+
+    public void setSpentTime(double time) {
+        this.spentTime = time;
+    }
+
+    public void setWinningHoursNeeded(double hours) {
+        this.winningHoursNeeded = hours;
+    }
+
+    public void setWinningHours(double wh) {
+        this.winningHours = wh;
+    }
+
+    public double getSpentTime() {
+        return this.spentTime;
+    }
+
+    public void setFirstConditionMetTime (double what) {
+        this.firstConditionMetTime = what;
+    }
+
+    public double getFirstConditionMetTime() {
+        return firstConditionMetTime;
+    }
+
+
+    public void setTimeline(Timeline timeline) {
+        this.timeline = timeline;
+    }
+
+    // ==========
 
     //need
     private final Image hungerForCarnivore = new Image(GameEngine.class.getResource("/images/hunger.png").toExternalForm());
@@ -142,9 +248,11 @@ public class GameEngine {
     public void gameLoop() {
         savePlants();
 
-        timeline = new Timeline(new KeyFrame(Duration.millis(50), e -> {
-            //== ANIMALS
-            updateAnimalStates();
+        timeline = new Timeline(
+            new KeyFrame(Duration.millis(50), e -> {
+                //== ANIMALS
+                updateAnimalStates();
+                checkForGrownUps();
 
             //== HERDS
             formNewHerds();
@@ -188,6 +296,23 @@ public class GameEngine {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
+
+    // ==== ANIMALS GROWING UP
+    private void checkForGrownUps(){
+        for (Herbivore herbivore : herbivores) {
+            if (herbivore.getAge() >= 3 && !herbivore.isGrownUp()) {
+                herbivore.growUp();
+            }
+        }
+
+        for (Carnivore carnivore : carnivores) {
+            if (carnivore.getAge() >= 3 && !carnivore.isGrownUp()) {
+                carnivore.growUp();
+            }
+        }
+    }
+
+    // ======
 
     // ==== SPAWNING TOURISTS
     private void maybeSpawnTourist() {
@@ -332,11 +457,19 @@ public class GameEngine {
             if (isAnyManuallyPaused) continue;
 
             for (Animal animal : herd.getMembers()) {
-                if (animal.isBeingEaten()) continue;
+                if(animal.isBeingEaten()) continue;
+
+                Animal leader2 = herd.getLeader();
+                if(leader2 == null){
+                    herd.assignNewLeader();
+                }
+
                 handleHerbivoreInHerd(animal, leader);
             }
         }
         cleanupSmallHerds(herbivoreherds);
+
+
     }
 
     private void handleHerbivoreInHerd(Animal animal, Animal leader) {
@@ -348,18 +481,20 @@ public class GameEngine {
             }
             case RESTING -> {
                 animal.rest();
-                Herd herd = leader.getHerd();
-                if (!herd.getHasBredThisRest()) {
-                    Animal baby = gameController.spawnBaby(herd.getLeader());
+                if(animal != leader) return;
 
-                    // DEFERRED ADDITION HERE
+                Herd herd = leader.getHerd();
+                herd.incrementBreedTimer(0.05);
+
+                if (herd.canTryBreeding() && Math.random() < breedingChancePerTick) {
+                    herd.resetBreedTimer();
+
+                    Animal baby = gameController.spawnBaby(herd.getLeader());
                     Platform.runLater(() -> {
                         herd.addMember(baby);
-                        baby.setBornAt(0);
+                        //baby.setBornAt(spentTime);
+                        //baby.setAge(1);
                     });
-
-
-                    herd.setHasBredThisRest(true);
                 }
             }
             case EATING -> {
@@ -408,6 +543,11 @@ public class GameEngine {
             if (isAnyManuallyPaused) continue;
 
             for (Animal animal : herd.getMembers()) {
+                Animal leader2 = herd.getLeader();
+                if(leader2 == null){
+                    herd.assignNewLeader();
+                }
+
                 handleCarnivoreInHerd(animal, leader);
             }
         }
@@ -422,7 +562,24 @@ public class GameEngine {
         if (animal == leader) {
             switch (leaderCarnivore.getState()) {
                 case MOVING -> leaderCarnivore.moveTowardsTarget(terrainUnder);
-                case RESTING -> leaderCarnivore.rest();
+                case RESTING -> {
+                    leaderCarnivore.rest();
+
+                    Herd herd = leader.getHerd();
+                    herd.incrementBreedTimer(0.05);
+
+                    if (herd.canTryBreeding() && Math.random() < breedingChancePerTick) {
+                        herd.resetBreedTimer();
+
+                        Animal baby = gameController.spawnBaby(herd.getLeader());
+                        Platform.runLater(() -> {
+                            herd.addMember(baby);
+                            //baby.setBornAt(spentTime);
+                            //baby.setAge(1);
+                        });
+                    }
+
+                }
                 case EATING -> {
                     leaderCarnivore.changeHunger(0.5);
                     leaderCarnivore.setStateIcon(hungerForCarnivore);
@@ -1002,6 +1159,16 @@ public class GameEngine {
         canCheckForLose = true;
     }
 
+    public void addAnimal(Animal animal){
+        if (animal instanceof Herbivore herbivore) {
+            this.herbivores.add(herbivore);
+        } else if (animal instanceof Carnivore carnivore) {
+            this.carnivores.add(carnivore);
+        }
+        updateTicketPrice();
+
+    }
+
     public void updateTicketPrice() {
         int ticketPrice = 100;
         for (Carnivore carnivore : carnivores) {
@@ -1014,19 +1181,30 @@ public class GameEngine {
     }
 
     public void sellAnimal(Animal animal) {
-        money += animal.getSellPrice();
-
         if (animal.getHerd() != null) {
             animal.getHerd().removeMember(animal);
         }
 
-        if (animal instanceof Herbivore herbivore) {
-            herbivores.remove(herbivore);
+        // Prevent further updates this tick
+        animal.pauseManually();              // So game loop skips it
+        animal.transitionTo(IDLE);          // Prevent move logic
+
+        // Optionally clear targets to avoid null issues
+        animal.setPath(new ArrayList<>());
+        animal.setTarget(null);
+
+        // Schedule UI and list removal in the next frame
+        Platform.runLater(() -> {
+            if (animal instanceof Herbivore herbivore) {
+                herbivores.remove(herbivore);
+            } else if (animal instanceof Carnivore carnivore) {
+                carnivores.remove(carnivore);
+            }
+
+            gameBoard.getUiLayer().getChildren().remove(animal);
             updateTicketPrice();
-        } else if (animal instanceof Carnivore carnivore) {
-            carnivores.remove(carnivore);
-            updateTicketPrice();
-        }
+            money += animal.getSellPrice();
+        });
     }
     // =====
 
@@ -1059,8 +1237,11 @@ public class GameEngine {
         return false;
     }
 
-    private boolean checkConditions() {
-        return money >= conditions.get(0) && herbivores.size() >= conditions.get(1) && carnivores.size() >= conditions.get(2) && tourists.size() >= conditions.get(3);
+    public boolean checkConditions() {
+        return money >= conditions.get(0)
+                && herbivores.size() >= conditions.get(1)
+                && carnivores.size() >= conditions.get(2)
+                && tourists.size() >= conditions.get(3);
     }
 
     public void stop() {

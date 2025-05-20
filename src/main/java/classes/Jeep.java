@@ -106,7 +106,7 @@ public class Jeep extends Pane {
         move(dir, stepX, stepY);
     }
 
-    private void move(Direction dir, double dx, double dy) {
+    public void move(Direction dir, double dx, double dy) {
         this.currentDirection = dir;
         this.x += dx;
         this.y += dy;
@@ -162,7 +162,12 @@ public class Jeep extends Pane {
         return this.y;
     }
 
+    public Direction getCurrentDirection() {
+        return this.currentDirection;
+    }
+
     public Set<Class<? extends Animal>> getSpeciesSeen() {
         return speciesSeen;
     }
+
 }

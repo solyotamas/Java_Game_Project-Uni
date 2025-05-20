@@ -11,8 +11,9 @@ public class Hippo extends Herbivore {
     private static final int frameHeight = 60;
     private static final double speed = 0.6;
     private static final String imgURL = "/images/animated/hippo.png";
+    private static final String childImgURL = "/images/animated/hippo_baby.png";
 
-    public Hippo(double x, double y) {
-        super(x, y, frameWidth, frameHeight, imgURL, speed, price, lifeExpectancy);
+    public Hippo(double x, double y, boolean isChild){
+        super(x,y,frameWidth, frameHeight, childImgURL,imgURL, speed, price, lifeExpectancy, isChild);
     }
 }
