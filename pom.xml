@@ -166,7 +166,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <configLocation>google_checks.xml</configLocation> <!-- vagy sun_checks.xml vagy saját fájl -->
+                    <configLocation>sun_checks.xml</configLocation> <!-- vagy sun_checks.xml/google_checks vagy saját fájl -->
                     <!--- <encoding>UTF-8</encoding> -->
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>false</failsOnError> <!-- ha nem akarod, hogy fail-eljen -->
