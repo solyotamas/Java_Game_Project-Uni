@@ -4,7 +4,7 @@ import classes.entities.animals.Carnivore;
 
 public class Panther extends Carnivore {
     //just so it looks clean
-    private static final int price = 400;
+    private static final int price = 1200;
     private static final int lifeExpectancy = 25;
 
     private static final int frameWidth = 84;

@@ -5,12 +5,14 @@ import classes.landforms.Lake;
 import classes.landforms.plants.Plant;
 import classes.terrains.River;
 import classes.terrains.Terrain;
+import javafx.scene.Cursor;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 
 import java.util.*;
+import java.util.Random;
 
 //public abstract class Animal<T extends Pane> extends Pane {
 
@@ -38,8 +40,8 @@ public abstract class Animal extends Pane {
     protected int startingAge = 5;
     protected int lifeExpectancy;
     protected double bornAt;
-    protected double thirst = 20.0;
-    protected double hunger = 20.0;
+    protected double thirst = 100.0;
+    protected double hunger = 100.0;
     //
 
     //Images of the Animal, ui
@@ -68,6 +70,11 @@ public abstract class Animal extends Pane {
     private boolean isManuallyPaused = false;
     private boolean isBeingEaten = false;
 
+    private boolean isStarving = false;
+    private double starvingTime = 0.0;
+
+    private int behindHerdLeader;
+    private final Random rand = new Random();
 
     public Animal(double x, double y, int frameWidth, int frameHeight, String imgUrl, double speed, int price, int lifeExpectancy)  {
         this.frameWidth = frameWidth;
@@ -75,6 +82,7 @@ public abstract class Animal extends Pane {
         this.speed = speed;
         this.price = price;
         this.lifeExpectancy = lifeExpectancy;
+        this.setCursor(Cursor.HAND);
 
         //Animation pictures
         this.spriteSheet = new Image(getClass().getResource(imgUrl).toExternalForm());
@@ -104,7 +112,8 @@ public abstract class Animal extends Pane {
         stateIcon.setLayoutY(imageView.getLayoutY() - 5);
         getChildren().add(stateIcon);
 
-
+        //herd
+        this.behindHerdLeader = rand.nextInt(15) + 15;
 
     }
 
@@ -134,7 +143,11 @@ public abstract class Animal extends Pane {
 
     //===== ANIMAL MOVEMENT & ACTIVITIES =====
     //moving
-    public void moveTowardsTarget() {
+    public void moveTowardsTarget(Terrain terrain) {
+        if (isStarving) {
+            transitionTo(AnimalState.IDLE);
+        }
+
         // If we've reached the end of the path
         if (pathIndex >= path.size()) {
             state = determineStateFromTarget(target);
@@ -167,19 +180,21 @@ public abstract class Animal extends Pane {
             dir = (dy > 0) ? Direction.DOWN : Direction.UP;
         }
 
-        move(dir, stepX, stepY);
+        move(terrain, dir, stepX, stepY);
 
     }
-    public void move(Direction dir, double dx, double dy) {
+    public void move(Terrain terrain, Direction dir, double dx, double dy) {
         //todo ELEGÁNSABB LENNE A DIRECTION-BŐL KISZEDNI AZ IRÁNY ÉRTÉKEIT
         this.currentDirection = dir;
-        this.x += dx; this.y += dy;
 
+        //moving slower on terrains with crossingDifficulty (river, hill)
+        dx *= crossingDifficulty(terrain);
+        dy *= crossingDifficulty(terrain);
+        this.x += dx; this.y += dy;
 
         //the UI element itself
         setLayoutX(getLayoutX() + dx);
         setLayoutY(getLayoutY() + dy);
-
 
         switch (currentDirection) {
             case UP -> {
@@ -219,7 +234,7 @@ public abstract class Animal extends Pane {
     }
 
     //in a herd movements
-    public void moveTowardsLeader(Animal leader) {
+    public void moveTowardsLeader(Animal leader, Terrain terrain) {
         double targetX = leader.getX();
         double targetY = leader.getY();
 
@@ -227,7 +242,7 @@ public abstract class Animal extends Pane {
         double dy = targetY - this.y;
 
         double distance = Math.hypot(dx, dy);
-        if (distance < 15) {
+        if (distance < this.behindHerdLeader) {
             this.transitionTo(leader.getState());
             return;
         }
@@ -242,7 +257,11 @@ public abstract class Animal extends Pane {
             dir = dy > 0 ? Direction.DOWN : Direction.UP;
         }
 
-        move(dir, stepX, stepY);
+        move(terrain, dir, stepX, stepY);
+    }
+    public double crossingDifficulty(Terrain terrain) {
+        int difficulty = terrain.getCrossingDifficulty(); // 0–3
+        return 1.0 / difficulty;
     }
 
     //not moving states
@@ -251,6 +270,8 @@ public abstract class Animal extends Pane {
 
         stateIcon.setImage(sleepImage);
         stateIcon.setVisible(true);
+
+
 
         if (restingTimePassed >= 15) {
             restingTimePassed = 0.0;
@@ -262,9 +283,19 @@ public abstract class Animal extends Pane {
     }
     public void eat(){
         this.changeHunger(0.5); //+10 / mp
-
         stateIcon.setImage(hungerImage);
         stateIcon.setVisible(true);
+
+        // when eating plants, they lose nutrition, if nutrition is 0 the plant disappears
+        if (this.target != null && this.target.getLandform() instanceof Plant) {
+            Plant plant = (Plant) this.target.getLandform();
+            plant.reduceNutrition(this.appetite * 0.005);
+
+            if (plant.isDepleted()) {
+                state = AnimalState.IDLE;
+                stateIcon.setVisible(false);
+            }
+        }
 
         if (hunger > 99.0) {
             state = AnimalState.IDLE;
@@ -345,7 +376,7 @@ public abstract class Animal extends Pane {
     }
     // =====
 
-    // ==== AGING, PRICE HANDLING
+    // ==== AGING, PRICE HANDLING, STARVING
     public void setBornAt(double currentGameHour) {
         this.bornAt = currentGameHour;
     }
@@ -355,7 +386,7 @@ public abstract class Animal extends Pane {
     }
 
     public void agingAnimal(double currentGameHour) {
-        this.age = startingAge + (int) ((currentGameHour - bornAt) / 24.0);
+        this.age = startingAge + (int) ((currentGameHour - bornAt) / 186.0); // 24 * 7, one year is one week in game
 
         double ageRatio = (double) this.age / this.lifeExpectancy;
         this.appetite = (int)(1 + ageRatio * 99);
@@ -376,6 +407,21 @@ public abstract class Animal extends Pane {
         } else {
             return base / 5;
         }
+    }
+
+    public void setStarving(boolean starving) {
+        this.isStarving = starving;
+        if (!starving) {
+            this.starvingTime = 0.0;
+        }
+    }
+    public void incrementStarvingTime(double amount) {
+        if (isStarving) {
+            this.starvingTime += amount;
+        }
+    }
+    public boolean diedOfStarvation() {
+        return starvingTime > 24.0; // one day
     }
     // =====
 

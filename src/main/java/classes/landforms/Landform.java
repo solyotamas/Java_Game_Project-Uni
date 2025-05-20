@@ -33,33 +33,25 @@ public abstract class Landform extends Pane{
 
     }
 
+    // Getters, setters
     public int getWidthInTiles() {
         return widthInTiles;
     }
     public int getHeightInTiles() {
         return heightInTiles;
     }
-
     public double getDepth(){
         return this.depth;
     }
     public void setDepth(double depth){
         this.depth = depth;
     }
-
-    public ImageView getPicture(){
-        return this.picture;
-    }
-
     public void setPicture(Image img){
         picture.setImage(img);
     }
-
     public double getX() { return this.x; }
     public double getY() { return this.y; }
-
     public int getPrice() {
         return this.price;
     }
-
 }

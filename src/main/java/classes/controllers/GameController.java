@@ -47,6 +47,7 @@ import javafx.scene.image.ImageView;
 public class GameController {
     private GameEngine gameEngine;
     private Difficulty difficulty;
+    private int speed = 1;
 
     //info panel
     private InfoWindowAnimal currentInfoWindowAnimal = null;
@@ -60,7 +61,6 @@ public class GameController {
     private final int SCREEN_WIDTH = 1920;
     private final int SCREEN_HEIGHT = 930;
     private final int TOURIST_SECTION = 150;
-    private final int HEADER_FOOTER = 75;
 
     //For Gameboard
     @FXML
@@ -94,9 +94,11 @@ public class GameController {
     @FXML
     private Label touristCountLabel;
     @FXML
-    private Button gameSpeedHourButton;
+    private Button gameSpeedRelaxedButton;
     @FXML
-    private Button gameSpeedDayButton;
+    private Button gameSpeedSteadyButton;
+    @FXML
+    private Button gameSpeedRapidButton;
     @FXML
     private Label ticketPriceLabel;
     @FXML
@@ -106,30 +108,44 @@ public class GameController {
     public void startGame() {
         this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer);
         System.out.println(difficulty);
+        gameSpeedRelaxedButton.getStyleClass().add("active");
         gameEngine.gameLoop();
     }
 
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
-    }
+    private void setActiveSpeedButton(Button activeButton) {
+        gameSpeedRelaxedButton.getStyleClass().remove("active");
+        gameSpeedSteadyButton.getStyleClass().remove("active");
+        gameSpeedRapidButton.getStyleClass().remove("active");
 
-    public void setReasonOfDeathText(String text) {
-        this.reasonOfDeathText.setText(text);
+        if (!activeButton.getStyleClass().contains("active")) {
+            activeButton.getStyleClass().add("active");
+        }
     }
 
     @FXML
-    public void speedGameToDay(){
-
+    public void speedGameToRelaxed(){
+        gameEngine.setGameSpeed(1);
+        speed = 1;
+        setActiveSpeedButton(gameSpeedRelaxedButton);
     }
-    @FXML
-    public void speedGameToHour(){
 
+    @FXML
+    public void speedGameToSteady(){
+        gameEngine.setGameSpeed(6);
+        speed = 6;
+        setActiveSpeedButton(gameSpeedSteadyButton);
+    }
+
+    @FXML
+    public void speedGameToRapid(){
+        gameEngine.setGameSpeed(12);
+        speed = 12;
+        setActiveSpeedButton(gameSpeedRapidButton);
     }
 
     // ==== LANDFORMS
     private void buyLandform(Class<? extends Landform> landformClass, Image chosen) {
         closeShopPane();
-
 
         boolean isRoad = Road.class.isAssignableFrom(landformClass); // If road, remainingPlacableTiles is 10, otherwise 1
         int[] remainingPlacableTiles = isRoad ? new int[]{10} : new int[]{1}; //Counter in array because you cant change primitive variables in lambda
@@ -143,6 +159,7 @@ public class GameController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         ImageView ghostImage = new ImageView(chosen);
         ghostImage.setOpacity(0.5);
         ghostImage.setFitWidth(TILE_SIZE * tempInstance.getWidthInTiles());
@@ -216,9 +233,8 @@ public class GameController {
                 ghostLayer.setMouseTransparent(true);
             }
         });
-
-
     }
+
     @FXML
     public void buyBush() {
         buyLandform(Bush.class, Bush.getRandomBushImage());
@@ -240,7 +256,6 @@ public class GameController {
         closeShopPane();
     }}
     // =====
-
 
     // ==== ANIMALS
     private void buyAnimal(Class<? extends Animal> animalClass, String imagePath) {
@@ -336,6 +351,7 @@ public class GameController {
                 bottomY <= SCREEN_HEIGHT
         );
     }
+
     @FXML
     public void buyElephant(){
         buyAnimal(Elephant.class, "/images/elephant.png");
@@ -375,6 +391,31 @@ public class GameController {
     }
     // =====
 
+    public Animal spawnBaby(Animal parent){
+
+        try {
+            Animal baby = parent.getClass()
+                    .getConstructor(double.class, double.class)
+                    .newInstance(
+                            parent.getX() + rand.nextInt(10) - 5,
+                            parent.getY() + rand.nextInt(10) - 5
+                    );
+
+            Platform.runLater(() -> {
+                baby.setOnMouseClicked(this::handleAnimalClicked);
+            });
+
+            gameEngine.buyAnimal(baby);
+            uiLayer.getChildren().add(baby);
+
+            return baby;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
+    }
 
     // ==== RANGERS
     @FXML
@@ -449,13 +490,12 @@ public class GameController {
                         bottomY <= SCREEN_HEIGHT
         );
     }
-
     // =====
 
 
     // ==== INFO WINDOWS
     private void handleAnimalClicked(MouseEvent event) {
-        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
+        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null || speed != 1)
             return;
 
         event.consume();
@@ -509,7 +549,7 @@ public class GameController {
     }
 
     private void handleRangerClicked(MouseEvent event) {
-        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null)
+        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null || speed != 1)
             return;
 
         event.consume();
@@ -526,8 +566,7 @@ public class GameController {
                 },
                 () -> {
                     // Choose prey action
-                    gameEngine.choosePreyForRanger();
-                    //TODO záródjon be
+                    gameEngine.choosePreyForRanger(clickedRanger);
                 },
                 () -> {
                     // Close action
@@ -537,11 +576,12 @@ public class GameController {
 
         uiLayer.getChildren().add(currentInfoWindowRanger);
     }
-    private void closeRangerWindow(Ranger ranger) {
+    public void closeRangerWindow(Ranger ranger) {
         if (currentInfoWindowRanger != null) {
             uiLayer.getChildren().remove(currentInfoWindowRanger);
             currentInfoWindowRanger = null;
         }
+        gameEngine.clearAllCarnivoreHighlights();
         ranger.resume();
     }
     // =====
@@ -595,6 +635,7 @@ public class GameController {
 
     //Market appear, disappear
     public void openShopPane() {
+        if (speed != 1) return;
         shopPane.setVisible(true);
     }
     public void closeShopPane(){
@@ -625,6 +666,7 @@ public class GameController {
 
     //SWITCHING BACK TO MAIN
     public void switchToMain(ActionEvent event) throws IOException {
+        gameEngine.stop();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxmls/main_screen.fxml"));
         Parent root = loader.load();
 
@@ -635,4 +677,12 @@ public class GameController {
         stage.show();
     }
     // =====
+
+    // Getters, setters
+    public void setReasonOfDeathText(String text) {
+        this.reasonOfDeathText.setText(text);
+    }
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
 }

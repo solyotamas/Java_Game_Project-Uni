@@ -10,7 +10,7 @@ public class Hill extends Terrain {
     private static final Random rand = new Random();
 
     public Hill(int row, int col) {
-        super(row, col, getRandomHillImage(), 2, true);
+        super(row, col, getRandomHillImage(), 3, true);
     }
 
     private static Image getRandomHillImage() {

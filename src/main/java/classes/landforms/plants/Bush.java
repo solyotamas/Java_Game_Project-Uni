@@ -12,13 +12,14 @@ public class Bush extends Plant {
     public static final int HEIGHT_IN_TILES = 1;
 
     private static final int price = 500;
+    private static final int nutrition = 80;
 
     public Bush(double x, double y, double depth) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, getRandomBushImage(), depth, price);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, getRandomBushImage(), depth, price, nutrition);
     }
 
     public Bush(double x, double y, double depth, Image img) {
-        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, img, depth, price);
+        super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, img, depth, price, nutrition);
     }
 
     public static Image getRandomBushImage() {

@@ -12,6 +12,7 @@ public class Ranger extends Human {
     private static double speed = 1.5;
     private static final String imgURL = "/images/animated/ranger.png";
     private double lastPaidHour;
+    private static final int price = 5000;
 
     private Carnivore prey;
 
@@ -80,8 +81,13 @@ public class Ranger extends Human {
 
         move(dir, stepX, stepY);
     }
+
     public Carnivore getPrey() {
         return prey;
+    }
+    public void setPrey(Carnivore prey) { this.prey = prey;}
+    public int getPrice() {
+        return price;
     }
     // =====
 

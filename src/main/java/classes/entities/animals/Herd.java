@@ -1,10 +1,6 @@
 package classes.entities.animals;
 
-import classes.entities.Direction;
-import classes.terrains.Terrain;
-
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Herd {
@@ -13,6 +9,7 @@ public class Herd {
 
     private static final Random rand = new Random();
     private final int MAX_SIZE = 5;
+    private boolean hasBredThisRest = false;
 
     public Herd(ArrayList<Animal> animals){
         members = animals;
@@ -66,6 +63,8 @@ public class Herd {
 
         members.add(animal);
         animal.setIsInAHerd(true);
+        animal.setHunger(leader.getHunger());
+        animal.setThirst(leader.getThirst());
         animal.setHerd(this);
     }
 
@@ -99,6 +98,15 @@ public class Herd {
         if (members.size() < 2) return;
         leader = members.get(0);
     }
+    public void setHasBredThisRest(boolean hasBred) {
+        this.hasBredThisRest = hasBred;
+    }
 
+    public boolean getHasBredThisRest() {
+        return hasBredThisRest;
+    }
 
+    public int getMAX_SIZE(){
+        return MAX_SIZE;
+    }
 }

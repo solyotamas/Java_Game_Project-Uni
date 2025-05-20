@@ -9,8 +9,8 @@ import classes.entities.animals.Herbivore;
 public class Elephant extends Herbivore {
 
     //just so it looks clean
-  private static final int price = 500;
-  private static final int lifeExpectancy = 60;
+    private static final int price = 3000;
+    private static final int lifeExpectancy = 60;
 
   private static final int frameWidth = 90;
   private static final int frameHeight = 88;
