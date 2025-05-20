@@ -355,9 +355,6 @@ public class GameBoard{
         return path;
     }
 
-
-
-
     //Movement for jeeps
     public ArrayList<Terrain> findRoadPathDijkstra(Terrain start, Terrain goal) {
         if (start == null || goal == null) return new ArrayList<>();
@@ -399,6 +396,7 @@ public class GameBoard{
 
         return path;
     }
+
     public ArrayList<Terrain> getRoadNeighbors(Terrain tile) {
         ArrayList<Terrain> neighbors = new ArrayList<>();
 
@@ -420,6 +418,7 @@ public class GameBoard{
 
         return neighbors;
     }
+
     public ArrayList<Terrain> getRoadTerrains() {
         ArrayList<Terrain> roadTiles = new ArrayList<>();
         for (int x = 0; x < terrainGrid.length; x++) {
@@ -433,9 +432,7 @@ public class GameBoard{
         return roadTiles;
     }
 
-
-
-    //TODO simplify createPlant and generatePlants into one, idk how tho
+    // Generating plants when new game
     private void createPlant(Class<? extends Plant> plantClass, int x, int y) {
         if ((x < 11 && y < 5) || (x > COLUMNS - 12 && y > ROWS - 6)) return;
 
@@ -504,7 +501,7 @@ public class GameBoard{
         }
     }
 
-    //road updates
+    // Road updates
     private void updateRoadAndNeighbors(int x, int y) {
         updateRoadTextureAt(x, y);
         updateRoadTextureAt(x + 1, y);

@@ -426,8 +426,6 @@ public class GameController {
             e.printStackTrace();
             return null;
         }
-
-
     }
 
     // ==== RANGERS

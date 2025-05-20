@@ -26,8 +26,7 @@ import javafx.util.Pair;
 
 import java.util.*;
 
-import static classes.Difficulty.EASY;
-import static classes.Difficulty.MEDIUM;
+import static classes.Difficulty.*;
 import static classes.entities.animals.AnimalState.*;
 
 public class GameEngine {
@@ -57,17 +56,16 @@ public class GameEngine {
 
     private ArrayList<Ranger> rangers;
     private ArrayList<Jeep> jeeps;
-    public ArrayList<Road> roads;
+    private ArrayList<Road> roads;
 
-    public Pair<Integer, Integer> entrance;
-    public Pair<Integer, Integer> exit;
+    private Pair<Integer, Integer> entrance;
+    private Pair<Integer, Integer> exit;
 
-    public Difficulty difficulty;
+    private Difficulty difficulty;
     private ArrayList<Integer> conditions;
 
-    public ArrayList<Plant> plants;
-    public ArrayList<Lake> lakes;
-
+    private ArrayList<Plant> plants;
+    private ArrayList<Lake> lakes;
 
     //need
     private final Image hungerForCarnivore = new Image(GameEngine.class.getResource("/images/hunger.png").toExternalForm());
@@ -89,13 +87,9 @@ public class GameEngine {
                 minPlants = 3;
                 maxPlants = 6;
             }
-            case EASY -> {
+            default -> {
                 minPlants = 6;
                 maxPlants = 9;
-            }
-            default -> {
-                minPlants = 3;
-                maxPlants = 6;
             }
         }
 
@@ -114,7 +108,6 @@ public class GameEngine {
         roads = new ArrayList<Road>();
         plants = new ArrayList<Plant>();
         lakes = new ArrayList<Lake>();
-
 
         entrance = new Pair<>(0, 0);
         exit = new Pair<>(0, 0);
@@ -154,7 +147,7 @@ public class GameEngine {
                 //== ANIMALS
                 updateAnimalStates();
 
-                //Herds
+                //== HERDS
                 formNewHerds();
                 checkToJoinHerds();
                 cleanupSmallHerds(carnivoreherds);
@@ -168,12 +161,8 @@ public class GameEngine {
                 checkIfJeepCanStart();
                 updateJeepPositions();
 
-
                 //== VISUALS
                 sortUiLayer();
-
-                //LOG
-                //logWhatever();
 
                 //== TOURISTS
                 maybeSpawnTourist();
@@ -201,7 +190,6 @@ public class GameEngine {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
     }
-
 
     // ==== SPAWNING TOURISTS
     private void maybeSpawnTourist() {
@@ -267,6 +255,7 @@ public class GameEngine {
             }
         }
     }
+
     private void checkToJoinHerds() {
         // --- Herbivores ---
         for (Herbivore herbivore : herbivores) {
@@ -314,6 +303,7 @@ public class GameEngine {
             }
         }
     }
+
     private void cleanupSmallHerds(List<Herd> herds) {
         List<Herd> toRemove = new ArrayList<>();
 
@@ -333,21 +323,16 @@ public class GameEngine {
         herds.removeAll(toRemove);
     }
 
-
     private void updateHerdStates() {
         updateHerbivoreHerdStates();
         updateCarnivoreHerdStates();
     }
+
     private void updateHerbivoreHerdStates() {
         for (Herd herd : herbivoreherds) {
             herd.assignNewLeader();
 
             Animal leader = herd.getLeader();
-            /*
-            if(leader.getTarget() == null){
-                leader.transitionTo(IDLE);
-                return;
-            }*/
 
             boolean isAnyManuallyPaused = herd.getMembers().stream().anyMatch(Animal::isManuallyPaused);
             if (isAnyManuallyPaused) continue;
@@ -359,6 +344,7 @@ public class GameEngine {
         }
         cleanupSmallHerds(herbivoreherds);
     }
+
     private void handleHerbivoreInHerd(Animal animal, Animal leader) {
         switch (animal.getState()) {
             case MOVING -> {
@@ -422,6 +408,7 @@ public class GameEngine {
             }
         }
     }
+
     private void updateCarnivoreHerdStates() {
         for (Herd herd : carnivoreherds) {
             herd.assignNewLeader();
@@ -436,14 +423,13 @@ public class GameEngine {
         }
         cleanupSmallHerds(carnivoreherds);
     }
+
     private void handleCarnivoreInHerd(Animal animal, Animal leader) {
         Carnivore leaderCarnivore = (Carnivore) leader;
 
         Terrain terrainUnder = gameBoard.getTerrainAtDouble(leaderCarnivore.getX(), leaderCarnivore.getY());
 
         if (animal == leader) {
-            // clearer naming
-
             switch (leaderCarnivore.getState()) {
                 case MOVING -> leaderCarnivore.moveTowardsTarget(terrainUnder);
                 case RESTING -> leaderCarnivore.rest();
@@ -501,9 +487,6 @@ public class GameEngine {
             }
         }
     }
-
-
-
     // ======
 
     // ==== VISUALS
@@ -519,6 +502,7 @@ public class GameEngine {
             uiLayer.getChildren().setAll(sortedNodes);
         });
     }
+
     private double extractDepthY(Node node) {
         if (node instanceof Animal animal)
             return animal.getY();
@@ -534,7 +518,6 @@ public class GameEngine {
             return Double.MAX_VALUE;
     }
     // =====
-
 
     // ==== UPDATE STATES
     // Animal
