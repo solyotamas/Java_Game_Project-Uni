@@ -44,7 +44,7 @@ public class GameEngine {
     protected ArrayList<Carnivore> carnivores;
     protected ArrayList<Herbivore> herbivores;
     protected ArrayList<Tourist> tourists;
-    private int jeepCount ;
+    private int jeepCount;
     private int ticketPrice = 100;
     private int money;
     private final Random rand = new Random();
@@ -69,6 +69,103 @@ public class GameEngine {
     public ArrayList<Lake> lakes;
 
 
+
+
+    // GETTERS / SETTERS
+    public ArrayList<Integer> getConditions() {
+        return this.conditions;
+    }
+
+    public Difficulty getDifficulty() {
+        return this.difficulty;
+    }
+
+    public double getWinningHoursNeeded() {
+        return this.winningHoursNeeded;
+    }
+
+    public int getMoney() {
+        return this.money;
+    }
+
+    public void setMoney(int money_p) {
+        this.money = money_p;
+    }
+
+    public ArrayList<Carnivore> getCarnivores() {
+        return this.carnivores;
+    }
+
+    public ArrayList<Herbivore> getHerbivores() {
+        return this.herbivores;
+    }
+
+    public int getJeepCount() {
+        return this.jeepCount;
+    }
+
+    public int getTicketPrice() {
+        return this.ticketPrice;
+    }
+
+    public ArrayList<Plant> getPlants() {
+        return this.plants;
+    }
+
+    public ArrayList<Lake> getLakes() {
+        return this.lakes;
+    }
+
+    public ArrayList<Tourist> getTourists() {
+        return tourists;
+    }
+
+    public ArrayList<Ranger> getRangers() {
+        return rangers;
+    }
+
+    public boolean getCanCheckForLose() {
+        return canCheckForLose;
+    }
+
+    public boolean getCanCheckForWin() {
+        return canCheckForWin;
+    }
+
+    public void setCanCheckForLose(boolean can) {
+        this.canCheckForLose = can;
+    }
+
+    public void setCanCheckForWin(boolean can) {
+        this.canCheckForWin = can;
+    }
+
+    public void setSpentTime(double time) {
+        this.spentTime = time;
+    }
+
+    public void setWinningHoursNeeded(double hours) {
+        this.winningHoursNeeded = hours;
+    }
+
+    public void setWinningHours(double wh) {
+        this.winningHours = wh;
+    }
+
+    public double getSpentTime() {
+        return this.spentTime;
+    }
+
+    public void setFirstConditionMetTime (double what) {
+        this.firstConditionMetTime = what;
+    }
+
+    public double getFirstConditionMetTime() {
+        return firstConditionMetTime;
+    }
+
+    // ==========
+
     //need
     private final Image hungerForCarnivore = new Image(GameEngine.class.getResource("/images/hunger.png").toExternalForm());
 
@@ -76,9 +173,11 @@ public class GameEngine {
         this.gameController = gameController;
         this.difficulty = difficulty;
 
-        this.gameBoard = new GameBoard(terrainLayer, uiLayer);
-        gameBoard.setupGroundBoard();
-        gameBoard.generatePlants(rand.nextInt(1) + 1);
+        if (terrainLayer != null && uiLayer != null && gameController != null) {
+            this.gameBoard = new GameBoard(terrainLayer, uiLayer);
+            gameBoard.setupGroundBoard();
+            gameBoard.generatePlants(rand.nextInt(1) + 1);
+        }
 
         carnivores = new ArrayList<Carnivore>();
         herbivores = new ArrayList<Herbivore>();
@@ -1077,7 +1176,7 @@ public class GameEngine {
         return false;
     }
 
-    private boolean checkConditions() {
+    public boolean checkConditions() {
         return money >= conditions.get(0)
                 && herbivores.size() >= conditions.get(1)
                 && carnivores.size() >= conditions.get(2)
