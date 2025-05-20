@@ -26,19 +26,6 @@ public class ElephantTest {
             // JavaFX már elindult
         }
     }
-//    public static void initJavaFX() {
-//        new JFXPanel(); // Ezzel elindul a JavaFX környezet
-//    }
-
-//    @BeforeAll
-//    static void initToolkit() throws InterruptedException {
-//        final CountDownLatch latch = new CountDownLatch(1);
-//        Platform.startup(() -> {
-//            // semmi dolgunk, csak elindítjuk
-//            latch.countDown();
-//        });
-//        latch.await();
-//    }
 
     @BeforeEach
     void setUp() {
@@ -157,6 +144,72 @@ public class ElephantTest {
         assertEquals(DOWN, elephant.getCurrentDirection());
     }
      */
+
+    @Test
+    public void testMoveTowardsLeader() {
+        Elephant leader = new Elephant(100, 100);
+        Elephant follower = new Elephant(50, 50);
+        leader.transitionTo(AnimalState.RESTING);
+
+        follower.moveTowardsLeader(leader);
+
+        assertTrue(follower.getX() != 50 || follower.getY() != 50); // Pozíció változott
+        // Ha elég közel van, akkor az állapot öröklődik
+        for (int i = 0; i < 200; i++) {
+            follower.moveTowardsLeader(leader);
+        }
+
+        follower.moveTowardsLeader(leader);
+        //System.out.println("leader: " + leader.getX() + ", " + leader.getY());
+        //System.out.println("follower: " + follower.getX() + ", " + follower.getY());
+        assertEquals(AnimalState.RESTING, follower.getState());
+    }
+
+    @Test
+    public void testSetBornAtAndAgingAnimal() {
+        //Elephant elephant = new Elephant(100, 100);
+        elephant.setBornAt(0.0);
+        elephant.agingAnimal(240.0); // 10 nap múlva
+
+        assertEquals(elephant.getStartingAge() + 10, elephant.getAge());
+        assertTrue(elephant.getAppetite() >= 1); // étvágy nő az idővel
+    }
+
+    @Test
+    public void testOldEnoughToDie() {
+        //Elephant elephant = new Elephant(100, 100);
+        elephant.setBornAt(0.0);
+
+        // idő még nem telt el (nem hal meg)
+        assertFalse(elephant.oldEnoughToDie(24.0)); // 1 nap
+
+        // épp elérte a várható élettartamot
+        double hoursUntilDeath = (elephant.getLifeExpectancy() - elephant.getStartingAge()) * 24.0;
+        assertTrue(elephant.oldEnoughToDie(hoursUntilDeath + 0.1));
+    }
+
+    @Test
+    public void testGetSellPrice() {
+        //Elephant elephant = new Elephant(100, 100);
+        int base = elephant.getPrice() * 3 / 5;
+        int ageSegment = elephant.getLifeExpectancy() / 5;
+
+        for (int i = 0; i <= 5; i++) {
+            elephant.setBornAt(0);
+            elephant.agingAnimal((elephant.getStartingAge() + i * ageSegment) * 24.0);
+            int price = elephant.getSellPrice();
+
+            int expected = switch (i) {
+                case 0 -> base * 5 / 5;
+                case 1 -> base * 4 / 5;
+                case 2 -> base * 3 / 5;
+                case 3 -> base * 2 / 5;
+                default -> base / 5;
+            };
+            assertEquals(expected, price);
+        }
+    }
+
 
 
 }
