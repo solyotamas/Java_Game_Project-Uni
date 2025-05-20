@@ -12,8 +12,9 @@ public class Turtle extends Herbivore {
     private static final int frameHeight = 52;
     private static final double speed = 0.2;
     private static final String imgURL = "/images/animated/turtle.png";
+    private static final String childImgURL = "/images/animated/turtle_baby.png";
 
-    public Turtle(double x, double y){
-        super(x,y,frameWidth, frameHeight, imgURL, speed, price, lifeExpectancy);
+    public Turtle(double x, double y, boolean isChild){
+        super(x,y,frameWidth, frameHeight, childImgURL,imgURL, speed, price, lifeExpectancy, isChild);
     }
 }
