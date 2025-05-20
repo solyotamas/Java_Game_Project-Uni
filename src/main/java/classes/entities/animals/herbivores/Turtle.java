@@ -13,7 +13,7 @@ public class Turtle extends Herbivore {
     private static final String imgURL = "/images/animated/turtle.png";
     private static final String childImgURL = "/images/animated/turtle_baby.png";
 
-    public Turtle(double x, double y, boolean isChild){
-        super(x,y,frameWidth, frameHeight, childImgURL,imgURL, speed, price, lifeExpectancy, isChild);
+    public Turtle(double x, double y, boolean isChild) {
+        super(x, y, frameWidth, frameHeight, childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
     }
 }

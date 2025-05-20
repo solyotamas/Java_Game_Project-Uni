@@ -11,7 +11,9 @@
 
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.image.Image?>
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/main_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.ScreenController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/main_screen.css"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="classes.controllers.ScreenController">
     <children>
         <Button styleClass="volumeButton" onAction="#toggleVolume" layoutX="10.0" layoutY="10.0"
                 style="-fx-background-color: transparent; -fx-padding: 0;"
@@ -19,61 +21,64 @@
             <graphic>
                 <ImageView fx:id="volumeIcon" fitHeight="52.0" fitWidth="52.0" preserveRatio="true">
                     <image>
-                        <Image url="@../images/medium.png" />
+                        <Image url="@../images/medium.png"/>
                     </image>
                 </ImageView>
             </graphic>
         </Button>
         <!-- Easy Button -->
-        <ToggleButton fx:id="easyToggle" layoutX="800.0" layoutY="472.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="320.0">
+        <ToggleButton fx:id="easyToggle" layoutX="800.0" layoutY="472.0" mnemonicParsing="false" prefHeight="97.0"
+                      prefWidth="320.0">
             <graphic>
                 <Text fill="WHITE" text="Easy">
                     <effect>
                         <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
                             <color>
-                                <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                                <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338"/>
                             </color>
                         </DropShadow>
                     </effect>
-               <font>
-                  <Font name="Franklin Gothic Demi" size="42.0" />
-               </font>
+                    <font>
+                        <Font name="Franklin Gothic Demi" size="42.0"/>
+                    </font>
                 </Text>
             </graphic>
         </ToggleButton>
 
         <!-- Medium Button -->
-        <ToggleButton fx:id="mediumToggle" layoutX="800.0" layoutY="589.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="320.0">
+        <ToggleButton fx:id="mediumToggle" layoutX="800.0" layoutY="589.0" mnemonicParsing="false" prefHeight="97.0"
+                      prefWidth="320.0">
             <graphic>
                 <Text fill="WHITE" text="Medium">
                     <effect>
                         <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
                             <color>
-                                <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                                <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338"/>
                             </color>
                         </DropShadow>
                     </effect>
-               <font>
-                  <Font name="Franklin Gothic Demi" size="42.0" />
-               </font>
+                    <font>
+                        <Font name="Franklin Gothic Demi" size="42.0"/>
+                    </font>
                 </Text>
             </graphic>
         </ToggleButton>
 
         <!-- Hard Button -->
-        <ToggleButton fx:id="hardToggle" layoutX="800.0" layoutY="706.0" mnemonicParsing="false" prefHeight="97.0" prefWidth="320.0">
+        <ToggleButton fx:id="hardToggle" layoutX="800.0" layoutY="706.0" mnemonicParsing="false" prefHeight="97.0"
+                      prefWidth="320.0">
             <graphic>
                 <Text fill="WHITE" text="Hard">
                     <effect>
                         <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
                             <color>
-                                <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                                <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338"/>
                             </color>
                         </DropShadow>
                     </effect>
-               <font>
-                  <Font name="Franklin Gothic Demi" size="42.0" />
-               </font>
+                    <font>
+                        <Font name="Franklin Gothic Demi" size="42.0"/>
+                    </font>
                 </Text>
             </graphic>
         </ToggleButton>
@@ -83,41 +88,43 @@
             <effect>
                 <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                     <color>
-                        <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                        <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338"/>
                     </color>
                 </DropShadow>
             </effect>
-         <font>
-            <Font name="Franklin Gothic Demi" size="96.0" />
-         </font>
+            <font>
+                <Font name="Franklin Gothic Demi" size="96.0"/>
+            </font>
         </Label>
 
         <!-- Back Button -->
-        <Button fx:id="backBtn" layoutX="561.0" layoutY="843.0" mnemonicParsing="false" onAction="#switchToMain" prefHeight="71.0" prefWidth="198.0" text="Back" textFill="WHITE">
+        <Button fx:id="backBtn" layoutX="561.0" layoutY="843.0" mnemonicParsing="false" onAction="#switchToMain"
+                prefHeight="71.0" prefWidth="198.0" text="Back" textFill="WHITE">
             <effect>
                 <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                     <color>
-                        <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                        <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338"/>
                     </color>
                 </DropShadow>
             </effect>
-         <font>
-            <Font name="Franklin Gothic Demi" size="42.0" />
-         </font>
+            <font>
+                <Font name="Franklin Gothic Demi" size="42.0"/>
+            </font>
         </Button>
 
         <!-- Start Button -->
-        <Button fx:id="startBtn" layoutX="1161.0" layoutY="843.0" mnemonicParsing="false" onAction="#switchToGame" prefHeight="71.0" prefWidth="198.0" text="Start" textFill="WHITE">
+        <Button fx:id="startBtn" layoutX="1161.0" layoutY="843.0" mnemonicParsing="false" onAction="#switchToGame"
+                prefHeight="71.0" prefWidth="198.0" text="Start" textFill="WHITE">
             <effect>
                 <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                     <color>
-                        <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                        <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338"/>
                     </color>
                 </DropShadow>
             </effect>
-         <font>
-            <Font name="Franklin Gothic Demi" size="42.0" />
-         </font>
+            <font>
+                <Font name="Franklin Gothic Demi" size="42.0"/>
+            </font>
         </Button>
     </children>
 </AnchorPane>

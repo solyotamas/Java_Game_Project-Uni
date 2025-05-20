@@ -13,7 +13,7 @@ public class Kangaroo extends Herbivore {
     private static final String imgURL = "/images/animated/kangaroo.png";
     private static final String childImgURL = "/images/animated/kangaroo_baby.png";
 
-    public Kangaroo(double x, double y, boolean isChild){
-        super(x,y,frameWidth, frameHeight,childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
+    public Kangaroo(double x, double y, boolean isChild) {
+        super(x, y, frameWidth, frameHeight, childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
     }
 }

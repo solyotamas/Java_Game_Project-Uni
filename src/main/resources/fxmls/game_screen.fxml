@@ -21,1435 +21,1640 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.RowConstraints?>
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/game_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.GameController">
-   <children>
-      <HBox fx:id="navbar" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="75.0" prefWidth="1920.0" spacing="50.0" style="-fx-background-color: #EC9043;">
-         <padding>
-            <Insets bottom="10.0" left="50.0" right="10.0" top="10.0" />
-         </padding>
-         <children>
-            <StackPane prefHeight="0.0" prefWidth="0.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="176.0" />
-                  <HBox alignment="CENTER" prefHeight="55.0" prefWidth="154.0" spacing="10.0">
-                     <children>
-                        <Label fx:id="moneyLabel" prefHeight="33.0" prefWidth="216.0" style="-fx-alignment: center;" textFill="#3e2415">
-                           <font>
-                              <Font name="Calibri Bold" size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="15.0" />
-                           </HBox.margin>
-                        </Label>
-                        <ImageView fitHeight="37.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/money.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets right="15.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </StackPane>
-            <StackPane prefHeight="0.0" prefWidth="0.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="250.0" />
-                  <HBox alignment="CENTER" prefHeight="55.0" prefWidth="192.0" spacing="10.0">
-                     <children>
-                        <Label fx:id="gameTimeLabel" prefHeight="33.0" prefWidth="300.0" style="-fx-alignment: center;" text="0 days 0 hours" textFill="#3e2415">
-                           <font>
-                              <Font name="Calibri Bold" size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="15.0" />
-                           </HBox.margin>
-                        </Label>
-                        <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                           <image>
-                              <Image url="@../images/time.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets right="15.0" />
-                           </HBox.margin>
-                        </ImageView>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </StackPane>
-            <HBox alignment="CENTER" prefHeight="44.0" prefWidth="484.0" spacing="15.0">
-               <children>
-                  <Label prefHeight="33.0" prefWidth="117.0" style="-fx-alignment: center;" text="Game speed" textFill="#3e2415">
-                     <font>
-                        <Font name="Calibri Bold" size="20.0" />
-                     </font>
-                  </Label>
-                  <Button fx:id="gameSpeedRelaxedButton" mnemonicParsing="false" onAction="#speedGameToRelaxed" prefHeight="44.0" prefWidth="100.0" style="-fx-background-radius: 12px;" text="Relaxed" textFill="#3e2415">
-                     <font>
-                        <Font name="Calibri Bold" size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="gameSpeedSteadyButton" mnemonicParsing="false" onAction="#speedGameToSteady" prefHeight="44.0" prefWidth="110.0" style="-fx-background-radius: 12px;" text="Steady" textFill="#3e2415">
-                     <font>
-                        <Font name="Calibri Bold" size="20.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="gameSpeedRapidButton" mnemonicParsing="false" onAction="#speedGameToRapid" prefHeight="44.0" prefWidth="100.0" style="-fx-background-radius: 12px;" text="Rapid" textFill="#3e2415">
-                     <font>
-                        <Font name="Calibri Bold" size="20.0" />
-                     </font>
-                  </Button>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="56.0" prefWidth="553.0" spacing="15.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="56.0" prefWidth="273.0" spacing="15.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <children>
-                  <Button styleClass="volumeButton" onAction="#toggleVolume"
-                          style="-fx-background-color: transparent; -fx-padding: 0;">
-                     <graphic>
-                        <ImageView fx:id="volumeIcon" fitHeight="40.0" fitWidth="40.0" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/medium.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button mnemonicParsing="false" onAction="#showSaveOverlay" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;" styleClass="fancyBtn" textFill="#3e2415">
-                     <font>
-                        <Font name="Calibri" size="24.0" />
-                     </font>
-                     <graphic>
-                        <Text fill="WHITE" text="Save">
-                           <effect>
-                              <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
-                                 <color>
-                                    <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                           <font>
-                              <Font name="Franklin Gothic Demi" size="24.0" />
-                           </font>
-                        </Text>
-                     </graphic>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-                  <Button mnemonicParsing="false" onAction="#switchToMain" prefHeight="31.0" prefWidth="118.0" style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;" styleClass="fancyBtn" textFill="#3e2415">
-                     <font>
-                        <Font name="Calibri" size="24.0" />
-                     </font>
-                     <graphic>
-                        <Text fill="WHITE" text="Exit">
-                           <effect>
-                              <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
-                                 <color>
-                                    <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                           <font>
-                              <Font name="Franklin Gothic Demi" size="24.0" />
-                           </font>
-                        </Text>
-                     </graphic>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </Button>
-               </children>
-            </HBox>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" layoutY="1006.0" prefHeight="75.0" prefWidth="1920.0" spacing="50.0" style="-fx-background-color: #EC9043;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <padding>
-            <Insets bottom="15.0" left="30.0" right="30.0" top="15.0" />
-         </padding>
-         <children>
-            <StackPane prefHeight="0.0" prefWidth="0.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
-                  <HBox alignment="CENTER" prefHeight="45.0" prefWidth="125.0" spacing="10.0">
-                     <children>
-                        <ImageView fitHeight="23.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/jeep.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="15.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label fx:id="jeepCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="174.0" style="-fx-alignment: center;" textFill="#3e2415">
-                           <font>
-                              <Font name="Calibri Bold" size="20.0" />
-                           </font>
-                           <opaqueInsets>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </opaqueInsets>
-                           <HBox.margin>
-                              <Insets right="15.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </StackPane>
-            <StackPane prefHeight="0.0" prefWidth="0.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
-                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
-                     <children>
-                        <ImageView fitHeight="37.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/zebra.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="15.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label fx:id="herbivoreCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="222.0" style="-fx-alignment: center;" textFill="#3e2415">
-                           <font>
-                              <Font name="Calibri Bold" size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets right="15.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </StackPane>
-            <StackPane prefHeight="0.0" prefWidth="0.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
-                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
-                     <children>
-                        <ImageView fitHeight="37.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/tiger.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="15.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label fx:id="carnivoreCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="224.0" style="-fx-alignment: center;" textFill="#3e2415">
-                           <font>
-                              <Font name="Calibri Bold" size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets right="15.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </StackPane>
-            <StackPane prefHeight="0.0" prefWidth="0.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
-                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
-                     <children>
-                        <ImageView fitHeight="23.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/ticket.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="15.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label fx:id="ticketPriceLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="165.0" style="-fx-alignment: center;" text="250 000" textFill="#3e2415">
-                           <font>
-                              <Font name="Calibri Bold" size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets right="15.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </StackPane>
-            <StackPane prefHeight="0.0" prefWidth="0.0">
-               <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0" />
-                  <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
-                     <children>
-                        <ImageView fitHeight="32.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/camera.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="15.0" />
-                           </HBox.margin>
-                        </ImageView>
-                        <Label fx:id="touristCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="33.0" prefWidth="175.0" style="-fx-alignment: center;" textFill="#3e2415">
-                           <font>
-                              <Font name="Calibri Bold" size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets right="15.0" />
-                           </HBox.margin>
-                        </Label>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <StackPane.margin>
-                        <Insets />
-                     </StackPane.margin>
-                  </HBox>
-               </children>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-            </StackPane>
-         </children>
-      </HBox>
-      <StackPane fx:id="rootPane" layoutY="75.0">
-         <children>
-            <Pane fx:id="terrainLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" />
-            <Pane fx:id="uiLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0">
-               <children>
-
-                                    <Button id="market" fx:id="marketButton" layoutX="1800.0" mnemonicParsing="false" onMouseClicked="#openShopPane" prefHeight="120.0" prefWidth="120.0" />
-               </children></Pane>
-            <Pane fx:id="ghostLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" visible="false" />
-            <Pane fx:id="shopPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1150.0" stylesheets="@../css/game_screen.css" visible="false">
-               <children>
-                  <Label layoutX="486.0" layoutY="24.0" styleClass="diffLabel" text="Market" textFill="WHITE">
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
-                           <color>
-                              <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                     <font>
-                        <Font name="Franklin Gothic Demi" size="58.0" />
-                     </font>
-                  </Label>
-                  <Button layoutX="502.0" layoutY="658.0" mnemonicParsing="false" onMouseClicked="#closeShopPane" prefHeight="58.0" prefWidth="152.0" styleClass="fancyBtn" text="" textFill="WHITE">
-                     <graphic>
-                        <Text fill="WHITE" text="Back">
-                           <effect>
-                              <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
-                                 <color>
-                                    <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                           <font>
-                              <Font name="Franklin Gothic Demi" size="28.0" />
-                           </font>
-                        </Text>
-                     </graphic>
-                  </Button>
-                  <GridPane hgap="10.0" layoutX="117.0" layoutY="120.0" prefHeight="507.0" prefWidth="923.0" style="-fx-background-color: FFD884; -fx-background-radius: 20px;" vgap="10.0">
-                     <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                     </columnConstraints>
-                     <rowConstraints>
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                     </rowConstraints>
-                     <children>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="1">
-                           <children>
-                              <ImageView fitHeight="55.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/bush1.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Bush 500$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Plant" textFill="#74a44e">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyBush" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                           <GridPane.margin>
-                              <Insets />
-                           </GridPane.margin>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="132.0" prefWidth="129.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="3">
-                           <children>
-                              <ImageView fitHeight="51.0" fitWidth="96.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/lake.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Lake 2500$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="18.0" prefWidth="98.0" text="Water" textFill="#4d97ff">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyLake" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                           <GridPane.margin>
-                              <Insets />
-                           </GridPane.margin>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="166.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="2">
-                           <children>
-                              <ImageView fitHeight="55.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/tree2.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Tree 800$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Plant" textFill="#74a44e">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyTree" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                           <GridPane.margin>
-                              <Insets />
-                           </GridPane.margin>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="132.0" prefWidth="129.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;">
-                           <children>
-                              <ImageView fitHeight="47.0" fitWidth="46.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/grass.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Grass 300$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Plant" textFill="#74a44e">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyGrass" prefHeight="26.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="132.0" prefWidth="129.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="4">
-                           <children>
-                              <ImageView fitHeight="40.0" fitWidth="74.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/jeep.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets bottom="7.0" top="15.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Jeep 4500$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyJeep" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets top="10.0" />
-                                 </padding>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="5">
-                           <children>
-                              <ImageView fitHeight="55.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/road.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Road 50$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyRoad" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.rowIndex="1">
-                           <children>
-                              <ImageView fitHeight="53.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/elephant.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="6.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Elephant 3000$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyElephant" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <children>
-                              <ImageView fitHeight="44.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/rhino.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="17.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Rhino 2500$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyRhino" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                           <children>
-                              <ImageView fitHeight="42.0" fitWidth="65.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/hippo.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="20.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" graphicTextGap="0.0" prefHeight="23.0" prefWidth="113.0" text="Hippo 1600$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" graphicTextGap="0.0" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyHippo" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="4" GridPane.rowIndex="1">
-                           <children>
-                              <ImageView fitHeight="52.0" fitWidth="59.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/zebra.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="7.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Zebra 2400$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyZebra" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="5" GridPane.rowIndex="1">
-                           <children>
-                              <ImageView fitHeight="48.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/kangaroo.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="9.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Kangaroo 2000$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyKangaroo" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="6" GridPane.rowIndex="1">
-                           <children>
-                              <ImageView fitHeight="44.0" fitWidth="43.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/turtle.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" top="25.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Turtle 1300$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyTurtle" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                           <children>
-                              <ImageView fitHeight="44.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/buffalo.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="15.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Buffalo 2500$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyBuffalo" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.rowIndex="2">
-                           <children>
-                              <ImageView fitHeight="42.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/lion.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="13.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Lion 1500$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore" textFill="#ff3a00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyLion" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <children>
-                              <ImageView fitHeight="41.0" fitWidth="57.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/tiger.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="14.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Tiger 1300$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore" textFill="#ff3a00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyTiger" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="2" GridPane.rowIndex="2">
-                           <children>
-                              <ImageView fitHeight="41.0" fitWidth="64.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/panther.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="14.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Panther 1200$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore" textFill="#ff3a00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyPanther" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="6">
-                           <children>
-                              <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/ranger.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label wrapText="true" alignment="CENTER" textAlignment="CENTER" prefHeight="43.0" prefWidth="113.0" text="Ranger 5000$/month" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyRanger" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                        <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0" style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;" GridPane.columnIndex="3" GridPane.rowIndex="2">
-                           <children>
-                              <ImageView fitHeight="23.0" fitWidth="58.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../images/vulture.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets bottom="8.0" top="22.0" />
-                                 </VBox.margin>
-                              </ImageView>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Vulture 800$" textFill="#3e2415">
-                                 <VBox.margin>
-                                    <Insets top="10.0" />
-                                 </VBox.margin>
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore" textFill="#ff3a00">
-                                 <font>
-                                    <Font name="Calibri Bold" size="16.0" />
-                                 </font>
-                                 <opaqueInsets>
-                                    <Insets />
-                                 </opaqueInsets>
-                              </Label>
-                              <Button mnemonicParsing="false" onAction="#buyVulture" prefHeight="44.0" prefWidth="57.0" styleClass="buyItem">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <effect>
-                              <DropShadow height="15.0" radius="7.0" width="15.0">
-                                 <color>
-                                    <Color red="0.30000001192092896" green="0.1712999939918518" blue="0.003000000026077032" opacity="0.26916030049324036" />
-                                 </color>
-                              </DropShadow>
-                           </effect>
-                        </VBox>
-                     </children>
-                     <opaqueInsets>
-                        <Insets />
-                     </opaqueInsets>
-                     <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-                     </padding>
-                  </GridPane>
-               </children>
-            </Pane>
-         </children>
-      </StackPane>
-   </children>
-   <AnchorPane fx:id="saveOverlay" prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/load_screen.css" visible="false" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-      <children>
-         <!-- Load Game Label -->
-         <Label layoutX="725.0" layoutY="115.0" styleClass="diffLabel" text="Save Game" textFill="WHITE">
-            <effect>
-               <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
-                  <color>
-                     <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
-                  </color>
-               </DropShadow>
-            </effect>
-            <font>
-               <Font name="Franklin Gothic Demi" size="96.0" />
-            </font>
-         </Label>
-
-         <Button layoutX="1157.0" layoutY="869.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
-            <graphic>
-               <Text fill="WHITE" text="Save">
-                  <effect>
-                     <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
-                        <color>
-                           <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
-                        </color>
-                     </DropShadow>
-                  </effect>
-                  <font>
-                     <Font name="Franklin Gothic Demi" size="42.0" />
-                  </font>
-               </Text>
-            </graphic>
-         </Button>
-
-         <Button layoutX="567.0" layoutY="869.0" mnemonicParsing="false" onAction="#hideSaveOverlay" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
-            <graphic>
-               <Text fill="WHITE" text="Back">
-                  <effect>
-                     <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
-                        <color>
-                           <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
-                        </color>
-                     </DropShadow>
-                  </effect>
-                  <font>
-                     <Font name="Franklin Gothic Demi" size="42.0" />
-                  </font>
-               </Text>
-            </graphic>
-         </Button>
-         <TextField layoutX="420.0" layoutY="390.0" prefHeight="48.0" prefWidth="1080.0" promptText="game" style="-fx-background-radius: 10px;">
-            <font>
-               <Font name="Calibri" size="24.0" />
-            </font></TextField>
-         <Label layoutX="420.0" layoutY="358.0" text="Save Game" textFill="#3e2415">
-            <font>
-               <Font name="Calibri" size="24.0" />
-            </font>
-         </Label>
-         <Pane id="saveTaken" fx:id="saveTaken" layoutX="683.0" layoutY="388.0" prefHeight="261.0" prefWidth="533.0" visible="false">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/game_screen.css"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="classes.controllers.GameController">
+    <children>
+        <HBox fx:id="navbar" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+              minWidth="-Infinity" prefHeight="75.0" prefWidth="1920.0" spacing="50.0"
+              style="-fx-background-color: #EC9043;">
+            <padding>
+                <Insets bottom="10.0" left="50.0" right="10.0" top="10.0"/>
+            </padding>
             <children>
-               <Label layoutX="59.0" layoutY="24.0" prefHeight="112.0" prefWidth="416.0" style="-fx-wrap-text: true;" text="This save name is taken. Do you want to overwrite the existing one?" textAlignment="CENTER" textFill="#683d26" wrapText="true">
-                  <font>
-                     <Font name="Calibri Bold" size="28.0" />
-                  </font>
-               </Label>
-               <Button layoutX="86.0" layoutY="152.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="150.0" text="" textFill="WHITE">
-                  <graphic>
-                     <Text fill="WHITE" text="No">
-                        <effect>
-                           <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
-                              <color>
-                                 <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
-                              </color>
-                           </DropShadow>
-                        </effect>
-                        <font>
-                           <Font name="Franklin Gothic Demi" size="42.0" />
-                        </font>
-                     </Text>
-                  </graphic>
-               </Button>
-               <Button id="yesBtn" layoutX="298.0" layoutY="152.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="150.0" text="" textFill="WHITE">
-                  <graphic>
-                     <Text fill="WHITE" text="Yes">
-                        <font>
-                           <Font name="Franklin Gothic Demi" size="42.0" />
-                        </font>
-                        <effect>
-                           <DropShadow blurType="ONE_PASS_BOX" height="18.0" radius="8.0" spread="1.0" width="16.0">
-                              <color>
-                                 <Color red="0.5333333611488342" green="0.4431372582912445" blue="0.003921568859368563" />
-                              </color>
-                           </DropShadow>
-                        </effect>
-                     </Text>
-                  </graphic>
-               </Button>
+                <StackPane prefHeight="0.0" prefWidth="0.0">
+                    <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK"
+                                   strokeType="INSIDE" strokeWidth="0.0"
+                                   style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="176.0"/>
+                        <HBox alignment="CENTER" prefHeight="55.0" prefWidth="154.0" spacing="10.0">
+                            <children>
+                                <Label fx:id="moneyLabel" prefHeight="33.0" prefWidth="216.0"
+                                       style="-fx-alignment: center;" textFill="#3e2415">
+                                    <font>
+                                        <Font name="Calibri Bold" size="20.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets left="15.0"/>
+                                    </HBox.margin>
+                                </Label>
+                                <ImageView fitHeight="37.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/money.png"/>
+                                    </image>
+                                    <HBox.margin>
+                                        <Insets right="15.0"/>
+                                    </HBox.margin>
+                                </ImageView>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                        </HBox>
+                    </children>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </StackPane>
+                <StackPane prefHeight="0.0" prefWidth="0.0">
+                    <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK"
+                                   strokeType="INSIDE" strokeWidth="0.0"
+                                   style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="250.0"/>
+                        <HBox alignment="CENTER" prefHeight="55.0" prefWidth="192.0" spacing="10.0">
+                            <children>
+                                <Label fx:id="gameTimeLabel" prefHeight="33.0" prefWidth="300.0"
+                                       style="-fx-alignment: center;" text="0 days 0 hours" textFill="#3e2415">
+                                    <font>
+                                        <Font name="Calibri Bold" size="20.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets left="15.0"/>
+                                    </HBox.margin>
+                                </Label>
+                                <ImageView fitHeight="28.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true"
+                                           HBox.hgrow="ALWAYS">
+                                    <image>
+                                        <Image url="@../images/time.png"/>
+                                    </image>
+                                    <HBox.margin>
+                                        <Insets right="15.0"/>
+                                    </HBox.margin>
+                                </ImageView>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                        </HBox>
+                    </children>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </StackPane>
+                <HBox alignment="CENTER" prefHeight="44.0" prefWidth="484.0" spacing="15.0">
+                    <children>
+                        <Label prefHeight="33.0" prefWidth="117.0" style="-fx-alignment: center;" text="Game speed"
+                               textFill="#3e2415">
+                            <font>
+                                <Font name="Calibri Bold" size="20.0"/>
+                            </font>
+                        </Label>
+                        <Button fx:id="gameSpeedRelaxedButton" mnemonicParsing="false" onAction="#speedGameToRelaxed"
+                                prefHeight="44.0" prefWidth="100.0" style="-fx-background-radius: 12px;" text="Relaxed"
+                                textFill="#3e2415">
+                            <font>
+                                <Font name="Calibri Bold" size="20.0"/>
+                            </font>
+                        </Button>
+                        <Button fx:id="gameSpeedSteadyButton" mnemonicParsing="false" onAction="#speedGameToSteady"
+                                prefHeight="44.0" prefWidth="110.0" style="-fx-background-radius: 12px;" text="Steady"
+                                textFill="#3e2415">
+                            <font>
+                                <Font name="Calibri Bold" size="20.0"/>
+                            </font>
+                        </Button>
+                        <Button fx:id="gameSpeedRapidButton" mnemonicParsing="false" onAction="#speedGameToRapid"
+                                prefHeight="44.0" prefWidth="100.0" style="-fx-background-radius: 12px;" text="Rapid"
+                                textFill="#3e2415">
+                            <font>
+                                <Font name="Calibri Bold" size="20.0"/>
+                            </font>
+                        </Button>
+                    </children>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="56.0" prefWidth="553.0" spacing="15.0">
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </HBox>
+                <HBox alignment="CENTER" prefHeight="56.0" prefWidth="273.0" spacing="15.0">
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                    <children>
+                        <Button styleClass="volumeButton" onAction="#toggleVolume"
+                                style="-fx-background-color: transparent; -fx-padding: 0;">
+                            <graphic>
+                                <ImageView fx:id="volumeIcon" fitHeight="40.0" fitWidth="40.0" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/medium.png"/>
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#showSaveOverlay" prefHeight="31.0" prefWidth="118.0"
+                                style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;"
+                                styleClass="fancyBtn" textFill="#3e2415">
+                            <font>
+                                <Font name="Calibri" size="24.0"/>
+                            </font>
+                            <graphic>
+                                <Text fill="WHITE" text="Save">
+                                    <effect>
+                                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0"
+                                                    width="16.0">
+                                            <color>
+                                                <Color red="0.24313725531101227" green="0.1411764770746231"
+                                                       blue="0.08235294371843338"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                    <font>
+                                        <Font name="Franklin Gothic Demi" size="24.0"/>
+                                    </font>
+                                </Text>
+                            </graphic>
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </Button>
+                        <Button mnemonicParsing="false" onAction="#switchToMain" prefHeight="31.0" prefWidth="118.0"
+                                style="-fx-background-color: linear-gradient(to bottom, #8B3D2D, #9B4A39); -fx-border-color: #83301B;"
+                                styleClass="fancyBtn" textFill="#3e2415">
+                            <font>
+                                <Font name="Calibri" size="24.0"/>
+                            </font>
+                            <graphic>
+                                <Text fill="WHITE" text="Exit">
+                                    <effect>
+                                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0"
+                                                    width="16.0">
+                                            <color>
+                                                <Color red="0.24313725531101227" green="0.1411764770746231"
+                                                       blue="0.08235294371843338"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                    <font>
+                                        <Font name="Franklin Gothic Demi" size="24.0"/>
+                                    </font>
+                                </Text>
+                            </graphic>
+                            <cursor>
+                                <Cursor fx:constant="HAND"/>
+                            </cursor>
+                        </Button>
+                    </children>
+                </HBox>
             </children>
-         </Pane>
-      </children>
-   </AnchorPane>
-   <AnchorPane fx:id="losePane" layoutX="660.0" layoutY="340.0" prefHeight="400.0" prefWidth="600.0" styleClass="losePane" stylesheets="@../css/game_screen.css" visible="false">
+        </HBox>
+        <HBox alignment="CENTER" layoutY="1006.0" prefHeight="75.0" prefWidth="1920.0" spacing="50.0"
+              style="-fx-background-color: #EC9043;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+              AnchorPane.rightAnchor="0.0">
+            <padding>
+                <Insets bottom="15.0" left="30.0" right="30.0" top="15.0"/>
+            </padding>
+            <children>
+                <StackPane prefHeight="0.0" prefWidth="0.0">
+                    <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK"
+                                   strokeType="INSIDE" strokeWidth="0.0"
+                                   style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0"/>
+                        <HBox alignment="CENTER" prefHeight="45.0" prefWidth="125.0" spacing="10.0">
+                            <children>
+                                <ImageView fitHeight="23.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/jeep.png"/>
+                                    </image>
+                                    <HBox.margin>
+                                        <Insets left="15.0"/>
+                                    </HBox.margin>
+                                </ImageView>
+                                <Label fx:id="jeepCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT"
+                                       prefHeight="33.0" prefWidth="174.0" style="-fx-alignment: center;"
+                                       textFill="#3e2415">
+                                    <font>
+                                        <Font name="Calibri Bold" size="20.0"/>
+                                    </font>
+                                    <opaqueInsets>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </opaqueInsets>
+                                    <HBox.margin>
+                                        <Insets right="15.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <StackPane.margin>
+                                <Insets/>
+                            </StackPane.margin>
+                        </HBox>
+                    </children>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </StackPane>
+                <StackPane prefHeight="0.0" prefWidth="0.0">
+                    <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK"
+                                   strokeType="INSIDE" strokeWidth="0.0"
+                                   style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0"/>
+                        <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
+                            <children>
+                                <ImageView fitHeight="37.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/zebra.png"/>
+                                    </image>
+                                    <HBox.margin>
+                                        <Insets left="15.0"/>
+                                    </HBox.margin>
+                                </ImageView>
+                                <Label fx:id="herbivoreCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT"
+                                       prefHeight="33.0" prefWidth="222.0" style="-fx-alignment: center;"
+                                       textFill="#3e2415">
+                                    <font>
+                                        <Font name="Calibri Bold" size="20.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets right="15.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <StackPane.margin>
+                                <Insets/>
+                            </StackPane.margin>
+                        </HBox>
+                    </children>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </StackPane>
+                <StackPane prefHeight="0.0" prefWidth="0.0">
+                    <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK"
+                                   strokeType="INSIDE" strokeWidth="0.0"
+                                   style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0"/>
+                        <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
+                            <children>
+                                <ImageView fitHeight="37.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/tiger.png"/>
+                                    </image>
+                                    <HBox.margin>
+                                        <Insets left="15.0"/>
+                                    </HBox.margin>
+                                </ImageView>
+                                <Label fx:id="carnivoreCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT"
+                                       prefHeight="33.0" prefWidth="224.0" style="-fx-alignment: center;"
+                                       textFill="#3e2415">
+                                    <font>
+                                        <Font name="Calibri Bold" size="20.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets right="15.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <StackPane.margin>
+                                <Insets/>
+                            </StackPane.margin>
+                        </HBox>
+                    </children>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </StackPane>
+                <StackPane prefHeight="0.0" prefWidth="0.0">
+                    <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK"
+                                   strokeType="INSIDE" strokeWidth="0.0"
+                                   style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0"/>
+                        <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
+                            <children>
+                                <ImageView fitHeight="23.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/ticket.png"/>
+                                    </image>
+                                    <HBox.margin>
+                                        <Insets left="15.0"/>
+                                    </HBox.margin>
+                                </ImageView>
+                                <Label fx:id="ticketPriceLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT"
+                                       prefHeight="33.0" prefWidth="165.0" style="-fx-alignment: center;" text="250 000"
+                                       textFill="#3e2415">
+                                    <font>
+                                        <Font name="Calibri Bold" size="20.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets right="15.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <StackPane.margin>
+                                <Insets/>
+                            </StackPane.margin>
+                        </HBox>
+                    </children>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </StackPane>
+                <StackPane prefHeight="0.0" prefWidth="0.0">
+                    <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#f9c771" height="44.0" stroke="BLACK"
+                                   strokeType="INSIDE" strokeWidth="0.0"
+                                   style="-fx-arc-height: 20px; -fx-arc-width: 20px;" width="173.0"/>
+                        <HBox alignment="CENTER" prefHeight="36.0" prefWidth="108.0" spacing="10.0">
+                            <children>
+                                <ImageView fitHeight="32.0" fitWidth="38.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../images/camera.png"/>
+                                    </image>
+                                    <HBox.margin>
+                                        <Insets left="15.0"/>
+                                    </HBox.margin>
+                                </ImageView>
+                                <Label fx:id="touristCountLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT"
+                                       prefHeight="33.0" prefWidth="175.0" style="-fx-alignment: center;"
+                                       textFill="#3e2415">
+                                    <font>
+                                        <Font name="Calibri Bold" size="20.0"/>
+                                    </font>
+                                    <HBox.margin>
+                                        <Insets right="15.0"/>
+                                    </HBox.margin>
+                                </Label>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <StackPane.margin>
+                                <Insets/>
+                            </StackPane.margin>
+                        </HBox>
+                    </children>
+                    <opaqueInsets>
+                        <Insets/>
+                    </opaqueInsets>
+                </StackPane>
+            </children>
+        </HBox>
+        <StackPane fx:id="rootPane" layoutY="75.0">
+            <children>
+                <Pane fx:id="terrainLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                      minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0"/>
+                <Pane fx:id="uiLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                      minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0">
+                    <children>
 
-      <children>
-         <VBox alignment="CENTER" layoutX="65.0" layoutY="41.0" prefHeight="319.0" prefWidth="471.0" spacing="15.0">
+                        <Button id="market" fx:id="marketButton" layoutX="1800.0" mnemonicParsing="false"
+                                onMouseClicked="#openShopPane" prefHeight="120.0" prefWidth="120.0"/>
+                    </children>
+                </Pane>
+                <Pane fx:id="ghostLayer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                      minWidth="-Infinity" prefHeight="930.0" prefWidth="1920.0" visible="false"/>
+                <Pane fx:id="shopPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+                      minWidth="-Infinity" prefHeight="750.0" prefWidth="1150.0" stylesheets="@../css/game_screen.css"
+                      visible="false">
+                    <children>
+                        <Label layoutX="486.0" layoutY="24.0" styleClass="diffLabel" text="Market" textFill="WHITE">
+                            <effect>
+                                <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0"
+                                            width="20.0">
+                                    <color>
+                                        <Color red="0.24313725531101227" green="0.1411764770746231"
+                                               blue="0.08235294371843338"/>
+                                    </color>
+                                </DropShadow>
+                            </effect>
+                            <font>
+                                <Font name="Franklin Gothic Demi" size="58.0"/>
+                            </font>
+                        </Label>
+                        <Button layoutX="502.0" layoutY="658.0" mnemonicParsing="false" onMouseClicked="#closeShopPane"
+                                prefHeight="58.0" prefWidth="152.0" styleClass="fancyBtn" text="" textFill="WHITE">
+                            <graphic>
+                                <Text fill="WHITE" text="Back">
+                                    <effect>
+                                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0"
+                                                    width="16.0">
+                                            <color>
+                                                <Color red="0.24313725531101227" green="0.1411764770746231"
+                                                       blue="0.08235294371843338"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                    <font>
+                                        <Font name="Franklin Gothic Demi" size="28.0"/>
+                                    </font>
+                                </Text>
+                            </graphic>
+                        </Button>
+                        <GridPane hgap="10.0" layoutX="117.0" layoutY="120.0" prefHeight="507.0" prefWidth="923.0"
+                                  style="-fx-background-color: FFD884; -fx-background-radius: 20px;" vgap="10.0">
+                            <columnConstraints>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="1">
+                                    <children>
+                                        <ImageView fitHeight="55.0" fitWidth="53.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/bush1.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="5.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Bush 500$"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Plant"
+                                               textFill="#74a44e">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyBush" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="132.0" prefWidth="129.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="3">
+                                    <children>
+                                        <ImageView fitHeight="51.0" fitWidth="96.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/lake.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="5.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Lake 2500$"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="18.0" prefWidth="98.0" text="Water"
+                                               textFill="#4d97ff">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyLake" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="166.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="2">
+                                    <children>
+                                        <ImageView fitHeight="55.0" fitWidth="52.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/tree2.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="5.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Tree 800$"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Plant"
+                                               textFill="#74a44e">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyTree" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                    <GridPane.margin>
+                                        <Insets/>
+                                    </GridPane.margin>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="132.0" prefWidth="129.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;">
+                                    <children>
+                                        <ImageView fitHeight="47.0" fitWidth="46.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/grass.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="5.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Grass 300$"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Plant"
+                                               textFill="#74a44e">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyGrass" prefHeight="26.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="132.0" prefWidth="129.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="4">
+                                    <children>
+                                        <ImageView fitHeight="40.0" fitWidth="74.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/jeep.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets bottom="7.0" top="15.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Jeep 4500$"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyJeep" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                            <padding>
+                                                <Insets top="10.0"/>
+                                            </padding>
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="5">
+                                    <children>
+                                        <ImageView fitHeight="55.0" fitWidth="54.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/road.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Road 50$"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyRoad" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.rowIndex="1">
+                                    <children>
+                                        <ImageView fitHeight="53.0" fitWidth="59.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/elephant.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="6.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0"
+                                               text="Elephant 3000$" textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore"
+                                               textFill="#ff8d00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyElephant" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <children>
+                                        <ImageView fitHeight="44.0" fitWidth="65.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/rhino.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="17.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Rhino 2500$"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore"
+                                               textFill="#ff8d00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyRhino" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <children>
+                                        <ImageView fitHeight="42.0" fitWidth="65.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/hippo.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="20.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" graphicTextGap="0.0" prefHeight="23.0"
+                                               prefWidth="113.0" text="Hippo 1600$" textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" graphicTextGap="0.0" prefHeight="23.0"
+                                               prefWidth="85.0" text="Herbivore" textFill="#ff8d00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyHippo" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="4" GridPane.rowIndex="1">
+                                    <children>
+                                        <ImageView fitHeight="52.0" fitWidth="59.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/zebra.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="7.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Zebra 2400$"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore"
+                                               textFill="#ff8d00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyZebra" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="5" GridPane.rowIndex="1">
+                                    <children>
+                                        <ImageView fitHeight="48.0" fitWidth="45.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/kangaroo.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="9.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0"
+                                               text="Kangaroo 2000$" textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore"
+                                               textFill="#ff8d00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyKangaroo" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="6" GridPane.rowIndex="1">
+                                    <children>
+                                        <ImageView fitHeight="44.0" fitWidth="43.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/turtle.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets bottom="10.0" top="25.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0"
+                                               text="Turtle 1300$" textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore"
+                                               textFill="#ff8d00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyTurtle" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="3" GridPane.rowIndex="1">
+                                    <children>
+                                        <ImageView fitHeight="44.0" fitWidth="71.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/buffalo.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="15.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0"
+                                               text="Buffalo 2500$" textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Herbivore"
+                                               textFill="#ff8d00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyBuffalo" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.rowIndex="2">
+                                    <children>
+                                        <ImageView fitHeight="42.0" fitWidth="64.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/lion.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="13.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Lion 1500$"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore"
+                                               textFill="#ff3a00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyLion" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                    <children>
+                                        <ImageView fitHeight="41.0" fitWidth="57.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/tiger.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="14.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0" text="Tiger 1300$"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore"
+                                               textFill="#ff3a00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyTiger" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                    <children>
+                                        <ImageView fitHeight="41.0" fitWidth="64.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/panther.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="14.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0"
+                                               text="Panther 1200$" textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore"
+                                               textFill="#ff3a00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyPanther" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="6">
+                                    <children>
+                                        <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/ranger.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets top="5.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label wrapText="true" alignment="CENTER" textAlignment="CENTER"
+                                               prefHeight="43.0" prefWidth="113.0" text="Ranger 5000$/month"
+                                               textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyRanger" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                                <VBox alignment="CENTER" prefHeight="177.0" prefWidth="141.0"
+                                      style="-fx-background-color: FFEB9D; -fx-background-radius: 20px; -fx-spacing: 0;"
+                                      GridPane.columnIndex="3" GridPane.rowIndex="2">
+                                    <children>
+                                        <ImageView fitHeight="23.0" fitWidth="58.0" pickOnBounds="true"
+                                                   preserveRatio="true">
+                                            <image>
+                                                <Image url="@../images/vulture.png"/>
+                                            </image>
+                                            <VBox.margin>
+                                                <Insets bottom="8.0" top="22.0"/>
+                                            </VBox.margin>
+                                        </ImageView>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="113.0"
+                                               text="Vulture 800$" textFill="#3e2415">
+                                            <VBox.margin>
+                                                <Insets top="10.0"/>
+                                            </VBox.margin>
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Label alignment="CENTER" prefHeight="23.0" prefWidth="85.0" text="Carnivore"
+                                               textFill="#ff3a00">
+                                            <font>
+                                                <Font name="Calibri Bold" size="16.0"/>
+                                            </font>
+                                            <opaqueInsets>
+                                                <Insets/>
+                                            </opaqueInsets>
+                                        </Label>
+                                        <Button mnemonicParsing="false" onAction="#buyVulture" prefHeight="44.0"
+                                                prefWidth="57.0" styleClass="buyItem">
+                                            <font>
+                                                <Font size="20.0"/>
+                                            </font>
+                                        </Button>
+                                    </children>
+                                    <opaqueInsets>
+                                        <Insets/>
+                                    </opaqueInsets>
+                                    <effect>
+                                        <DropShadow height="15.0" radius="7.0" width="15.0">
+                                            <color>
+                                                <Color red="0.30000001192092896" green="0.1712999939918518"
+                                                       blue="0.003000000026077032" opacity="0.26916030049324036"/>
+                                            </color>
+                                        </DropShadow>
+                                    </effect>
+                                </VBox>
+                            </children>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                            <padding>
+                                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+                            </padding>
+                        </GridPane>
+                    </children>
+                </Pane>
+            </children>
+        </StackPane>
+    </children>
+    <AnchorPane fx:id="saveOverlay" prefHeight="1080.0" prefWidth="1920.0" styleClass="background"
+                stylesheets="@../css/load_screen.css" visible="false" xmlns="http://javafx.com/javafx/23.0.1"
+                xmlns:fx="http://javafx.com/fxml/1">
+        <children>
+            <!-- Load Game Label -->
+            <Label layoutX="725.0" layoutY="115.0" styleClass="diffLabel" text="Save Game" textFill="WHITE">
+                <effect>
+                    <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
+                        <color>
+                            <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338"/>
+                        </color>
+                    </DropShadow>
+                </effect>
+                <font>
+                    <Font name="Franklin Gothic Demi" size="96.0"/>
+                </font>
+            </Label>
 
-            <Text styleClass="gameOverText" text="Game Over!">
-               <effect>
-                  <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
-                     <color>
-                        <Color red="0.2431" green="0.1411" blue="0.0823" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </Text>
-
-            <Text fx:id="reasonOfDeathText" styleClass="reasonOfDeathText" text="" />
-
-            <ImageView fitHeight="130.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/loose.png" />
-               </image>
-            </ImageView>
-
-            <Button onAction="#switchToMain" styleClass="fancyBtn">
-               <graphic>
-                  <Text fill="WHITE" text="Back To Main Menu">
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
-                           <color>
-                              <Color red="0.2431" green="0.1411" blue="0.0823" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                     <font>
-                        <Font name="Franklin Gothic Demi" size="24.0" />
-                     </font>
-                  </Text>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+            <Button layoutX="1157.0" layoutY="869.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="198.0" text=""
+                    textFill="WHITE">
+                <graphic>
+                    <Text fill="WHITE" text="Save">
+                        <effect>
+                            <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
+                                <color>
+                                    <Color red="0.24313725531101227" green="0.1411764770746231"
+                                           blue="0.08235294371843338"/>
+                                </color>
+                            </DropShadow>
+                        </effect>
+                        <font>
+                            <Font name="Franklin Gothic Demi" size="42.0"/>
+                        </font>
+                    </Text>
+                </graphic>
             </Button>
 
-         </VBox>
-      </children>
-   </AnchorPane>
-
-   <AnchorPane fx:id="winPane" layoutX="660.0" layoutY="340.0" prefHeight="400.0" prefWidth="600.0" styleClass="losePane" stylesheets="@../css/game_screen.css" visible="false">
-
-      <children>
-         <VBox alignment="CENTER" layoutX="87.0" layoutY="41.0" spacing="15.0">
-
-            <Text styleClass="gameOverText" text="You won!">
-               <effect>
-                  <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
-                     <color>
-                        <Color red="0.2431" green="0.1411" blue="0.0823" />
-                     </color>
-                  </DropShadow>
-               </effect>
-            </Text>
-
-            <Text styleClass="reasonOfDeathText" text="Congratulations, you completed the game!" />
-
-            <ImageView fitHeight="130.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../images/winelephant.png" />
-               </image>
-            </ImageView>
-
-            <Button onAction="#switchToMain" styleClass="fancyBtn">
-               <graphic>
-                  <Text fill="WHITE" text="Back To Main Menu">
-                     <effect>
-                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
-                           <color>
-                              <Color red="0.2431" green="0.1411" blue="0.0823" />
-                           </color>
-                        </DropShadow>
-                     </effect>
-                     <font>
-                        <Font name="Franklin Gothic Demi" size="24.0" />
-                     </font>
-                  </Text>
-               </graphic>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
+            <Button layoutX="567.0" layoutY="869.0" mnemonicParsing="false" onAction="#hideSaveOverlay"
+                    prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
+                <graphic>
+                    <Text fill="WHITE" text="Back">
+                        <effect>
+                            <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
+                                <color>
+                                    <Color red="0.24313725531101227" green="0.1411764770746231"
+                                           blue="0.08235294371843338"/>
+                                </color>
+                            </DropShadow>
+                        </effect>
+                        <font>
+                            <Font name="Franklin Gothic Demi" size="42.0"/>
+                        </font>
+                    </Text>
+                </graphic>
             </Button>
+            <TextField layoutX="420.0" layoutY="390.0" prefHeight="48.0" prefWidth="1080.0" promptText="game"
+                       style="-fx-background-radius: 10px;">
+                <font>
+                    <Font name="Calibri" size="24.0"/>
+                </font>
+            </TextField>
+            <Label layoutX="420.0" layoutY="358.0" text="Save Game" textFill="#3e2415">
+                <font>
+                    <Font name="Calibri" size="24.0"/>
+                </font>
+            </Label>
+            <Pane id="saveTaken" fx:id="saveTaken" layoutX="683.0" layoutY="388.0" prefHeight="261.0" prefWidth="533.0"
+                  visible="false">
+                <children>
+                    <Label layoutX="59.0" layoutY="24.0" prefHeight="112.0" prefWidth="416.0"
+                           style="-fx-wrap-text: true;"
+                           text="This save name is taken. Do you want to overwrite the existing one?"
+                           textAlignment="CENTER" textFill="#683d26" wrapText="true">
+                        <font>
+                            <Font name="Calibri Bold" size="28.0"/>
+                        </font>
+                    </Label>
+                    <Button layoutX="86.0" layoutY="152.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="150.0"
+                            text="" textFill="WHITE">
+                        <graphic>
+                            <Text fill="WHITE" text="No">
+                                <effect>
+                                    <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0"
+                                                width="16.0">
+                                        <color>
+                                            <Color red="0.24313725531101227" green="0.1411764770746231"
+                                                   blue="0.08235294371843338"/>
+                                        </color>
+                                    </DropShadow>
+                                </effect>
+                                <font>
+                                    <Font name="Franklin Gothic Demi" size="42.0"/>
+                                </font>
+                            </Text>
+                        </graphic>
+                    </Button>
+                    <Button id="yesBtn" layoutX="298.0" layoutY="152.0" mnemonicParsing="false" prefHeight="76.0"
+                            prefWidth="150.0" text="" textFill="WHITE">
+                        <graphic>
+                            <Text fill="WHITE" text="Yes">
+                                <font>
+                                    <Font name="Franklin Gothic Demi" size="42.0"/>
+                                </font>
+                                <effect>
+                                    <DropShadow blurType="ONE_PASS_BOX" height="18.0" radius="8.0" spread="1.0"
+                                                width="16.0">
+                                        <color>
+                                            <Color red="0.5333333611488342" green="0.4431372582912445"
+                                                   blue="0.003921568859368563"/>
+                                        </color>
+                                    </DropShadow>
+                                </effect>
+                            </Text>
+                        </graphic>
+                    </Button>
+                </children>
+            </Pane>
+        </children>
+    </AnchorPane>
+    <AnchorPane fx:id="losePane" layoutX="660.0" layoutY="340.0" prefHeight="400.0" prefWidth="600.0"
+                styleClass="losePane" stylesheets="@../css/game_screen.css" visible="false">
 
-         </VBox>
-      </children>
-   </AnchorPane>
+        <children>
+            <VBox alignment="CENTER" layoutX="65.0" layoutY="41.0" prefHeight="319.0" prefWidth="471.0" spacing="15.0">
+
+                <Text styleClass="gameOverText" text="Game Over!">
+                    <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
+                            <color>
+                                <Color red="0.2431" green="0.1411" blue="0.0823"/>
+                            </color>
+                        </DropShadow>
+                    </effect>
+                </Text>
+
+                <Text fx:id="reasonOfDeathText" styleClass="reasonOfDeathText" text=""/>
+
+                <ImageView fitHeight="130.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/loose.png"/>
+                    </image>
+                </ImageView>
+
+                <Button onAction="#switchToMain" styleClass="fancyBtn">
+                    <graphic>
+                        <Text fill="WHITE" text="Back To Main Menu">
+                            <effect>
+                                <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0"
+                                            width="16.0">
+                                    <color>
+                                        <Color red="0.2431" green="0.1411" blue="0.0823"/>
+                                    </color>
+                                </DropShadow>
+                            </effect>
+                            <font>
+                                <Font name="Franklin Gothic Demi" size="24.0"/>
+                            </font>
+                        </Text>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </Button>
+
+            </VBox>
+        </children>
+    </AnchorPane>
+
+    <AnchorPane fx:id="winPane" layoutX="660.0" layoutY="340.0" prefHeight="400.0" prefWidth="600.0"
+                styleClass="losePane" stylesheets="@../css/game_screen.css" visible="false">
+
+        <children>
+            <VBox alignment="CENTER" layoutX="87.0" layoutY="41.0" spacing="15.0">
+
+                <Text styleClass="gameOverText" text="You won!">
+                    <effect>
+                        <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
+                            <color>
+                                <Color red="0.2431" green="0.1411" blue="0.0823"/>
+                            </color>
+                        </DropShadow>
+                    </effect>
+                </Text>
+
+                <Text styleClass="reasonOfDeathText" text="Congratulations, you completed the game!"/>
+
+                <ImageView fitHeight="130.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../images/winelephant.png"/>
+                    </image>
+                </ImageView>
+
+                <Button onAction="#switchToMain" styleClass="fancyBtn">
+                    <graphic>
+                        <Text fill="WHITE" text="Back To Main Menu">
+                            <effect>
+                                <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0"
+                                            width="16.0">
+                                    <color>
+                                        <Color red="0.2431" green="0.1411" blue="0.0823"/>
+                                    </color>
+                                </DropShadow>
+                            </effect>
+                            <font>
+                                <Font name="Franklin Gothic Demi" size="24.0"/>
+                            </font>
+                        </Text>
+                    </graphic>
+                    <cursor>
+                        <Cursor fx:constant="HAND"/>
+                    </cursor>
+                </Button>
+
+            </VBox>
+        </children>
+    </AnchorPane>
 </AnchorPane>

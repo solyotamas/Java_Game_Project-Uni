@@ -71,8 +71,6 @@ public class GameEngine {
     private double breedingChancePerTick = 0.003;
 
 
-
-
     // GETTERS / SETTERS
     public ArrayList<Integer> getConditions() {
         return this.conditions;
@@ -158,7 +156,7 @@ public class GameEngine {
         return this.spentTime;
     }
 
-    public void setFirstConditionMetTime (double what) {
+    public void setFirstConditionMetTime(double what) {
         this.firstConditionMetTime = what;
     }
 
@@ -248,11 +246,10 @@ public class GameEngine {
     public void gameLoop() {
         savePlants();
 
-        timeline = new Timeline(
-            new KeyFrame(Duration.millis(50), e -> {
-                //== ANIMALS
-                updateAnimalStates();
-                checkForGrownUps();
+        timeline = new Timeline(new KeyFrame(Duration.millis(50), e -> {
+            //== ANIMALS
+            updateAnimalStates();
+            checkForGrownUps();
 
             //== HERDS
             formNewHerds();
@@ -298,7 +295,7 @@ public class GameEngine {
     }
 
     // ==== ANIMALS GROWING UP
-    private void checkForGrownUps(){
+    private void checkForGrownUps() {
         for (Herbivore herbivore : herbivores) {
             if (herbivore.getAge() >= 3 && !herbivore.isGrownUp()) {
                 herbivore.growUp();
@@ -311,7 +308,6 @@ public class GameEngine {
             }
         }
     }
-
     // ======
 
     // ==== SPAWNING TOURISTS
@@ -457,10 +453,10 @@ public class GameEngine {
             if (isAnyManuallyPaused) continue;
 
             for (Animal animal : herd.getMembers()) {
-                if(animal.isBeingEaten()) continue;
+                if (animal.isBeingEaten()) continue;
 
                 Animal leader2 = herd.getLeader();
-                if(leader2 == null){
+                if (leader2 == null) {
                     herd.assignNewLeader();
                 }
 
@@ -468,8 +464,6 @@ public class GameEngine {
             }
         }
         cleanupSmallHerds(herbivoreherds);
-
-
     }
 
     private void handleHerbivoreInHerd(Animal animal, Animal leader) {
@@ -481,7 +475,7 @@ public class GameEngine {
             }
             case RESTING -> {
                 animal.rest();
-                if(animal != leader) return;
+                if (animal != leader) return;
 
                 Herd herd = leader.getHerd();
                 herd.incrementBreedTimer(0.05);
@@ -544,7 +538,7 @@ public class GameEngine {
 
             for (Animal animal : herd.getMembers()) {
                 Animal leader2 = herd.getLeader();
-                if(leader2 == null){
+                if (leader2 == null) {
                     herd.assignNewLeader();
                 }
 
@@ -1159,7 +1153,7 @@ public class GameEngine {
         canCheckForLose = true;
     }
 
-    public void addAnimal(Animal animal){
+    public void addAnimal(Animal animal) {
         if (animal instanceof Herbivore herbivore) {
             this.herbivores.add(herbivore);
         } else if (animal instanceof Carnivore carnivore) {
@@ -1268,10 +1262,7 @@ public class GameEngine {
     }
 
     public boolean checkConditions() {
-        return money >= conditions.get(0)
-                && herbivores.size() >= conditions.get(1)
-                && carnivores.size() >= conditions.get(2)
-                && tourists.size() >= conditions.get(3);
+        return money >= conditions.get(0) && herbivores.size() >= conditions.get(1) && carnivores.size() >= conditions.get(2) && tourists.size() >= conditions.get(3);
     }
 
     public void stop() {

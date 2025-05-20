@@ -135,8 +135,7 @@ public abstract class Human extends Pane {
 
         // close enough -> Switch to rest
         if (Math.abs(dx) < 1 && Math.abs(dy) < 1) {
-            if (state == HumanState.MOVING)
-                transitionTo(HumanState.RESTING);
+            if (state == HumanState.MOVING) transitionTo(HumanState.RESTING);
             if (state == HumanState.EXITING) {
                 //System.out.println("Tourist reached exit: " + this);
                 transitionTo(HumanState.LEFT);

@@ -13,7 +13,7 @@ public class Panther extends Carnivore {
     private static final String imgURL = "/images/animated/panther.png";
     private static final String childImgURL = "/images/animated/panther_baby.png";
 
-    public Panther(double x, double y, boolean isChild){
-        super(x,y,frameWidth, frameHeight, childImgURL,imgURL, speed, price, lifeExpectancy, isChild);
+    public Panther(double x, double y, boolean isChild) {
+        super(x, y, frameWidth, frameHeight, childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
     }
 }

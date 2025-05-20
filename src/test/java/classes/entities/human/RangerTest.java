@@ -21,7 +21,8 @@ class RangerTest {
     @BeforeAll
     public static void initJavaFX() {
         try {
-            Platform.startup(() -> {});
+            Platform.startup(() -> {
+            });
         } catch (IllegalStateException e) {
             // JavaFX már elindult
         }

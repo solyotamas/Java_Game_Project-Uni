@@ -22,7 +22,8 @@ class JeepTest {
     @BeforeAll
     public static void initJavaFX() {
         try {
-            Platform.startup(() -> {});
+            Platform.startup(() -> {
+            });
         } catch (IllegalStateException e) {
             // JavaFX már fut
         }
@@ -47,7 +48,7 @@ class JeepTest {
 
     @Test
     void testMoveAlongPathMovesTowardTarget() {
-        Ground ground = new Ground(10,4);
+        Ground ground = new Ground(10, 4);
         ArrayList<Terrain> path = new ArrayList<>();
         path.add(ground);
 
@@ -66,7 +67,7 @@ class JeepTest {
 
     @Test
     void testMoveAlongPathEndsCorrectly() {
-        Ground ground = new Ground((int) jeep.getY(),(int) jeep.getY());
+        Ground ground = new Ground((int) jeep.getY(), (int) jeep.getY());
         ArrayList<Terrain> path = new ArrayList<>();
         path.add(ground);
 

@@ -13,7 +13,7 @@ public class Rhino extends Herbivore {
     private static final String imgURL = "/images/animated/rhino.png";
     private static final String childImgURL = "/images/animated/rhino_baby.png";
 
-    public Rhino(double x, double y, boolean isChild){
-        super(x,y,frameWidth, frameHeight, childImgURL,imgURL, speed, price, lifeExpectancy, isChild);
+    public Rhino(double x, double y, boolean isChild) {
+        super(x, y, frameWidth, frameHeight, childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
     }
 }

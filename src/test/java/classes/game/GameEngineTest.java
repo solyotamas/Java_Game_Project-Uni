@@ -31,7 +31,8 @@ public class GameEngineTest {
     @BeforeAll
     public static void initJavaFX() {
         try {
-            Platform.startup(() -> {});
+            Platform.startup(() -> {
+            });
         } catch (IllegalStateException e) {
             // JavaFX már fut
         }
@@ -80,9 +81,6 @@ public class GameEngineTest {
     }
 
 
-
-
-
     @Test
     void testGameOverWhenNoAnimalsAndCanCheckForLose() {
         gameEngineE.getHerbivores().clear();
@@ -125,7 +123,7 @@ public class GameEngineTest {
         for (int i = 0; i < 15; i++) {
             gameEngineE.herbivores.add(new Elephant(0, 0, false));
             gameEngineE.carnivores.add(new Lion(1, 1, false));
-            gameEngineE.tourists.add(new Tourist(2,2, 0));
+            gameEngineE.tourists.add(new Tourist(2, 2, 0));
         }
         gameEngineE.setCanCheckForWin(true);
         gameEngineE.setSpentTime(1000);
@@ -146,7 +144,7 @@ public class GameEngineTest {
         gameEngineE.setMoney(40001);
         for (int i = 0; i < 15; i++) {
             gameEngineE.herbivores.add(new Elephant(0, 0, false));
-            gameEngineE.carnivores.add(new Lion(1, 1,false));
+            gameEngineE.carnivores.add(new Lion(1, 1, false));
             gameEngineE.tourists.add(new Tourist(2, 2, 0));
         }
 
@@ -271,8 +269,4 @@ public class GameEngineTest {
         // ticketPrice = 100 + 300 (elephant/10) + 150 (lion/10)
         assertEquals(550, gameEngineE.getTicketPrice());
     }
-
-
-
-
 }

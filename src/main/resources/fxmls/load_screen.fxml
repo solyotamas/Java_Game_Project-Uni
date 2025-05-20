@@ -9,55 +9,60 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/load_screen.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="classes.controllers.ScreenController">
+<AnchorPane prefHeight="1080.0" prefWidth="1920.0" styleClass="background" stylesheets="@../css/load_screen.css"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="classes.controllers.ScreenController">
     <children>
         <!-- Load Game Label -->
-        <Label fx:id="diffLabel" layoutX="724.0" layoutY="114.0" text="Load Game" textAlignment="CENTER" textFill="WHITE">
+        <Label fx:id="diffLabel" layoutX="724.0" layoutY="114.0" text="Load Game" textAlignment="CENTER"
+               textFill="WHITE">
             <effect>
                 <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="20.0">
                     <color>
-                        <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                        <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338"/>
                     </color>
                 </DropShadow>
             </effect>
-         <font>
-            <Font name="Franklin Gothic Demi" size="96.0" />
-         </font>
+            <font>
+                <Font name="Franklin Gothic Demi" size="96.0"/>
+            </font>
         </Label>
 
-        <Button layoutX="1147.0" layoutY="866.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
+        <Button layoutX="1147.0" layoutY="866.0" mnemonicParsing="false" prefHeight="76.0" prefWidth="198.0" text=""
+                textFill="WHITE">
             <graphic>
                 <Text fill="WHITE" text="Load">
                     <effect>
                         <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
                             <color>
-                                <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                                <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338"/>
                             </color>
                         </DropShadow>
                     </effect>
-               <font>
-                  <Font name="Franklin Gothic Demi" size="42.0" />
-               </font>
+                    <font>
+                        <Font name="Franklin Gothic Demi" size="42.0"/>
+                    </font>
                 </Text>
             </graphic>
         </Button>
 
-        <Button layoutX="575.0" layoutY="866.0" mnemonicParsing="false" onAction="#switchToMain" prefHeight="76.0" prefWidth="198.0" text="" textFill="WHITE">
+        <Button layoutX="575.0" layoutY="866.0" mnemonicParsing="false" onAction="#switchToMain" prefHeight="76.0"
+                prefWidth="198.0" text="" textFill="WHITE">
             <graphic>
                 <Text fill="WHITE" text="Back">
                     <effect>
                         <DropShadow blurType="ONE_PASS_BOX" height="20.0" radius="9.5" spread="1.0" width="16.0">
                             <color>
-                                <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338" />
+                                <Color red="0.24313725531101227" green="0.1411764770746231" blue="0.08235294371843338"/>
                             </color>
                         </DropShadow>
                     </effect>
-               <font>
-                  <Font name="Franklin Gothic Demi" size="42.0" />
-               </font>
+                    <font>
+                        <Font name="Franklin Gothic Demi" size="42.0"/>
+                    </font>
                 </Text>
             </graphic>
         </Button>
-      <ListView fx:id="saveListView" layoutX="413.0" layoutY="243.0" prefHeight="594.0" prefWidth="1095.0" />
+        <ListView fx:id="saveListView" layoutX="413.0" layoutY="243.0" prefHeight="594.0" prefWidth="1095.0"/>
     </children>
 </AnchorPane>

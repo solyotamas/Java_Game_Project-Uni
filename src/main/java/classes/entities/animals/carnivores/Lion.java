@@ -13,8 +13,8 @@ public class Lion extends Carnivore {
     private static final String imgURL = "/images/animated/lion.png";
     private static final String childImgURL = "/images/animated/lion_baby.png";
 
-    public Lion(double x, double y, boolean isChild){
-        super(x,y,frameWidth, frameHeight, childImgURL,imgURL, speed, price, lifeExpectancy, isChild);
+    public Lion(double x, double y, boolean isChild) {
+        super(x, y, frameWidth, frameHeight, childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
     }
 
 }

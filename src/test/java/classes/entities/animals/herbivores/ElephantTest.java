@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
+
 import static classes.entities.Direction.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +18,8 @@ public class ElephantTest {
     @BeforeAll
     public static void initJavaFX() {
         try {
-            Platform.startup(() -> {});
+            Platform.startup(() -> {
+            });
         } catch (IllegalStateException e) {
             // JavaFX már elindult
         }
@@ -79,7 +81,7 @@ public class ElephantTest {
 
     @Test
     void testMove() {
-        Ground ground = new Ground(10,4);
+        Ground ground = new Ground(10, 4);
         double initialX = elephant.getLayoutX();
 
         elephant.move(ground, RIGHT, 1, 0);
@@ -93,7 +95,7 @@ public class ElephantTest {
 
         double initialY = elephant.getLayoutY();
         elephant.move(ground, UP, 0, -1);
-        assertEquals(initialY - 1 , elephant.getLayoutY());
+        assertEquals(initialY - 1, elephant.getLayoutY());
         assertEquals(UP, elephant.getCurrentDirection());
 
         initialY = elephant.getLayoutY();
@@ -109,7 +111,7 @@ public class ElephantTest {
         Elephant follower = new Elephant(50, 50, false);
         leader.transitionTo(AnimalState.RESTING);
 
-        Ground ground = new Ground(10,4);
+        Ground ground = new Ground(10, 4);
         follower.moveTowardsLeader(leader, ground);
 
         assertTrue(follower.getX() != 50 || follower.getY() != 50);
@@ -162,7 +164,6 @@ public class ElephantTest {
             assertEquals(expected, price);
         }
     }
-
 
 
 }

@@ -13,7 +13,7 @@ public class Vulture extends Carnivore {
     private static final String imgURL = "/images/animated/vulture.png";
     private static final String childImgURL = "/images/animated/vulture_baby.png";
 
-    public Vulture(double x, double y, boolean isChild){
-        super(x,y,frameWidth, frameHeight, childImgURL,imgURL, speed, price, lifeExpectancy, isChild);
+    public Vulture(double x, double y, boolean isChild) {
+        super(x, y, frameWidth, frameHeight, childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
     }
 }

@@ -7,6 +7,7 @@ import javafx.scene.layout.Pane;
 
 public abstract class Plant extends Landform {
     private double nutrition;
+
     public Plant(double x, double y, int widthInTiles, int heightInTiles, Image img, double depth, int price, int nutrition) {
         super(x, y, widthInTiles, heightInTiles, img, depth, price);
         this.nutrition = nutrition;

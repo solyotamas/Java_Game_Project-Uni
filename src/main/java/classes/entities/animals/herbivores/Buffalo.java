@@ -13,7 +13,7 @@ public class Buffalo extends Herbivore {
     private static final String imgURL = "/images/animated/buffalo.png";
     private static final String childImgURL = "/images/animated/buffalo_baby.png";
 
-    public Buffalo(double x, double y, boolean isChild){
-        super(x,y,frameWidth, frameHeight,childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
+    public Buffalo(double x, double y, boolean isChild) {
+        super(x, y, frameWidth, frameHeight, childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
     }
 }
