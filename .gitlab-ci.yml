@@ -1,4 +1,8 @@
 image: maven:3.9.6-eclipse-temurin-21
+#image: ghcr.io/openjfx/javafx-docker:21 #ez nem volt nyilvános
+#image: docker.io/frolvlad/alpine-glibc:alpine-3.12_glibc-2.31 #nem volt benne maven????
+
+
 
 variables:
   MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
@@ -10,6 +14,22 @@ cache:
   paths:
     - .m2/repository
 
+#cserép cuccok
+#include:
+  # NuGet Dependency Scanning
+  # https://docs.gitlab.com/ee/user/application_security/dependency_scanning/
+  #- template: Jobs/Dependency-Scanning.gitlab-ci.yml
+  # Secret Detection
+  # https://docs.gitlab.com/user/application_security/secret_detection/
+  #- template: Jobs/Secret-Detection.gitlab-ci.yml
+  # Static Application Security Testing (SAST)
+  # https://docs.gitlab.com/user/application_security/sast/
+  #- template: Jobs/SAST.gitlab-ci.yml
+  # Static analysis-based Code Quality evaluation for Java
+  # https://szofttech.inf.elte.hu/components/code-quality-java
+  #- component: szofttech.inf.elte.hu/components/code-quality-java/maven@1 #ez mind szép és jó lett volna, de attól hogy ez újra buildel és testel, ebben nincs javafx és failel a dolog
+
+
 build:
   stage: build
   script:
@@ -18,10 +38,25 @@ build:
 test:
   stage: test
   script:
-    - mvn test
-    - mvn jacoco:report
-    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
-  coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
+    #javafx shit
+    - apt-get update && apt-get install -y xvfb libgtk-3-0 libxrender1 libxtst6
+    - xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" mvn test jacoco:report
+
+    #- mvn test
+    #- mvn jacoco:report
+
+    #cserép code.coverage
+    - apt-get update -yqq && apt-get install -yqq libxml2-utils
+    - |
+      COVERAGE=$(xmllint --xpath "string(//report/counter[@type='LINE']/@covered)" target/site/jacoco/jacoco.xml)
+      MISSED=$(xmllint --xpath "string(//report/counter[@type='LINE']/@missed)" target/site/jacoco/jacoco.xml)
+      TOTAL=$((COVERAGE + MISSED))
+      PERCENT=$((100 * COVERAGE / TOTAL))
+      echo "TOTAL_COVERAGE=$PERCENT%"
+  coverage: '/TOTAL_COVERAGE=(\d+)%/'
+
+  #  - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml # | head -n 1
+  #coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
   artifacts:
     when: always
     reports:
@@ -54,3 +89,6 @@ code_quality:
    # expire_in: 1 day
   #only:
    # - master
+
+#    - grep "<counter type=\"INSTRUCTION\"" target/site/jacoco/jacoco.xml
+#  coverage: '/<counter type="INSTRUCTION" missed="(\d+)" covered="(\d+)"\/>/'
