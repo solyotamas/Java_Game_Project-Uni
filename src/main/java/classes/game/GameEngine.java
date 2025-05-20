@@ -351,8 +351,13 @@ public class GameEngine {
                 Herd herd = leader.getHerd();
                 if (!herd.getHasBredThisRest()) {
                     Animal baby = gameController.spawnBaby(herd.getLeader());
-                    herd.addMember(baby);
-                    baby.setBornAt(spentTime);
+
+                    // DEFERRED ADDITION HERE
+                    Platform.runLater(() -> {
+                        herd.addMember(baby);
+                        baby.setBornAt(0);
+                    });
+
 
                     herd.setHasBredThisRest(true);
                 }
