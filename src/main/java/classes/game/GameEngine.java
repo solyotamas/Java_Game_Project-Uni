@@ -491,7 +491,7 @@ public class GameEngine {
                     Animal baby = gameController.spawnBaby(herd.getLeader());
                     Platform.runLater(() -> {
                         herd.addMember(baby);
-                        //baby.setBornAt(spentTime);
+                        baby.setBornAt(spentTime);
                         //baby.setAge(1);
                     });
                 }
@@ -573,7 +573,7 @@ public class GameEngine {
                         Animal baby = gameController.spawnBaby(herd.getLeader());
                         Platform.runLater(() -> {
                             herd.addMember(baby);
-                            //baby.setBornAt(spentTime);
+                            baby.setBornAt(spentTime);
                             //baby.setAge(1);
                         });
                     }
