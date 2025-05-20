@@ -1,6 +1,8 @@
 package classes.entities.animals.herbivores;
 
 import classes.entities.animals.AnimalState;
+import classes.terrains.Ground;
+import classes.terrains.Terrain;
 import javafx.application.Platform;
 import javafx.scene.image.ImageView;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +41,7 @@ public class ElephantTest {
         assertEquals(90, elephant.getFrameWidth());
         assertEquals(88, elephant.getFrameHeight());
         assertEquals(0.4, elephant.getSpeed(), 0.001);
-        assertEquals(500, elephant.getPrice());
+        assertEquals(3000, elephant.getPrice());
         assertEquals(60, elephant.getLifeExpectancy());
         assertEquals(0, elephant.getAge());
     }
@@ -47,8 +49,8 @@ public class ElephantTest {
     @Test
     void testInitialAnimalStats() {
         assertEquals(AnimalState.IDLE, elephant.getState());
-        assertEquals(20.0, elephant.getThirst());
-        assertEquals(20.0, elephant.getHunger());
+        assertEquals(100.0, elephant.getThirst());
+        assertEquals(100.0, elephant.getHunger());
         assertTrue(elephant.getPath().isEmpty());
         assertNull(elephant.getStart());
         assertNull(elephant.getTarget());
@@ -71,16 +73,16 @@ public class ElephantTest {
 
     @Test
     void testDrinks() {
-        elephant.changeThirst(-10);
+        elephant.changeThirst(-50);
         elephant.drink();
-        assertTrue(elephant.getThirst() > 10); //mert alapból ugye 20 a kontrusktorban
+        assertTrue(elephant.getThirst() > 50); //mert alapból ugye 20 a kontrusktorban
     }
 
     @Test
     void testEats() {
-        elephant.changeHunger(-10);
+        elephant.changeHunger(-50);
         elephant.eat();
-        assertTrue(elephant.getHunger() >= 10); //ez is 20
+        assertTrue(elephant.getHunger() >= 50); //ez is 20
     }
 
     @Test
@@ -92,12 +94,12 @@ public class ElephantTest {
         assertEquals(AnimalState.IDLE, elephant.getState());
 
         //egyik sem nyúl az éhséghez vagy szomjúsághoz
-        assertEquals(20.0, elephant.getThirst());
-        assertEquals(20.0, elephant.getHunger());
+        assertEquals(100.0, elephant.getThirst());
+        assertEquals(100.0, elephant.getHunger());
     }
 
     @Test
-    void testMove() {
+    /*void testMove() {
         double initialX = elephant.getLayoutX();
         elephant.move(RIGHT, 1, 0);
         assertEquals(initialX + 1, elephant.getLayoutX());
@@ -117,9 +119,9 @@ public class ElephantTest {
         elephant.move(DOWN, 0, 1);
         assertEquals(initialY + 1, elephant.getLayoutY());
         assertEquals(DOWN, elephant.getCurrentDirection());
-    }
+    }*/
 
-    /*
+
     void testMove() {
         Ground ground = new Ground(10,4);
         double initialX = elephant.getLayoutX();
@@ -143,7 +145,7 @@ public class ElephantTest {
         assertEquals(initialY + 1, elephant.getLayoutY());
         assertEquals(DOWN, elephant.getCurrentDirection());
     }
-     */
+
 
     @Test
     public void testMoveTowardsLeader() {
@@ -151,15 +153,16 @@ public class ElephantTest {
         Elephant follower = new Elephant(50, 50);
         leader.transitionTo(AnimalState.RESTING);
 
-        follower.moveTowardsLeader(leader);
+        Ground ground = new Ground(10,4);
+        follower.moveTowardsLeader(leader, ground);
 
         assertTrue(follower.getX() != 50 || follower.getY() != 50); // Pozíció változott
         // Ha elég közel van, akkor az állapot öröklődik
         for (int i = 0; i < 200; i++) {
-            follower.moveTowardsLeader(leader);
+            follower.moveTowardsLeader(leader, ground);
         }
 
-        follower.moveTowardsLeader(leader);
+        follower.moveTowardsLeader(leader, ground);
         //System.out.println("leader: " + leader.getX() + ", " + leader.getY());
         //System.out.println("follower: " + follower.getX() + ", " + follower.getY());
         assertEquals(AnimalState.RESTING, follower.getState());
@@ -169,7 +172,7 @@ public class ElephantTest {
     public void testSetBornAtAndAgingAnimal() {
         //Elephant elephant = new Elephant(100, 100);
         elephant.setBornAt(0.0);
-        elephant.agingAnimal(240.0); // 10 nap múlva
+        elephant.agingAnimal(168.0 * 10); // 10 nap múlva
 
         assertEquals(elephant.getStartingAge() + 10, elephant.getAge());
         assertTrue(elephant.getAppetite() >= 1); // étvágy nő az idővel
@@ -184,7 +187,7 @@ public class ElephantTest {
         assertFalse(elephant.oldEnoughToDie(24.0)); // 1 nap
 
         // épp elérte a várható élettartamot
-        double hoursUntilDeath = (elephant.getLifeExpectancy() - elephant.getStartingAge()) * 24.0;
+        double hoursUntilDeath = (elephant.getLifeExpectancy() - elephant.getStartingAge()) * 168.0;
         assertTrue(elephant.oldEnoughToDie(hoursUntilDeath + 0.1));
     }
 
@@ -196,7 +199,7 @@ public class ElephantTest {
 
         for (int i = 0; i <= 5; i++) {
             elephant.setBornAt(0);
-            elephant.agingAnimal((elephant.getStartingAge() + i * ageSegment) * 24.0);
+            elephant.agingAnimal((elephant.getStartingAge() + i * ageSegment) * 168.0);
             int price = elephant.getSellPrice();
 
             int expected = switch (i) {

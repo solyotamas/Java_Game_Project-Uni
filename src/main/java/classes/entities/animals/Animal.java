@@ -386,7 +386,7 @@ public abstract class Animal extends Pane {
     }
 
     public void agingAnimal(double currentGameHour) {
-        this.age = startingAge + (int) ((currentGameHour - bornAt) / 186.0); // 24 * 7, one year is one week in game
+        this.age = startingAge + (int) ((currentGameHour - bornAt) / 168.0); // 24 * 7, one year is one week in game
 
         double ageRatio = (double) this.age / this.lifeExpectancy;
         this.appetite = (int)(1 + ageRatio * 99);
