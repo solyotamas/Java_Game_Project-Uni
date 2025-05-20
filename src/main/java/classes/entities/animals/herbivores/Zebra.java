@@ -12,9 +12,9 @@ public class Zebra extends Herbivore {
     private static final int frameHeight = 68;
     private static final double speed = 1.0;
     private static final String imgURL = "/images/animated/zebra.png";
+    private static final String childImgURL = "/images/animated/zebra_baby.png";
 
-
-    public Zebra(double x, double y){
-        super(x,y, frameWidth, frameHeight, imgURL, speed, price, lifeExpectancy);
+    public Zebra(double x, double y, boolean isChild){
+        super(x,y, frameWidth, frameHeight,childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
     }
 }

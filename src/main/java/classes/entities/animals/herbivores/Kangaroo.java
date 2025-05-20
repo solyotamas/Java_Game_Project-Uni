@@ -11,8 +11,9 @@ public class Kangaroo extends Herbivore {
     private static final int frameHeight = 78;
     private static final double speed = 1.2;
     private static final String imgURL = "/images/animated/kangaroo.png";
+    private static final String childImgURL = "/images/animated/kangaroo_baby.png";
 
-    public Kangaroo(double x, double y){
-        super(x,y,frameWidth, frameHeight, imgURL, speed, price, lifeExpectancy);
+    public Kangaroo(double x, double y, boolean isChild){
+        super(x,y,frameWidth, frameHeight,childImgURL, imgURL, speed, price, lifeExpectancy, isChild);
     }
 }
