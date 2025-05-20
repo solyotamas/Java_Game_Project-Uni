@@ -107,6 +107,7 @@ public class GameController {
 
 
     public void startGame() {
+        volumeIcon.setImage(new Image(getClass().getResource(MusicPlayer.getCurrentIconPath()).toExternalForm()));
         this.gameEngine = new GameEngine(this, difficulty, terrainLayer, uiLayer);
         System.out.println(difficulty);
         gameSpeedRelaxedButton.getStyleClass().add("active");
@@ -150,26 +151,8 @@ public class GameController {
 
     @FXML
     private void toggleVolume() {
-        double current = MusicPlayer.getVolume();
-        double next;
-        String iconPath;
-
-        if (current == 0.0) {
-            next = 0.1;
-            iconPath = "/images/low.png";
-        } else if (current <= 0.1) {
-            next = 0.3;
-            iconPath = "/images/medium.png";
-        } else if (current <= 0.3) {
-            next = 0.6;
-            iconPath = "/images/high.png";
-        } else {
-            next = 0.0;
-            iconPath = "/images/off.png";
-        }
-
-        MusicPlayer.setVolume(next);
-        volumeIcon.setImage(new Image(getClass().getResource(iconPath).toExternalForm()));
+        MusicPlayer.toggleVolume();
+        volumeIcon.setImage(new Image(getClass().getResource(MusicPlayer.getCurrentIconPath()).toExternalForm()));
     }
     // =====
 
