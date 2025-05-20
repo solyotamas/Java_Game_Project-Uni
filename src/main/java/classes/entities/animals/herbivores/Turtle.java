@@ -4,7 +4,6 @@ import classes.entities.animals.Herbivore;
 
 public class Turtle extends Herbivore {
 
-    //just so it looks clean
     private static final int price = 1300;
     private static final int lifeExpectancy = 100;
 
@@ -13,7 +12,7 @@ public class Turtle extends Herbivore {
     private static final double speed = 0.2;
     private static final String imgURL = "/images/animated/turtle.png";
 
-    public Turtle(double x, double y){
-        super(x,y,frameWidth, frameHeight, imgURL, speed, price, lifeExpectancy);
+    public Turtle(double x, double y) {
+        super(x, y, frameWidth, frameHeight, imgURL, speed, price, lifeExpectancy);
     }
 }

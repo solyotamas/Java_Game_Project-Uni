@@ -1,10 +1,7 @@
 package classes.entities.additions;
 
 public enum VolumeLevel {
-    OFF(0.0, "/images/off.png"),
-    LOW(0.1, "/images/low.png"),
-    MEDIUM(0.3, "/images/medium.png"),
-    HIGH(0.6, "/images/high.png");
+    OFF(0.0, "/images/off.png"), LOW(0.1, "/images/low.png"), MEDIUM(0.3, "/images/medium.png"), HIGH(0.6, "/images/high.png");
 
     private final double volume;
     private final String iconPath;

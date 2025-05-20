@@ -18,12 +18,8 @@ public class Lake extends Landform {
     public Lake(double x, double y, double placeHolder) {
         super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, lakePicture, depth, price);
     }
+
     public Lake(double x, double y, double placeHolder, Image img) {
         super(x, y, WIDTH_IN_TILES, HEIGHT_IN_TILES, img, depth, price);
     }
-
-
-
-
-
 }

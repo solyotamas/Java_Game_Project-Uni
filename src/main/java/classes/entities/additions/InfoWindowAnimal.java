@@ -47,7 +47,5 @@ public class InfoWindowAnimal extends VBox {
 
         VBox vbox = new VBox(5, animalAge, lifeExpectancy, appetite, row);
         this.getChildren().add(vbox);
-
-
     }
 }

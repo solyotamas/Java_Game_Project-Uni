@@ -12,13 +12,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-//todo:
-//  - a kép útvonal még lehet rossz
-//  - a többit kb a Placeableből másoltam
-//  - a radiust majd ki kell találni
-//  - valszeg kell majd egy ilyen irány field hogy éppen merre megyünk mert a képed majd forgatni kell
-
-
 public class Jeep extends Pane {
     public double x, y;
     private double depth;
@@ -112,6 +105,7 @@ public class Jeep extends Pane {
 
         move(dir, stepX, stepY);
     }
+
     private void move(Direction dir, double dx, double dy) {
         this.currentDirection = dir;
         this.x += dx;
@@ -129,27 +123,30 @@ public class Jeep extends Pane {
 
         switch (dir) {
             case RIGHT -> imageView.setImage(jeepRight);
-            case LEFT  -> imageView.setImage(jeepLeft);
-            case UP    -> imageView.setImage(jeepUp);
-            case DOWN  -> imageView.setImage(jeepDown);
+            case LEFT -> imageView.setImage(jeepLeft);
+            case UP -> imageView.setImage(jeepUp);
+            case DOWN -> imageView.setImage(jeepDown);
         }
     }
 
     public double getDepth() {
         return this.depth;
     }
+
     public void setPath(ArrayList<Terrain> path) {
         this.path = path;
         this.pathIndex = 0;
     }
 
-    public Image getJeepLeft(){
+    public Image getJeepLeft() {
         return this.jeepLeft;
     }
-    public void setImageView(Image img){
+
+    public void setImageView(Image img) {
         this.imageView.setImage(img);
     }
-    public void transitionTo(JeepState newState){
+
+    public void transitionTo(JeepState newState) {
         this.state = newState;
     }
 
@@ -157,10 +154,11 @@ public class Jeep extends Pane {
         return this.state;
     }
 
-    public double getX(){
+    public double getX() {
         return this.x;
     }
-    public double getY(){
+
+    public double getY() {
         return this.y;
     }
 

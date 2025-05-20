@@ -28,7 +28,7 @@ public class Bush extends Plant {
 
     static {
         for (int i = 0; i < 3; i++) {
-            bushImages[i] = new Image(Tree.class.getResource("/images/bush" + (i+1) + ".png").toExternalForm());
+            bushImages[i] = new Image(Tree.class.getResource("/images/bush" + (i + 1) + ".png").toExternalForm());
         }
     }
 }

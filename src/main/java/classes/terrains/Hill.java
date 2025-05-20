@@ -2,6 +2,7 @@ package classes.terrains;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import javafx.scene.image.Image;
 
 public class Hill extends Terrain {

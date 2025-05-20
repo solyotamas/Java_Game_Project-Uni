@@ -39,6 +39,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.Random;
 
@@ -125,21 +126,21 @@ public class GameController {
     }
 
     @FXML
-    public void speedGameToRelaxed(){
+    public void speedGameToRelaxed() {
         gameEngine.setGameSpeed(1);
         speed = 1;
         setActiveSpeedButton(gameSpeedRelaxedButton);
     }
 
     @FXML
-    public void speedGameToSteady(){
+    public void speedGameToSteady() {
         gameEngine.setGameSpeed(6);
         speed = 6;
         setActiveSpeedButton(gameSpeedSteadyButton);
     }
 
     @FXML
-    public void speedGameToRapid(){
+    public void speedGameToRapid() {
         gameEngine.setGameSpeed(12);
         speed = 12;
         setActiveSpeedButton(gameSpeedRapidButton);
@@ -166,9 +167,7 @@ public class GameController {
         //For ghostImage pic to be equivalent of the image of the instance that will be placed
         Landform tempInstance = null;
         try {
-            tempInstance = landformClass
-                    .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
-                    .newInstance(0.0, 0.0, 0.0, chosen);
+            tempInstance = landformClass.getDeclaredConstructor(double.class, double.class, double.class, Image.class).newInstance(0.0, 0.0, 0.0, chosen);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -212,9 +211,7 @@ public class GameController {
             }
 
             try {
-                Landform placedLandform = landformClass
-                        .getDeclaredConstructor(double.class, double.class, double.class, Image.class)
-                        .newInstance(tileX * TILE_SIZE, tileY * TILE_SIZE, depth, chosen);
+                Landform placedLandform = landformClass.getDeclaredConstructor(double.class, double.class, double.class, Image.class).newInstance(tileX * TILE_SIZE, tileY * TILE_SIZE, depth, chosen);
 
                 if (gameEngine.getGameBoard().canPlaceLandform(placedLandform, tileX, tileY)) {
                     gameEngine.getGameBoard().placeLandform(placedLandform, tileX, tileY);
@@ -252,22 +249,29 @@ public class GameController {
     public void buyBush() {
         buyLandform(Bush.class, Bush.getRandomBushImage());
     }
+
     public void buyTree() {
         buyLandform(Tree.class, Tree.getRandomTreeImage());
     }
+
     public void buyLake() {
         buyLandform(Lake.class, Lake.lakePicture);
     }
+
     public void buyGrass() {
         buyLandform(Grass.class, Grass.grassPicture);
     }
+
     public void buyRoad() {
         buyLandform(Road.class, Road.roadImages[0]);
     }
-    public void buyJeep() {{
-        gameEngine.buyJeep();
-        closeShopPane();
-    }}
+
+    public void buyJeep() {
+        {
+            gameEngine.buyJeep();
+            closeShopPane();
+        }
+    }
     // =====
 
     // ==== ANIMALS
@@ -280,8 +284,7 @@ public class GameController {
         // Create a temporary instance just to get size info
         Animal tempAnimal = null;
         try {
-            tempAnimal = animalClass.getDeclaredConstructor(double.class, double.class)
-                    .newInstance(0.0, 0.0);
+            tempAnimal = animalClass.getDeclaredConstructor(double.class, double.class).newInstance(0.0, 0.0);
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -316,12 +319,10 @@ public class GameController {
             try {
                 double placeX = e.getX();
                 double placeY = e.getY();
-                Animal animalInstance = animalClass
-                        .getDeclaredConstructor(double.class, double.class)
-                        .newInstance(placeX, placeY);
+                Animal animalInstance = animalClass.getDeclaredConstructor(double.class, double.class).newInstance(placeX, placeY);
 
                 //click
-                if(canPlaceAnimal(animalInstance, placeX, placeY)){
+                if (canPlaceAnimal(animalInstance, placeX, placeY)) {
 
                     Platform.runLater(() -> {
                         animalInstance.setOnMouseClicked(this::handleAnimalClicked);
@@ -357,62 +358,63 @@ public class GameController {
         double topY = placeY - imgHeight / 2.0;
         double bottomY = placeY + imgHeight / 2.0;
 
-        return (
-                leftX >= TOURIST_SECTION &&
-                rightX <= SCREEN_WIDTH - TOURIST_SECTION &&
-                topY >= 0 &&
-                bottomY <= SCREEN_HEIGHT
-        );
+        return (leftX >= TOURIST_SECTION && rightX <= SCREEN_WIDTH - TOURIST_SECTION && topY >= 0 && bottomY <= SCREEN_HEIGHT);
     }
 
     @FXML
-    public void buyElephant(){
+    public void buyElephant() {
         buyAnimal(Elephant.class, "/images/elephant.png");
     }
-    public void buyRhino(){
+
+    public void buyRhino() {
         buyAnimal(Rhino.class, "/images/rhino.png");
     }
-    public void buyHippo(){
+
+    public void buyHippo() {
         buyAnimal(Hippo.class, "/images/hippo.png");
     }
-    public void buyBuffalo(){
+
+    public void buyBuffalo() {
         buyAnimal(Buffalo.class, "/images/buffalo.png");
     }
-    public void buyZebra(){
+
+    public void buyZebra() {
         buyAnimal(Zebra.class, "/images/zebra.png");
     }
-    public void buyKangaroo(){
+
+    public void buyKangaroo() {
         buyAnimal(Kangaroo.class, "/images/kangaroo.png");
     }
-    public void buyTurtle(){
+
+    public void buyTurtle() {
         buyAnimal(Turtle.class, "/images/turtle.png");
     }
-    public void buyLion(){
+
+    public void buyLion() {
         buyAnimal(Lion.class, "/images/lion.png");
     }
-    public void buyTiger(){
+
+    public void buyTiger() {
         buyAnimal(Tiger.class, "/images/tiger.png");
     }
-    public void buyPanther(){
+
+    public void buyPanther() {
         buyAnimal(Panther.class, "/images/panther.png");
     }
-    public void buyVulture(){
+
+    public void buyVulture() {
         buyAnimal(Vulture.class, "/images/vulture.png");
     }
-    public void removeAnimal(Animal animal){
+
+    public void removeAnimal(Animal animal) {
         uiLayer.getChildren().remove(animal);
     }
     // =====
 
-    public Animal spawnBaby(Animal parent){
+    public Animal spawnBaby(Animal parent) {
 
         try {
-            Animal baby = parent.getClass()
-                    .getConstructor(double.class, double.class)
-                    .newInstance(
-                            parent.getX() + rand.nextInt(10) - 5,
-                            parent.getY() + rand.nextInt(10) - 5
-                    );
+            Animal baby = parent.getClass().getConstructor(double.class, double.class).newInstance(parent.getX() + rand.nextInt(10) - 5, parent.getY() + rand.nextInt(10) - 5);
 
             Platform.runLater(() -> {
                 baby.setOnMouseClicked(this::handleAnimalClicked);
@@ -494,20 +496,14 @@ public class GameController {
         double topY = placeY - imgHeight / 2.0;
         double bottomY = placeY + imgHeight / 2.0;
 
-        return (
-                leftX >= TOURIST_SECTION &&
-                        rightX <= SCREEN_WIDTH - TOURIST_SECTION &&
-                        topY >= 0 &&
-                        bottomY <= SCREEN_HEIGHT
-        );
+        return (leftX >= TOURIST_SECTION && rightX <= SCREEN_WIDTH - TOURIST_SECTION && topY >= 0 && bottomY <= SCREEN_HEIGHT);
     }
     // =====
 
 
     // ==== INFO WINDOWS
     private void handleAnimalClicked(MouseEvent event) {
-        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null || speed != 1)
-            return;
+        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null || speed != 1) return;
 
         event.consume();
 
@@ -520,38 +516,32 @@ public class GameController {
             clickedAnimal.pauseManually();
         }
 
-        currentInfoWindowAnimal = new InfoWindowAnimal(
-                clickedAnimal,
-                () -> {
-                    // Sell action
-                    if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
-                        for (Animal a : clickedAnimal.getHerd().getMembers()) {
-                            a.resumeManually();
-                        }
-                    }else
-                        clickedAnimal.resumeManually();
-
-                    gameEngine.sellAnimal(clickedAnimal);
-                    uiLayer.getChildren().remove(clickedAnimal);
-                    closeAnimalWindow(clickedAnimal);
-
-                },
-                () -> {
-                    // Close action
-                    if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
-                        for (Animal a : clickedAnimal.getHerd().getMembers()) {
-                            a.resumeManually();
-                        }
-                    }
-                    else
-                        clickedAnimal.resumeManually();
-
-                    closeAnimalWindow(clickedAnimal);
+        currentInfoWindowAnimal = new InfoWindowAnimal(clickedAnimal, () -> {
+            // Sell action
+            if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
+                for (Animal a : clickedAnimal.getHerd().getMembers()) {
+                    a.resumeManually();
                 }
-        );
+            } else clickedAnimal.resumeManually();
+
+            gameEngine.sellAnimal(clickedAnimal);
+            uiLayer.getChildren().remove(clickedAnimal);
+            closeAnimalWindow(clickedAnimal);
+
+        }, () -> {
+            // Close action
+            if (clickedAnimal.getIsInAHerd() && clickedAnimal.getHerd() != null) {
+                for (Animal a : clickedAnimal.getHerd().getMembers()) {
+                    a.resumeManually();
+                }
+            } else clickedAnimal.resumeManually();
+
+            closeAnimalWindow(clickedAnimal);
+        });
 
         uiLayer.getChildren().add(currentInfoWindowAnimal);
     }
+
     private void closeAnimalWindow(Animal animal) {
         if (currentInfoWindowAnimal != null) {
             uiLayer.getChildren().remove(currentInfoWindowAnimal);
@@ -560,33 +550,28 @@ public class GameController {
     }
 
     private void handleRangerClicked(MouseEvent event) {
-        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null || speed != 1)
-            return;
+        if (currentInfoWindowAnimal != null || currentInfoWindowRanger != null || speed != 1) return;
 
         event.consume();
 
         Ranger clickedRanger = (Ranger) event.getSource();
         clickedRanger.transitionTo(HumanState.PAUSED);
 
-        currentInfoWindowRanger = new InfoWindowRanger(
-                clickedRanger,
-                () -> {
-                    // Unemploy action
-                    gameEngine.unemployRanger(clickedRanger);
-                    closeRangerWindow(clickedRanger);
-                },
-                () -> {
-                    // Choose prey action
-                    gameEngine.choosePreyForRanger(clickedRanger);
-                },
-                () -> {
-                    // Close action
-                    closeRangerWindow(clickedRanger);
-                }
-        );
+        currentInfoWindowRanger = new InfoWindowRanger(clickedRanger, () -> {
+            // Unemploy action
+            gameEngine.unemployRanger(clickedRanger);
+            closeRangerWindow(clickedRanger);
+        }, () -> {
+            // Choose prey action
+            gameEngine.choosePreyForRanger(clickedRanger);
+        }, () -> {
+            // Close action
+            closeRangerWindow(clickedRanger);
+        });
 
         uiLayer.getChildren().add(currentInfoWindowRanger);
     }
+
     public void closeRangerWindow(Ranger ranger) {
         if (currentInfoWindowRanger != null) {
             uiLayer.getChildren().remove(currentInfoWindowRanger);
@@ -598,30 +583,30 @@ public class GameController {
     // =====
 
     // ==== TOURISTS
-    public Tourist spawnTourist(){
-        Tourist template = new Tourist(0,0,0);
+    public Tourist spawnTourist() {
+        Tourist template = new Tourist(0, 0, 0);
 
         //which side - 0 left, 1 right
 
         int coinFlip = rand.nextBoolean() ? 0 : 1;
         double x, y;
         Tourist tourist;
-        if(coinFlip == 0){
+        if (coinFlip == 0) {
             x = template.getImageView().getFitWidth() / 2;
             y = 31.0 * TILE_SIZE / 2. + template.getImageView().getFitHeight() / 2.;
-            tourist = new Tourist(x,y,0);
-        }
-        else{
+            tourist = new Tourist(x, y, 0);
+        } else {
             x = 64 * TILE_SIZE - template.getImageView().getFitWidth() / 2;
             y = 31.0 * TILE_SIZE / 2. + template.getImageView().getFitHeight() / 2.;
-            tourist = new Tourist(x,y,1);
+            tourist = new Tourist(x, y, 1);
         }
 
         uiLayer.getChildren().add(tourist);
         return tourist;
 
     }
-    public void removeTourist(Tourist tourist){
+
+    public void removeTourist(Tourist tourist) {
         uiLayer.getChildren().remove(tourist);
     }
     // =====
@@ -629,7 +614,7 @@ public class GameController {
 
     // ==== UI HANDLING
     //Display
-    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int  money){
+    public void updateDisplay(double time, int carnivores, int herbivores, int jeeps, int tourists, int ticketPrice, int money) {
         //STATS
         int days = (int) time / 24;
         int hours = (int) time % 24;
@@ -649,7 +634,8 @@ public class GameController {
         if (speed != 1) return;
         shopPane.setVisible(true);
     }
-    public void closeShopPane(){
+
+    public void closeShopPane() {
         shopPane.setVisible(false);
     }
 
@@ -671,6 +657,7 @@ public class GameController {
     public void showSaveOverlay() {
         saveOverlay.setVisible(true);
     }
+
     public void hideSaveOverlay() {
         saveOverlay.setVisible(false);
     }
@@ -693,6 +680,7 @@ public class GameController {
     public void setReasonOfDeathText(String text) {
         this.reasonOfDeathText.setText(text);
     }
+
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
     }

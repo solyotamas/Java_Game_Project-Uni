@@ -9,10 +9,9 @@ import java.util.Random;
 public abstract class Carnivore extends Animal {
     private Herbivore prey;
 
-    public Carnivore(double x, double y, int frameWidth, int frameHeight, String imgURL, double speed, int price, int life_expectancy){
-        super(x,y,frameWidth, frameHeight, imgURL, speed, price, life_expectancy);
+    public Carnivore(double x, double y, int frameWidth, int frameHeight, String imgURL, double speed, int price, int life_expectancy) {
+        super(x, y, frameWidth, frameHeight, imgURL, speed, price, life_expectancy);
     }
-
 
     public void huntTarget(Terrain terrain) {
         if (prey == null) {
@@ -45,6 +44,7 @@ public abstract class Carnivore extends Animal {
 
         move(terrain, dir, stepX, stepY);
     }
+
     public void choosePrey(Carnivore carnivore, ArrayList<Herbivore> herbivores) {
         if (herbivores.isEmpty()) {
             carnivore.setStarving(true);
@@ -53,10 +53,12 @@ public abstract class Carnivore extends Animal {
             carnivore.setStarving(false);
         }
     }
-    public Herbivore getPrey(){
+
+    public Herbivore getPrey() {
         return prey;
     }
-    public void clearPrey(){
+
+    public void clearPrey() {
         this.prey = null;
     }
 }

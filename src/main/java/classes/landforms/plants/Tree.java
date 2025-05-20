@@ -28,7 +28,7 @@ public class Tree extends Plant {
 
     static {
         for (int i = 0; i < 2; i++) {
-            treeImages[i] = new Image(Tree.class.getResource("/images/tree" + (i+1) + ".png").toExternalForm());
+            treeImages[i] = new Image(Tree.class.getResource("/images/tree" + (i + 1) + ".png").toExternalForm());
         }
     }
 }

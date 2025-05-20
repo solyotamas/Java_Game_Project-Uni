@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class SaveScreen extends Application {
@@ -15,7 +16,6 @@ public class SaveScreen extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
 
-        //stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
     }
 
